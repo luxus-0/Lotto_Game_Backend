@@ -1,7 +1,11 @@
 package pl.lotto.numberreceiver;
 
 import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
+import pl.lotto.numberreceiver.dto.NumberReceiverDto;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NumberReceiverFacadeTest {
@@ -11,11 +15,12 @@ public class NumberReceiverFacadeTest {
         // given
         NumberValidator numberValidator = new NumberValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
-        List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
+        Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         // when
-        String result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        NumberReceiverDto inputNumbers = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result).isEqualTo("success");
+        NumberReceiverDto numberReceiver = new NumberReceiverDto(numbersFromUser, "SUCCESS");
+        assertThat(inputNumbers).isEqualTo(numberReceiver);
     }
 
     @Test
@@ -23,11 +28,12 @@ public class NumberReceiverFacadeTest {
         // given
         NumberValidator numberValidator = new NumberValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
-        List<Integer> numbersFromUser = List.of(1, 2, 3, 4);
+        Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4);
         // when
-        String result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        NumberReceiverDto inputNumbers = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result).isEqualTo("failed");
+        NumberReceiverDto numberReceiver = new NumberReceiverDto(numbersFromUser, "FAILED");
+        assertThat(inputNumbers).isEqualTo(numberReceiver);
     }
 
     @Test
