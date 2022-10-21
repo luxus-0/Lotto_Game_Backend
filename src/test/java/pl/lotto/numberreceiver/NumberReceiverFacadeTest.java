@@ -2,12 +2,13 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.Test;
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
+import pl.lotto.numberreceiver.enums.ValidateMessageInfo;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static pl.lotto.numberreceiver.NumberReceiverMessageProvider.FAILED_MESSAGE;
-import static pl.lotto.numberreceiver.NumberReceiverMessageProvider.SUCCESS_MESSAGE;
 import static pl.lotto.numberreceiver.enums.ValidateMessageInfo.CORRECT_SIZE_NUMBERS;
 import static pl.lotto.numberreceiver.enums.ValidateMessageInfo.NOT_CORRECT_SIZE_NUMBERS;
 
@@ -54,6 +55,15 @@ public class NumberReceiverFacadeTest {
 
     @Test
     public void should_return_failed_when_user_gave_duplicated_number() {
+        // given
+        NumberValidator numberValidator = new NumberValidator();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
+        List<Integer> numbers = List.of(1, 2, 2, 4, 5, 6, 6, 14);
+        // when
+        ValidateMessageInfo readNumbers = numberReceiverFacade.isDuplicateNumbers(numbers);
+        // then
+        ValidateMessageInfo messageResult = ValidateMessageInfo.DUPLICATE_NUMBERS;
+        assertThat(readNumbers).isEqualTo(messageResult);
     }
 
     @Test
