@@ -1,6 +1,5 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 import pl.lotto.numberreceiver.dto.ValidationDto;
 
 import java.util.Set;
@@ -21,10 +20,6 @@ class NumberValidator {
 
     public boolean isEqualsSixNumbers(Set<Integer> inputNumbers) {
         return inputNumbers.stream().allMatch(numbers -> checkEqualSixNumbers(inputNumbers));
-    }
-
-    public static boolean isSizeEqualSix(NumbersResultMessageDto correctResult) {
-        return correctResult.inputNumber().size() == SIZE_NUMBERS;
     }
 
     private static boolean checkEqualSixNumbers(Set<Integer> inputNumbers) {
