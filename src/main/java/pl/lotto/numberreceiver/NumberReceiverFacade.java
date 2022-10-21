@@ -1,14 +1,12 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
-import pl.lotto.numberreceiver.enums.ValidateMessageInfo;
 
 import java.util.Optional;
 import java.util.Set;
 
 import static pl.lotto.numberreceiver.NumberReceiverMessageProvider.*;
 import static pl.lotto.numberreceiver.NumberValidator.checkMoreThanSixNumbers;
-import static pl.lotto.numberreceiver.NumberValidator.isSizeEqualSix;
 import static pl.lotto.numberreceiver.enums.ValidateMessageInfo.*;
 
 public class NumberReceiverFacade {
@@ -27,9 +25,8 @@ public class NumberReceiverFacade {
         }
 
         if (numberValidator.isEqualsSixNumbers(inputNumbers)) {
-            NumbersResultMessageDto correctResult = new NumbersResultMessageDto(inputNumbers, SUCCESS_MESSAGE);
-            ValidateMessageInfo validateInfo = isSizeEqualSix(correctResult) ? CORRECT_SIZE_NUMBERS : NOT_CORRECT_SIZE_NUMBERS;
-            return new NumbersResultMessageDto(inputNumbers, validateInfo.name());
+            NumbersResultMessageDto result = new NumbersResultMessageDto(inputNumbers, CORRECT_SIZE_NUMBERS.name());
+            return new NumbersResultMessageDto(inputNumbers, result.message());
         }
 
         return new NumbersResultMessageDto(inputNumbers, INVALID_MESSAGE);
