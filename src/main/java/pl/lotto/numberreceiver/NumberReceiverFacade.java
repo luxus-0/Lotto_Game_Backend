@@ -40,7 +40,6 @@ public class NumberReceiverFacade {
     public NumbersResultMessageDto isMoreThanSixNumbers(Set<Integer> inputNumbers) {
         boolean greaterThanSixNumbers = inputNumbers.stream()
                 .anyMatch(numbers -> checkMoreThanSixNumbers(inputNumbers));
-
         if (greaterThanSixNumbers) {
             return Optional.of(new NumbersResultMessageDto(inputNumbers, NOT_CORRECT_SIZE_NUMBERS.name()))
                     .orElseGet(() -> new NumbersResultMessageDto(inputNumbers, CORRECT_SIZE_NUMBERS.name()));
