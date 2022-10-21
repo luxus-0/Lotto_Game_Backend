@@ -41,7 +41,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_failed_when_user_gave_more_than_six_numbers() {
+    public void should_return_not_correct_size_numbers_when_user_gave_more_than_six_numbers() {
         // given
         NumberValidator numberValidator = new NumberValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
