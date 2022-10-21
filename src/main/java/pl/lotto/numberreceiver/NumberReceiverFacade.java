@@ -1,22 +1,46 @@
 package pl.lotto.numberreceiver;
 
-import java.util.Collection;
+import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
+import pl.lotto.numberreceiver.enums.ValidateMessageInfo;
+
+import java.util.Optional;
+import java.util.Set;
+
+import static pl.lotto.numberreceiver.NumberReceiverMessageProvider.*;
+import static pl.lotto.numberreceiver.NumberValidator.checkMoreThanSixNumbers;
+import static pl.lotto.numberreceiver.NumberValidator.isSizeEqualSix;
+import static pl.lotto.numberreceiver.enums.ValidateMessageInfo.*;
 
 public class NumberReceiverFacade {
 
-    public static final String FAILED_MESSAGE = "failed";
-    public static final String SUCCESS_MESSAGE = "success";
     private final NumberValidator numberValidator;
 
     public NumberReceiverFacade(NumberValidator numberValidator) {
         this.numberValidator = numberValidator;
     }
 
-    public String inputNumbers(Collection<Integer> numbersFromUser) {
-        if (numberValidator.isLessThanSixNumbers(numbersFromUser)) {
-            return FAILED_MESSAGE;
+    public NumbersResultMessageDto inputNumbers(Set<Integer> inputNumbers) {
+        if (numberValidator.isLessThanSixNumbers(inputNumbers)) {
+            NumbersResultMessageDto notCorrectResults = new NumbersResultMessageDto(inputNumbers, FAILED_MESSAGE);
+            return Optional.of(notCorrectResults)
+                    .orElse(new NumbersResultMessageDto(inputNumbers, SUCCESS_MESSAGE));
         }
-        return SUCCESS_MESSAGE;
+
+        if (numberValidator.isEqualsSixNumbers(inputNumbers)) {
+            NumbersResultMessageDto correctResult = new NumbersResultMessageDto(inputNumbers, SUCCESS_MESSAGE);
+            ValidateMessageInfo validateInfo = isSizeEqualSix(correctResult) ? CORRECT_SIZE_NUMBERS : NOT_CORRECT_SIZE_NUMBERS;
+            return new NumbersResultMessageDto(inputNumbers, validateInfo.name());
+        }
+
+        return new NumbersResultMessageDto(inputNumbers, INVALID_MESSAGE);
     }
 
+    public NumbersResultMessageDto isMoreThanSixNumbers(Set<Integer> inputNumbers) {
+        boolean greaterThanSixNumbers = inputNumbers.stream().anyMatch(numbers -> checkMoreThanSixNumbers(inputNumbers));
+        if (greaterThanSixNumbers) {
+            return Optional.of(new NumbersResultMessageDto(inputNumbers, NOT_CORRECT_SIZE_NUMBERS.name()))
+                    .orElseGet(() -> new NumbersResultMessageDto(inputNumbers, CORRECT_SIZE_NUMBERS.name()));
+        }
+        return new NumbersResultMessageDto(Set.of(0), UNKNOWN_SIZE_NUMBERS.name());
+    }
 }
