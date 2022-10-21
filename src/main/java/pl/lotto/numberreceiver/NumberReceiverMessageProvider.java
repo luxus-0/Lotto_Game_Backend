@@ -1,9 +1,10 @@
 package pl.lotto.numberreceiver;
 
-public class NumberReceiverMessageProvider {
-    public static final int SIZE_NUMBER = 6;
-    public static final int RANGE_FROM = 1;
-    public static final int RANGE_TO = 99;
-    public static final String FAILED_MESSAGE = "FAILED";
-    public static final String SUCCESS_MESSAGE = "SUCCESS";
+class NumberReceiverMessageProvider {
+    public static final int SIZE_NUMBERS = 6;
+    public static final int RANGE_FROM_NUMBER = 1;
+    public static final int RANGE_TO_NUMBER = 99;
+    public static final String FAILED_MESSAGE = "failed";
+    public static final String SUCCESS_MESSAGE = "success";
+    public static final String INVALID_MESSAGE = "invalid";
 }
