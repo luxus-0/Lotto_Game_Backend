@@ -1,9 +1,9 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
-import pl.lotto.numberreceiver.enums.ValidateMessageInfo;
+import pl.lotto.numberreceiver.enums.ValidateMessage;
 import pl.lotto.numberreceiver.exception.DuplicateNumbersNotFoundException;
-import pl.lotto.numberreceiver.exception.NotInRangeNumbersException;
+import pl.lotto.numberreceiver.exception.RangeNumbersException;
 import pl.lotto.numberreceiver.exception.NumbersNotFoundException;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static pl.lotto.numberreceiver.NumberReceiverMessageProvider.*;
 import static pl.lotto.numberreceiver.NumbersDuplicationInfo.duplicateNumbersInfo;
-import static pl.lotto.numberreceiver.enums.ValidateMessageInfo.*;
+import static pl.lotto.numberreceiver.enums.ValidateMessage.*;
 
 public class NumberReceiverFacade {
 
@@ -47,7 +47,7 @@ public class NumberReceiverFacade {
 
     }
 
-    public ValidateMessageInfo isDuplicateNumbers(List<Integer> numbersCheck) {
+    public ValidateMessage isDuplicateNumbers(List<Integer> numbersCheck) {
         NumbersDuplicationChecker numbersFinder = new NumbersDuplicationChecker();
         if (numbersFinder.checkIdenticalNumbers(numbersCheck)) {
             return duplicateNumbersInfo();
@@ -55,11 +55,11 @@ public class NumberReceiverFacade {
         throw new DuplicateNumbersNotFoundException();
     }
 
-    public ValidateMessageInfo isNumbersNotInRange(Set<Integer> inputNumbers) {
+    public ValidateMessage isNumbersNotInRange(Set<Integer> inputNumbers) {
         NumberReceiverRangeChecker numbers = new NumberReceiverRangeChecker();
         if (numbers.checkNumbersInRange(inputNumbers)) {
             return IN_RANGE_NUMBERS;
         }
-        throw new NotInRangeNumbersException();
+        throw new RangeNumbersException();
     }
 }
