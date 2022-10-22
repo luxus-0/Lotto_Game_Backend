@@ -3,6 +3,7 @@ package pl.lotto.numberreceiver;
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 import pl.lotto.numberreceiver.enums.ValidateMessageInfo;
 import pl.lotto.numberreceiver.exception.DuplicateNumbersNotFoundException;
+import pl.lotto.numberreceiver.exception.NotInRangeNumbersException;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,5 +65,13 @@ public class NumberReceiverFacade {
             return DUPLICATE_NUMBERS;
         }
         return DUPLICATE_NUMBERS_NOT_FOUND;
+    }
+
+    public ValidateMessageInfo isNumbersNotInRange(Set<Integer> inputNumbers){
+        InRangeNumbersChecker numbers = new InRangeNumbersChecker();
+        if(numbers.checkNumbersInRange(inputNumbers)){
+            return IN_RANGE_NUMBERS;
+        }
+        throw new NotInRangeNumbersException();
     }
 }
