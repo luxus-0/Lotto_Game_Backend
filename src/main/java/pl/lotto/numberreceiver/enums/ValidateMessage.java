@@ -1,6 +1,6 @@
 package pl.lotto.numberreceiver.enums;
 
-public enum ValidateMessageInfo {
+public enum ValidateMessage {
     CORRECT_SIZE_NUMBERS,
     NOT_CORRECT_SIZE_NUMBERS,
     UNKNOWN_SIZE_NUMBERS,
