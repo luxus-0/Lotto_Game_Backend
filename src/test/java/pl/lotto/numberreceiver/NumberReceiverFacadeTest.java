@@ -3,11 +3,13 @@ package pl.lotto.numberreceiver;
 import org.junit.jupiter.api.Test;
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 import pl.lotto.numberreceiver.enums.ValidateMessageInfo;
+import pl.lotto.numberreceiver.exception.NotInRangeNumbersException;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static pl.lotto.numberreceiver.NumberReceiverMessageProvider.FAILED_MESSAGE;
 import static pl.lotto.numberreceiver.enums.ValidateMessageInfo.CORRECT_SIZE_NUMBERS;
 import static pl.lotto.numberreceiver.enums.ValidateMessageInfo.NOT_CORRECT_SIZE_NUMBERS;
@@ -67,7 +69,39 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_failed_when_user_gave_number_out_of_range() {
+    public void should_return_counting_numbers_when_user_gave_duplicated_number() {
+        // given
+        NumberValidator numberValidator = new NumberValidator();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
+        List<Integer> numbers = List.of(1, 2, 2, 4, 5, 6, 6, 14);
+        // when
+        ValidateMessageInfo readNumbers = numberReceiverFacade.quantityDuplicateNumbers(numbers);
+        // then
+        ValidateMessageInfo messageResult = ValidateMessageInfo.DUPLICATE_NUMBERS;
+        assertThat(readNumbers).isEqualTo(messageResult);
     }
 
+    @Test
+    public void should_return_false_when_user_gave_number_out_of_range() {
+        // given
+        NumberValidator numberValidator = new NumberValidator();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
+        Set<Integer> numbers = Set.of(100, 1, 2, 3, 4, 200);
+        // when
+        ValidateMessageInfo findNumbers = numberReceiverFacade.isNumbersNotInRange(numbers);
+        // then
+        assertNotEquals(ValidateMessageInfo.NOT_IN_RANGE_NUMBERS.name(), findNumbers.name());
+    }
+
+    @Test
+    public void should_return_in_range_numbers_message_when_user_gave_number_in_range() {
+        // given
+        NumberValidator numberValidator = new NumberValidator();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
+        Set<Integer> numbers = Set.of(90, 1, 2, 3, 4, 98);
+        // when
+        ValidateMessageInfo findNumbers = numberReceiverFacade.isNumbersNotInRange(numbers);
+        // then
+        assertEquals("IN_RANGE_NUMBERS", findNumbers.name());
+    }
 }
