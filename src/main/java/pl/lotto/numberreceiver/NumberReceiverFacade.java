@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static pl.lotto.numberreceiver.NumberReceiverMessageProvider.*;
+import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
 import static pl.lotto.numberreceiver.NumbersDuplicationInfo.duplicateNumbersInfo;
 import static pl.lotto.numberreceiver.enums.ValidateMessage.*;
 
 public class NumberReceiverFacade {
 
-    private final NumberReceiverValidator numberValidator;
+    private final NumbersValidator numberValidator;
 
-    public NumberReceiverFacade(NumberReceiverValidator numberValidator) {
+    public NumberReceiverFacade(NumbersValidator numberValidator) {
         this.numberValidator = numberValidator;
     }
 
@@ -56,7 +56,7 @@ public class NumberReceiverFacade {
     }
 
     public ValidateMessage isNumbersNotInRange(Set<Integer> inputNumbers) {
-        NumberReceiverRangeChecker numbers = new NumberReceiverRangeChecker();
+        NumbersRangeChecker numbers = new NumbersRangeChecker();
         if (numbers.checkNumbersInRange(inputNumbers)) {
             return IN_RANGE_NUMBERS;
         }
