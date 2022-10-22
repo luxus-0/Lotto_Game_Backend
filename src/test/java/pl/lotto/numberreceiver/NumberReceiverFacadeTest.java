@@ -74,7 +74,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Return counting numbers when user gave duplicated numbers")
     public void should_return_counting_numbers_when_user_gave_duplicated_number() {
         // given
         NumberValidator numberValidator = new NumberValidator();
@@ -88,7 +88,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Return not in range numbers when user gave number out of range")
     public void should_return_not_in_range_numbers_message_when_user_gave_number_out_of_range() {
         // given
         NumberValidator numberValidator = new NumberValidator();
@@ -101,7 +101,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Return in range numbers when user gave number in range")
     public void should_return_in_range_numbers_message_when_user_gave_number_in_range() {
         // given
         NumberValidator numberValidator = new NumberValidator();
