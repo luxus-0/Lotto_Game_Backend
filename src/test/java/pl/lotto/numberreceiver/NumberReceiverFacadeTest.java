@@ -11,7 +11,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static pl.lotto.numberreceiver.NumberReceiverMessageProvider.FAILED_MESSAGE;
+import static pl.lotto.numberreceiver.NumbersMessageProvider.FAILED_MESSAGE;
 import static pl.lotto.numberreceiver.enums.ValidateMessage.CORRECT_SIZE_NUMBERS;
 import static pl.lotto.numberreceiver.enums.ValidateMessage.NOT_CORRECT_SIZE_NUMBERS;
 
@@ -21,7 +21,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("Return success when user gave six numbers")
     public void should_return_success_when_user_gave_six_numbers() {
         // given
-        NumberReceiverValidator numberValidator = new NumberReceiverValidator();
+        NumbersValidator numberValidator = new NumbersValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         // when
@@ -35,7 +35,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("Return failed when user gave less than six numbers")
     public void should_return_failed_when_user_gave_less_than_six_numbers() {
         // given
-        NumberReceiverValidator numberValidator = new NumberReceiverValidator();
+        NumbersValidator numberValidator = new NumbersValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4);
         // when
@@ -49,7 +49,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("return not correct size numbers when user gave more than six numbers")
     public void should_return_not_correct_size_numbers_message_when_user_gave_more_than_six_numbers() {
         // given
-        NumberReceiverValidator numberValidator = new NumberReceiverValidator();
+        NumbersValidator numberValidator = new NumbersValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6, 12, 14);
         // when
@@ -63,7 +63,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("Return duplicate numbers message when user gave duplicated number")
     public void should_return_duplicate_numbers_message_when_user_gave_duplicated_number() {
         // given
-        NumberReceiverValidator numberValidator = new NumberReceiverValidator();
+        NumbersValidator numberValidator = new NumbersValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
         List<Integer> numbers = List.of(1, 2, 2, 4, 5, 6, 6, 14);
         // when
@@ -90,7 +90,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("Return not in range numbers when user gave number out of range")
     public void should_return_not_in_range_numbers_message_when_user_gave_number_out_of_range() {
         // given
-        NumberReceiverValidator numberValidator = new NumberReceiverValidator();
+        NumbersValidator numberValidator = new NumbersValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
         Set<Integer> numbers = Set.of(100, 1, 2, 3, 4, 200);
         // when
@@ -103,7 +103,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("Return in range numbers when user gave number in range")
     public void should_return_in_range_numbers_message_when_user_gave_number_in_range() {
         // given
-        NumberReceiverValidator numberValidator = new NumberReceiverValidator();
+        NumbersValidator numberValidator = new NumbersValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
         Set<Integer> numbers = Set.of(90, 1, 2, 3, 4, 98);
         // when
