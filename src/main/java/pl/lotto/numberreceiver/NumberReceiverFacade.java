@@ -51,8 +51,7 @@ public class NumberReceiverFacade {
     public ValidateMessageInfo isDuplicateNumbers(List<Integer> numbersCheck){
         DuplicateNumbersChecker numbersFinder = new DuplicateNumbersChecker();
         if(numbersFinder.checkIdenticalNumbers(numbersCheck)){
-            duplicateNumbersInfo();
-            return DUPLICATE_NUMBERS;
+            return duplicateNumbersInfo();
         }
         throw new DuplicateNumbersNotFoundException();
     }
