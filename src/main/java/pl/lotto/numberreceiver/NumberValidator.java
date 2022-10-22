@@ -14,15 +14,15 @@ class NumberValidator {
                 .anyMatch(NumberValidator::checkSizeLessThanSixNumbers);
     }
 
-    private static boolean checkSizeLessThanSixNumbers(ValidationDto validation) {
+    static boolean checkSizeLessThanSixNumbers(ValidationDto validation) {
         return validation.numbersFromUser().size() < SIZE_NUMBERS;
     }
 
-    public boolean isEqualsSixNumbers(Set<Integer> inputNumbers) {
+    boolean isEqualsSixNumbers(Set<Integer> inputNumbers) {
         return inputNumbers.stream().allMatch(numbers -> checkEqualSixNumbers(inputNumbers));
     }
 
-    private static boolean checkEqualSixNumbers(Set<Integer> inputNumbers) {
+    static boolean checkEqualSixNumbers(Set<Integer> inputNumbers) {
         return inputNumbers.size() == SIZE_NUMBERS;
     }
 
