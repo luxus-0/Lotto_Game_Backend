@@ -1,5 +1,6 @@
 package pl.lotto.numberreceiver;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 import pl.lotto.numberreceiver.enums.ValidateMessageInfo;
@@ -17,6 +18,7 @@ import static pl.lotto.numberreceiver.enums.ValidateMessageInfo.NOT_CORRECT_SIZE
 public class NumberReceiverFacadeTest {
 
     @Test
+    @DisplayName("Return success when user gave six numbers")
     public void should_return_success_when_user_gave_six_numbers() {
         // given
         NumberValidator numberValidator = new NumberValidator();
@@ -30,6 +32,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
+    @DisplayName("Return failed when user gave less than six numbers")
     public void should_return_failed_when_user_gave_less_than_six_numbers() {
         // given
         NumberValidator numberValidator = new NumberValidator();
@@ -43,7 +46,8 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_not_correct_size_numbers_when_user_gave_more_than_six_numbers() {
+    @DisplayName("return not correct size numbers when user gave more than six numbers")
+    public void should_return_not_correct_size_numbers_message_when_user_gave_more_than_six_numbers() {
         // given
         NumberValidator numberValidator = new NumberValidator();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(numberValidator);
@@ -56,6 +60,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
+    @DisplayName("Return duplicate numbers message when user gave duplicated number")
     public void should_return_duplicate_numbers_message_when_user_gave_duplicated_number() {
         // given
         NumberValidator numberValidator = new NumberValidator();
@@ -69,6 +74,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
+    @DisplayName("")
     public void should_return_counting_numbers_when_user_gave_duplicated_number() {
         // given
         NumberValidator numberValidator = new NumberValidator();
@@ -82,6 +88,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
+    @DisplayName("")
     public void should_return_not_in_range_numbers_message_when_user_gave_number_out_of_range() {
         // given
         NumberValidator numberValidator = new NumberValidator();
@@ -94,6 +101,7 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
+    @DisplayName("")
     public void should_return_in_range_numbers_message_when_user_gave_number_in_range() {
         // given
         NumberValidator numberValidator = new NumberValidator();
