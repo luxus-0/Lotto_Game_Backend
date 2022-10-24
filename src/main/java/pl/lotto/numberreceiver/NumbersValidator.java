@@ -1,10 +1,12 @@
 package pl.lotto.numberreceiver;
 
+import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 import pl.lotto.numberreceiver.dto.ValidationDto;
 
 import java.util.Set;
+import java.util.stream.IntStream;
 
-import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
+import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
 import static pl.lotto.numberreceiver.enums.ValidateMessage.*;
 
 class NumbersValidator {
@@ -28,6 +30,13 @@ class NumbersValidator {
 
     boolean checkMoreThanSixNumbers(Set<Integer> inputNumbers) {
         return inputNumbers.stream().anyMatch(NumbersValidator::isMoreThanCorrectSize);
+    }
+
+    boolean checkNumbersInRange(Set<Integer> numbersInRange){
+        return IntStream.rangeClosed(RANGE_FROM_NUMBER, RANGE_TO_NUMBER)
+                .mapToObj(rangeNumbers -> new NumbersResultMessageDto(numbersInRange, IN_RANGE_NUMBERS.name()))
+                .findAny()
+                .isPresent();
     }
 
     private static boolean isMoreThanCorrectSize(Integer number) {
