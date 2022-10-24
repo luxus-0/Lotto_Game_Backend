@@ -15,8 +15,4 @@ class NumbersGenerator {
                 .boxed()
                 .collect(Collectors.toSet());
     }
-
-    private static int readRandomNumbers() {
-        return new Random().nextInt(MIN_NUMBERS, MAX_NUMBERS);
-    }
 }
