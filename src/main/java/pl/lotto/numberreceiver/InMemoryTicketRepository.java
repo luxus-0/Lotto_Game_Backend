@@ -15,6 +15,13 @@ class InMemoryTicketRepository implements TicketRepository {
 
     @Override
     public Optional<Ticket> findByHash(String hash) {
-        return Optional.of(map.get(hash));
+        Ticket ticket = map.get(hash);
+        return Optional.of(ticket);
+    }
+
+    @Override
+    public Optional<Ticket> findByDate(String dateDraw){
+        Ticket ticket = map.get(dateDraw);
+        return Optional.of(ticket);
     }
 }
