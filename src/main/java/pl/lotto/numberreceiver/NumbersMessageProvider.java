@@ -7,4 +7,8 @@ class NumbersMessageProvider {
     public static final String FAILED_MESSAGE = "failed";
     public static final String SUCCESS_MESSAGE = "success";
     public static final String INVALID_MESSAGE = "invalid";
+
+    static void numbers_not_found(){
+        System.err.println("Numbers not found");
+    }
 }
