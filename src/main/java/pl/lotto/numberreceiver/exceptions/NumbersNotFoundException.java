@@ -1,4 +1,4 @@
-package pl.lotto.numberreceiver.exception;
+package pl.lotto.numberreceiver.exceptions;
 
 public class NumbersNotFoundException extends RuntimeException {
     public NumbersNotFoundException(){

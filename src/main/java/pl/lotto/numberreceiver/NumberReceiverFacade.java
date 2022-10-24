@@ -3,9 +3,9 @@ package pl.lotto.numberreceiver;
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 import pl.lotto.numberreceiver.dto.TicketMessageDto;
 import pl.lotto.numberreceiver.enums.ValidateMessage;
-import pl.lotto.numberreceiver.exception.DuplicateNumbersNotFoundException;
-import pl.lotto.numberreceiver.exception.NumbersNotFoundException;
-import pl.lotto.numberreceiver.exception.RangeNumbersException;
+import pl.lotto.numberreceiver.exceptions.DuplicateNumbersNotFoundException;
+import pl.lotto.numberreceiver.exceptions.NumbersNotFoundException;
+import pl.lotto.numberreceiver.exceptions.RangeNumbersException;
 
 import java.time.LocalDateTime;
 import java.util.List;
