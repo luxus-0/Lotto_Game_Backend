@@ -13,11 +13,6 @@ public class Ticket{
    private Set<Integer> numbers;
    private LocalDateTime drawDate;
 
-   public Ticket(String hash, Set<Integer> numbers) {
-      this.hash = hash;
-      this.numbers = numbers;
-   }
-
    Ticket dto(){
       return Ticket.builder()
               .numbers(numbers)
