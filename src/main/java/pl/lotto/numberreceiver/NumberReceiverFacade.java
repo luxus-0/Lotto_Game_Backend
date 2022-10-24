@@ -65,8 +65,7 @@ public class NumberReceiverFacade {
     }
 
     public ValidateMessage isNumbersNotInRange(Set<Integer> inputNumbers) {
-        NumbersRangeChecker numbers = new NumbersRangeChecker();
-        if (numbers.checkNumbersInRange(inputNumbers)) {
+        if (numberValidator.checkNumbersInRange(inputNumbers)) {
             return IN_RANGE_NUMBERS;
         }
         throw new RangeNumbersException();
