@@ -1,29 +1,27 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.TicketDto;
-
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 class InMemoryTicketRepository implements TicketRepository {
-    private final ConcurrentHashMap<String, TicketDto> map = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Ticket> map = new ConcurrentHashMap<>();
 
     @Override
     public void save(Ticket ticket) {
-        String hash = ticket.hash();
-        TicketDto ticketDto = new TicketDto(ticket.numbers(), ticket.drawDate());
-        map.put(hash, ticketDto);
+        map.put(ticket.getHash(), ticket.dto());
     }
 
     @Override
-    public Optional<TicketDto> findByHash(String hash) {
-        TicketDto ticket = map.get(hash);
-        return Optional.of(ticket);
+    public Optional<Ticket> findByHash(String hash) {
+        Ticket ticket = map.get(hash);
+        return Optional.of(ticket)
+                .map(Ticket::dto);
     }
 
     @Override
-    public Optional<TicketDto> findByDate(String dateDraw){
-        TicketDto ticket = map.get(dateDraw);
-        return Optional.of(ticket);
+    public Optional<Ticket> findByDate(String dateDraw){
+        Ticket ticket = map.get(dateDraw);
+        return Optional.of(ticket)
+                .map(Ticket::dto);
     }
 }
