@@ -1,25 +1,32 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
+import pl.lotto.numberreceiver.dto.TicketDto;
+import pl.lotto.numberreceiver.dto.TicketMessageDto;
 import pl.lotto.numberreceiver.enums.ValidateMessage;
 import pl.lotto.numberreceiver.exception.DuplicateNumbersNotFoundException;
-import pl.lotto.numberreceiver.exception.RangeNumbersException;
 import pl.lotto.numberreceiver.exception.NumbersNotFoundException;
+import pl.lotto.numberreceiver.exception.RangeNumbersException;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
-import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
+import static pl.lotto.numberreceiver.DrawDateGenerator.generateDrawDate;
 import static pl.lotto.numberreceiver.NumbersDuplicationInfo.duplicateNumbersInfo;
+import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
+import static pl.lotto.numberreceiver.TicketIdGenerator.generateTicketHash;
 import static pl.lotto.numberreceiver.enums.ValidateMessage.*;
 
 public class NumberReceiverFacade {
 
     private final NumbersValidator numberValidator;
+    private final TicketRepository ticketRepository;
 
-    public NumberReceiverFacade(NumbersValidator numberValidator) {
+    public NumberReceiverFacade(NumbersValidator numberValidator, TicketRepository ticketRepository) {
         this.numberValidator = numberValidator;
+        this.ticketRepository = ticketRepository;
     }
 
     public NumbersResultMessageDto isLessThanSixNumbers(Set<Integer> inputNumbers) {
@@ -61,5 +68,24 @@ public class NumberReceiverFacade {
             return IN_RANGE_NUMBERS;
         }
         throw new RangeNumbersException();
+    }
+
+    public TicketMessageDto generateMessageTicket(Set<Integer> inputNumbers) {
+        if (inputNumbers.isEmpty()) {
+            numbers_not_found();
+        }
+        if (numberValidator.checkEqualsSixNumbers(inputNumbers)) {
+            Ticket generatedTicket = Ticket.builder()
+                    .hash(generateTicketHash())
+                    .numbers(new TreeSet<>(inputNumbers))
+                    .drawDate(generateDrawDate())
+                    .build();
+            ticketRepository.save(generatedTicket);
+            Optional<TicketDto> addedTicket = ticketRepository.findByHash(generateTicketHash());
+            if (addedTicket.isPresent()) {
+                return new TicketMessageDto(generatedTicket, GENERATED_TICKET_OK);
+            }
+        }
+        return new TicketMessageDto(null, GENERATED_TICKET_FAILED);
     }
 }
