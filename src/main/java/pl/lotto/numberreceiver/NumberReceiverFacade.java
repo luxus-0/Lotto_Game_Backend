@@ -1,22 +1,24 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
-import pl.lotto.numberreceiver.dto.TicketDto;
 import pl.lotto.numberreceiver.dto.TicketMessageDto;
 import pl.lotto.numberreceiver.enums.ValidateMessage;
 import pl.lotto.numberreceiver.exception.DuplicateNumbersNotFoundException;
 import pl.lotto.numberreceiver.exception.NumbersNotFoundException;
 import pl.lotto.numberreceiver.exception.RangeNumbersException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
 import static pl.lotto.numberreceiver.DrawDateGenerator.generateDrawDate;
-import static pl.lotto.numberreceiver.NumbersDuplicationInfo.duplicateNumbersInfo;
+import static pl.lotto.numberreceiver.GeneratedTicketMessageProvider.generated_ticket_message_failed;
+import static pl.lotto.numberreceiver.GeneratedTicketMessageProvider.generated_ticket_message_ok;
+import static pl.lotto.numberreceiver.NumbersDuplicationCounter.printDuplicatedNumbersInfo;
 import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
-import static pl.lotto.numberreceiver.TicketIdGenerator.generateTicketHash;
+import static pl.lotto.numberreceiver.TicketIdGenerator.generateHash;
 import static pl.lotto.numberreceiver.enums.ValidateMessage.*;
 
 public class NumberReceiverFacade {
@@ -57,7 +59,7 @@ public class NumberReceiverFacade {
     public ValidateMessage isDuplicateNumbers(List<Integer> numbersCheck) {
         NumbersDuplicationChecker numbersFinder = new NumbersDuplicationChecker();
         if (numbersFinder.checkIdenticalNumbers(numbersCheck)) {
-            return duplicateNumbersInfo();
+            return printDuplicatedNumbersInfo(numbersCheck);
         }
         throw new DuplicateNumbersNotFoundException();
     }
@@ -70,22 +72,24 @@ public class NumberReceiverFacade {
         throw new RangeNumbersException();
     }
 
-    public TicketMessageDto generateMessageTicket(Set<Integer> inputNumbers) {
+    public TicketMessageDto isGeneratedTicket(Set<Integer> inputNumbers) {
         if (inputNumbers.isEmpty()) {
             numbers_not_found();
         }
         if (numberValidator.checkEqualsSixNumbers(inputNumbers)) {
+            String hash = generateHash();
+            LocalDateTime date = generateDrawDate();
             Ticket generatedTicket = Ticket.builder()
-                    .hash(generateTicketHash())
+                    .hash(hash)
                     .numbers(new TreeSet<>(inputNumbers))
-                    .drawDate(generateDrawDate())
+                    .drawDate(date)
                     .build();
             ticketRepository.save(generatedTicket);
-            Optional<TicketDto> addedTicket = ticketRepository.findByHash(generateTicketHash());
+            Optional<Ticket> addedTicket = ticketRepository.findByHash(hash);
             if (addedTicket.isPresent()) {
-                return new TicketMessageDto(generatedTicket, GENERATED_TICKET_OK);
+                return new TicketMessageDto(generatedTicket, generated_ticket_message_ok());
             }
         }
-        return new TicketMessageDto(null, GENERATED_TICKET_FAILED);
+        return new TicketMessageDto(null, generated_ticket_message_failed());
     }
 }
