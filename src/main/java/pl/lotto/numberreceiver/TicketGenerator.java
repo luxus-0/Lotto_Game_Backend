@@ -1,7 +1,7 @@
 package pl.lotto.numberreceiver;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.Collection;
 import java.util.TreeSet;
 import java.util.UUID;
 
@@ -14,7 +14,7 @@ class TicketGenerator {
         return LocalDateTime.now();
     }
 
-    public Ticket generateTicket(Set<Integer> inputNumbers, String hash, LocalDateTime date) {
+    public Ticket generateTicket(Collection<Integer> inputNumbers, String hash, LocalDateTime date) {
         return Ticket.builder()
                 .hash(hash)
                 .numbers(new TreeSet<>(inputNumbers))
