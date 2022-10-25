@@ -9,7 +9,7 @@ import static pl.lotto.numberreceiver.enums.ValidateMessage.DUPLICATE_NUMBERS;
 import static pl.lotto.numberreceiver.enums.ValidateMessage.DUPLICATE_NUMBERS_NOT_FOUND;
 
 class NumbersDuplicationCounter {
-    static ValidateMessage printDuplicatedNumbersInfo(List<Integer> numbersFromUser) {
+    ValidateMessage printDuplicatedNumbersInfo(List<Integer> numbersFromUser) {
         long countNumbers = countDuplicatedNumbers(numbersFromUser);
         if (countNumbers > 0) {
             countDuplicateNumbersInfo(countNumbers);
@@ -18,13 +18,13 @@ class NumbersDuplicationCounter {
         return DUPLICATE_NUMBERS_NOT_FOUND;
     }
 
-    static long countDuplicatedNumbers(List<Integer> numbersInput){
+    long countDuplicatedNumbers(List<Integer> numbersInput){
         return numbersInput.stream()
                 .filter(duplicateNumbers -> Collections.frequency(numbersInput, duplicateNumbers) > 1)
                 .count();
     }
 
-    static void countDuplicateNumbersInfo(long countNumbers){
+    void countDuplicateNumbersInfo(long countNumbers){
         System.out.println("COUNT DUPLICATE NUMBERS: " +countNumbers);
     }
 }

@@ -9,7 +9,7 @@ import static pl.lotto.numbersgenerator.NumbersGeneratorMapper.RANDOM_NUMBERS;
 import static pl.lotto.numbersgenerator.NumbersGeneratorMessageProvider.*;
 
 class NumbersGenerator {
-    static Set<Integer> generateNumbers() {
+    Set<Integer> generateNumbers() {
         return IntStream.rangeClosed(SIZE_MIN, SIZE_MAX)
                 .map(mapper -> RANDOM_NUMBERS)
                 .boxed()
