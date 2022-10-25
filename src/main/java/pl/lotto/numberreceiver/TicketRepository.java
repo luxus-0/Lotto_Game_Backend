@@ -1,11 +1,11 @@
 package pl.lotto.numberreceiver;
 
-import java.util.Optional;
+import java.util.Set;
 
 interface TicketRepository {
-    void save(Ticket ticket);
+    Ticket save(Ticket ticket);
 
-    Optional<Ticket> findByHash(String hash);
+    Set<Integer> findByHash(String hash);
 
-    Optional<Ticket> findByDate(String dateDraw);
+    Set<Integer> findByDate(String dateDraw);
 }
