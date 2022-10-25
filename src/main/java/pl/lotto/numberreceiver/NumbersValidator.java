@@ -1,45 +1,63 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
-import pl.lotto.numberreceiver.dto.ValidationDto;
-
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
-import static pl.lotto.numberreceiver.enums.ValidateMessage.*;
+import static pl.lotto.numberreceiver.TicketMessageProvider.*;
 
 class NumbersValidator {
-    boolean checkLessThanSixNumbers(Set<Integer> numbersInput) {
-        return numbersInput.stream()
-                .map(valid -> new ValidationDto(numbersInput, NOT_CORRECT_SIZE_NUMBERS))
-                .anyMatch(NumbersValidator::isLessThanSixSizeNumbers);
+
+    List<String> errors = new LinkedList<>();
+
+    public boolean validate(Set<Integer> inputNumbers) {
+        if (isEqualsSixNumbers(inputNumbers)) {
+            System.out.println(EQUALS_SIX_NUMBERS);
+        }
+        if (isLessThanSixNumbers(inputNumbers)) {
+            errors.add(LESS_THAN_SIX_NUMBERS);
+        }
+        if (isMoreThanSixNumbers(inputNumbers)) {
+            errors.add(MORE_THAN_SIX_NUMBERS);
+        }
+        if (!isInRangeNumbers()) {
+            errors.add(NOT_IN_RANGE_NUMBERS);
+        }
+        if (isDuplicateNumbers(inputNumbers)) {
+            errors.add(DUPLICATE_NUMBERS);
+        }
+        if(inputNumbers.isEmpty()){
+            errors.add(NUMBERS_IS_EMPTY);
+        }
+        throw new IllegalArgumentException("ERROR");
     }
 
-    private static boolean isLessThanSixSizeNumbers(ValidationDto validator) {
-        return validator.numbersFromUser().size() < SIZE_NUMBERS;
+    boolean isDuplicateNumbers(Collection<Integer> inputNumbers) {
+        for (Integer number : inputNumbers) {
+            if (inputNumbers.contains(number)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    boolean checkEqualsSixNumbers(Set<Integer> inputNumbers) {
-        return inputNumbers.stream().anyMatch(NumbersValidator::isCorrectSizeNumbers);
+    boolean isLessThanSixNumbers(Set<Integer> inputNumbers) {
+        return inputNumbers.size() < SIZE_NUMBERS;
     }
 
-    private static boolean isCorrectSizeNumbers(Integer number) {
-        return number == SIZE_NUMBERS;
+    boolean isEqualsSixNumbers(Set<Integer> inputNumbers) {
+        return inputNumbers.size() == SIZE_NUMBERS;
     }
 
-    boolean checkMoreThanSixNumbers(Set<Integer> inputNumbers) {
-        return inputNumbers.stream().anyMatch(NumbersValidator::isMoreThanCorrectSize);
-    }
-
-    boolean checkNumbersInRange(Set<Integer> numbersInRange){
+    boolean isInRangeNumbers() {
         return IntStream.rangeClosed(RANGE_FROM_NUMBER, RANGE_TO_NUMBER)
-                .mapToObj(rangeNumbers -> new NumbersResultMessageDto(numbersInRange, IN_RANGE_NUMBERS.name()))
                 .findAny()
                 .isPresent();
     }
 
-    private static boolean isMoreThanCorrectSize(Integer number) {
-        return number > SIZE_NUMBERS;
+    boolean isMoreThanSixNumbers(Set<Integer> inputNumbers) {
+        return inputNumbers.size() > SIZE_NUMBERS;
     }
 }
