@@ -15,12 +15,4 @@ class TicketMessageProvider {
     public static final String NUMBERS_IS_EMPTY = "numbers is empty";
     public static final String GENERATED_TICKET_OK = "ok";
     public static final String GENERATED_TICKET_FAILED = "failed";
-
-    static String ticket_failed() {
-        return GENERATED_TICKET_FAILED;
-    }
-
-    static String ticket_ok() {
-        return GENERATED_TICKET_OK;
-    }
 }

@@ -3,8 +3,6 @@ package pl.lotto.numberreceiver;
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public class NumberReceiverFacade {
