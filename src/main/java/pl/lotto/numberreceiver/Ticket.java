@@ -8,15 +8,8 @@ import java.util.Set;
 
 @Builder
 @Getter
-public class Ticket{
-   private String hash;
-   private Set<Integer> numbers;
-   private LocalDateTime drawDate;
-
-   Ticket dto(){
-      return Ticket.builder()
-              .numbers(numbers)
-              .drawDate(drawDate)
-              .build();
-   }
+public class Ticket {
+    private String hash;
+    private Set<Integer> numbers;
+    private LocalDateTime drawDate;
 }
