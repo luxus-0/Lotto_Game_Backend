@@ -1,13 +1,11 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
-import pl.lotto.numberreceiver.dto.TicketMessageDto;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
-
-import static pl.lotto.numberreceiver.TicketMessageProvider.ticket_failed;
-import static pl.lotto.numberreceiver.TicketMessageProvider.ticket_ok;
 
 public class NumberReceiverFacade {
 
@@ -27,10 +25,9 @@ public class NumberReceiverFacade {
            LocalDateTime date = ticketGenerator.generateDate();
            String hash = ticketGenerator.generateHash();
            Ticket ticketCreated = ticketGenerator.generateTicket(inputNumbers, hash, date);
-           Ticket ticket = ticketRepository.save(ticketCreated);
-           TicketMessageDto ticketMessage = new TicketMessageDto(ticket, ticket_ok());
-           return new NumbersResultMessageDto(inputNumbers, ticketMessage.message());
+           ticketRepository.save(ticketCreated);
+           return new NumbersResultMessageDto(inputNumbers, numberValidator.errors);
        }
-        return new NumbersResultMessageDto(inputNumbers, ticket_failed());
+        return new NumbersResultMessageDto(inputNumbers, numberValidator.errors);
     }
 }
