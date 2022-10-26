@@ -1,24 +1,34 @@
 package pl.lotto.numberreceiver;
 
+import pl.lotto.date_time_generator.DateTimeGenerator;
+
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.Set;
 
 class TicketGenerator {
-    String generateHash() {
-        return UUID.randomUUID().toString();
+    private final UuidGenerator uuidGenerator;
+    private final DateTimeGenerator dateTimeGenerator;
+
+    TicketGenerator(UuidGenerator uuidGenerator, DateTimeGenerator dateTimeGenerator) {
+        this.uuidGenerator = uuidGenerator;
+        this.dateTimeGenerator = dateTimeGenerator;
     }
 
-    LocalDateTime generateDate(){
-        return LocalDateTime.now();
+    Ticket generateTicket(Set<Integer> inputNumbers) {
+        String uuid = uuidGenerator.generateUUID();
+        LocalDateTime currentTime = dateTimeGenerator.getCurrentDateAndTime();
+        LocalDateTime currentDrawTime = dateTimeGenerator.getDrawDate(currentTime);
+        LocalDateTime expirationDate = dateTimeGenerator.getExpirationDateAndTime(currentTime);
+        return generate(inputNumbers, uuid, currentTime, currentDrawTime, expirationDate);
     }
 
-    public Ticket generateTicket(Collection<Integer> inputNumbers, String hash, LocalDateTime date) {
+    private Ticket generate(Set<Integer> inputNumbers, String hash, LocalDateTime currentTime, LocalDateTime currentDrawTime, LocalDateTime expirationDate) {
         return Ticket.builder()
                 .hash(hash)
-                .numbers(new TreeSet<>(inputNumbers))
-                .drawDate(date)
+                .numbers(inputNumbers)
+                .dateTime(currentTime)
+                .dateTime(currentDrawTime)
+                .dateTime(expirationDate)
                 .build();
     }
 }
