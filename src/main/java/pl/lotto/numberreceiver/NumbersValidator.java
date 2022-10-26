@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static pl.lotto.numberreceiver.TicketMessageProvider.*;
+import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
 
 class NumbersValidator {
 
