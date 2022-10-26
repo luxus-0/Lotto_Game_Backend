@@ -1,4 +1,4 @@
-package pl.lotto.numberreceiver.enums;
+package pl.lotto.numberreceiver;
 
 public enum ValidateMessage {
     CORRECT_SIZE_NUMBERS,

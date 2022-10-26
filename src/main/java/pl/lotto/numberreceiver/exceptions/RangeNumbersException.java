@@ -1,6 +1,6 @@
 package pl.lotto.numberreceiver.exceptions;
 
-import pl.lotto.numberreceiver.enums.ValidateMessage;
+import pl.lotto.numberreceiver.ValidateMessage;
 
 public class RangeNumbersException extends RuntimeException {
     public RangeNumbersException(){

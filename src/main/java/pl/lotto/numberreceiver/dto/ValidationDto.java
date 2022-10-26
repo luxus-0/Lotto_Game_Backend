@@ -1,6 +1,6 @@
 package pl.lotto.numberreceiver.dto;
 
-import pl.lotto.numberreceiver.enums.ValidateMessage;
+import pl.lotto.numberreceiver.ValidateMessage;
 
 import java.util.Set;
 
