@@ -9,7 +9,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static pl.lotto.numberreceiver.TicketMessageProvider.*;
+import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
 
 public class NumberReceiverFacadeTest {
 
