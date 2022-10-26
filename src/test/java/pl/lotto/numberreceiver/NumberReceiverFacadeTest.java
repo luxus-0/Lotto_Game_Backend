@@ -19,7 +19,7 @@ public class NumberReceiverFacadeTest {
         // given
         TicketRepository ticketRepository = new InMemoryTicketRepository();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository);
+                .createModuleForTests();
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -48,7 +48,7 @@ public class NumberReceiverFacadeTest {
         // given
         TicketRepository ticketRepository = new InMemoryTicketRepository();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository);
+                .createModuleForTests();
         Set<Integer> numbers = Set.of(1, 2, 3, 4);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -64,7 +64,7 @@ public class NumberReceiverFacadeTest {
         // given
         TicketRepository ticketRepository = new InMemoryTicketRepository();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository);
+                .createModuleForTests();
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6, 12, 14);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -80,7 +80,7 @@ public class NumberReceiverFacadeTest {
         // given
         TicketRepository ticketRepository = new InMemoryTicketRepository();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository);
+                .createModuleForTests();
         Set<Integer> numbers = Set.of(100, 1, 2, 3, 4, -3);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
