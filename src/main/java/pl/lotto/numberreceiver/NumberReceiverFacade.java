@@ -2,7 +2,6 @@ package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 public class NumberReceiverFacade {
@@ -20,9 +19,7 @@ public class NumberReceiverFacade {
     public NumbersResultMessageDto inputNumbers(Set<Integer> inputNumbers) {
        boolean validate = numberValidator.validate(inputNumbers);
        if(validate){
-           LocalDateTime date = ticketGenerator.generateDate();
-           String hash = ticketGenerator.generateHash();
-           Ticket ticketCreated = ticketGenerator.generateTicket(inputNumbers, hash, date);
+           Ticket ticketCreated = ticketGenerator.generateTicket(inputNumbers);
            ticketRepository.save(ticketCreated);
            return new NumbersResultMessageDto(inputNumbers, numberValidator.errors);
        }
