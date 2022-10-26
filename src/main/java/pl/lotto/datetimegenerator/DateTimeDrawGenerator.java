@@ -1,19 +1,18 @@
-package pl.lotto.date_time_generator;
+package pl.lotto.datetimegenerator;
 
 import java.time.*;
 
-public class DateTimeGenerator {
+public class DateTimeDrawGenerator {
 
-    private Clock clock;
-    private LocalTime drawTime;
-    private DayOfWeek drawDayOfWeek;
-    private Duration numberDays;
+    private final LocalTime drawTime;
+    private final DayOfWeek drawDayOfWeek;
 
-    public LocalDateTime getCurrentDateAndTime() {
-        return LocalDateTime.now(clock);
+    public DateTimeDrawGenerator(LocalTime drawTime, DayOfWeek drawDayOfWeek) {
+        this.drawTime = drawTime;
+        this.drawDayOfWeek = drawDayOfWeek;
     }
 
-    public LocalDateTime getDrawDate(LocalDateTime currentDateTime) {
+    public LocalDateTime generateDrawDate(LocalDateTime currentDateTime) {
         LocalTime actualTime = currentDateTime.toLocalTime();
         LocalDate actualDate = currentDateTime.toLocalDate();
         DayOfWeek actualDayOfWeek = currentDateTime.getDayOfWeek();
@@ -38,9 +37,5 @@ public class DateTimeGenerator {
             dayDifference = DayOfWeek.values().length + dayDifference;
         }
         return Duration.ofDays(dayDifference);
-    }
-
-    public LocalDateTime getExpirationDateAndTime(LocalDateTime drawDateTime) {
-        return drawDateTime.plusDays(numberDays.toDays());
     }
 }
