@@ -4,14 +4,10 @@ import java.time.*;
 
 public class DateTimeGenerator {
 
-    private final Clock clock;
+    private Clock clock;
     private LocalTime drawTime;
     private DayOfWeek drawDayOfWeek;
     private Duration numberDays;
-
-    public DateTimeGenerator(Clock clock) {
-        this.clock = clock;
-    }
 
     public LocalDateTime getCurrentDateAndTime() {
         return LocalDateTime.now(clock);
