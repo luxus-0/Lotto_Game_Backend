@@ -1,9 +1,6 @@
 package pl.lotto.numberreceiver;
 
-import java.util.List;
-import java.util.Set;
-
-class TicketMessageProvider {
+class NumbersMessageProvider {
     public static final int SIZE_NUMBERS = 6;
     public static final int RANGE_FROM_NUMBER = 1;
     public static final int RANGE_TO_NUMBER = 99;
@@ -11,8 +8,5 @@ class TicketMessageProvider {
     public static final String MORE_THAN_SIX_NUMBERS = "more than six numbers";
     public static final String EQUALS_SIX_NUMBERS = "equals six numbers";
     public static final String NOT_IN_RANGE_NUMBERS = "not in range numbers";
-    public static final String DUPLICATE_NUMBERS = "duplicate numbers";
     public static final String NUMBERS_IS_EMPTY = "numbers is empty";
-    public static final String GENERATED_TICKET_OK = "ok";
-    public static final String GENERATED_TICKET_FAILED = "failed";
 }
