@@ -30,6 +30,19 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
+    @DisplayName("return true when user gave six numbers")
+    public void should_return_true_when_user_gave_six_numbers() {
+        // given
+        NumbersValidator validator = new NumbersValidator();
+        Set<Integer> numbers = Set.of(100, 1, 2, 3, 4, -3);
+        // when
+        boolean isCorrectSizeNumbers = validator.isEqualsSixNumbers(numbers);
+        // then
+        List<String> messages = List.of(EQUALS_SIX_NUMBERS);
+        assertTrue(isCorrectSizeNumbers, messages.toString());
+    }
+
+    @Test
     @DisplayName("return failed when user gave less than six numbers")
     public void should_return_failed_when_user_gave_less_than_six_numbers() {
         // given
@@ -75,18 +88,5 @@ public class NumberReceiverFacadeTest {
         List<String> messages = List.of(EQUALS_SIX_NUMBERS);
         NumbersResultMessageDto result = new NumbersResultMessageDto(numbers, messages);
         assertThat(inputNumbers).isEqualTo(result);
-    }
-
-    @Test
-    @DisplayName("return true when user gave six numbers")
-    public void should_return_true_when_user_gave_six_numbers() {
-        // given
-        NumbersValidator validator = new NumbersValidator();
-        Set<Integer> numbers = Set.of(100, 1, 2, 3, 4, -3);
-        // when
-        boolean isCorrectSizeNumbers = validator.isEqualsSixNumbers(numbers);
-        // then
-        List<String> messages = List.of(EQUALS_SIX_NUMBERS);
-        assertTrue(isCorrectSizeNumbers, messages.toString());
     }
 }
