@@ -1,26 +1,17 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.datetimegenerator.DateTimeActualGenerator;
-import pl.lotto.datetimegenerator.DateTimeDrawGenerator;
-import pl.lotto.datetimegenerator.DateTimeExpiryGenerator;
-import pl.lotto.datetimegenerator.DateTimeGeneratorFacade;
+import org.springframework.context.annotation.Configuration;
+import pl.lotto.datetimegenerator.*;
 
-import java.time.Clock;
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalTime;
-
+@Configuration
 public class NumberReceiverFacadeConfiguration {
-    NumberReceiverFacade createModuleForTests(TicketRepository ticketRepository,
-                                              Clock clock,
-                                              LocalTime drawTime,
-                                              DayOfWeek drawDayOfWeek,
-                                              Duration duration){
+
+    NumberReceiverFacade createModuleForTests(TicketRepository ticketRepository, DateTimeGenerator timeGenerator){
         NumbersValidator numbersValidator = new NumbersValidator();
         UuidGenerator uuidGenerator = new UuidGenerator();
-        DateTimeActualGenerator dateTimeActualGenerator = new DateTimeActualGenerator(clock);
-        DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(drawTime, drawDayOfWeek);
-        DateTimeExpiryGenerator dateTimeExpiryGenerator = new DateTimeExpiryGenerator(duration);
+        DateTimeActualGenerator dateTimeActualGenerator = new DateTimeActualGenerator(timeGenerator.getClock());
+        DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(timeGenerator.getDrawHour(), timeGenerator.getDrawDayOfWeek());
+        DateTimeExpiryGenerator dateTimeExpiryGenerator = new DateTimeExpiryGenerator(timeGenerator.getExpirationInDays());
         DateTimeGeneratorFacade dateTimeGeneratorFacade = new DateTimeGeneratorFacade(dateTimeActualGenerator, dateTimeDrawGenerator, dateTimeExpiryGenerator);
         TicketGenerator ticketCreated = new TicketGenerator(uuidGenerator, dateTimeGeneratorFacade);
         return new NumberReceiverFacade(numbersValidator, ticketRepository, ticketCreated);
