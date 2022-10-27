@@ -12,13 +12,7 @@ class InMemoryTicketRepository implements TicketRepository {
         return ticket;
     }
 
-    @Override
-    public Set<Integer> findByHash(String hash) {
+    public Set<Integer> findByHash(String hash){
         return map.get(hash);
-    }
-
-    @Override
-    public Set<Integer> findByDate(String dateDraw){
-        return map.get(dateDraw);
     }
 }
