@@ -27,9 +27,9 @@ class TicketGenerator {
         return Ticket.builder()
                 .hash(hash)
                 .numbers(inputNumbers)
-                .dateTime(currentTime)
-                .dateTime(currentDrawTime)
-                .dateTime(expirationDate)
+                .actualDate(currentTime)
+                .drawDate(currentDrawTime)
+                .expirationDate(expirationDate)
                 .build();
     }
 }
