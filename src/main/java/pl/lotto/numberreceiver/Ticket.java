@@ -11,5 +11,7 @@ import java.util.Set;
 public class Ticket {
     private String hash;
     private Set<Integer> numbers;
-    private LocalDateTime dateTime;
+    private LocalDateTime actualDate;
+    private LocalDateTime drawDate;
+    private LocalDateTime expirationDate;
 }
