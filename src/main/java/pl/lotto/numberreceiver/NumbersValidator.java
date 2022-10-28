@@ -10,23 +10,23 @@ import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
 
 class NumbersValidator {
 
-    List<String> errors = new LinkedList<>();
+    List<String> messagesValidation = new LinkedList<>();
 
     public boolean validate(Set<Integer> inputNumbers) {
         if (isEqualsSixNumbers(inputNumbers)) {
-            errors.add(EQUALS_SIX_NUMBERS);
+            messagesValidation.add(EQUALS_SIX_NUMBERS);
         }
         else if (isLessThanSixNumbers(inputNumbers)) {
-            errors.add(LESS_THAN_SIX_NUMBERS);
+            messagesValidation.add(LESS_THAN_SIX_NUMBERS);
         }
        else if (isMoreThanSixNumbers(inputNumbers)) {
-            errors.add(MORE_THAN_SIX_NUMBERS);
+            messagesValidation.add(MORE_THAN_SIX_NUMBERS);
         }
        else if (!isInRangeNumbers()) {
-            errors.add(NOT_IN_RANGE_NUMBERS);
+            messagesValidation.add(NOT_IN_RANGE_NUMBERS);
         }
-        if(inputNumbers.isEmpty()){
-            errors.add(NUMBERS_IS_EMPTY);
+        else if(inputNumbers.isEmpty()){
+            messagesValidation.add(NUMBERS_IS_EMPTY);
         }
         return false;
     }
