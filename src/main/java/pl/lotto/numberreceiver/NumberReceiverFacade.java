@@ -3,7 +3,6 @@ package pl.lotto.numberreceiver;
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class NumberReceiverFacade {
@@ -24,7 +23,7 @@ public class NumberReceiverFacade {
        if(validate){
            Ticket ticketCreated = ticketGenerator.generateTicket(inputNumbers);
            ticketRepository.save(ticketCreated);
-           return new NumbersResultMessageDto(inputNumbers, numberValidator.messageValidations);
+           return new NumbersResultMessageDto(inputNumbers, numberValidator.messagesValidation);
        }
        return new NumbersResultMessageDto(inputNumbers, numbersNotFound());
     }
