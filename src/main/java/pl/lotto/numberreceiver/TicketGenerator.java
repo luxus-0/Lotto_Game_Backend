@@ -1,35 +1,29 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.datetimegenerator.DateTimeGeneratorFacade;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 
 class TicketGenerator {
-    private final UuidGenerator uuidGenerator;
-    private final DateTimeGeneratorFacade dateTimeGeneratorFacade;
+    private final TicketRandomUUID ticketUUID;
+    private final TicketDrawDate ticketDrawDate;
 
-    TicketGenerator(UuidGenerator uuidGenerator, DateTimeGeneratorFacade dateTimeGeneratorFacade) {
-        this.uuidGenerator = uuidGenerator;
-        this.dateTimeGeneratorFacade = dateTimeGeneratorFacade;
+    TicketGenerator(TicketRandomUUID ticketUUID, TicketDrawDate ticketDrawDate) {
+        this.ticketUUID = ticketUUID;
+        this.ticketDrawDate = ticketDrawDate;
     }
 
 
     Ticket generateTicket(Set<Integer> inputNumbers) {
-        String uuid = uuidGenerator.generateUUID();
-        LocalDateTime actualDateTime = dateTimeGeneratorFacade.readActualDateTime();
-        LocalDateTime actualDrawDateTime = dateTimeGeneratorFacade.readDrawDateTime();
-        LocalDateTime expirationDateTime = dateTimeGeneratorFacade.readExpirationDateTime();
-        return generate(inputNumbers, uuid, actualDateTime, actualDrawDateTime, expirationDateTime);
+        String uuid = ticketUUID.generateUUID();
+        LocalDateTime drawDate = ticketDrawDate.generateDrawDate();
+        return generate(uuid, inputNumbers, drawDate);
     }
 
-    private Ticket generate(Set<Integer> inputNumbers, String hash, LocalDateTime currentTime, LocalDateTime currentDrawTime, LocalDateTime expirationDate) {
+    private Ticket generate(String hash, Set<Integer> numbersUser, LocalDateTime drawDate) {
         return Ticket.builder()
                 .hash(hash)
-                .numbers(inputNumbers)
-                .actualDate(currentTime)
-                .drawDate(currentDrawTime)
-                .expirationDate(expirationDate)
+                .numbersUser(numbersUser)
+                .drawDate(drawDate)
                 .build();
     }
 }
