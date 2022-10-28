@@ -1,12 +1,12 @@
-package pl.lotto.datetimegenerator;
+package pl.lotto.numberreceiver;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 
-class CurrentDateTime {
+class TicketCurrentDateTime {
     private final Clock clock;
 
-    CurrentDateTime(Clock clock) {
+    TicketCurrentDateTime(Clock clock) {
         this.clock = clock;
     }
 
