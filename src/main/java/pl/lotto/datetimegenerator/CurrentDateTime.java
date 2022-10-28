@@ -3,15 +3,14 @@ package pl.lotto.datetimegenerator;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
-public class DateTimeActualGenerator {
-
+class CurrentDateTime {
     private final Clock clock;
 
-    public DateTimeActualGenerator(Clock clock) {
+    CurrentDateTime(Clock clock) {
         this.clock = clock;
     }
 
-    public LocalDateTime generateCurrentDateAndTime() {
+    public LocalDateTime generateToday() {
         return LocalDateTime.now(clock);
     }
 }
