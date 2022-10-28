@@ -10,8 +10,6 @@ import java.util.Set;
 @Getter
 public class Ticket {
     private String hash;
-    private Set<Integer> numbers;
-    private LocalDateTime actualDate;
+    private Set<Integer> numbersUser;
     private LocalDateTime drawDate;
-    private LocalDateTime expirationDate;
 }
