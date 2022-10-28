@@ -1,18 +1,15 @@
 package pl.lotto.numberreceiver;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 class InMemoryTicketRepository implements TicketRepository {
-    private final ConcurrentHashMap<String, Set<Integer>> map = new ConcurrentHashMap<>();
+    private final Map<String, Set<Integer>> map = new HashMap<>();
 
     @Override
     public Ticket save(Ticket ticket) {
-        map.put(ticket.getHash(), ticket.getNumbers());
+        map.put(ticket.getHash(), ticket.getNumbersUser());
         return ticket;
-    }
-
-    public Set<Integer> findByHash(String hash){
-        return map.get(hash);
     }
 }
