@@ -1,9 +1,6 @@
 package pl.lotto.numberreceiver;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Set;
 
 class TicketGenerator {
