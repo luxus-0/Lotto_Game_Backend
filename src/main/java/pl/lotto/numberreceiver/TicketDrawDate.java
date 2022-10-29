@@ -1,6 +1,8 @@
 package pl.lotto.numberreceiver;
 
+import javax.swing.text.html.Option;
 import java.time.*;
+import java.util.Optional;
 
 class TicketDrawDate {
     private final TicketCurrentDateTime currentDateTime;
@@ -18,7 +20,7 @@ class TicketDrawDate {
         if (isDayEqualSaturdayAndTimeEqualNoon(drawDateTime, timeNow, dateNow, drawDayOfWeek, drawTime)) {
             return LocalDateTime.of(drawDate, drawTime);
         }
-        throw new DateTimeException(DrawDateMessageProvider.FAILED_GENERATED_DATE_WITH_TIME);
+        return Optional.of(drawDateTime).orElseThrow();
     }
 
     private static boolean isDayEqualSaturdayAndTimeEqualNoon(LocalDateTime drawDate, LocalTime timeNow, LocalDate dateNow, DayOfWeek drawDayOfWeek, LocalTime drawTime) {

@@ -5,11 +5,11 @@ import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class NumberReceiverFacade {
 
-    private final static String NUMBERS_NOT_FOUND = "Numbers not found";
     private final NumbersValidator numberValidator;
     private final TicketRepository ticketRepository;
     private final TicketGenerator ticketGenerator;
@@ -32,10 +32,7 @@ public class NumberReceiverFacade {
            ticketRepository.save(ticketCreated);
            return new NumbersResultMessageDto(inputNumbers, numberValidator.messagesValidation);
        }
-       return new NumbersResultMessageDto(inputNumbers, numbersNotFound());
-    }
-
-    private List<String> numbersNotFound() {
-        return List.of(NUMBERS_NOT_FOUND);
+        NumbersResultMessageDto messageResult = new NumbersResultMessageDto(inputNumbers, numberValidator.messagesValidation);
+        return Optional.of(messageResult).orElseThrow();
     }
 }
