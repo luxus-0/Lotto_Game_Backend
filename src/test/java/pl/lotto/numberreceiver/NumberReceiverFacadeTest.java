@@ -2,9 +2,9 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.datetimegenerator.DateTimeGenerator;
 import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Set;
 
@@ -19,9 +19,9 @@ public class NumberReceiverFacadeTest {
     public void should_return_success_when_user_gave_six_numbers() {
         // given
         TicketRepository ticketRepository = new InMemoryTicketRepository();
-        DateTimeGenerator dateTimeGenerator = new DateTimeGenerator();
+        TicketCurrentDateTime currentDateTime = new TicketCurrentDateTime(Clock.systemUTC());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, dateTimeGenerator);
+                .createModuleForTests(ticketRepository, currentDateTime);
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -49,9 +49,9 @@ public class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_less_than_six_numbers() {
         // given
         TicketRepository ticketRepository = new InMemoryTicketRepository();
-        DateTimeGenerator dateTimeGenerator = new DateTimeGenerator();
+        TicketCurrentDateTime drawDate = new TicketCurrentDateTime(Clock.systemUTC());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, dateTimeGenerator);
+                .createModuleForTests(ticketRepository, drawDate);
         Set<Integer> numbers = Set.of(1, 2, 3, 4);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -66,9 +66,9 @@ public class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_more_than_six_numbers() {
         // given
         TicketRepository ticketRepository = new InMemoryTicketRepository();
-        DateTimeGenerator dateTimeGenerator = new DateTimeGenerator();
+        TicketCurrentDateTime drawDate = new TicketCurrentDateTime(Clock.systemUTC());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, dateTimeGenerator);
+                .createModuleForTests(ticketRepository, drawDate);
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6, 12, 14);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -83,9 +83,9 @@ public class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_number_out_of_range() {
         // given
         TicketRepository ticketRepository = new InMemoryTicketRepository();
-        DateTimeGenerator dateTimeGenerator = new DateTimeGenerator();
+        TicketCurrentDateTime drawDate = new TicketCurrentDateTime(Clock.systemUTC());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, dateTimeGenerator);
+                .createModuleForTests(ticketRepository, drawDate);
         Set<Integer> numbers = Set.of(100, 1, 2, 3, 4, -3);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
