@@ -1,12 +1,6 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.DateDrawResultMessageDto;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Optional;
+import java.time.*;
 
 class TicketDrawDate {
     private final TicketCurrentDateTime currentDateTime;
@@ -15,23 +9,22 @@ class TicketDrawDate {
         this.currentDateTime = currentDateTime;
     }
 
-    DateDrawResultMessageDto generateDrawDate(LocalDateTime drawDate){
+    public LocalDateTime generateDrawDate(LocalDateTime drawDateTime) {
         LocalTime timeNow = currentDateTime.generateToday().toLocalTime();
         LocalDate dateNow = currentDateTime.generateToday().toLocalDate();
-        if(timeNow.isBefore(drawDate.toLocalTime()) && dateNow.isBefore(drawDate.toLocalDate())){
-            long daysBetweenNowAndDrawDate = Duration.between(dateNow, drawDate).toDays();
-            long hoursBetweenNowAndDrawDate = Duration.between(timeNow, drawDate.toLocalTime()).toHours();
-            long minutesBetweenNowAndDrawDate = Duration.between(timeNow, drawDate.toLocalTime()).toMinutes();
-            long secondsBetweenNowAndDrawDate = Duration.between(timeNow, drawDate.toLocalTime()).toSeconds();
-
-            LocalDate days = dateNow.plusDays(daysBetweenNowAndDrawDate);
-            LocalTime hours = timeNow.plusHours(hoursBetweenNowAndDrawDate);
-            LocalTime minutes = timeNow.plusMinutes(minutesBetweenNowAndDrawDate);
-            LocalTime seconds = timeNow.plusSeconds(secondsBetweenNowAndDrawDate);
-            LocalTime localTime = LocalTime.parse(hours.getHour() + ":" + minutes.getMinute() + ":" +seconds.getSecond());
-            LocalDateTime localDateTime = LocalDateTime.of(days, localTime);
-            return new DateDrawResultMessageDto(localDateTime, DrawDateMessageProvider.SUCCESS_GENERATED_DATE_WITH_TIME);
+        DayOfWeek drawDayOfWeek = drawDateTime.getDayOfWeek();
+        LocalTime drawTime = drawDateTime.toLocalTime();
+        LocalDate drawDate = drawDateTime.toLocalDate();
+        if (isDayEqualSaturdayAndTimeEqualNoon(drawDateTime, timeNow, dateNow, drawDayOfWeek, drawTime)) {
+            return LocalDateTime.of(drawDate, drawTime);
         }
-        return new DateDrawResultMessageDto(Optional.of(drawDate).get(), DrawDateMessageProvider.FAILED_GENERATED_DATE_WITH_TIME);
+        throw new DateTimeException(DrawDateMessageProvider.FAILED_GENERATED_DATE_WITH_TIME);
+    }
+
+    private static boolean isDayEqualSaturdayAndTimeEqualNoon(LocalDateTime drawDate, LocalTime timeNow, LocalDate dateNow, DayOfWeek drawDayOfWeek, LocalTime drawTime) {
+        return drawDayOfWeek == DayOfWeek.SATURDAY &&
+                drawTime == LocalTime.NOON &&
+                timeNow == LocalTime.NOON &&
+                dateNow == drawDate.toLocalDate();
     }
 }
