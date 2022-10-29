@@ -15,9 +15,9 @@ class TicketGenerator {
         this.ticketDrawDate = ticketDrawDate;
     }
 
-    Ticket generateTicket(Set<Integer> inputNumbers) {
+    Ticket generateTicket(Set<Integer> inputNumbers, LocalDateTime drawDateTime) {
         String uuid = ticketUUID.generateUUID();
-        LocalDateTime drawDate = ticketDrawDate.generateDrawDate();
+        LocalDateTime drawDate = ticketDrawDate.generateDrawDate(drawDateTime);
         return generate(uuid, inputNumbers, drawDate);
     }
 
