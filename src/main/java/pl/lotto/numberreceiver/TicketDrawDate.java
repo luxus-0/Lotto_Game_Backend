@@ -4,7 +4,7 @@ import javax.swing.text.html.Option;
 import java.time.*;
 import java.util.Optional;
 
-class TicketDrawDate {
+public class TicketDrawDate {
     private final TicketCurrentDateTime currentDateTime;
 
     TicketDrawDate(TicketCurrentDateTime currentDateTime) {
