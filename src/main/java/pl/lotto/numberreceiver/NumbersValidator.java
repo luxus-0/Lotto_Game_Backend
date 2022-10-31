@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 
 import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
 
-class NumbersValidator {
+public class NumbersValidator {
 
     List<String> messagesValidation = new LinkedList<>();
 
