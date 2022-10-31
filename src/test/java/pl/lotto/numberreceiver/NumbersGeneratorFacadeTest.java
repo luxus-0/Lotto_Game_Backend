@@ -118,10 +118,12 @@ public class NumbersGeneratorFacadeTest {
         WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .createModuleForTests(winningNumbersRepository, ticket);
         //when
+        WinningNumbersResultDto resultWinningNumbers = winningNumbersFacade.checkWinnerNumbers(ticket);
         boolean isWinnerNumbers = inputNumbers.contains(randomNumber);
         //then
         assertThat(isWinnerNumbers).isEqualTo(true);
         assertNotEquals(correctDateTime, notCorrectDateTime);
+        assertEquals(resultWinningNumbers.messageInfo(), FAILED);
         assertEquals(SIZE_NUMBERS, randomNumbers.size());
         assertEquals(SIZE_NUMBERS, inputNumbers.size());
     }
