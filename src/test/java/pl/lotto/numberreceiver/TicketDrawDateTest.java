@@ -19,7 +19,7 @@ class TicketDrawDateTest {
     }
 
     @Test
-    @DisplayName("return date time draw given date time with clock fixed")
+    @DisplayName("return failed date time draw given date time with clock UTC")
     public void should_return_date_time_draw_when_user_get_date_time_now_with_UTC_clock() {
         //given
         LocalDate date = LocalDate.of(2000, Month.APRIL, DayOfWeek.SATURDAY.getValue());
