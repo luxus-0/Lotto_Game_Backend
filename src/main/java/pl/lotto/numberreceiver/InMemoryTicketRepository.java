@@ -12,4 +12,9 @@ class InMemoryTicketRepository implements TicketRepository {
         map.put(ticket.getHash(), ticket.getNumbersUser());
         return ticket;
     }
+
+    @Override
+    public Set<Integer> findAll(String uuid){
+        return map.get(uuid);
+    }
 }
