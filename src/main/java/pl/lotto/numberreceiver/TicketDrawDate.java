@@ -23,7 +23,7 @@ public class TicketDrawDate {
         return Optional.of(drawDateTime).orElseThrow();
     }
 
-    private static boolean isDayEqualSaturdayAndTimeEqualNoon(LocalDateTime drawDate, LocalTime timeNow, LocalDate dateNow, DayOfWeek drawDayOfWeek, LocalTime drawTime) {
+    public boolean isDayEqualSaturdayAndTimeEqualNoon(LocalDateTime drawDate, LocalTime timeNow, LocalDate dateNow, DayOfWeek drawDayOfWeek, LocalTime drawTime) {
         return drawDayOfWeek == DayOfWeek.SATURDAY &&
                 drawTime == LocalTime.NOON &&
                 timeNow == LocalTime.NOON &&
