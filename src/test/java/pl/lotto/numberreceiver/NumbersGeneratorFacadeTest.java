@@ -2,7 +2,6 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
 import pl.lotto.numbersgenerator.InMemoryWinningNumbersRepository;
 import pl.lotto.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.numbersgenerator.WinningNumbersFacadeConfiguration;
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static java.time.LocalTime.MIDNIGHT;
 import static java.time.LocalTime.NOON;
@@ -22,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.FAILED;
-import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.SUCCESS;
 
 public class NumbersGeneratorFacadeTest {
 
