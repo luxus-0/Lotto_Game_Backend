@@ -17,10 +17,8 @@ import java.util.Set;
 import static java.time.LocalTime.NOON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.FAILED;
-import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.SUCCESS;
 
 public class NumbersGeneratorFacadeTest {
 
@@ -57,6 +55,7 @@ public class NumbersGeneratorFacadeTest {
         WinningNumbersResultDto winnerTicket = winningNumbersFacade.checkWinnerNumbers(ticket);
         //then
         assertThat(winnerTicket).isEqualTo(messageTicket);
+        assertEquals(SIZE_NUMBERS, inputNumbers.size());
     }
 
     @Test
@@ -73,7 +72,7 @@ public class NumbersGeneratorFacadeTest {
         WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .createModuleForTests(winningNumbersRepository, ticket);
         //when
-       WinningNumbersResultDto winningNumbersResult = winningNumbersFacade.checkWinnerNumbers(ticket);
+        WinningNumbersResultDto winningNumbersResult = winningNumbersFacade.checkWinnerNumbers(ticket);
         Set<Integer> winningNumbers = winningNumbersResult.ticket().numbersUser();
         boolean isWinnerNumbers = winningNumbers.contains(randomNumber);
         //then
