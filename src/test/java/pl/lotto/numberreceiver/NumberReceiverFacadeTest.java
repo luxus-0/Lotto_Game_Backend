@@ -15,7 +15,7 @@ import static java.time.LocalTime.NOON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
 
-public class NumberReceiverFacadeTest {
+class NumberReceiverFacadeTest {
 
     private final TicketRepository ticketRepository;
     private final TicketCurrentDateTime currentDateTime;
