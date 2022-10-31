@@ -1,27 +1,26 @@
 package pl.lotto.numbersgenerator;
 
+import pl.lotto.numberreceiver.Ticket;
 import pl.lotto.numbersgenerator.dto.WinningNumbersResultDto;
 
-import java.util.Set;
-
+import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.FAILED;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.SUCCESS;
 
 public class WinningNumbersFacade {
+    private final WinningNumbersRepository winningNumbersRepository;
     private final WinningNumbersValidator winningNumbersValidator;
 
-    public WinningNumbersFacade(WinningNumbersValidator winningNumbersValidator, NumbersGenerator numbersGenerator) {
+    public WinningNumbersFacade(WinningNumbersRepository winningNumbersRepository, WinningNumbersValidator winningNumbersValidator) {
+        this.winningNumbersRepository = winningNumbersRepository;
         this.winningNumbersValidator = winningNumbersValidator;
     }
 
-    WinningNumbersResultDto checkWinnerNumbers(Set<Integer> userInputNumbers){
-        WinningNumbersResultDto validator = winningNumbersValidator.isWinnerNumbers(userInputNumbers);
-        Set<Integer> numbers = validator.winnerNumbers();
-        if(numbers.isEmpty()){
-            return new WinningNumbersResultDto(numbers, FAILED);
+    public WinningNumbersResultDto checkWinnerNumbers(Ticket ticket) {
+        if (winningNumbersValidator.isWinnerNumbers() != null && ticket.numbersUser().size() > SIZE_NUMBERS) {
+            return new WinningNumbersResultDto(ticket, FAILED);
         }
-        return new WinningNumbersResultDto(numbers, SUCCESS);
-
+        winningNumbersRepository.save(ticket);
+        return new WinningNumbersResultDto(ticket, SUCCESS);
     }
-
 }
