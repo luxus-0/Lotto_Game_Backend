@@ -17,7 +17,7 @@ public class WinningNumbersFacade {
     }
 
     public WinningNumbersResultDto checkWinnerNumbers(Ticket ticket) {
-        if (winningNumbersValidator.isWinnerNumbers() != null && ticket.numbersUser().size() > SIZE_NUMBERS) {
+        if (winningNumbersValidator.isWinnerNumbers() != null) {
             return new WinningNumbersResultDto(ticket, FAILED);
         }
         winningNumbersRepository.save(ticket);
