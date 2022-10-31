@@ -9,7 +9,7 @@ class InMemoryTicketRepository implements TicketRepository {
 
     @Override
     public Ticket save(Ticket ticket) {
-        map.put(ticket.getHash(), ticket.getNumbersUser());
+        map.put(ticket.hash(), ticket.numbersUser());
         return ticket;
     }
 
