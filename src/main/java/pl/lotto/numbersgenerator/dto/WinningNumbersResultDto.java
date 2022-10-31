@@ -1,6 +1,6 @@
 package pl.lotto.numbersgenerator.dto;
 
-import java.util.Set;
+import pl.lotto.numberreceiver.Ticket;
 
-public record WinningNumbersResultDto(Set<Integer> winnerNumbers, String message) {
+public record WinningNumbersResultDto(Ticket ticket, String messageInfo) {
 }
