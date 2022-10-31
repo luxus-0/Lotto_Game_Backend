@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.FAILED;
 
-public class NumbersGeneratorFacadeTest {
+class NumbersGeneratorFacadeTest {
 
     private final WinningNumbersRepository winningNumbersRepository;
     private final TicketDrawDate drawDate;
