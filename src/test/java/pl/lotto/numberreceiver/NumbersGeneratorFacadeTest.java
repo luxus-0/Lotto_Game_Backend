@@ -13,13 +13,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static java.time.LocalTime.NOON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.FAILED;
+import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.SUCCESS;
 
 public class NumbersGeneratorFacadeTest {
 
@@ -59,22 +60,25 @@ public class NumbersGeneratorFacadeTest {
     }
 
     @Test
-    @DisplayName("return success when user get six numbers and result is win numbers")
-    public void return_success_when_user_get_six_numbers_and_result_is_zero_win_numbers() {
+    @DisplayName("return success when user get six numbers and result win numbers")
+    public void return_success_when_user_get_six_numbers_and_result_win_numbers() {
         //given
         LocalDate date = LocalDate.of(2022, Month.OCTOBER, 29);
         LocalDateTime dateTime = LocalDateTime.of(date, NOON);
         Set<Integer> inputNumbers = Set.of(12, 20, 30, 25, 50, 77);
-        Set<Integer> randomNumbers = Set.of(12, 20, 11, 17, 52, 77);
-        int randomNumber = randomNumbers.stream().findAny().orElseThrow();
+        Set<Integer> randomNumbers = Set.of(12, 20, 14, 17, 52, 77);
+        Integer randomNumber = randomNumbers.stream().findAny().orElseThrow();
         Ticket ticket = getTicket(dateTime, inputNumbers);
 
         WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .createModuleForTests(winningNumbersRepository, ticket);
         //when
-        WinningNumbersResultDto isWinnerNumbers = winningNumbersFacade.checkWinnerNumbers(ticket);
+       WinningNumbersResultDto winningNumbersResult = winningNumbersFacade.checkWinnerNumbers(ticket);
+        Set<Integer> winningNumbers = winningNumbersResult.ticket().numbersUser();
+        boolean isWinnerNumbers = winningNumbers.contains(randomNumber);
         //then
-        Set<Integer> winnerNumbers = isWinnerNumbers.ticket().numbersUser();
-        assertTrue(winnerNumbers.contains(randomNumber));
+        assertThat(isWinnerNumbers).isEqualTo(true);
+        assertEquals(SIZE_NUMBERS, inputNumbers.size());
+        assertEquals(SIZE_NUMBERS, randomNumbers.size());
     }
 }
