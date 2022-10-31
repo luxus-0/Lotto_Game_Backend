@@ -16,7 +16,7 @@ import java.util.Set;
 
 import static java.time.LocalTime.NOON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.FAILED;
 
@@ -56,6 +56,46 @@ public class NumbersGeneratorFacadeTest {
         //then
         assertThat(winnerTicket).isEqualTo(messageTicket);
         assertEquals(SIZE_NUMBERS, inputNumbers.size());
+    }
+
+    @Test
+    @DisplayName("return failed when user get six numbers and result is 0 win numbers")
+    public void should_return_failed_when_user_get_more_than_six_numbers_and_result_is_zero_win_numbers() {
+        //given
+        LocalDate date = LocalDate.of(2022, Month.OCTOBER, 29);
+        LocalDateTime dateTime = LocalDateTime.of(date, NOON);
+        Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
+        Ticket ticket = getTicket(dateTime, inputNumbers);
+        WinningNumbersResultDto messageTicket = new WinningNumbersResultDto(ticket, FAILED);
+
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
+                .createModuleForTests(winningNumbersRepository, ticket);
+        //when
+        WinningNumbersResultDto winnerTicket = winningNumbersFacade.checkWinnerNumbers(ticket);
+        //then
+        assertThat(winnerTicket).isEqualTo(messageTicket);
+        assertNotEquals(SIZE_NUMBERS, inputNumbers.size());
+    }
+
+    @Test
+    @DisplayName("return failed when user get six numbers and result is 0 win numbers")
+    public void should_return_failed_when_user_get_less_than_six_numbers_and_result_is_zero_win_numbers() {
+        //given
+        LocalDate date = LocalDate.of(2022, Month.OCTOBER, 29);
+        LocalDateTime dateTime = LocalDateTime.of(date, NOON);
+        Set<Integer> inputNumbers = Set.of(20, 30, 40, 50, 60);
+        Set<Integer> randomNumbers = Set.of(34, 75, 11, 45, 99);
+        Integer randomNumber = randomNumbers.stream().findAny().orElseThrow();
+        Ticket ticket = getTicket(dateTime, inputNumbers);
+
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
+                .createModuleForTests(winningNumbersRepository, ticket);
+        //when
+        WinningNumbersResultDto result = winningNumbersFacade.checkWinnerNumbers(ticket);
+        boolean isWinnerNumber = inputNumbers.contains(randomNumber);
+        //then
+        assertFalse(isWinnerNumber, result.messageInfo());
+        assertNotEquals(SIZE_NUMBERS, inputNumbers.size());
     }
 
     @Test
