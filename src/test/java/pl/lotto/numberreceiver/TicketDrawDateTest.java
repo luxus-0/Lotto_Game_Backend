@@ -87,15 +87,14 @@ class TicketDrawDateTest {
     }
 
     @Test
-    @DisplayName("return draw date time is after now when user give saturday 12 december am with clock UTC")
-    public void should_return_now_is_before_default_date_time_when_user_get_saturday_12_00_am_december_with_clock_UTC() {
+    @DisplayName("return now is before default date time draw when user give saturday 11 november am with clock UTC")
+    public void should_return_now_is_before_default_date_time_when_user_get_saturday_11_00_am_december_with_clock_fixed() {
 
         //given
-        LocalDateTime date = LocalDate.of(2022, Month.DECEMBER, 3).atStartOfDay();
-        LocalDateTime dateTime = date.plus(12, ChronoUnit.HOURS).plusMinutes(0);
+        LocalDateTime date = LocalDate.of(2022, Month.NOVEMBER, 5).atStartOfDay();
+        LocalDateTime dateTime = date.plus(11, ChronoUnit.HOURS).plusMinutes(0);
         dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
-        LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
-
+        LocalDateTime now = LocalDateTime.now(Clock.fixed(Instant.now(), ZoneId.systemDefault()));
         //when
         LocalDateTime dateTimeResult = drawDate.generateDrawDate(now);
 
