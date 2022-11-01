@@ -39,13 +39,13 @@ class TicketDrawDateTest {
 
     @Test
     @DisplayName("return correct draw day time when user give saturday 11 am with clock UTC when draw date today")
-    public void should_return_correct_draw_day_time_when_user_get_saturday_11_am_with_clock_UTC_and_not_today_is_draw_date() {
+    public void should_return_correct_draw_day_time_when_user_get_saturday_12_am_with_clock_UTC_and_not_today_is_draw_date() {
 
         //given
         LocalDate actualDate = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SATURDAY.getValue());
         LocalTime actualTime = LocalTime.NOON;
         LocalDateTime actualDateTime = LocalDateTime.of(actualDate, actualTime);
-        actualDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
+        actualDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
         //when
         LocalDateTime resultDrawDate = drawDate.generateDrawDate(LocalDateTime.now());
 
