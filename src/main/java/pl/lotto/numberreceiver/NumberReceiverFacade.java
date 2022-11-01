@@ -25,7 +25,7 @@ public class NumberReceiverFacade {
        boolean validate = numberValidator.validate(inputNumbers);
        if(validate){
            TicketCurrentDateTime currentDateTime = new TicketCurrentDateTime(Clock.systemUTC());
-           TicketDrawDate ticketDrawDate = new TicketDrawDate(currentDateTime);
+           TicketDrawDate ticketDrawDate = new TicketDrawDate(currentDateTime, clock);
            LocalDateTime drawDate = ticketDrawDate.generateDrawDate(drawDateTime);
            Ticket ticketCreated = ticketGenerator.generateTicket(inputNumbers, drawDate);
            ticketRepository.save(ticketCreated);
