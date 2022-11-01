@@ -1,21 +1,22 @@
 package pl.lotto.numberreceiver;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Optional;
 
 public class TicketDrawDate {
-    private final TicketCurrentDateTime currentDateTime;
+    private final Clock clock;
 
-    TicketDrawDate(TicketCurrentDateTime currentDateTime) {
-        this.currentDateTime = currentDateTime;
+    TicketDrawDate(Clock clock) {
+        this.clock = clock;
+    }
+
+    public LocalDateTime generateToday() {
+        return LocalDateTime.now(clock);
     }
 
     public LocalDateTime generateDrawDate(LocalDateTime drawDateTime) {
-        LocalTime timeNow = currentDateTime.generateToday().toLocalTime();
-        LocalDate dateNow = currentDateTime.generateToday().toLocalDate();
+        LocalTime timeNow = generateToday().toLocalTime();
+        LocalDate dateNow = generateToday().toLocalDate();
         DayOfWeek drawDayOfWeek = drawDateTime.getDayOfWeek();
         LocalTime drawTime = drawDateTime.toLocalTime();
         LocalDate drawDate = drawDateTime.toLocalDate();
