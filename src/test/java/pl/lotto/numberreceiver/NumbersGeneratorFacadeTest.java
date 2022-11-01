@@ -29,9 +29,9 @@ class NumbersGeneratorFacadeTest {
 
     public NumbersGeneratorFacadeTest() {
         TicketRandomUUID uuid = new TicketRandomUUID();
+        Clock clock = Clock.systemUTC();
         this.winningNumbersRepository = new InMemoryWinningNumbersRepository();
-        TicketCurrentDateTime currentDateTime = new TicketCurrentDateTime(Clock.systemUTC());
-        this.drawDate = new TicketDrawDate(currentDateTime);
+        this.drawDate = new TicketDrawDate(clock);
         this.ticketGenerator = new TicketGenerator(uuid, drawDate);
     }
 
