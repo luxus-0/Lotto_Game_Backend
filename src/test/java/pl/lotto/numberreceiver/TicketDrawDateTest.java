@@ -88,7 +88,7 @@ class TicketDrawDateTest {
 
     @Test
     @DisplayName("return draw date time is after now when user give saturday 12 december am with clock UTC")
-    public void should_return_draw_date_time_is_before_now_when_user_get_saturday_12_00_am_december_with_clock_UTC() {
+    public void should_return_now_is_before_default_date_time_when_user_get_saturday_12_00_am_december_with_clock_UTC() {
 
         //given
         LocalDateTime date = LocalDate.of(2022, Month.DECEMBER, 3).atStartOfDay();
@@ -100,6 +100,6 @@ class TicketDrawDateTest {
         LocalDateTime dateTimeResult = drawDate.generateDrawDate(now);
 
         //then
-        assertThat(dateTime).isBefore(dateTimeResult);
+        assertThat(dateTimeResult).isBefore(dateTime);
     }
 }
