@@ -18,13 +18,11 @@ import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
 class NumberReceiverFacadeTest {
 
     private final TicketRepository ticketRepository;
-    private final TicketCurrentDateTime currentDateTime;
     private final TicketDrawDate ticketDrawDate;
 
     public NumberReceiverFacadeTest() {
         this.ticketRepository = new InMemoryTicketRepository();
-        this.currentDateTime = new TicketCurrentDateTime(Clock.systemUTC());
-        this.ticketDrawDate = new TicketDrawDate(currentDateTime);
+        this.ticketDrawDate = new TicketDrawDate(Clock.systemUTC());
     }
 
     @Test
@@ -35,7 +33,7 @@ class NumberReceiverFacadeTest {
         LocalDateTime dateTime = LocalDateTime.of(date, NOON);
         LocalDateTime drawDate = ticketDrawDate.generateDrawDate(dateTime);
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, currentDateTime, drawDate);
+                .createModuleForTests(ticketRepository, drawDate);
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -53,7 +51,7 @@ class NumberReceiverFacadeTest {
         LocalDateTime dateTime = LocalDateTime.of(date, NOON);
         LocalDateTime drawDate = ticketDrawDate.generateDrawDate(dateTime);
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, currentDateTime, drawDate);
+                .createModuleForTests(ticketRepository, drawDate);
         Set<Integer> numbers = Set.of(90, 1, 2, 3, 4, 19);
         // when
         NumbersResultMessageDto inputNumbersForUser = numberReceiverFacade.inputNumbers(numbers);
@@ -67,7 +65,7 @@ class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_less_than_six_numbers() {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, null, null);
+                .createModuleForTests(ticketRepository, null);
         Set<Integer> numbers = Set.of(1, 2, 3, 4);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -82,7 +80,7 @@ class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_more_than_six_numbers() {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, null, null);
+                .createModuleForTests(ticketRepository, null);
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6, 12, 14);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
@@ -97,7 +95,7 @@ class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_number_out_of_range() {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, null, null);
+                .createModuleForTests(ticketRepository, null);
         Set<Integer> numbers = Set.of(100, 1, 2, 3, 4, -3);
         // when
         NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
