@@ -12,14 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class TicketDrawDateTest {
 
-    private final TicketDrawDate drawDate;
-
-    TicketDrawDateTest() {
-        Clock clock = Clock.systemUTC();
-        TicketCurrentDateTime currentDateTime = new TicketCurrentDateTime(clock);
-        this.drawDate = new TicketDrawDate(currentDateTime);
-
-    }
+   private final Clock clock = Clock.systemUTC();
+   private final TicketDrawDate drawDate = new TicketDrawDate(clock);
 
     @Test
     @DisplayName("return success day of week with clock UTC when today is saturday draw date")
@@ -27,11 +21,11 @@ class TicketDrawDateTest {
 
         //given
         Clock clock = Clock.systemUTC();
-        TicketCurrentDateTime currentDateTime = new TicketCurrentDateTime(clock);
+        TicketDrawDate drawDate = new TicketDrawDate(clock);
         DayOfWeek dayOfWeek = DayOfWeek.SATURDAY;
 
         //when
-        DayOfWeek resultDay = currentDateTime.generateToday().getDayOfWeek();
+        DayOfWeek resultDay = drawDate.generateToday().getDayOfWeek();
 
         //then
         assertNotEquals(dayOfWeek, resultDay);
