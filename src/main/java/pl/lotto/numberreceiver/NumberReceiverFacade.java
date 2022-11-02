@@ -19,13 +19,14 @@ public class NumberReceiverFacade {
         this.ticketRepository = ticketRepository;
         this.ticketGenerator = ticketGenerator;
         this.drawDateTime = drawDateTime;
+
     }
 
     public NumbersResultMessageDto inputNumbers(Set<Integer> inputNumbers) {
        boolean validate = numberValidator.validate(inputNumbers);
        if(validate){
-           TicketCurrentDateTime currentDateTime = new TicketCurrentDateTime(Clock.systemUTC());
-           TicketDrawDate ticketDrawDate = new TicketDrawDate(currentDateTime, clock);
+           Clock clock = Clock.systemUTC();
+           TicketDrawDate ticketDrawDate = new TicketDrawDate(clock);
            LocalDateTime drawDate = ticketDrawDate.generateDrawDate(drawDateTime);
            Ticket ticketCreated = ticketGenerator.generateTicket(inputNumbers, drawDate);
            ticketRepository.save(ticketCreated);
