@@ -5,11 +5,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
-class ResultsLotto {
-    private final String uuid;
-    private final Set<Integer> numbersUser;
-    private final Set<Integer> winningNumbers;
-    private final LocalDateTime drawDate;
-    private final boolean isWinner;
+record ResultsLotto(String uuid, Set<Integer> numbersUser, Set<Integer> winningNumbers, LocalDateTime drawDate,
+                    boolean isWinner, String message) {
 }
