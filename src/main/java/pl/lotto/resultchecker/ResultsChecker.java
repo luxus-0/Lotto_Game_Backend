@@ -10,8 +10,6 @@ class ResultsChecker {
         return inputNumbers.stream().filter(checkNumbers -> valid(randomNumbers)).anyMatch(randomNumbers::contains);
     }
 
-
-
     public boolean valid(Set<Integer> winnerNumbers){
         return winnerNumbers.size() <= SIZE_NUMBERS;
     }
