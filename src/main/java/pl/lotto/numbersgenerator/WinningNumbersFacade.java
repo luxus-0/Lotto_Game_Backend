@@ -3,7 +3,6 @@ package pl.lotto.numbersgenerator;
 import pl.lotto.numberreceiver.Ticket;
 import pl.lotto.numbersgenerator.dto.WinningNumbersResultDto;
 
-import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.FAILED;
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.SUCCESS;
 
