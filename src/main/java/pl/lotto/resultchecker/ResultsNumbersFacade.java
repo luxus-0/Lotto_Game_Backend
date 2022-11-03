@@ -1,7 +1,5 @@
 package pl.lotto.resultchecker;
 
-import pl.lotto.numbersgenerator.WinningNumbersMessageProvider;
-
 import java.util.Optional;
 import java.util.Set;
 
