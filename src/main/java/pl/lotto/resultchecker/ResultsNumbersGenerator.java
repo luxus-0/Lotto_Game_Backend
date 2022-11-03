@@ -7,23 +7,21 @@ import java.util.Set;
 
 class ResultsNumbersGenerator {
 
-    private final ResultsChecker resultsChecker;
     private final ResultsLotto resultsLotto;
-    private final ResultsCheckerMessageProvider resultMessage;
+    private final ResultsChecker resultsChecker;
 
-    ResultsNumbersGenerator(ResultsChecker resultsChecker, ResultsLotto resultsLotto, ResultsCheckerMessageProvider resultMessage) {
-        this.resultsChecker = resultsChecker;
+    ResultsNumbersGenerator(ResultsLotto resultsLotto, ResultsChecker resultsChecker) {
         this.resultsLotto = resultsLotto;
-        this.resultMessage = resultMessage;
+        this.resultsChecker = resultsChecker;
     }
 
     public ResultsLotto generateAllResults(WinningNumbersResultDto winnerResults){
         String uuid = winnerResults.ticket().hash();
         Set<Integer> numbersFromUser = winnerResults.ticket().numbersUser();
         Set<Integer> numberWinner = resultsLotto.winningNumbers();
-        boolean isWinner = resultsChecker.checkWinnerNumbers(numbersFromUser, resultsLotto.winningNumbers());
-        String messageResultNumbers = resultMessage.getResultMessage(numbersFromUser, numberWinner);
+        ResultsCheckerMessageProvider message = new ResultsCheckerMessageProvider(resultsChecker);
+        String messageResultNumbers = message.getResultMessage(numbersFromUser, numberWinner);
         LocalDateTime drawDate = winnerResults.ticket().drawDate();
-        return new ResultsLotto(uuid, numbersFromUser,numberWinner, drawDate, isWinner, messageResultNumbers);
+        return new ResultsLotto(uuid, numbersFromUser,numberWinner, drawDate, messageResultNumbers);
     }
 }
