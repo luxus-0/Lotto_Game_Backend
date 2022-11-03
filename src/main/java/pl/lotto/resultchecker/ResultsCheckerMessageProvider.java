@@ -1,5 +1,7 @@
 package pl.lotto.resultchecker;
 
+import pl.lotto.numberreceiver.Ticket;
+
 import java.util.Set;
 
 class ResultsCheckerMessageProvider {
