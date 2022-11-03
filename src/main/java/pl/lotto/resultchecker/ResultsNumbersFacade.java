@@ -22,7 +22,7 @@ public class ResultsNumbersFacade {
 
     ResultsLotto getAllResults(ResultsLotto results){
         if(resultsChecker.checkWinnerNumbers(results.numbersUser(), results.winningNumbers())){
-            String successResult = WinningNumbersMessageProvider.SUCCESS;
+            String successResult = ResultsCheckerMessageProvider.WIN;
             return new ResultsLotto(results.uuid(), results.numbersUser(), results.winningNumbers(), results.drawDate(), successResult);
         }
         return Optional.of(results).get();
