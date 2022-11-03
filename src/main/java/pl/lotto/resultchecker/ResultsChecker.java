@@ -6,7 +6,7 @@ import static pl.lotto.numberreceiver.NumbersMessageProvider.SIZE_NUMBERS;
 
 class ResultsChecker {
 
-    public boolean checkWinnerNumbers(Set<Integer> inputNumbers, Set<Integer> randomNumbers){
+    public boolean checkWinnerNumbers(Set<Integer> inputNumbers, Set<Integer> randomNumbers) {
         return inputNumbers.stream().filter(checkNumbers -> valid(randomNumbers)).anyMatch(randomNumbers::contains);
     }
 
