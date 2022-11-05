@@ -12,7 +12,7 @@ public class ResultsCheckerFacade {
         this.resultsChecker = resultsChecker;
     }
 
-    String getResultsMessage(Set<Integer>inputNumbers, Set<Integer> lottoNumbers){
+    String getNumbersResult(Set<Integer>inputNumbers, Set<Integer> lottoNumbers){
         if(resultsChecker.checkWinnerNumbers(inputNumbers, lottoNumbers)){
             ResultsCheckerMessageProvider messageResult = new ResultsCheckerMessageProvider(resultsChecker);
             return messageResult.getResultMessage(inputNumbers, lottoNumbers);
@@ -20,7 +20,7 @@ public class ResultsCheckerFacade {
         throw new IllegalArgumentException(WINNER_NUMBERS_NOT_FOUND);
     }
 
-    ResultsLotto getResultsMessageNumbersWithDate(ResultsLotto results){
+    ResultsLotto getAllResults(ResultsLotto results){
         if(resultsChecker.checkWinnerNumbers(results.numbersUser(), results.winningNumbers())){
             String successResult = ResultsCheckerMessageProvider.WIN;
             return new ResultsLotto(results.uuid(), results.numbersUser(), results.winningNumbers(), results.drawDate(), successResult);
