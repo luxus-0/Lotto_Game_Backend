@@ -82,7 +82,8 @@ class TicketDrawDateTest {
     }
 
     @Test
-    public void should_return_correct_date_time_draw_when_user_give_saturday_12_am_november_with_clock_UTC() {
+    @DisplayName("return correct date time draw when user give saturday november am with clock UTC")
+    public void should_return_correct_date_time_draw_when_user_give_saturday_november_with_clock_UTC() {
 
         //given
         LocalDate actualDate = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SATURDAY.getValue());
