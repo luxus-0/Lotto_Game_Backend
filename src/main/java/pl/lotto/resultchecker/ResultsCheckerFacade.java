@@ -3,6 +3,8 @@ package pl.lotto.resultchecker;
 import java.util.Optional;
 import java.util.Set;
 
+import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WINNER_NUMBERS_NOT_FOUND;
+
 public class ResultsCheckerFacade {
     private final ResultsChecker resultsChecker;
 
@@ -15,7 +17,7 @@ public class ResultsCheckerFacade {
             ResultsCheckerMessageProvider messageResult = new ResultsCheckerMessageProvider(resultsChecker);
             return messageResult.getResultMessage(inputNumbers, lottoNumbers);
         }
-        throw new IllegalArgumentException(ResultsCheckerMessageProvider.WINNER_NUMBERS_NOT_FOUND);
+        throw new IllegalArgumentException(WINNER_NUMBERS_NOT_FOUND);
     }
 
     ResultsLotto getResultsMessageNumbersWithDate(ResultsLotto results){
