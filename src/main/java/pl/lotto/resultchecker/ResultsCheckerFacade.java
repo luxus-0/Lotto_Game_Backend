@@ -18,26 +18,26 @@ public class ResultsCheckerFacade {
         this.winningNumbersResult = winningNumbersResult;
     }
 
-    String getNumbersResult(Set<Integer>inputNumbers, Set<Integer> lottoNumbers){
-        if(resultsChecker.checkWinnerNumbers(inputNumbers, lottoNumbers)){
+    String getNumbersResult(Set<Integer> inputNumbers, Set<Integer> lottoNumbers) {
+        if (resultsChecker.checkWinnerNumbers(inputNumbers, lottoNumbers)) {
             ResultsCheckerMessageProvider messageResult = new ResultsCheckerMessageProvider(resultsChecker);
             return messageResult.getResultMessage(inputNumbers, lottoNumbers);
         }
         throw new IllegalArgumentException(WINNER_NUMBERS_NOT_FOUND);
     }
 
-    ResultsLotto getAllResults(ResultsLotto results){
-        if(resultsChecker.checkWinnerNumbers(results.numbersUser(), results.winningNumbers())){
+    ResultsLotto getAllResults(ResultsLotto results) {
+        if (resultsChecker.checkWinnerNumbers(results.numbersUser(), results.winningNumbers())) {
             String successResult = ResultsCheckerMessageProvider.WIN;
             return new ResultsLotto(results.uuid(), results.numbersUser(), results.winningNumbers(), results.drawDate(), successResult);
         }
         return Optional.of(results).get();
     }
 
-    Set<Integer> getWinners(String uuid, ResultsLotto results){
+    Set<Integer> getWinners(String uuid, ResultsLotto results) {
         Set<Integer> numbersFromUser = results.numbersUser();
         Set<Integer> winnerNumbers = results.winningNumbers();
-        if(resultsChecker.checkWinnerNumbers(numbersFromUser, winnerNumbers)){
+        if (resultsChecker.checkWinnerNumbers(numbersFromUser, winnerNumbers)) {
             WinningNumbersRepository winningNumbersRepository = new InMemoryWinningNumbersRepository();
             return winningNumbersRepository.findWinningNumbers(uuid);
         }
