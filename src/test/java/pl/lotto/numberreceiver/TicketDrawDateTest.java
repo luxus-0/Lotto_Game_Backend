@@ -8,8 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TicketDrawDateTest {
 
@@ -95,5 +94,18 @@ class TicketDrawDateTest {
 
         //then
         assertNotEquals(resultDrawDate, actualDateTime);
+    }
+
+    @Test
+    @DisplayName("return correct time draw when time draw at 10 am is before 12 am")
+    public void should_return_correct_when_user_give_10_am_clock_UTC() {
+
+        //given
+        LocalTime timeDraw = LocalTime.of(10,0);
+        LocalTime correctTimeDraw = LocalTime.NOON;
+        //when
+        boolean resultTimeDraw = timeDraw.isBefore(correctTimeDraw);
+        //then
+        assertThat(resultTimeDraw).isEqualTo(true);
     }
 }
