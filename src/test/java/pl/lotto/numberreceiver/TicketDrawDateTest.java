@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class TicketDrawDateTest {
@@ -16,8 +17,8 @@ class TicketDrawDateTest {
    private final TicketDrawDate drawDate = new TicketDrawDate(clock);
 
     @Test
-    @DisplayName("return success day of week with clock UTC when today is saturday draw date")
-    public void should_return_success_day_of_week_with_clock_UTC_when_saturday() {
+    @DisplayName("return correct day draw when user give saturday with clock UTC")
+    public void should_return_correct_day_draw_when_user_give_saturday_with_clock_UTC(){
 
         //given
         Clock clock = Clock.systemUTC();
@@ -28,28 +29,12 @@ class TicketDrawDateTest {
         DayOfWeek resultDay = drawDate.generateToday().getDayOfWeek();
 
         //then
-        assertNotEquals(dayOfWeek, resultDay);
+        assertEquals(dayOfWeek, resultDay);
     }
 
     @Test
-    @DisplayName("return correct draw day time when user give saturday 11 am with clock UTC")
-    public void should_return_correct_draw_day_time_when_user_get_saturday_12_am_with_clock_UTC_and_not_today_is_draw_date() {
-
-        //given
-        LocalDate actualDate = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SATURDAY.getValue());
-        LocalTime actualTime = LocalTime.NOON;
-        LocalDateTime actualDateTime = LocalDateTime.of(actualDate, actualTime);
-        actualDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
-        //when
-        LocalDateTime resultDrawDate = drawDate.generateDrawDate(LocalDateTime.now());
-
-        //then
-        assertNotEquals(resultDrawDate, actualDateTime);
-    }
-
-    @Test
-    @DisplayName("return failed draw day time when user give sunday 11 am with clock UTC")
-    public void should_return_failed_draw_day_time_when_user_get_sunday_11_am_with_clock_UTC_and_not_today_is_draw_date() {
+    @DisplayName("return not correct date time draw when user give sunday 11 am with clock UTC")
+    public void should_return_not_correct_date_time_draw_when_user_get_sunday_11_am_with_clock_UTC() {
 
         //given
         LocalDate actualDate = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SUNDAY.getValue());
@@ -64,8 +49,8 @@ class TicketDrawDateTest {
     }
 
     @Test
-    @DisplayName("return draw date time is after now when user give saturday 12 december am with clock UTC")
-    public void should_return_draw_date_time_is_after_now_when_user_get_saturday_12_00_am_december_with_clock_UTC() {
+    @DisplayName("return correct date time when user give saturday 12 december am with clock UTC")
+    public void should_return_correct_date_time_draw_when_user_get_saturday_12_00_am_december_with_clock_UTC() {
 
         //given
         LocalDateTime date = LocalDate.of(2022, Month.DECEMBER, 3).atStartOfDay();
@@ -81,8 +66,8 @@ class TicketDrawDateTest {
     }
 
     @Test
-    @DisplayName("return now is before default date time draw when user give saturday 11 november am with clock UTC")
-    public void should_return_now_is_before_default_date_time_when_user_get_saturday_11_00_am_december_with_clock_fixed() {
+    @DisplayName("return correct date time draw when user give saturday 11 november am with clock UTC")
+    public void should_return_correct_date_time_draw_when_user_get_saturday_11_00_am_december_with_clock_fixed() {
 
         //given
         LocalDateTime date = LocalDate.of(2022, Month.NOVEMBER, 5).atStartOfDay();
@@ -93,6 +78,21 @@ class TicketDrawDateTest {
         LocalDateTime dateTimeResult = drawDate.generateDrawDate(now);
 
         //then
-        assertThat(dateTimeResult).isBefore(dateTime);
+        assertThat(dateTime).isBefore(dateTimeResult);
+    }
+
+    @Test
+    public void should_return_correct_date_time_draw_when_user_give_saturday_12_am_november_with_clock_UTC() {
+
+        //given
+        LocalDate actualDate = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SATURDAY.getValue());
+        LocalTime actualTime = LocalTime.NOON;
+        LocalDateTime actualDateTime = LocalDateTime.of(actualDate, actualTime);
+        actualDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+        //when
+        LocalDateTime resultDrawDate = drawDate.generateDrawDate(LocalDateTime.now());
+
+        //then
+        assertNotEquals(resultDrawDate, actualDateTime);
     }
 }
