@@ -98,7 +98,7 @@ class TicketDrawDateTest {
 
     @Test
     @DisplayName("return correct time draw when time draw at 10 am is before 12 am")
-    public void should_return_correct_when_user_give_10_am_clock_UTC() {
+    public void should_return_correct_when_time_draw_10_am_is_before_12_am() {
 
         //given
         LocalTime timeDraw = LocalTime.of(10,0);
