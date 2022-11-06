@@ -6,6 +6,5 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public
-record Ticket(String hash, Set<Integer> numbersUser, LocalDateTime drawDate) {
+public record NumberReceiver(String uuid, Set<Integer> numbersFromUser, LocalDateTime drawDate) {
 }
