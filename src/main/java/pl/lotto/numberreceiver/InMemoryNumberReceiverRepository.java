@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
+public class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
     private final Map<String, Set<Integer>> map = new HashMap<>();
 
     public Set<Integer> save(NumberReceiver numberReceiver) {
