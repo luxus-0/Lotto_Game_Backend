@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TicketDrawDateTest {
 
    private final Clock clock = Clock.systemUTC();
-   private final TicketDrawDate drawDate = new TicketDrawDate(clock);
+   private final DateTimeReceiver drawDate = new DateTimeReceiver(clock);
 
     @Test
     @DisplayName("return correct day draw when user give saturday with clock UTC")
@@ -21,7 +21,7 @@ class TicketDrawDateTest {
 
         //given
         Clock clock = Clock.systemUTC();
-        TicketDrawDate drawDate = new TicketDrawDate(clock);
+        DateTimeReceiver drawDate = new DateTimeReceiver(clock);
         DayOfWeek dayOfWeek = DayOfWeek.SATURDAY;
 
         //when
