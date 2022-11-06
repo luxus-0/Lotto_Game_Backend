@@ -1,38 +1,39 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
+import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.EQUALS_SIX_NUMBERS;
+
 public class NumberReceiverFacade {
 
-    private final NumbersValidator numberValidator;
-    private final TicketRepository ticketRepository;
-    private final TicketGenerator ticketGenerator;
+    private final NumbersReceiverValidator numberValidator;
+    private final NumberReceiverRepository numberReceiverRepository;
     private final LocalDateTime drawDateTime;
+    private final Clock clock = Clock.systemUTC();
 
-    public NumberReceiverFacade(NumbersValidator numberValidator, TicketRepository ticketRepository, TicketGenerator ticketGenerator, LocalDateTime drawDateTime) {
+    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, LocalDateTime drawDateTime) {
         this.numberValidator = numberValidator;
-        this.ticketRepository = ticketRepository;
-        this.ticketGenerator = ticketGenerator;
+        this.numberReceiverRepository = numberReceiverRepository;
         this.drawDateTime = drawDateTime;
-
     }
 
-    public NumbersResultMessageDto inputNumbers(Set<Integer> inputNumbers) {
+
+    public NumbersMessageDto inputNumbers(Set<Integer> inputNumbers) {
        boolean validate = numberValidator.validate(inputNumbers);
        if(validate){
-           Clock clock = Clock.systemUTC();
-           TicketDrawDate ticketDrawDate = new TicketDrawDate(clock);
+           DateTimeReceiver ticketDrawDate = new DateTimeReceiver(clock);
            LocalDateTime drawDate = ticketDrawDate.generateDrawDate(drawDateTime);
-           Ticket ticketCreated = ticketGenerator.generateTicket(inputNumbers, drawDate);
-           ticketRepository.save(ticketCreated);
-           return new NumbersResultMessageDto(inputNumbers, numberValidator.messagesValidation);
+           NumberReceiverGenerator numberReceiverGenerator = new NumberReceiverGenerator();
+           NumberReceiver numberReceiver = numberReceiverGenerator.generateUserTicket(inputNumbers, drawDate);
+           numberReceiverRepository.save(numberReceiver);
+           return new NumbersMessageDto(inputNumbers, EQUALS_SIX_NUMBERS);
        }
-        NumbersResultMessageDto messageResult = new NumbersResultMessageDto(inputNumbers, numberValidator.messagesValidation);
-        return Optional.of(messageResult).orElseThrow();
+        return new NumbersMessageDto(inputNumbers, null);
     }
 }
