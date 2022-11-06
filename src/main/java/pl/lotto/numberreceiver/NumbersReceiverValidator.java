@@ -6,37 +6,37 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
+import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
-public class NumbersValidator {
+public class NumbersReceiverValidator {
 
-    List<String> messagesValidation = new LinkedList<>();
+    List<String> messages = new LinkedList<>();
 
     public boolean validate(Set<Integer> inputNumbers) {
         if (isEqualsSixNumbers(inputNumbers)) {
-            messagesValidation.add(EQUALS_SIX_NUMBERS);
+            messages.add(EQUALS_SIX_NUMBERS);
         }
         else if (isLessThanSixNumbers(inputNumbers)) {
-            messagesValidation.add(LESS_THAN_SIX_NUMBERS);
+            messages.add(LESS_THAN_SIX_NUMBERS);
         }
        else if (isMoreThanSixNumbers(inputNumbers)) {
-            messagesValidation.add(MORE_THAN_SIX_NUMBERS);
+            messages.add(MORE_THAN_SIX_NUMBERS);
         }
        else if (!isInRangeNumbers()) {
-            messagesValidation.add(NOT_IN_RANGE_NUMBERS);
+            messages.add(NOT_IN_RANGE_NUMBERS);
         }
         else if(inputNumbers.isEmpty()){
-            messagesValidation.add(NUMBERS_IS_EMPTY);
+            messages.add(NUMBERS_IS_EMPTY);
         }
         return false;
     }
 
     boolean isLessThanSixNumbers(Collection<Integer> inputNumbers) {
-        return inputNumbers.size() < SIZE_NUMBERS;
+        return inputNumbers.size() < SIZE_MAX;
     }
 
     boolean isEqualsSixNumbers(Collection<Integer> inputNumbers) {
-        return inputNumbers.size() == SIZE_NUMBERS;
+        return inputNumbers.size() == SIZE_MAX;
     }
 
     boolean isInRangeNumbers() {
@@ -46,6 +46,6 @@ public class NumbersValidator {
     }
 
     boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {
-        return inputNumbers.size() > SIZE_NUMBERS;
+        return inputNumbers.size() > SIZE_MAX;
     }
 }
