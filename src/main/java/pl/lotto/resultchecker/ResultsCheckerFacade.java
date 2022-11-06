@@ -2,48 +2,50 @@ package pl.lotto.resultchecker;
 
 import pl.lotto.numberreceiver.InMemoryNumberReceiverRepository;
 import pl.lotto.numberreceiver.NumberReceiverRepository;
-import pl.lotto.numberreceiver.dto.NumbersDateMessageDto;
 import pl.lotto.resultchecker.exceptions.DateWinnerNotFoundException;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WINNER_NUMBERS_NOT_FOUND;
 
 public class ResultsCheckerFacade {
-    private final ResultsChecker resultsChecker;
+    private final ResultsCheckerValidator validator;
+    private final ResultsLottoRepository resultsLottoRepository;
 
-    public ResultsCheckerFacade(ResultsChecker resultsChecker) {
-        this.resultsChecker = resultsChecker;
+    public ResultsCheckerFacade(ResultsCheckerValidator validator, ResultsLottoRepository resultsLottoRepository) {
+        this.validator = validator;
+        this.resultsLottoRepository = resultsLottoRepository;
     }
 
-    String getNumbersResult(Set<Integer> inputNumbers, Set<Integer> lottoNumbers) {
-        if (resultsChecker.checkWinnerNumbers(inputNumbers, lottoNumbers)) {
-            ResultsCheckerMessageProvider messageResult = new ResultsCheckerMessageProvider(resultsChecker);
-            return messageResult.getResultMessage(inputNumbers, lottoNumbers);
+    public String getResults(ResultsLotto resultsLotto) {
+        Set<Integer> inputNumbers = resultsLotto.numbersUser();
+        Set<Integer> lottoNumbers = resultsLotto.lottoNumbers();
+        boolean validation = validator.checkWinnerNumbers(inputNumbers, lottoNumbers);
+        if (validation) {
+            String message = ResultsCheckerMessageProvider.WIN;
+            ResultsLotto results = new ResultsLotto(resultsLotto.uuid(), inputNumbers, lottoNumbers, resultsLotto.drawDate(), message);
+            resultsLottoRepository.save(results);
         }
         throw new IllegalArgumentException(WINNER_NUMBERS_NOT_FOUND);
     }
 
-    ResultsLotto getWinners(String uuid, ResultsLotto results) {
-        if (resultsChecker.checkWinnerNumbers(results.numbersUser(), results.lottoNumbers())) {
-            String successResult = ResultsCheckerMessageProvider.WIN;
-            return new ResultsLotto(uuid, results.numbersUser(), results.lottoNumbers(), results.drawDate(), successResult);
-        }
-        return Optional.of(results).get();
+    public ResultsLotto getWinners(UUID uuid, ResultsLotto results) {
     }
 
-    Set<Integer> getWinnersByUUID(ResultsLotto results) {
+    public Set<Integer> getWinnersByUUID(ResultsLotto results) {
         Set<Integer> numbersFromUser = results.numbersUser();
         Set<Integer> numbersFromLotto = results.lottoNumbers();
-        if (resultsChecker.checkWinnerNumbers(numbersFromUser, numbersFromLotto)) {
+        boolean validation = validator.checkWinnerNumbers(numbersFromUser, numbersFromLotto);
+        if (validation) {
             NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository();
             return numberReceiverRepository.findByUUID(results.uuid());
         }
         throw new IllegalArgumentException();
     }
 
-    Set<Integer> getWinnersByDateDraw(ResultsLotto results) {
+   public Set<Integer> getWinnersByDateDraw(ResultsLotto results) {
         Set<Integer> numbersFromUser = results.numbersUser();
         Set<Integer> numbersFromLotto = results.lottoNumbers();
         if (resultsChecker.checkWinnerNumbers(numbersFromUser, numbersFromLotto)) {
