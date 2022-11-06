@@ -25,8 +25,8 @@ public class NumbersReceiverValidator {
        else if (!isInRangeNumbers()) {
             messages.add(NOT_IN_RANGE_NUMBERS);
         }
-        else if(inputNumbers.isEmpty()){
-            messages.add(NUMBERS_IS_EMPTY);
+       else {
+           messages.add(NUMBERS_IS_EMPTY);
         }
         return false;
     }
