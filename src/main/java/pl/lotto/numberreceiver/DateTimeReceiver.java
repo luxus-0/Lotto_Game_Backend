@@ -3,10 +3,10 @@ package pl.lotto.numberreceiver;
 import java.time.*;
 import java.util.Optional;
 
-public class TicketDrawDate {
+public class DateTimeReceiver {
     private final Clock clock;
 
-    TicketDrawDate(Clock clock) {
+    DateTimeReceiver(Clock clock) {
         this.clock = clock;
     }
 
