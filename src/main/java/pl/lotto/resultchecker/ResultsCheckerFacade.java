@@ -4,7 +4,6 @@ import pl.lotto.numberreceiver.InMemoryNumberReceiverRepository;
 import pl.lotto.numberreceiver.NumberReceiverRepository;
 import pl.lotto.resultchecker.exceptions.DateWinnerNotFoundException;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
