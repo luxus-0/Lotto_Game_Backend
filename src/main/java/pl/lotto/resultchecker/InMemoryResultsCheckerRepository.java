@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class ResultsCheckerInMemoryRepository implements ResultsLottoRepository{
+public class InMemoryResultsCheckerRepository implements ResultsLottoRepository{
     private final Map<UUID, ResultsLotto> databaseInMemory = new ConcurrentHashMap<>();
 
     @Override
@@ -21,7 +21,7 @@ public class ResultsCheckerInMemoryRepository implements ResultsLottoRepository{
     public Set<ResultsLotto> findByUUID(UUID uuid, boolean isWinner) {
         return databaseInMemory.values()
                 .stream()
-                .filter(ResultsCheckerInMemoryRepository::isWinnerMessage)
+                .filter(InMemoryResultsCheckerRepository::isWinnerMessage)
                 .collect(Collectors.toSet());
     }
 
