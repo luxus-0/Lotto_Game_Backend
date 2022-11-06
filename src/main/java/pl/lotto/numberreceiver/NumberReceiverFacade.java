@@ -2,6 +2,7 @@ package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
+import javax.swing.text.html.Option;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,25 +16,24 @@ public class NumberReceiverFacade {
     private final NumbersReceiverValidator numberValidator;
     private final NumberReceiverRepository numberReceiverRepository;
     private final LocalDateTime drawDateTime;
-    private final Clock clock = Clock.systemUTC();
+    private final NumberReceiverGenerator numberReceiverGenerator;
 
-    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, LocalDateTime drawDateTime) {
+    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, LocalDateTime drawDateTime, NumberReceiverGenerator numberReceiverGenerator) {
         this.numberValidator = numberValidator;
         this.numberReceiverRepository = numberReceiverRepository;
         this.drawDateTime = drawDateTime;
+        this.numberReceiverGenerator = numberReceiverGenerator;
     }
 
-
     public NumbersMessageDto inputNumbers(Set<Integer> inputNumbers) {
-       boolean validate = numberValidator.validate(inputNumbers);
-       if(validate){
-           DateTimeReceiver ticketDrawDate = new DateTimeReceiver(clock);
-           LocalDateTime drawDate = ticketDrawDate.generateDrawDate(drawDateTime);
-           NumberReceiverGenerator numberReceiverGenerator = new NumberReceiverGenerator();
-           NumberReceiver numberReceiver = numberReceiverGenerator.generateUserTicket(inputNumbers, drawDate);
-           numberReceiverRepository.save(numberReceiver);
-           return new NumbersMessageDto(inputNumbers, EQUALS_SIX_NUMBERS);
-       }
-        return new NumbersMessageDto(inputNumbers, null);
+        boolean validate = numberValidator.validate(inputNumbers);
+        if (validate) {
+            Clock clock = Clock.systemUTC();
+            DateTimeReceiver ticketDrawDate = new DateTimeReceiver(clock);
+            LocalDateTime drawDate = ticketDrawDate.generateDrawDate(drawDateTime);
+            NumberReceiver numberReceiver = numberReceiverGenerator.generateUserTicket(inputNumbers, drawDate);
+            numberReceiverRepository.save(numberReceiver);
+        }
+        return new NumbersMessageDto(inputNumbers, numberValidator.messages);
     }
 }
