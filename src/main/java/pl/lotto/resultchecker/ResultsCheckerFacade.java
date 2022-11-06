@@ -26,10 +26,10 @@ public class ResultsCheckerFacade {
         throw new IllegalArgumentException(WINNER_NUMBERS_NOT_FOUND);
     }
 
-    ResultsLotto getWinners(String id, ResultsLotto results) {
+    ResultsLotto getWinners(String uuid, ResultsLotto results) {
         if (resultsChecker.checkWinnerNumbers(results.numbersUser(), results.lottoNumbers())) {
             String successResult = ResultsCheckerMessageProvider.WIN;
-            return new ResultsLotto(id, results.numbersUser(), results.lottoNumbers(), results.drawDate(), successResult);
+            return new ResultsLotto(uuid, results.numbersUser(), results.lottoNumbers(), results.drawDate(), successResult);
         }
         return Optional.of(results).get();
     }
