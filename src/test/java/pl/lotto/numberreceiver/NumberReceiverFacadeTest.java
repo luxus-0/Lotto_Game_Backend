@@ -2,7 +2,7 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.numberreceiver.dto.NumbersResultMessageDto;
+import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -13,16 +13,16 @@ import java.util.Set;
 
 import static java.time.LocalTime.NOON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.lotto.numberreceiver.NumbersMessageProvider.*;
+import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
 class NumberReceiverFacadeTest {
 
-    private final TicketRepository ticketRepository;
-    private final TicketDrawDate ticketDrawDate;
+    private final DateTimeReceiver ticketDrawDate;
+    private final Clock clock;
 
-    public NumberReceiverFacadeTest() {
-        this.ticketRepository = new InMemoryTicketRepository();
-        this.ticketDrawDate = new TicketDrawDate(Clock.systemUTC());
+    NumberReceiverFacadeTest(DateTimeReceiver ticketDrawDate) {
+        this.ticketDrawDate = ticketDrawDate;
+        this.clock = Clock.systemUTC();
     }
 
     @Test
@@ -33,13 +33,14 @@ class NumberReceiverFacadeTest {
         LocalDateTime dateTime = LocalDateTime.of(date, NOON);
         LocalDateTime drawDate = ticketDrawDate.generateDrawDate(dateTime);
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, drawDate);
+                .createModuleForTests(clock, drawDate);
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6);
+
         // when
-        NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+
         // then
-        List<String> messages = List.of(EQUALS_SIX_NUMBERS);
-        NumbersResultMessageDto result = new NumbersResultMessageDto(numbers, messages);
+        NumbersMessageDto result = new NumbersMessageDto(numbers, EQUALS_SIX_NUMBERS);
         assertThat(inputNumbers).isEqualTo(result);
     }
 
@@ -51,12 +52,12 @@ class NumberReceiverFacadeTest {
         LocalDateTime dateTime = LocalDateTime.of(date, NOON);
         LocalDateTime drawDate = ticketDrawDate.generateDrawDate(dateTime);
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, drawDate);
+                .createModuleForTests(clock, drawDate);
         Set<Integer> numbers = Set.of(90, 1, 2, 3, 4, 19);
         // when
-        NumbersResultMessageDto inputNumbersForUser = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto inputNumbersForUser = numberReceiverFacade.inputNumbers(numbers);
         // then
-        NumbersResultMessageDto resultMessage = new NumbersResultMessageDto(numbers, List.of(EQUALS_SIX_NUMBERS));
+        NumbersMessageDto resultMessage = new NumbersMessageDto(numbers, EQUALS_SIX_NUMBERS);
         assertThat(inputNumbersForUser).isEqualTo(resultMessage);
     }
 
@@ -65,13 +66,12 @@ class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_less_than_six_numbers() {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, null);
+                .createModuleForTests(clock, ticketDrawDate.generateToday());
         Set<Integer> numbers = Set.of(1, 2, 3, 4);
         // when
-        NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
         // then
-        List<String> messages = List.of(LESS_THAN_SIX_NUMBERS);
-        NumbersResultMessageDto result = new NumbersResultMessageDto(numbers, messages);
+        NumbersMessageDto result = new NumbersMessageDto(numbers, LESS_THAN_SIX_NUMBERS);
         assertThat(inputNumbers).isEqualTo(result);
     }
 
@@ -80,13 +80,12 @@ class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_more_than_six_numbers() {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, null);
+                .createModuleForTests(clock, ticketDrawDate.generateToday());
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6, 12, 14);
         // when
-        NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
         // then
-        List<String> messages = List.of(MORE_THAN_SIX_NUMBERS);
-        NumbersResultMessageDto result = new NumbersResultMessageDto(numbers, messages);
+        NumbersMessageDto result = new NumbersMessageDto(numbers, MORE_THAN_SIX_NUMBERS);
         assertThat(inputNumbers).isEqualTo(result);
     }
 
@@ -94,14 +93,14 @@ class NumberReceiverFacadeTest {
     @DisplayName("return failed when user gave number out of range")
     public void should_return_failed_when_user_gave_number_out_of_range() {
         // given
+        LocalDateTime dateTimeNow = ticketDrawDate.generateDrawDate(LocalDateTime.now(clock));
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(ticketRepository, null);
+                .createModuleForTests(clock, dateTimeNow);
         Set<Integer> numbers = Set.of(100, 1, 2, 3, 4, -3);
         // when
-        NumbersResultMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
         // then
-        List<String> messages = List.of(EQUALS_SIX_NUMBERS);
-        NumbersResultMessageDto result = new NumbersResultMessageDto(numbers, messages);
+        NumbersMessageDto result = new NumbersMessageDto(numbers, NOT_IN_RANGE_NUMBERS);
         assertThat(inputNumbers).isEqualTo(result);
     }
 }
