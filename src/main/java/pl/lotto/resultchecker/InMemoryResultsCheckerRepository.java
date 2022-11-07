@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class InMemoryResultsCheckerRepository implements ResultsLottoRepository {
+public class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
     private final Map<UUID, ResultsLotto> databaseInMemory = new ConcurrentHashMap<>();
 
     private static boolean isWinnerMessage(ResultsLotto resultsLotto) {
