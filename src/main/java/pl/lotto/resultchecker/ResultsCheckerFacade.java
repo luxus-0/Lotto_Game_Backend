@@ -44,7 +44,7 @@ public class ResultsCheckerFacade {
         throw new IllegalArgumentException();
     }
 
-   public Set<Integer> getWinnersByDateDraw(ResultsLotto results) {
+    public Set<Integer> getWinnersByDateDraw(ResultsLotto results) {
         Set<Integer> numbersFromUser = results.numbersUser();
         Set<Integer> numbersFromLotto = results.lottoNumbers();
         if (resultsChecker.checkWinnerNumbers(numbersFromUser, numbersFromLotto)) {
