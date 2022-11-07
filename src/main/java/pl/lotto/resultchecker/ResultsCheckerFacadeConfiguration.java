@@ -4,7 +4,7 @@ public class ResultsCheckerFacadeConfiguration {
 
     ResultsCheckerFacade createModuleForTests() {
         ResultsCheckerValidator resultsChecker = new ResultsCheckerValidator();
-        ResultsLottoRepository numberReceiverRepository = new InMemoryResultsCheckerRepository();
-        return new ResultsCheckerFacade(numberReceiverRepository, resultsLottoRepository);
+        ResultsCheckerRepository resultsLottoRepository = new InMemoryResultsCheckerRepository();
+        return new ResultsCheckerFacade(resultsChecker, resultsLottoRepository);
     }
 }
