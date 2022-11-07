@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-interface ResultsLottoRepository {
+interface ResultsCheckerRepository {
     Set<ResultsLotto> findByDate(LocalDateTime dateTime, boolean isWinner);
 
     Set<ResultsLotto> findByUUID(UUID uuid, boolean isWinner);
