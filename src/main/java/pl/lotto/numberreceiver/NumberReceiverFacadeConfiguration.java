@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Configuration
 public class NumberReceiverFacadeConfiguration {
 
-    NumberReceiverFacade createModuleForTests(NumberReceiverGenerator numberReceiverGenerator, Clock clock, LocalDateTime drawDate){
+    NumberReceiverFacade createModuleForTests(NumberReceiverGenerator numberReceiverGenerator, Clock clock, LocalDateTime drawDate) {
         DateTimeReceiver dateTimeReceiver = new DateTimeReceiver(clock);
         LocalDateTime dateTime = dateTimeReceiver.generateDrawDate(drawDate);
         NumbersReceiverValidator numbersValidator = new NumbersReceiverValidator();

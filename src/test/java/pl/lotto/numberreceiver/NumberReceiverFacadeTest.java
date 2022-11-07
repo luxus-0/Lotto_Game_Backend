@@ -116,12 +116,12 @@ class NumberReceiverFacadeTest {
 
     @Test
     @DisplayName("return failed day draw when user give saturday with clock 10_am")
-    public void should_return_correct_day_draw_when_user_give_saturday_with_clock_10_am(){
+    public void should_return_correct_day_draw_when_user_give_saturday_with_clock_10_am() {
 
         //given
         DateTimeReceiver drawDate = new DateTimeReceiver(clock);
         DayOfWeek dayOfWeek = DayOfWeek.SATURDAY;
-        LocalTime time = LocalTime.of(10,0);
+        LocalTime time = LocalTime.of(10, 0);
 
         //when
         DayOfWeek resultDay = drawDate.generateToday().getDayOfWeek();
@@ -138,7 +138,7 @@ class NumberReceiverFacadeTest {
 
         //given
         LocalDate actualDate = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SUNDAY.getValue());
-        LocalTime actualTime = LocalTime.of(11,0);
+        LocalTime actualTime = LocalTime.of(11, 0);
         LocalDateTime actualDateTime = LocalDateTime.of(actualDate, actualTime);
         actualDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
         //when
@@ -201,7 +201,7 @@ class NumberReceiverFacadeTest {
     public void should_return_correct_when_time_draw_10_am_is_before_12_am() {
 
         //given
-        LocalTime timeDraw = LocalTime.of(10,0);
+        LocalTime timeDraw = LocalTime.of(10, 0);
 
         //when
         boolean resultTimeDraw = timeDraw.isBefore(LocalTime.NOON);
