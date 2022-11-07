@@ -11,6 +11,10 @@ import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
 class NumberReceiverGenerator {
 
+    private static int readNumbers() {
+        return new Random().nextInt(RANGE_FROM_NUMBER, RANGE_TO_NUMBER);
+    }
+
     public NumberReceiver generateUserTicket(Set<Integer> numbersUser, LocalDateTime drawDate) {
         String uuid = UUID.randomUUID().toString();
         return NumberReceiver.builder()
@@ -25,9 +29,5 @@ class NumberReceiverGenerator {
                 .map(mapper -> readNumbers())
                 .boxed()
                 .collect(Collectors.toSet());
-    }
-
-    private static int readNumbers() {
-        return new Random().nextInt(RANGE_FROM_NUMBER, RANGE_TO_NUMBER);
     }
 }
