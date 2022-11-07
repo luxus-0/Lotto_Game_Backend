@@ -15,18 +15,14 @@ public class NumbersReceiverValidator {
     public boolean validate(Set<Integer> inputNumbers) {
         if (isEqualsSixNumbers(inputNumbers)) {
             messages.add(EQUALS_SIX_NUMBERS);
-        }
-        else if (isLessThanSixNumbers(inputNumbers)) {
+        } else if (isLessThanSixNumbers(inputNumbers)) {
             messages.add(LESS_THAN_SIX_NUMBERS);
-        }
-       else if (isMoreThanSixNumbers(inputNumbers)) {
+        } else if (isMoreThanSixNumbers(inputNumbers)) {
             messages.add(MORE_THAN_SIX_NUMBERS);
-        }
-       else if (!isInRangeNumbers()) {
+        } else if (!isInRangeNumbers()) {
             messages.add(NOT_IN_RANGE_NUMBERS);
-        }
-       else {
-           messages.add(NUMBERS_IS_EMPTY);
+        } else {
+            messages.add(NUMBERS_IS_EMPTY);
         }
         return false;
     }
