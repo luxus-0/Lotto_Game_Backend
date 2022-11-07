@@ -27,21 +27,21 @@ public class NumbersReceiverValidator {
         return false;
     }
 
-    boolean isLessThanSixNumbers(Collection<Integer> inputNumbers) {
+    public boolean isLessThanSixNumbers(Collection<Integer> inputNumbers) {
         return inputNumbers.size() < SIZE_MAX;
     }
 
-    boolean isEqualsSixNumbers(Collection<Integer> inputNumbers) {
+    public boolean isEqualsSixNumbers(Collection<Integer> inputNumbers) {
         return inputNumbers.size() == SIZE_MAX;
     }
 
-    boolean isInRangeNumbers() {
+    public boolean isInRangeNumbers() {
         return IntStream.rangeClosed(RANGE_FROM_NUMBER, RANGE_TO_NUMBER)
                 .findAny()
                 .isPresent();
     }
 
-    boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {
+    public boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {
         return inputNumbers.size() > SIZE_MAX;
     }
 }
