@@ -2,14 +2,9 @@ package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
-import javax.swing.text.html.Option;
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-
-import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.EQUALS_SIX_NUMBERS;
 
 public class NumberReceiverFacade {
 
