@@ -3,10 +3,10 @@ package pl.lotto.numberreceiver;
 import java.time.*;
 import java.util.Optional;
 
-public class DateTimeReceiver {
+class DateTimeReceiver {
     private final Clock clock;
 
-    DateTimeReceiver(Clock clock) {
+    public DateTimeReceiver(Clock clock) {
         this.clock = clock;
     }
 
