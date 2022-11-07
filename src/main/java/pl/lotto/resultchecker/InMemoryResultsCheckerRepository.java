@@ -29,9 +29,4 @@ public class InMemoryResultsCheckerRepository implements ResultsCheckerRepositor
                 .filter(InMemoryResultsCheckerRepository::isWinnerMessage)
                 .collect(Collectors.toSet());
     }
-
-    @Override
-    public ResultsLotto save(ResultsLotto results) {
-        return databaseInMemory.put(results.uuid(), results);
-    }
 }
