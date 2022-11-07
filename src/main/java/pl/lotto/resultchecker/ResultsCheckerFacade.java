@@ -2,6 +2,7 @@ package pl.lotto.resultchecker;
 
 import pl.lotto.numberreceiver.InMemoryNumberReceiverRepository;
 import pl.lotto.numberreceiver.NumberReceiverRepository;
+import pl.lotto.numberreceiver.NumbersReceiverValidator;
 import pl.lotto.resultchecker.exceptions.DateWinnerNotFoundException;
 
 import java.util.Set;
@@ -10,31 +11,35 @@ import java.util.UUID;
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WINNER_NUMBERS_NOT_FOUND;
 
 public class ResultsCheckerFacade {
-    private final ResultsCheckerValidator validator;
-    private final ResultsCheckerRepository resultsLottoRepository;
+    private final ResultsCheckerValidator resultsValidator;
+    private final NumbersReceiverValidator receiverValidator;
+    private final ResultsCheckerRepository resultsCheckerRepository;
 
-    public ResultsCheckerFacade(ResultsCheckerValidator validator, ResultsCheckerRepository resultsLottoRepository) {
-        this.validator = validator;
-        this.resultsLottoRepository = resultsLottoRepository;
+    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator, NumbersReceiverValidator receiverValidator, ResultsCheckerRepository resultsCheckerRepository) {
+        this.resultsValidator = resultsValidator;
+        this.receiverValidator = receiverValidator;
+        this.resultsCheckerRepository = resultsCheckerRepository;
     }
 
-    public String getResults(ResultsLotto resultsLotto) {
-        Set<Integer> inputNumbers = resultsLotto.numbersUser();
-        Set<Integer> lottoNumbers = resultsLotto.lottoNumbers();
-        boolean validation = validator.checkWinnerNumbers(inputNumbers, lottoNumbers);
-        if (validation) {
-            String message = ResultsCheckerMessageProvider.WIN;
-            ResultsLotto results = new ResultsLotto(resultsLotto.uuid(), inputNumbers, lottoNumbers, resultsLotto.drawDate(), message);
-            resultsLottoRepository.save(results);
+    public ResultsLotto getAllResults(ResultsLotto resultsLotto) {
+        boolean isWinnerNumbers = containWinnerNumbers(resultsLotto);
+        boolean isSizeSixNumbers = isEqualsSixNumbers(resultsLotto);
+        if (isWinnerNumbers && isSizeSixNumbers) {
+            return new ResultsLotto(resultsLotto.uuid(), resultsLotto.numbersUser(), resultsLotto.lottoNumbers(), resultsLotto.drawDate(), ResultsCheckerMessageProvider.WIN);
         }
         throw new IllegalArgumentException(WINNER_NUMBERS_NOT_FOUND);
     }
 
-    public Set<Integer> getWinnersByUUID(UUID uuid, ResultsLotto results) {
-        Set<Integer> numbersFromUser = results.numbersUser();
-        Set<Integer> numbersFromLotto = results.lottoNumbers();
-        boolean validation = validator.checkWinnerNumbers(numbersFromUser, numbersFromLotto);
-        if (validation) {
+    private boolean isEqualsSixNumbers(ResultsLotto resultsLotto) {
+        return receiverValidator.isEqualsSixNumbers(resultsLotto.numbersUser());
+    }
+
+    private boolean containWinnerNumbers(ResultsLotto resultsLotto) {
+        return resultsValidator.checkWinnerNumbers(resultsLotto.numbersUser(), resultsLotto.lottoNumbers());
+    }
+
+    public Set<Integer> getResultsByUUID(String uuid, ResultsLotto results) {
+        if (containWinnerNumbers(results) && isEqualsSixNumbers(results)) {
             NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository();
             return numberReceiverRepository.findByUUID(uuid);
         }
@@ -42,9 +47,7 @@ public class ResultsCheckerFacade {
     }
 
     public Set<Integer> getWinnersByDateDraw(ResultsLotto results) {
-        Set<Integer> numbersFromUser = results.numbersUser();
-        Set<Integer> numbersFromLotto = results.lottoNumbers();
-        if (validator.checkWinnerNumbers(numbersFromUser, numbersFromLotto)) {
+        if (containWinnerNumbers(results) && isEqualsSixNumbers(results)) {
             NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository();
             return numberReceiverRepository.findByDate(results.drawDate());
         }
