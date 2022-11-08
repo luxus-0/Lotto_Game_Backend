@@ -2,7 +2,6 @@ package pl.lotto.resultchecker;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.numberreceiver.NumberReceiver;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -22,12 +21,12 @@ class ResultsCheckerFacadeTest {
         LocalDateTime drawDateTime = LocalDateTime.of(2001, 12,7, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .createModuleForTests();
-        ResultsLotto result = new ResultsLotto(uuid, inputNumbers, lottoNumbers, drawDateTime, ResultsCheckerMessageProvider.NOT_WIN);
+        ResultsLotto allResults = new ResultsLotto(uuid, inputNumbers, lottoNumbers, drawDateTime, ResultsCheckerMessageProvider.NOT_WIN);
 
         //when
-        ResultsLotto allResults = resultsCheckerFacade.getAllResults(result);
+        ResultsLotto result = resultsCheckerFacade.getAllResults(allResults);
 
         //then
-        assertEquals(result, allResults);
+        assertEquals(allResults, result);
     }
 }
