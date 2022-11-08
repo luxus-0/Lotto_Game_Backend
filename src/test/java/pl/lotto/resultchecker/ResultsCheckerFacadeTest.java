@@ -2,6 +2,7 @@ package pl.lotto.resultchecker;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.lotto.resultchecker.dto.ResultsLotto;
 
 import java.time.LocalDateTime;
 import java.util.Set;
