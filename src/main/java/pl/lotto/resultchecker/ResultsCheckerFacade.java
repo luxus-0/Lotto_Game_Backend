@@ -2,12 +2,16 @@ package pl.lotto.resultchecker;
 
 import pl.lotto.numberreceiver.NumbersReceiverValidator;
 import pl.lotto.resultchecker.dto.ResultsLotto;
+import pl.lotto.resultchecker.exceptions.WinnerNumbersNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toSet;
-import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.*;
+import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
+import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 
 public class ResultsCheckerFacade {
     private final ResultsCheckerValidator resultsValidator;
@@ -25,7 +29,7 @@ public class ResultsCheckerFacade {
                 .filter(winNumbers -> resultsValidator.isWinnerNumbers(userNumbers, lottoNumbers))
                 .filter(isSizeSixNumbers -> receiverValidator.isEqualsSixNumbers(userNumbers))
                 .collect(toSet());
-        }
+    }
 
     public ResultsLotto getWinnerNumbersMessage(Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
         Set<Integer> winnersNumbersInLotto = getWinnerNumbers(userNumbers, lottoNumbers);
@@ -49,6 +53,16 @@ public class ResultsCheckerFacade {
         return winNumbersByDate.stream()
                 .filter(checkWin -> isWinningNumbers(userNumbers, lottoNumbers))
                 .collect(toSet());
+    }
+
+    public void addWinnerNumbers(UUID uuid, Set<Integer> inputNumbers, Set<Integer> lottoNumbers) {
+        Set<Integer> winnerNumbers = getWinnerNumbers(inputNumbers, lottoNumbers);
+        winnerNumbers.stream()
+                .findAny()
+                .ifPresentOrElse(create ->
+                                resultsCheckerRepository.save(uuid, winnerNumbers),
+                        WinnerNumbersNotFoundException::new);
+
     }
 
     private boolean isWinningNumbers(Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
