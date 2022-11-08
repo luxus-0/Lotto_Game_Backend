@@ -23,10 +23,15 @@ public class InMemoryResultsCheckerRepository implements ResultsCheckerRepositor
     }
 
     @Override
-    public Set<ResultsLotto> findByUUID(UUID uuid, boolean isWinner) {
+    public Set<Integer> findByUUID(UUID uuid, boolean isWinner) {
         return databaseInMemory.values()
                 .stream()
                 .filter(InMemoryResultsCheckerRepository::isWinnerMessage)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void save(ResultsLotto resultsLotto) {
+        databaseInMemory.put(resultsLotto.uuid(), resultsLotto);
     }
 }
