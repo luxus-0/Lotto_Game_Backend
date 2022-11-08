@@ -1,18 +1,13 @@
 package pl.lotto.resultchecker;
 
-import pl.lotto.numberreceiver.InMemoryNumberReceiverRepository;
-import pl.lotto.numberreceiver.NumberReceiverRepository;
 import pl.lotto.numberreceiver.NumbersReceiverValidator;
-import pl.lotto.resultchecker.exceptions.DateWinnerNotFoundException;
+import pl.lotto.resultchecker.dto.ResultsLotto;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.util.*;
 
-import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
-import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WINNER_NUMBERS_NOT_FOUND;
+import static java.util.stream.Collectors.toSet;
+import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.*;
 
 public class ResultsCheckerFacade {
     private final ResultsCheckerValidator resultsValidator;
@@ -25,31 +20,38 @@ public class ResultsCheckerFacade {
         this.resultsCheckerRepository = resultsCheckerRepository;
     }
 
-    public ResultsLotto getResults(ResultsLotto resultsLotto) {
-        boolean checkWinnerNumbers = resultsValidator.isWinnerNumbers(resultsLotto.numbersUser(), resultsLotto.lottoNumbers());
-        boolean checkSizeSixNumbers = receiverValidator.isEqualsSixNumbers(resultsLotto.numbersUser());
-        if (checkWinnerNumbers && checkSizeSixNumbers) {
-            resultsCheckerRepository.save(resultsLotto);
-            return new ResultsLotto(resultsLotto.uuid(), resultsLotto.numbersUser(), resultsLotto.lottoNumbers(), resultsLotto.drawDate(), WIN);
+    public Set<Integer> getWinnerNumbers(Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
+        return userNumbers.stream()
+                .filter(winNumbers -> resultsValidator.isWinnerNumbers(userNumbers, lottoNumbers))
+                .filter(isSizeSixNumbers -> receiverValidator.isEqualsSixNumbers(userNumbers))
+                .collect(toSet());
         }
-        throw new IllegalArgumentException(WINNER_NUMBERS_NOT_FOUND);
+
+    public ResultsLotto getWinnerNumbersMessage(Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
+        Set<Integer> winnersNumbersInLotto = getWinnerNumbers(userNumbers, lottoNumbers);
+        return winnersNumbersInLotto.stream()
+                .map(dto -> new ResultsLotto(winnersNumbersInLotto, WIN))
+                .findAny()
+                .orElse(new ResultsLotto(winnersNumbersInLotto, NOT_WIN));
     }
 
-    public Set<Integer> getWinnerNumbersByUUID(Set<Integer> numberInput, Set<Integer> numbersLotto, UUID uuid) {
-        boolean checkWinnerNumbers = resultsValidator.isWinnerNumbers(numberInput, numbersLotto);
-        Set<Integer> winNumbers = resultsCheckerRepository.findByUUID(uuid, checkWinnerNumbers);
-        return new HashSet<>(winNumbers);
+    public Set<Integer> getWinnerNumbersByUUID(UUID uuid, Set<Integer> numbersInput, Set<Integer> numbersLotto) {
+        boolean checkWinnerNumbers = resultsValidator.isWinnerNumbers(numbersInput, numbersLotto);
+        Set<Integer> winNumbers = resultsCheckerRepository.findWinnerNumbersByUUID(uuid, numbersInput, numbersLotto);
+        return winNumbers.stream()
+                .filter(Objects::nonNull)
+                .filter(isWin -> checkWinnerNumbers)
+                .collect(toSet());
     }
 
-    public Set<Integer> getWinnersNumbersByDateDraw(ResultsLotto results) {
-        NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository();
-        Set<Integer> winNumbersByDate = numberReceiverRepository.findByDate(results.drawDate());
+    public Set<Integer> getWinnersNumbersByDate(LocalDateTime dateTime, Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
+        Set<Integer> winNumbersByDate = resultsCheckerRepository.findWinnerNumbersByDate(dateTime, userNumbers, lottoNumbers);
         return winNumbersByDate.stream()
-                .filter(checkWin -> isWinningNumbers(results))
-                .collect(Collectors.toSet());
+                .filter(checkWin -> isWinningNumbers(userNumbers, lottoNumbers))
+                .collect(toSet());
     }
 
-    private boolean isWinningNumbers(ResultsLotto results) {
-        return resultsValidator.isWinnerNumbers(results.numbersUser(), results.lottoNumbers());
+    private boolean isWinningNumbers(Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
+        return resultsValidator.isWinnerNumbers(userNumbers, lottoNumbers);
     }
 }
