@@ -1,7 +1,7 @@
 package pl.lotto.resultchecker;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -30,7 +30,7 @@ public class InMemoryResultsCheckerRepository implements ResultsCheckerRepositor
                 .stream()
                 .filter(win -> validator.isWinnerNumbers(userNumbers, lottoNumbers))
                 .findAny()
-                .orElseGet(LinkedHashSet::new);
+                .orElseGet(HashSet::new);
     }
 
     @Override
