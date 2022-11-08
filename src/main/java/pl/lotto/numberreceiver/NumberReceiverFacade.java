@@ -5,6 +5,7 @@ import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 public class NumberReceiverFacade {
 
@@ -20,15 +21,16 @@ public class NumberReceiverFacade {
         this.numberReceiverGenerator = numberReceiverGenerator;
     }
 
-    public NumbersMessageDto inputNumbers(Set<Integer> inputNumbers) {
-        boolean validate = numberValidator.validate(inputNumbers);
+    public NumbersMessageDto inputNumbers(Set<Integer> numbersFromUser) {
+        boolean validate = numberValidator.validate(numbersFromUser);
         if (validate) {
             Clock clock = Clock.systemUTC();
             DateTimeReceiver ticketDrawDate = new DateTimeReceiver(clock);
+            UUID uuid = UUID.randomUUID();
             LocalDateTime drawDate = ticketDrawDate.generateDrawDate(drawDateTime);
-            NumberReceiver numberReceiver = numberReceiverGenerator.generateUserTicket(inputNumbers, drawDate);
+            NumberReceiver numberReceiver = numberReceiverGenerator.generateTicket(uuid, numbersFromUser, drawDate);
             numberReceiverRepository.save(numberReceiver);
         }
-        return new NumbersMessageDto(inputNumbers, numberValidator.messages);
+        return new NumbersMessageDto(numbersFromUser, numberValidator.messages);
     }
 }
