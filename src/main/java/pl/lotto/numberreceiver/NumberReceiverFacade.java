@@ -4,6 +4,8 @@ import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,9 +30,14 @@ public class NumberReceiverFacade {
             DateTimeReceiver ticketDrawDate = new DateTimeReceiver(clock);
             UUID uuid = UUID.randomUUID();
             LocalDateTime drawDate = ticketDrawDate.generateDrawDate(drawDateTime);
-            NumberReceiver numberReceiver = numberReceiverGenerator.generateTicket(uuid, numbersFromUser, drawDate);
-            numberReceiverRepository.save(numberReceiver);
+            Set<Integer> savedUUIDNumbers = numberReceiverRepository.save(uuid, numbersFromUser);
+            Set<Integer> savedTicket = numberReceiverRepository.save(drawDate, savedUUIDNumbers);
+            return new NumbersMessageDto(savedTicket, numberValidator.messages);
         }
-        return new NumbersMessageDto(numbersFromUser, numberValidator.messages);
+        return throwNumbersNotFoundException();
+    }
+
+    private NumbersMessageDto throwNumbersNotFoundException() {
+        return Optional.of(new NumbersMessageDto(null, numberValidator.messages)).orElseThrow();
     }
 }
