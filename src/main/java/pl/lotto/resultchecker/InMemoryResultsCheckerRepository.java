@@ -16,19 +16,19 @@ public class InMemoryResultsCheckerRepository implements ResultsCheckerRepositor
     }
 
     @Override
-    public Set<Integer> findWinnerNumbersByDate(LocalDateTime dateTime, Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
+    public Set<Integer> findWinnerNumbersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
         return databaseInMemory.values()
                 .stream()
-                .filter(winner -> validator.isWinnerNumbers(userNumbers, lottoNumbers))
+                .filter(winner -> validator.isWinnerNumbers(userNumbers))
                 .findAny()
                 .orElseThrow();
     }
 
     @Override
-    public Set<Integer> findWinnerNumbersByUUID(UUID uuid, Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
+    public Set<Integer> findWinnerNumbersByUUID(UUID uuid, Set<Integer> userNumbers) {
         return databaseInMemory.values()
                 .stream()
-                .filter(win -> validator.isWinnerNumbers(userNumbers, lottoNumbers))
+                .filter(win -> validator.isWinnerNumbers(userNumbers))
                 .findAny()
                 .orElseGet(HashSet::new);
     }
