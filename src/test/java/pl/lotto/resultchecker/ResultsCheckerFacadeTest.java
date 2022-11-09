@@ -70,7 +70,7 @@ class ResultsCheckerFacadeTest {
 
     @Test
     @DisplayName("return failed when user get more than 6 numbers and is winner numbers")
-    public void should_return_failed_when_user_get_more_than_6_numbers_and_is_winner_numbers() {
+    public void should_return_failed_when_user_get_more_than_six_numbers_and_is_winner_numbers() {
         //given
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 88, 23);
         ResultsLotto win = new ResultsLotto(inputNumbers, WIN);
@@ -86,7 +86,7 @@ class ResultsCheckerFacadeTest {
 
     @Test
     @DisplayName("return failed when user get more than 6 numbers and is not winner numbers")
-    public void should_return_failed_when_user_get_more_than_6_numbers_and_is_not_winner_numbers() {
+    public void should_return_failed_when_user_get_more_than_six_numbers_and_is_not_winner_numbers() {
         //given
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 88, 31);
         ResultsLotto notWin = new ResultsLotto(inputNumbers, NOT_WIN);
@@ -98,5 +98,39 @@ class ResultsCheckerFacadeTest {
         ResultsLotto result = resultsCheckerFacade.getWinnerNumbers(results.resultNumbers());
         //then
         assertThat(notWin).isEqualTo(result);
+    }
+
+    @Test
+    @DisplayName("return success message when user get 6 numbers and is winner numbers")
+    public void should_return_true_when_user_get_six_numbers_and_is_winner_numbers() {
+        //given
+        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 88);
+        ResultsLotto resultsLotto = new ResultsLotto(inputNumbers, WIN);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .createModuleForTests(validator);
+
+        //when
+        String resultMessage = resultsCheckerFacade.getWinnerNumbers(inputNumbers)
+                .message();
+
+        //then
+        assertThat(resultsLotto.message()).isEqualTo(resultMessage);
+    }
+
+    @Test
+    @DisplayName("return failed message when user get 6 numbers and is not winner numbers")
+    public void should_return_failed_message_when_user_get_six_numbers_and_is_not_winner_numbers() {
+        //given
+        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 88);
+        ResultsLotto resultsLotto = new ResultsLotto(inputNumbers, NOT_WIN);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .createModuleForTests(validator);
+
+        //when
+        String resultMessage = resultsCheckerFacade.getWinnerNumbers(inputNumbers)
+                .message();
+
+        //then
+        assertThat(resultsLotto.message()).isNotEqualTo(resultMessage);
     }
 }
