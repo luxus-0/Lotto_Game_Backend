@@ -19,6 +19,11 @@ class ResultsCheckerFacadeTest {
         this.validator = new ResultsCheckerValidator();
     }
 
+    void printWinnerNumber(String result) {
+        int win = Integer.parseInt(result);
+        System.out.println(win + " " + NOT_WIN);
+    }
+
     @Test
     @DisplayName("return success when user get 6 numbers and is winner numbers")
     public void should_return_success_when_user_get_six_numbers_and_is_winner_numbers() {
@@ -147,10 +152,7 @@ class ResultsCheckerFacadeTest {
 
         //then
         ResultsLotto resultsLotto = new ResultsLotto(inputNumbers, result);
-        assertThrows(RuntimeException.class, () -> {
-            int win = Integer.parseInt(result);
-            System.out.println(win + " " +NOT_WIN);
-        });
+        assertThrows(RuntimeException.class, () -> printWinnerNumber(result));
 
         String expectedMessage = "not win";
         String actualMessage = resultsLotto.message();
