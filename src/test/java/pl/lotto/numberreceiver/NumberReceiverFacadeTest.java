@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
@@ -40,9 +39,9 @@ class NumberReceiverFacadeTest {
 
         // when
         NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(EQUALS_SIX_NUMBERS));
 
         // then
-        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(EQUALS_SIX_NUMBERS));
         assertThat(numbersUser).isEqualTo(result);
     }
 
@@ -172,7 +171,6 @@ class NumberReceiverFacadeTest {
         //given
         LocalDateTime date = LocalDate.of(2022, Month.NOVEMBER, 5).atStartOfDay();
         LocalDateTime dateTime = date.plus(11, ChronoUnit.HOURS).plusMinutes(0);
-        dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
         LocalDateTime now = LocalDateTime.now(Clock.fixed(Instant.now(), ZoneId.systemDefault()));
 
         //when
