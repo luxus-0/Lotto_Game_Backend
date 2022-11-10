@@ -133,4 +133,28 @@ class ResultsCheckerFacadeTest {
         //then
         assertThat(resultsLotto.message()).isNotEqualTo(resultMessage);
     }
+
+    @Test
+    @DisplayName("return throwing exception when user get less than six numbers and is not winner numbers")
+    public void should_return_throwing_exception_when_user_get_less_than_six_numbers_and_is_not_winner_numbers() {
+        //given
+        Set<Integer> inputNumbers = Set.of(1, 2, 3);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .createModuleForTests(validator);
+
+        //when
+        String result = resultsCheckerFacade.getWinnerNumbers(inputNumbers).message();
+
+        //then
+        ResultsLotto resultsLotto = new ResultsLotto(inputNumbers, result);
+        assertThrows(RuntimeException.class, () -> {
+            int win = Integer.parseInt(result);
+            System.out.println(win + " " +NOT_WIN);
+        });
+
+        String expectedMessage = "not win";
+        String actualMessage = resultsLotto.message();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 }
