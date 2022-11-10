@@ -1,7 +1,9 @@
 package pl.lotto.numberreceiver;
 
 import java.time.*;
-import java.util.Optional;
+
+import static java.time.LocalTime.NOON;
+import static java.time.MonthDay.now;
 
 class DateTimeReceiver {
     private final Clock clock;
@@ -14,22 +16,17 @@ class DateTimeReceiver {
         return LocalDateTime.now(clock);
     }
 
-    public LocalDateTime generateDrawDate(LocalDateTime drawDateTime) {
-        LocalTime timeNow = generateToday().toLocalTime();
-        LocalDate dateNow = generateToday().toLocalDate();
-        DayOfWeek drawDayOfWeek = drawDateTime.getDayOfWeek();
-        LocalTime drawTime = drawDateTime.toLocalTime();
-        LocalDate drawDate = drawDateTime.toLocalDate();
-        if (isDayEqualSaturdayAndTimeEqualNoon(drawDateTime, timeNow, dateNow, drawDayOfWeek, drawTime)) {
-            return LocalDateTime.of(drawDate, drawTime);
+    public LocalDateTime generateDrawDate(LocalDateTime dateTime) {
+        LocalDate date = dateTime.toLocalDate();
+        LocalTime time = dateTime.toLocalTime();
+        int fromActualYear = Year.from(now()).getValue();
+        int fromActualMonth = Month.from(now()).getValue();
+        int dayDraw = DayOfWeek.SATURDAY.getValue();
+        LocalDate dateDraw = LocalDate.of(fromActualYear, fromActualMonth, dayDraw);
+        LocalDateTime dateTimeDraw = LocalDateTime.of(dateDraw, NOON);
+        if (dateTime.equals(dateTimeDraw)) {
+            return LocalDateTime.of(date, time);
         }
-        return Optional.of(drawDateTime).orElseThrow();
-    }
-
-    public boolean isDayEqualSaturdayAndTimeEqualNoon(LocalDateTime drawDate, LocalTime timeNow, LocalDate dateNow, DayOfWeek drawDayOfWeek, LocalTime drawTime) {
-        return drawDayOfWeek == DayOfWeek.SATURDAY &&
-                drawTime == LocalTime.NOON &&
-                timeNow == LocalTime.NOON &&
-                dateNow == drawDate.toLocalDate();
+        return dateTime;
     }
 }
