@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static java.time.LocalTime.NOON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
 class NumberReceiverFacadeTest {
@@ -39,11 +39,11 @@ class NumberReceiverFacadeTest {
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6);
 
         // when
-        NumbersMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
 
         // then
-        NumbersMessageDto result = new NumbersMessageDto(numbers, List.of(EQUALS_SIX_NUMBERS));
-        assertThat(inputNumbers).isEqualTo(result);
+        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(EQUALS_SIX_NUMBERS));
+        assertThat(numbersUser).isEqualTo(result);
     }
 
     @Test
@@ -58,11 +58,11 @@ class NumberReceiverFacadeTest {
         Set<Integer> numbers = Set.of(90, 1, 2, 3, 4, 19);
 
         // when
-        NumbersMessageDto inputNumbersForUser = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(EQUALS_SIX_NUMBERS));
 
         // then
-        NumbersMessageDto resultMessage = new NumbersMessageDto(numbers, List.of(EQUALS_SIX_NUMBERS));
-        assertThat(inputNumbersForUser).isEqualTo(resultMessage);
+        assertThat(numbersUser).isEqualTo(result);
     }
 
     @Test
@@ -74,11 +74,11 @@ class NumberReceiverFacadeTest {
         Set<Integer> numbers = Set.of(1, 2, 3, 4);
 
         // when
-        NumbersMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(LESS_THAN_SIX_NUMBERS));
 
         // then
-        NumbersMessageDto result = new NumbersMessageDto(numbers, List.of(LESS_THAN_SIX_NUMBERS));
-        assertThat(inputNumbers).isEqualTo(result);
+        assertThat(numbersUser).isEqualTo(result);
     }
 
     @Test
@@ -90,28 +90,29 @@ class NumberReceiverFacadeTest {
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6, 12, 14);
 
         // when
-        NumbersMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
+        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(MORE_THAN_SIX_NUMBERS));
 
         // then
-        NumbersMessageDto result = new NumbersMessageDto(numbers, List.of(MORE_THAN_SIX_NUMBERS));
-        assertThat(inputNumbers).isEqualTo(result);
+        assertThat(numbersUser).isEqualTo(result);
     }
 
     @Test
     @DisplayName("return failed when user gave number out of range")
     public void should_return_failed_when_user_gave_number_out_of_range() {
         // given
-        LocalDateTime dateTimeNow = dateTimeReceiver.generateDrawDate(LocalDateTime.now(clock));
+        LocalDateTime dateTime = dateTimeReceiver.generateDrawDate(LocalDateTime.now(clock));
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(numberReceiverGenerator, clock, dateTimeNow);
-        Set<Integer> numbers = Set.of(102, 1, 2, 3, 4, -3);
+                .createModuleForTests(numberReceiverGenerator, clock, dateTime);
+        Set<Integer> numbers = Set.of(102, 1, 2, 3, 4, 130);
 
         // when
-        NumbersMessageDto inputNumbers = numberReceiverFacade.inputNumbers(numbers);
+        List<String> messagesNumbers = numberReceiverFacade.inputNumbers(numbers).messages();
+        List<String> results = List.of(NOT_IN_RANGE_NUMBERS);
+        boolean isCorrectMessage = messagesNumbers.equals(results);
 
         // then
-        NumbersMessageDto result = new NumbersMessageDto(numbers, List.of(NOT_IN_RANGE_NUMBERS));
-        assertThat(inputNumbers).isNotEqualTo(result);
+        assertFalse(isCorrectMessage);
     }
 
     @Test
@@ -137,15 +138,15 @@ class NumberReceiverFacadeTest {
     public void should_return_not_correct_date_time_draw_when_user_get_sunday_11_am_with_clock_UTC() {
 
         //given
-        LocalDate actualDate = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SUNDAY.getValue());
-        LocalTime actualTime = LocalTime.of(11, 0);
-        LocalDateTime actualDateTime = LocalDateTime.of(actualDate, actualTime);
-        actualDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+        LocalDate date = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SATURDAY.getValue());
+        LocalTime time = LocalTime.of(11, 0);
+        LocalDateTime dateTime = LocalDateTime.of(date, time);
+
         //when
-        LocalDateTime resultDrawDate = dateTimeReceiver.generateDrawDate(LocalDateTime.now());
+        LocalDateTime resultDateTime = dateTimeReceiver.generateDrawDate(dateTime);
 
         //then
-        assertNotEquals(resultDrawDate, actualDateTime);
+        assertEquals(dateTime, resultDateTime);
     }
 
     @Test
@@ -155,7 +156,6 @@ class NumberReceiverFacadeTest {
         //given
         LocalDateTime date = LocalDate.of(2022, Month.DECEMBER, 3).atStartOfDay();
         LocalDateTime dateTime = date.plus(12, ChronoUnit.HOURS).plusMinutes(0);
-        dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
         LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
 
         //when
@@ -174,6 +174,7 @@ class NumberReceiverFacadeTest {
         LocalDateTime dateTime = date.plus(11, ChronoUnit.HOURS).plusMinutes(0);
         dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
         LocalDateTime now = LocalDateTime.now(Clock.fixed(Instant.now(), ZoneId.systemDefault()));
+
         //when
         LocalDateTime dateTimeResult = dateTimeReceiver.generateDrawDate(now);
 
@@ -188,7 +189,7 @@ class NumberReceiverFacadeTest {
         //given
         LocalDate actualDate = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SATURDAY.getValue());
         LocalDateTime actualDateTime = LocalDateTime.of(actualDate, LocalTime.NOON);
-        actualDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+
         //when
         LocalDateTime resultDrawDate = dateTimeReceiver.generateDrawDate(LocalDateTime.now());
 
