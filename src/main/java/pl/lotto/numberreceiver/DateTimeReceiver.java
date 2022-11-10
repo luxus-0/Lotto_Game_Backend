@@ -1,6 +1,7 @@
 package pl.lotto.numberreceiver;
 
 import java.time.*;
+import java.util.Optional;
 
 import static java.time.LocalTime.NOON;
 import static java.time.MonthDay.now;
@@ -17,16 +18,14 @@ class DateTimeReceiver {
     }
 
     public LocalDateTime generateDrawDate(LocalDateTime dateTime) {
-        LocalDate date = dateTime.toLocalDate();
-        LocalTime time = dateTime.toLocalTime();
-        int fromActualYear = Year.from(now()).getValue();
-        int fromActualMonth = Month.from(now()).getValue();
-        int dayDraw = DayOfWeek.SATURDAY.getValue();
-        LocalDate dateDraw = LocalDate.of(fromActualYear, fromActualMonth, dayDraw);
+        int actualYear = Year.now().getValue();
+        int actualMonth = Month.from(now()).getValue();
+        int day = DayOfWeek.SATURDAY.getValue();
+        LocalDate dateDraw = LocalDate.of(actualYear, actualMonth, day);
         LocalDateTime dateTimeDraw = LocalDateTime.of(dateDraw, NOON);
         if (dateTime.equals(dateTimeDraw)) {
-            return LocalDateTime.of(date, time);
+            return dateTimeDraw;
         }
-        return dateTime;
+        return Optional.of(dateTimeDraw).get();
     }
 }
