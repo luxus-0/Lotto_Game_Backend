@@ -30,7 +30,7 @@ class NumberReceiverFacadeTest {
     @DisplayName("return success when user gave six numbers and day is saturday and time is noon")
     public void should_return_success_when_user_gave_six_numbers_and_day_is_saturday_and_time_is_noon() {
         // given
-        LocalDate date = LocalDate.of(2022, Month.OCTOBER, 29);
+        LocalDate date = LocalDate.of(2022, 11, DayOfWeek.SATURDAY.getValue());
         LocalDateTime dateTime = LocalDateTime.of(date, NOON);
         LocalDateTime drawDate = dateTimeReceiver.generateDrawDate(dateTime);
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
@@ -39,7 +39,7 @@ class NumberReceiverFacadeTest {
 
         // when
         NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
-        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(EQUALS_SIX_NUMBERS));
+        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), EQUALS_SIX_NUMBERS);
 
         // then
         assertThat(numbersUser).isEqualTo(result);
@@ -58,7 +58,7 @@ class NumberReceiverFacadeTest {
 
         // when
         NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
-        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(EQUALS_SIX_NUMBERS));
+        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), EQUALS_SIX_NUMBERS);
 
         // then
         assertThat(numbersUser).isEqualTo(result);
@@ -74,7 +74,7 @@ class NumberReceiverFacadeTest {
 
         // when
         NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
-        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(LESS_THAN_SIX_NUMBERS));
+        NumbersMessageDto result = new NumbersMessageDto(numbers, LESS_THAN_SIX_NUMBERS);
 
         // then
         assertThat(numbersUser).isEqualTo(result);
@@ -90,7 +90,7 @@ class NumberReceiverFacadeTest {
 
         // when
         NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
-        NumbersMessageDto result = new NumbersMessageDto(numbersUser.inputNumber(), List.of(MORE_THAN_SIX_NUMBERS));
+        NumbersMessageDto result = new NumbersMessageDto(numbers, MORE_THAN_SIX_NUMBERS);
 
         // then
         assertThat(numbersUser).isEqualTo(result);
@@ -106,12 +106,12 @@ class NumberReceiverFacadeTest {
         Set<Integer> numbers = Set.of(102, 1, 2, 3, 4, 130);
 
         // when
-        List<String> messagesNumbers = numberReceiverFacade.inputNumbers(numbers).messages();
-        List<String> results = List.of(NOT_IN_RANGE_NUMBERS);
-        boolean isCorrectMessage = messagesNumbers.equals(results);
+        String resultMessage = numberReceiverFacade.inputNumbers(numbers).message();
+        boolean checkValidation = resultMessage.equals(EQUALS_SIX_NUMBERS)
+                || resultMessage.equals(NOT_IN_RANGE_NUMBERS);
 
         // then
-        assertFalse(isCorrectMessage);
+        assertTrue(checkValidation);
     }
 
     @Test
@@ -133,11 +133,11 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("return not correct date time draw when user give sunday 11 am with clock UTC")
-    public void should_return_not_correct_date_time_draw_when_user_get_sunday_11_am_with_clock_UTC() {
+    @DisplayName("return not correct date time draw when user give sunday 11 am with saturday november")
+    public void should_return_not_correct_date_time_draw_when_user_get_sunday_11_am_with_saturday_november() {
 
         //given
-        LocalDate date = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SATURDAY.getValue());
+        LocalDate date = LocalDate.of(2022, Month.NOVEMBER, DayOfWeek.SUNDAY.getValue());
         LocalTime time = LocalTime.of(11, 0);
         LocalDateTime dateTime = LocalDateTime.of(date, time);
 
@@ -145,7 +145,7 @@ class NumberReceiverFacadeTest {
         LocalDateTime resultDateTime = dateTimeReceiver.generateDrawDate(dateTime);
 
         //then
-        assertEquals(dateTime, resultDateTime);
+        assertNotEquals(dateTime, resultDateTime);
     }
 
     @Test
@@ -192,7 +192,7 @@ class NumberReceiverFacadeTest {
         LocalDateTime resultDrawDate = dateTimeReceiver.generateDrawDate(LocalDateTime.now());
 
         //then
-        assertNotEquals(resultDrawDate, actualDateTime);
+        assertEquals(resultDrawDate, actualDateTime);
     }
 
     @Test
