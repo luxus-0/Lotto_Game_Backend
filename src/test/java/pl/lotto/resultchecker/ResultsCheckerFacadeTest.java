@@ -148,11 +148,11 @@ class ResultsCheckerFacadeTest {
                 .createModuleForTests(validator);
 
         //when
-        String result = resultsCheckerFacade.getWinnerNumbers(inputNumbers).message();
+        String resultMessage = resultsCheckerFacade.getWinnerNumbers(inputNumbers).message();
+        ResultsLotto resultsLotto = new ResultsLotto(inputNumbers, resultMessage);
 
         //then
-        ResultsLotto resultsLotto = new ResultsLotto(inputNumbers, result);
-        assertThrows(RuntimeException.class, () -> printWinnerNumber(result));
+        assertThrows(RuntimeException.class, () -> printWinnerNumber(resultMessage));
 
         String expectedMessage = "not win";
         String actualMessage = resultsLotto.message();
