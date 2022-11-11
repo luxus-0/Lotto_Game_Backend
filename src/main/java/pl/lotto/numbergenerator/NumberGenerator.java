@@ -8,7 +8,7 @@ import static java.util.stream.Collectors.toSet;
 import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.RANGE_TO_NUMBER;
 
-public class GenerateLottoNumbers {
+public class NumberGenerator {
     public Set<Integer> generate() {
         return IntStream.rangeClosed(SIZE_MIN, SIZE_MAX)
                 .map(mapToRandom -> readNumbers())
