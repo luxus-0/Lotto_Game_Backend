@@ -29,8 +29,8 @@ class DateTimeReceiverTest {
     }
 
     @Test
-    @DisplayName("return success when user gave Wednesday November 2022 12:00 am with zone Europe/Warsaw")
-    public void should_return_success_when_user_gave_Wednesday_November_2022_year_and_time_12_am_with_zone_Europe_Warsaw() {
+    @DisplayName("return success when user gave saturday November 2022 12:00 am with zone Europe/Warsaw")
+    public void should_return_success_when_user_gave_saturday_november_2022_year_and_time_12_am_with_zone_Europe_Warsaw() {
         // given
         LocalDate date = LocalDate.of(2022, 11, DayOfWeek.SATURDAY.getValue());
         LocalTime time = LocalTime.of(12, 0);
@@ -42,25 +42,25 @@ class DateTimeReceiverTest {
         LocalDateTime drawDate = dateTimeReceiver.generateDrawDate(dateTime);
 
         // then
-        assertThat(drawDate.getDayOfWeek()).isEqualTo(DayOfWeek.SATURDAY);
+        assertThat(drawDate.toLocalDate()).isEqualTo(date);
         assertEquals(drawDate.toLocalTime(), time);
     }
 
     @Test
-    @DisplayName("return success when user gave Wednesday November 2022 12:00 am with zone Europe/Warsaw")
-    public void should_return_success_when_user_gave_Wednesday_November_2022_year_and_time_12_am_with_zone_Europe_Warsaw() {
+    @DisplayName("return failed when user gave wednesday 14 december 2022 12:00 am with clock UTC")
+    public void should_return_failed_when_user_gave_wednesday_14_december_and_2022_year_and_time_12_am_with_clock_UTC() {
         // given
-        LocalDate date = LocalDate.of(2022, 11, DayOfWeek.SATURDAY.getValue());
+        LocalDate date = LocalDate.of(2022, 12, 14);
         LocalTime time = LocalTime.of(12, 0);
         LocalDateTime dateTime = LocalDateTime.of(date, time);
-        Clock clock = Clock.fixed(Instant.now(), ZoneId.of("Europe/Warsaw"));
+        Clock clock = Clock.systemUTC();
         DateTimeReceiver dateTimeReceiver = new DateTimeReceiver(clock);
 
         // when
         LocalDateTime drawDate = dateTimeReceiver.generateDrawDate(dateTime);
 
         // then
-        assertThat(drawDate.getDayOfWeek()).isEqualTo(DayOfWeek.SATURDAY);
+        assertThat(drawDate.getDayOfWeek()).isNotEqualTo(DayOfWeek.SATURDAY);
         assertEquals(drawDate.toLocalTime(), time);
     }
 }
