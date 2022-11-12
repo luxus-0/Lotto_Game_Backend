@@ -6,7 +6,6 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toSet;
 import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
-import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.RANGE_TO_NUMBER;
 
 public class NumberGenerator {
     public Set<Integer> generate() {
