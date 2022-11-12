@@ -1,36 +1,39 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.DateTimeMessageDto;
+import pl.lotto.numberreceiver.dto.NumbersDateTimeMessageDto;
 import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
-    private final DateTimeReceiverValidator dateTimeValidator;
+    private final Clock clock;
     private final NumberReceiverRepository numberReceiverRepository;
     private final NumberReceiverGenerator numberReceiverGenerator;
 
-    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, DateTimeReceiverValidator dateTimeValidator, NumberReceiverRepository numberReceiverRepository, NumberReceiverGenerator numberReceiverGenerator) {
+    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, NumberReceiverGenerator numberReceiverGenerator) {
         this.numberValidator = numberValidator;
-        this.dateTimeValidator = dateTimeValidator;
+        this.clock = Clock.systemDefaultZone();
         this.numberReceiverRepository = numberReceiverRepository;
         this.numberReceiverGenerator = numberReceiverGenerator;
     }
 
 
-    public NumbersMessageDto inputNumbers(Set<Integer> numbersFromUser) {
-        boolean validateNumbers = numberValidator.validate(numbersFromUser);
-        boolean validateDate = dateTimeValidator.isCorrectDateTimeDraw();
-        String messageValidation = numberValidator.messages.stream().findAny().orElseThrow();
-        if (validateNumbers && validateDate) {
+    public NumbersDateTimeMessageDto inputNumbers(Set<Integer> numbersFromUser) {
+        boolean validate = numberValidator.validate(numbersFromUser);
+        String numbersMessage = numberValidator.messages.stream().findAny().orElseThrow();
+        if (validate) {
             UUID uuid = UUID.randomUUID();
-            NumberReceiver numberReceiver = numberReceiverGenerator.generateTicket(uuid, numbersFromUser, validateDate);
-            NumberReceiver savedReceiver = numberReceiverRepository.save(numberReceiver);
-            return new NumbersMessageDto(savedReceiver.numbersFromUser(), messageValidation);
+            DateTimeReceiver dateTimeReceiver = new DateTimeReceiver(clock);
+            LocalDateTime drawDateTime = dateTimeReceiver.readDateTimeDraw();
+            NumberReceiver numberReceiver = numberReceiverGenerator.generateTicket(uuid, numbersFromUser, drawDateTime);
+            numberReceiverRepository.save(numberReceiver);
+            return new NumbersDateTimeMessageDto(numbersFromUser, numbersMessage, drawDateTime, true);
         }
-        return new NumbersMessageDto(numbersFromUser, messageValidation);
+        return new NumbersDateTimeMessageDto(numbersFromUser, numbersMessage, null, false);
     }
 }
