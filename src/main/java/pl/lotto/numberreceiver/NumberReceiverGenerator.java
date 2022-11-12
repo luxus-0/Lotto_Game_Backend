@@ -6,11 +6,11 @@ import java.util.UUID;
 
 class NumberReceiverGenerator {
 
-    public NumberReceiver generateTicket(UUID uuid, Set<Integer> numbersUser, LocalDateTime drawDate) {
+    public NumberReceiver generateTicket(UUID uuid, Set<Integer> numbersUser, boolean isCorrectDateTimeDraw) {
         return NumberReceiver.builder()
                 .uuid(uuid)
                 .numbersFromUser(numbersUser)
-                .drawDate(drawDate)
+                .isCorrectDateTimeDraw(isCorrectDateTimeDraw)
                 .build();
     }
 }
