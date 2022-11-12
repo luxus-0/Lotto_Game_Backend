@@ -33,11 +33,4 @@ public class NumberReceiverFacade {
         }
         return new NumbersMessageDto(numbersFromUser, messageValidation);
     }
-
-    public DateTimeMessageDto generateDateMessage() {
-        if (dateTimeValidator.isCorrectDateTimeDraw()) {
-            return new DateTimeMessageDto("success");
-        }
-        return new DateTimeMessageDto("failed");
-    }
 }
