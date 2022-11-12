@@ -20,7 +20,7 @@ class DateTimeReceiverValidator {
         LocalTime actualTime = LocalTime.now();
         LocalDate actualDate = LocalDate.of(actualYear, actualMonth, actualDay);
         LocalDateTime dateTimeDraw = LocalDateTime.of(actualDate, NOON);
-        if(actualDay == SATURDAY.getValue() && actualTime == NOON) {
+        if (actualDay == SATURDAY.getValue() && actualTime == NOON) {
             System.out.println(dateTimeDraw);
             return true;
         }
