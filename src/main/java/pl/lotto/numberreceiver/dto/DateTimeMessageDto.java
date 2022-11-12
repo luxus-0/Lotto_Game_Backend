@@ -1,4 +1,6 @@
 package pl.lotto.numberreceiver.dto;
 
-public record DateTimeMessageDto(String message) {
+import java.time.LocalDateTime;
+
+public record DateTimeMessageDto(LocalDateTime drawDateTime, String message) {
 }
