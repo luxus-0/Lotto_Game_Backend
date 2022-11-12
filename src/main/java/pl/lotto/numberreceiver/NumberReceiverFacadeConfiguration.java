@@ -8,9 +8,9 @@ import java.time.Clock;
 public class NumberReceiverFacadeConfiguration {
 
     NumberReceiverFacade createModuleForTests(NumberReceiverGenerator numberReceiverGenerator, Clock clock) {
-        DateTimeReceiverValidator dateTimeReceiver = new DateTimeReceiverValidator(clock);
+        DateTimeReceiver dateTimeReceiver = new DateTimeReceiver(clock);
         NumbersReceiverValidator numbersValidator = new NumbersReceiverValidator();
         NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository();
-        return new NumberReceiverFacade(numbersValidator, dateTimeReceiver, numberReceiverRepository, numberReceiverGenerator);
+        return new NumberReceiverFacade(numbersValidator, numberReceiverRepository, numberReceiverGenerator);
     }
 }
