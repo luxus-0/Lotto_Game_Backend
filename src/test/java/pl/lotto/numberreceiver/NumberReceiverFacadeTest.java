@@ -2,16 +2,13 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.numberreceiver.dto.DateTimeMessageDto;
 import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
-import java.time.*;
-import java.time.temporal.ChronoUnit;
+import java.time.Clock;
 import java.util.Set;
 
-import static java.time.LocalTime.NOON;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
 class NumberReceiverFacadeTest {
