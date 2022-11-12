@@ -34,7 +34,7 @@ class ResultsCheckerFacadeTest {
                 .createModuleForTests(validator);
 
         //when
-        ResultsLotto result = resultsCheckerFacade.getWinnerNumbers(winner.resultNumbers());
+        ResultsLotto result = resultsCheckerFacade.getWinnerNumbers(inputNumbers);
 
         //then
         assertEquals(winner, result);
