@@ -2,6 +2,7 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.lotto.numberreceiver.dto.NumbersDateTimeMessageDto;
 import pl.lotto.numberreceiver.dto.NumbersMessageDto;
 
 import java.time.Clock;
@@ -30,12 +31,12 @@ class NumberReceiverFacadeTest {
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
 
         // when
-        NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbersFromUser);
+        NumbersDateTimeMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbersFromUser);
 
         // then
-        NumbersMessageDto resultNumbers = new NumbersMessageDto(numbersUser.inputNumber(), EQUALS_SIX_NUMBERS);
+        NumbersDateTimeMessageDto resultNumbersDate = new NumbersDateTimeMessageDto(numbersFromUser, EQUALS_SIX_NUMBERS, numbersUser.dateTimeDraw(), numbersUser.isDrawDate());
 
-        assertThat(numbersUser).isEqualTo(resultNumbers);
+        assertThat(numbersUser).isEqualTo(resultNumbersDate);
     }
 
     @Test
@@ -47,7 +48,7 @@ class NumberReceiverFacadeTest {
         Set<Integer> numbers = Set.of(1, 2, 3, 4);
 
         // when
-        NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
+        NumbersDateTimeMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
 
         // then
         NumbersMessageDto result = new NumbersMessageDto(numbers, LESS_THAN_SIX_NUMBERS);
@@ -64,12 +65,12 @@ class NumberReceiverFacadeTest {
         Set<Integer> numbers = Set.of(1, 2, 3, 4, 5, 6, 12, 14);
 
         // when
-        NumbersMessageDto numbersUser = numberReceiverFacade.inputNumbers(numbers);
+        NumbersDateTimeMessageDto userNumbers = numberReceiverFacade.inputNumbers(numbers);
 
         // then
-        NumbersMessageDto result = new NumbersMessageDto(numbers, MORE_THAN_SIX_NUMBERS);
+        NumbersDateTimeMessageDto result = new NumbersDateTimeMessageDto(numbers, MORE_THAN_SIX_NUMBERS, userNumbers.dateTimeDraw(), userNumbers.numbersMessage());
 
-        assertThat(numbersUser).isEqualTo(result);
+        assertThat(userNumbers).isEqualTo(result);
     }
 
     @Test
