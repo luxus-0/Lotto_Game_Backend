@@ -14,7 +14,7 @@ public class InMemoryNumberReceiverRepository implements NumberReceiverRepositor
     @Override
     public NumberReceiver save(NumberReceiver numberReceiver) {
         databaseInMemory.put(numberReceiver.uuid(), numberReceiver.numbersFromUser());
-        return new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.isCorrectDateTimeDraw());
+        return new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
     }
 
     @Override
