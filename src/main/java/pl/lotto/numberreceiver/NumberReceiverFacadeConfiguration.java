@@ -6,11 +6,9 @@ import java.time.Clock;
 
 @Configuration
 public class NumberReceiverFacadeConfiguration {
-
-    NumberReceiverFacade createModuleForTests(NumberReceiverGenerator numberReceiverGenerator, Clock clock) {
-        DateTimeReceiver dateTimeReceiver = new DateTimeReceiver(clock);
+    NumberReceiverFacade createModuleForTests(Clock clock, NumberReceiverRepository numberReceiverRepository) {
         NumbersReceiverValidator numbersValidator = new NumbersReceiverValidator();
-        NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository();
-        return new NumberReceiverFacade(numbersValidator, numberReceiverRepository, numberReceiverGenerator);
+        DateReceiverValidator dateReceiverValidator = new DateReceiverValidator();
+        return new NumberReceiverFacade(clock, numbersValidator, dateReceiverValidator, numberReceiverRepository);
     }
 }
