@@ -6,5 +6,5 @@ import java.util.Set;
 import java.util.UUID;
 
 @Builder
-public record NumberReceiver(UUID uuid, Set<Integer> numbersFromUser, DateTimeDraw dateTimeDraw) {
+public record NumberReceiverDto(UUID uuid, Set<Integer> numbersFromUser, java.time.LocalDateTime dateTimeDraw) {
 }

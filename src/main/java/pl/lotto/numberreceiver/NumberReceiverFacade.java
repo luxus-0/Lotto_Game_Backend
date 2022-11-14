@@ -1,55 +1,46 @@
 package pl.lotto.numberreceiver;
 
-import java.time.*;
-import java.util.Optional;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Stream;
-
-import static java.time.DayOfWeek.SATURDAY;
-import static java.time.LocalTime.NOON;
-import static java.time.MonthDay.now;
-import static pl.lotto.numberreceiver.DateTimeDrawMessageProvider.*;
 
 public class NumberReceiverFacade {
 
     private final Clock clock;
     private final NumbersReceiverValidator numberValidator;
-    private final DateReceiverValidator dateValidator;
     private final NumberReceiverRepository numberReceiverRepository;
+    private final DateTimeDrawGenerator dateTimeDrawGenerator;
+    private final UUIDGenerator uuidGenerator;
 
-    public NumberReceiverFacade(Clock clock, NumbersReceiverValidator numberValidator, DateReceiverValidator dateValidator, NumberReceiverRepository numberReceiverRepository) {
+    public NumberReceiverFacade(Clock clock, NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, DateTimeDrawGenerator dateTimeDrawGenerator, UUIDGenerator uuidGenerator) {
         this.clock = clock;
         this.numberValidator = numberValidator;
-        this.dateValidator = dateValidator;
         this.numberReceiverRepository = numberReceiverRepository;
+        this.dateTimeDrawGenerator = dateTimeDrawGenerator;
+        this.uuidGenerator = uuidGenerator;
     }
 
-    public NumberReceiver inputNumbers(Set<Integer> numbersFromUser) {
+    public NumberReceiverDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
-        UUID uuid = UUID.randomUUID();
-        LocalDateTime todaySaturdayNoon = LocalDateTime.now(clock).withDayOfMonth(SATURDAY.getValue()).withHour(12).withMinute(0);
-        DateTimeDraw dateTimeDraw = inputDateTimeDraw(numbersFromUser, todaySaturdayNoon);
-        NumberReceiver numberReceiver = new NumberReceiver(uuid, numbersFromUser, dateTimeDraw);
-        if (validate) {
-            return numberReceiverRepository.save(numberReceiver);
+        if(!validate){
+            return new NumberReceiverDto(null, numbersFromUser, null);
         }
-        return Optional.of(numberReceiver).get();
+        UUID uuid = uuidGenerator.generateUUID();
+        LocalDateTime dateTimeDraw = dateTimeDrawGenerator.generateNextDrawDate();
+        UserNumbers userNumbers = new UserNumbers(uuid, numbersFromUser, dateTimeDraw);
+        UserNumbers save = numberReceiverRepository.save(userNumbers);
+        return new NumberReceiverDto(save.uuid(), save.numbersFromUser(), save.dateDraw());
     }
 
-    public DateTimeDraw inputDateTimeDraw(Set<Integer> numbersFromUser, LocalDateTime dateTimeDraw) {
-        if (dateValidator.validate(numbersFromUser, dateTimeDraw)) {
-            int actualYear = Year.now(clock).getValue();
-            int actualMonth = Month.from(now(clock)).getValue();
-            int actualDay = MonthDay.from(now(clock)).withDayOfMonth(SATURDAY.getValue()).getDayOfMonth();
-            LocalDate actualDate = LocalDate.of(actualYear, actualMonth, actualDay);
-            LocalDateTime todayTwelveAm = LocalDateTime.of(actualDate, NOON);
-            return Stream.of(dateTimeDraw)
-                    .filter(checkDateTime -> dateTimeDraw.equals(todayTwelveAm))
-                    .map(dateTime -> new DateTimeDraw(todayTwelveAm, SUCCESS_DRAW_DATE_TIME))
-                    .findAny()
-                    .orElse(new DateTimeDraw(todayTwelveAm, FAILED_DRAW_DATE_TIME));
-        }
-        return new DateTimeDraw(null, null);
+    public AllUsersNumbersDto usersNumbers(LocalDateTime date){
+        UUID uuid = uuidGenerator.generateUUID();
+        UserNumbers userByUUID = numberReceiverRepository.findByUUID(uuid);
+        UserNumbers userByDate = numberReceiverRepository.findByDate(date);
+        UUID id = userByUUID.uuid();
+        Set<Integer> numbersInput = userByUUID.numbersFromUser();
+        LocalDateTime dateDraw = userByDate.dateDraw();
+        return new AllUsersNumbersDto(List.of(new UserNumbersDto(id, numbersInput, dateDraw)));
     }
 }

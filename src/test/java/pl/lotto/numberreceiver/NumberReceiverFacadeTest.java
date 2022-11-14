@@ -10,7 +10,6 @@ import java.time.ZoneId;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class NumberReceiverFacadeTest {
 
@@ -25,13 +24,9 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         // when
-        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        boolean checkSixNumbers = validator.isEqualsSixNumbers(numberReceiver.numbersFromUser());
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
-
-        assertThat(numberReceiver).isEqualTo(resultNumbers);
-        assertThat(checkSixNumbers).isTrue();
+        assertThat(numberReceiver.numbersFromUser()).isEqualTo(numbersFromUser);
     }
 
     @Test
@@ -42,13 +37,9 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4);
         // when
-        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        boolean checkLessThanSixNumbers = validator.isLessThanSixNumbers(numberReceiver.numbersFromUser());
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
-
-        assertThat(numberReceiver).isEqualTo(resultNumbers);
-        assertTrue(checkLessThanSixNumbers);
+        assertThat(numberReceiver.numbersFromUser()).isEqualTo(numbersFromUser);
     }
 
     @Test
@@ -59,13 +50,9 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6, 7, 8);
         // when
-        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        boolean checkMoreThanSixNumbers = validator.isMoreThanSixNumbers(numberReceiver.numbersFromUser());
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
-
-        assertThat(numberReceiver).isEqualTo(resultNumbers);
-        assertTrue(checkMoreThanSixNumbers);
+        assertThat(numberReceiver.numbersFromUser()).isEqualTo(numbersFromUser);
     }
 
     @Test
@@ -76,13 +63,9 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 100, 4, 5, 135,900);
         // when
-        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        boolean checkNotInRangeNumbers = validator.isNotInRangeNumbers(numberReceiver.numbersFromUser());
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
-
-        assertThat(numberReceiver).isEqualTo(resultNumbers);
-        assertTrue(checkNotInRangeNumbers);
+        assertThat(numberReceiver.numbersFromUser()).isEqualTo(numbersFromUser);
     }
 
     @Test
@@ -93,13 +76,9 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of();
         // when
-        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        boolean checkEmptyNumbers = validator.isEmptyNumbers(numberReceiver.numbersFromUser());
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
-
-        assertThat(numberReceiver).isEqualTo(resultNumbers);
-        assertTrue(checkEmptyNumbers);
+        assertThat(numberReceiver.numbersFromUser()).isEqualTo(numbersFromUser);
     }
 
     @Test
@@ -110,35 +89,22 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(-20,-34, 3, -13, 5, -44);
         // when
-        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        boolean checkPositiveNumbers = validator.isPositiveNumbers(numberReceiver.numbersFromUser());
-        boolean checkSixNumbers = validator.isEqualsSixNumbers(numberReceiver.numbersFromUser());
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
-
-        assertThat(numberReceiver).isEqualTo(resultNumbers);
-        assertThat(checkSixNumbers).isTrue();
-        assertFalse(checkPositiveNumbers);
+        assertThat(numberReceiver.numbersFromUser()).isEqualTo(numbersFromUser);
     }
 
     @Test
     @DisplayName("return success when user gave six numbers and draw date time draw")
-    public void should_return_success_when_user_gave_six_numbers_and_date_time_draw() {
+    public void should_return_success_when_user_gave_correct_date_time_draw() {
         // given
         Clock clock = Clock.systemUTC().withZone(ZoneId.of("Europe/Warsaw"));
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         LocalDateTime dateTime = LocalDateTime.of(2022, Month.NOVEMBER, 19, 12,0);
         // when
-        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        DateTimeDraw dateTimeDraw = numberReceiverFacade.inputDateTimeDraw(numbersFromUser, dateTime);
-        boolean checkSixNumbers = validator.isEqualsSixNumbers(numberReceiver.numbersFromUser());
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
-        DateTimeDraw resultDateTime = new DateTimeDraw(dateTimeDraw.dateTime(), dateTimeDraw.message());
-
-        assertThat(numberReceiver).isEqualTo(resultNumbers);
-        assertThat(checkSixNumbers).isTrue();
-        assertEquals(dateTimeDraw, resultDateTime);
+        assertThat(numberReceiver.dateTimeDraw()).isEqualTo(dateTime);
     }
 }
