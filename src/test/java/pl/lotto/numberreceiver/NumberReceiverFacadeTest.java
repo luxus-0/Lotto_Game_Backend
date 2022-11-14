@@ -10,8 +10,7 @@ import java.time.ZoneId;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class NumberReceiverFacadeTest {
 
@@ -84,6 +83,42 @@ class NumberReceiverFacadeTest {
 
         assertThat(numberReceiver).isEqualTo(resultNumbers);
         assertTrue(checkNotInRangeNumbers);
+    }
+
+    @Test
+    @DisplayName("return failed when user gave empty numbers")
+    public void should_return_failed_when_user_gave_empty_numbers() {
+        // given
+        Clock clock = Clock.systemUTC();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
+        Set<Integer> numbersFromUser = Set.of();
+        // when
+        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
+        boolean checkEmptyNumbers = validator.isEmptyNumbers(numberReceiver.numbersFromUser());
+        // then
+        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
+
+        assertThat(numberReceiver).isEqualTo(resultNumbers);
+        assertTrue(checkEmptyNumbers);
+    }
+
+    @Test
+    @DisplayName("return failed when user gave six minus numbers")
+    public void should_return_failed_when_user_gave_six_minus_numbers() {
+        // given
+        Clock clock = Clock.systemUTC();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
+        Set<Integer> numbersFromUser = Set.of(-20,-34, 3, -13, 5, -44);
+        // when
+        NumberReceiver numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
+        boolean checkPositiveNumbers = validator.isPositiveNumbers(numberReceiver.numbersFromUser());
+        boolean checkSixNumbers = validator.isEqualsSixNumbers(numberReceiver.numbersFromUser());
+        // then
+        NumberReceiver resultNumbers = new NumberReceiver(numberReceiver.uuid(), numberReceiver.numbersFromUser(), numberReceiver.dateTimeDraw());
+
+        assertThat(numberReceiver).isEqualTo(resultNumbers);
+        assertThat(checkSixNumbers).isTrue();
+        assertFalse(checkPositiveNumbers);
     }
 
     @Test
