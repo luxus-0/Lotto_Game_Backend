@@ -28,7 +28,8 @@ public class NumberReceiverFacade {
     public NumberReceiver inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         UUID uuid = UUID.randomUUID();
-        DateTimeDraw dateTimeDraw = inputDateTimeDraw(numbersFromUser, LocalDateTime.now(clock));
+        LocalDateTime todaySaturdayNoon = LocalDateTime.now(clock).withDayOfMonth(SATURDAY.getValue()).withHour(12).withMinute(0);
+        DateTimeDraw dateTimeDraw = inputDateTimeDraw(numbersFromUser, todaySaturdayNoon);
         NumberReceiver numberReceiver = new NumberReceiver(uuid, numbersFromUser, dateTimeDraw);
         if (validate) {
             return numberReceiverRepository.save(numberReceiver);
