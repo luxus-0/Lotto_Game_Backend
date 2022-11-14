@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
@@ -19,7 +18,7 @@ public class NumbersReceiverValidator {
             messages.add(LESS_THAN_SIX_NUMBERS);
         } else if (isMoreThanSixNumbers(inputNumbers)) {
             messages.add(MORE_THAN_SIX_NUMBERS);
-        } else if (!isInRangeNumbers()) {
+        } else if (isNotInRangeNumbers(inputNumbers)) {
             messages.add(NOT_IN_RANGE_NUMBERS);
         } else {
             messages.add(NUMBERS_IS_EMPTY);
@@ -35,10 +34,8 @@ public class NumbersReceiverValidator {
         return inputNumbers.size() == SIZE_MAX;
     }
 
-    public boolean isInRangeNumbers() {
-        return IntStream.rangeClosed(RANGE_FROM_NUMBER, RANGE_TO_NUMBER)
-                .findAny()
-                .isPresent();
+    public boolean isNotInRangeNumbers(Collection<Integer> inputNumbers) {
+        return inputNumbers.stream().anyMatch(validNumbers -> inputNumbers.size() > SIZE_MAX);
     }
 
     public boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {
