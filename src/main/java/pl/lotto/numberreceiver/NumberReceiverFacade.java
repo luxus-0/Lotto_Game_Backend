@@ -47,8 +47,8 @@ public class NumberReceiverFacade {
                     .filter(checkDateTime -> dateTimeDraw.equals(todayTwelveAm))
                     .map(dateTime -> new DateTimeDraw(todayTwelveAm, SUCCESS_DRAW_DATE_TIME))
                     .findAny()
-                    .orElse(new DateTimeDraw(null, FAILED_DRAW__DATE_TIME));
+                    .orElse(new DateTimeDraw(todayTwelveAm, FAILED_DRAW_DATE_TIME));
         }
-        throw new IllegalArgumentException();
+        return new DateTimeDraw(null, null);
     }
 }
