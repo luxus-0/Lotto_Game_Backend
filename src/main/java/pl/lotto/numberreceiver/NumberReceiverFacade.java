@@ -1,39 +1,54 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.NumbersDateTimeMessageDto;
-import pl.lotto.numberreceiver.dto.NumbersMessageDto;
-
-import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
+
+import static java.time.DayOfWeek.SATURDAY;
+import static java.time.LocalTime.NOON;
+import static java.time.MonthDay.now;
+import static pl.lotto.numberreceiver.DateTimeDrawMessageProvider.*;
 
 public class NumberReceiverFacade {
 
-    private final NumbersReceiverValidator numberValidator;
     private final Clock clock;
+    private final NumbersReceiverValidator numberValidator;
+    private final DateReceiverValidator dateValidator;
     private final NumberReceiverRepository numberReceiverRepository;
-    private final NumberReceiverGenerator numberReceiverGenerator;
 
-    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, NumberReceiverGenerator numberReceiverGenerator) {
+    public NumberReceiverFacade(Clock clock, NumbersReceiverValidator numberValidator, DateReceiverValidator dateValidator, NumberReceiverRepository numberReceiverRepository) {
+        this.clock = clock;
         this.numberValidator = numberValidator;
-        this.clock = Clock.systemDefaultZone();
+        this.dateValidator = dateValidator;
         this.numberReceiverRepository = numberReceiverRepository;
-        this.numberReceiverGenerator = numberReceiverGenerator;
     }
 
-
-    public NumbersDateTimeMessageDto inputNumbers(Set<Integer> numbersFromUser) {
+    public NumberReceiver inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
-        String numbersMessage = numberValidator.messages.stream().findAny().orElseThrow();
+        UUID uuid = UUID.randomUUID();
+        DateTimeDraw dateTimeDraw = inputDateTimeDraw(numbersFromUser, LocalDateTime.now(clock));
+        NumberReceiver numberReceiver = new NumberReceiver(uuid, numbersFromUser, dateTimeDraw);
         if (validate) {
-            UUID uuid = UUID.randomUUID();
-            DateTimeReceiver dateTimeReceiver = new DateTimeReceiver(clock);
-            LocalDateTime drawDateTime = dateTimeReceiver.readDateTimeDraw();
-            NumberReceiver numberReceiver = numberReceiverGenerator.generateTicket(uuid, numbersFromUser, drawDateTime);
-            numberReceiverRepository.save(numberReceiver);
-            return new NumbersDateTimeMessageDto(numbersFromUser, numbersMessage, drawDateTime, true);
+            return numberReceiverRepository.save(numberReceiver);
         }
-        return new NumbersDateTimeMessageDto(numbersFromUser, numbersMessage, null, false);
+        return Optional.of(numberReceiver).get();
+    }
+
+    public DateTimeDraw inputDateTimeDraw(Set<Integer> numbersFromUser, LocalDateTime dateTimeDraw) {
+        if (dateValidator.validate(numbersFromUser, dateTimeDraw)) {
+            int actualYear = Year.now(clock).getValue();
+            int actualMonth = Month.from(now(clock)).getValue();
+            int actualDay = MonthDay.from(now(clock)).withDayOfMonth(SATURDAY.getValue()).getDayOfMonth();
+            LocalDate actualDate = LocalDate.of(actualYear, actualMonth, actualDay);
+            LocalDateTime todayTwelveAm = LocalDateTime.of(actualDate, NOON);
+            return Stream.of(dateTimeDraw)
+                    .filter(checkDateTime -> dateTimeDraw.equals(todayTwelveAm))
+                    .map(dateTime -> new DateTimeDraw(todayTwelveAm, SUCCESS_DRAW_DATE_TIME))
+                    .findAny()
+                    .orElse(new DateTimeDraw(null, FAILED_DRAW__DATE_TIME));
+        }
+        throw new IllegalArgumentException();
     }
 }
