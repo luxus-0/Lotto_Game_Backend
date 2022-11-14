@@ -104,6 +104,6 @@ class NumberReceiverFacadeTest {
         // when
         NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(numberReceiver.dateTimeDraw().toLocalDate()).isEqualTo(nextSaturday.toLocalDate());
+        assertThat(numberReceiver.dateTimeDraw()).isEqualTo(nextSaturday);
     }
 }
