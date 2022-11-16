@@ -10,6 +10,6 @@ public class NumberReceiverFacadeConfiguration {
         NumbersReceiverValidator numbersValidator = new NumbersReceiverValidator();
         DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
         UUIDGenerator uuidGenerator = new UUIDGenerator();
-        return new NumberReceiverFacade(clock, numbersValidator, numberReceiverRepository, dateTimeDrawGenerator, uuidGenerator);
+        return new NumberReceiverFacade(numbersValidator, numberReceiverRepository, dateTimeDrawGenerator, uuidGenerator);
     }
 }
