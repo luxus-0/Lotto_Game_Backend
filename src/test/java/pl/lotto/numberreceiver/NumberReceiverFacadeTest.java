@@ -2,6 +2,7 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.lotto.numberreceiver.dto.NumberReceiverDto;
 
 import java.time.*;
 import java.util.Set;
@@ -96,11 +97,10 @@ class NumberReceiverFacadeTest {
     @DisplayName("return success when user gave six numbers and draw date time draw")
     public void should_return_success_when_user_gave_correct_date_time_draw() {
         // given
-        LocalDateTime today = LocalDateTime.of(2022, Month.NOVEMBER, 14, 11, 17);
-        Clock clock = Clock.fixed(today.toInstant(UTC), ZoneId.systemDefault());
+        LocalDateTime nextSaturday = LocalDateTime.of(2022, Month.NOVEMBER, 19, 12, 0);
+        Clock clock = Clock.fixed(nextSaturday.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
-        LocalDateTime nextSaturday = LocalDateTime.of(2022, Month.NOVEMBER, 19, 12, 0);
         // when
         NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then

@@ -7,16 +7,16 @@ import java.util.UUID;
 
 public class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
     private final Map<UUID, UserNumbers> databaseInMemory = new HashMap<>();
-    private final Map<LocalDateTime, UserNumbers> databaseInMemory2 = new HashMap<>();
+    private final Map<LocalDateTime, UserNumbers> dateInMemory = new HashMap<>();
 
     @Override
     public UserNumbers save(UserNumbers userNumbers) {
-        return databaseInMemory.put(userNumbers.uuid(), userNumbers);
+        return databaseInMemory.put(userNumbers.uuid, userNumbers);
     }
 
     @Override
     public UserNumbers findByDate(LocalDateTime dateTime) {
-        return databaseInMemory2.get(dateTime);
+        return dateInMemory.get(dateTime);
     }
 
     @Override

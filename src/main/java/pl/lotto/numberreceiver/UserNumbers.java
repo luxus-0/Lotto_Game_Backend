@@ -4,5 +4,14 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-public record UserNumbers(UUID uuid, Set<Integer> numbersFromUser, LocalDateTime dateDraw) {
+class UserNumbers {
+    UUID uuid;
+    Set<Integer> numbersFromUser;
+    LocalDateTime dateTimeDraw;
+
+    UserNumbers(UUID uuid, Set<Integer> numbersFromUser, LocalDateTime dateTimeDraw) {
+        this.uuid = uuid;
+        this.numbersFromUser = numbersFromUser;
+        this.dateTimeDraw = dateTimeDraw;
+    }
 }
