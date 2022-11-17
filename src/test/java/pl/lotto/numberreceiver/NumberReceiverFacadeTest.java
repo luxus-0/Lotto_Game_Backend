@@ -12,7 +12,6 @@ import java.util.Set;
 import static java.time.Month.DECEMBER;
 import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class NumberReceiverFacadeTest {
