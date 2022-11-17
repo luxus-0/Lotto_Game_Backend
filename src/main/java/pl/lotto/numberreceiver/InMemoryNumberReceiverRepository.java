@@ -30,14 +30,5 @@ class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
                 .findAny()
                 .orElseThrow();
     }
-
-    @Override
-    public void delete() {
-        inMemoryUserNumbers.clear();
-    }
-    @Override
-    public void deleteByUUID(UUID uuid) {
-        inMemoryUserNumbers.remove(uuid);
-    }
 }
 

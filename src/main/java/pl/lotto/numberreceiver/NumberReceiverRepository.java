@@ -9,6 +9,4 @@ public interface NumberReceiverRepository {
     <S extends UserNumbers> S save(S entity);
     UserNumbers findByDate(LocalDateTime dateTime);
     UserNumbers findByUUID(UUID uuid);
-    void deleteByUUID(UUID uuid);
-    void delete();
 }
