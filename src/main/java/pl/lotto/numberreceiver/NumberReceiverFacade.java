@@ -41,7 +41,7 @@ public class NumberReceiverFacade {
         UUID uuid = uuidGenerator.generateUUID();
         UserNumbers userNumbers = numberReceiverRepository.findByDate(date);
         Set<Integer> numbersInput = userNumbers.numbersFromUser();
-        LocalDateTime dateDraw = userNumbers.dateTimeDraw();
-        return new AllUsersNumbersDto(List.of(new UserNumbersDto(uuid, numbersInput, dateDraw)));
+        LocalDateTime dateTime = userNumbers.dateTimeDraw();
+        return new AllUsersNumbersDto(List.of(new UserNumbersDto(uuid, numbersInput, dateTime)));
     }
 }

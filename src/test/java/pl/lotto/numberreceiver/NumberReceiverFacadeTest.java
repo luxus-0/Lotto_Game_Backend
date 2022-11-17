@@ -107,11 +107,11 @@ class NumberReceiverFacadeTest {
         // when
         NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        LocalDateTime nextSaturday = LocalDateTime.now(clock)
+        LocalDateTime resultDateTimeDraw = LocalDateTime.now(clock)
                 .withYear(2022).withMonth(DECEMBER.getValue()).withDayOfMonth(10)
                 .withHour(12).withMinute(0);
 
-        assertThat(numberReceiver.dateTimeDraw()).isEqualTo(nextSaturday);
+        assertThat(numberReceiver.dateTimeDraw()).isEqualTo(resultDateTimeDraw);
     }
 
     @Test
@@ -125,10 +125,10 @@ class NumberReceiverFacadeTest {
         // when
         NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        LocalDateTime nextSaturday = LocalDateTime.now(clock)
-                .withYear(2022).withMonth(DECEMBER.getValue()).withDayOfMonth(9)
+        LocalDateTime resultDateTimeDraw = LocalDateTime.now(clock)
+                .withYear(2022).withMonth(12).withDayOfMonth(9)
                 .withHour(12).withMinute(0);
 
-        assertNotEquals(numberReceiver.dateTimeDraw(), nextSaturday);
+        assertNotEquals(numberReceiver.dateTimeDraw(), resultDateTimeDraw);
     }
 }
