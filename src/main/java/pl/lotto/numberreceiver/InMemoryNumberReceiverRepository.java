@@ -1,7 +1,8 @@
 package pl.lotto.numberreceiver;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
@@ -14,21 +15,12 @@ class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
     }
 
     @Override
-    public UserNumbers findByDate(LocalDateTime dateTime) {
+    public LocalDateTime findDate(LocalDateTime dateTime) {
         return inMemoryUserNumbers.values()
                 .stream()
-                .filter(userNumbers -> userNumbers.dateTimeDraw().equals(dateTime))
-                .findAny()
-                .orElseThrow();
-    }
-
-    @Override
-    public UserNumbers findByUUID(UUID uuid) {
-        return inMemoryUserNumbers.values()
-                .stream()
-                .filter(userNumbers -> userNumbers.uuid().equals(uuid))
-                .findAny()
-                .orElseThrow();
+                .map(UserNumbers::dateTimeDraw)
+                .filter(userNumbers -> userNumbers.equals(dateTime))
+                .findAny().orElse(dateTime);
     }
 }
 

@@ -2,12 +2,16 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.lotto.numberreceiver.dto.AllUsersNumbersDto;
 import pl.lotto.numberreceiver.dto.NumberReceiverDto;
+import pl.lotto.numberreceiver.dto.UserNumbersDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.time.Month.DECEMBER;
 import static java.time.ZoneOffset.UTC;
@@ -130,5 +134,22 @@ class NumberReceiverFacadeTest {
                 .withHour(12).withMinute(0);
 
         assertNotEquals(numberReceiver.dateTimeDraw(), resultDateTimeDraw);
+    }
+
+    @Test
+    @DisplayName("return success when user gave correct draw date time user numbers")
+    public void should_return_success_when_user_gave_correct_date_time_draw_user_numbers() {
+        // given
+        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
+        Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
+        Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
+        // when
+        AllUsersNumbersDto allUsersNumbers = numberReceiverFacade.usersNumbers(datetimeDraw);
+        // then
+        List<UserNumbersDto> usersNumbers = List.of(new UserNumbersDto(UUID.randomUUID(), numbersFromUser, datetimeDraw));
+        AllUsersNumbersDto resultAllUsersNumbers = new AllUsersNumbersDto(usersNumbers);
+
+        assertThat(allUsersNumbers).isEqualTo(resultAllUsersNumbers);
     }
 }

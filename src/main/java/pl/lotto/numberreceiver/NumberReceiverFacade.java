@@ -4,12 +4,10 @@ import pl.lotto.numberreceiver.dto.AllUsersNumbersDto;
 import pl.lotto.numberreceiver.dto.NumberReceiverDto;
 import pl.lotto.numberreceiver.dto.UserNumbersDto;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 public class NumberReceiverFacade {
 
@@ -39,9 +37,9 @@ public class NumberReceiverFacade {
 
     public AllUsersNumbersDto usersNumbers(LocalDateTime date) {
         UUID uuid = uuidGenerator.generateUUID();
-        UserNumbers userNumbers = numberReceiverRepository.findByDate(date);
-        Set<Integer> numbersInput = userNumbers.numbersFromUser();
-        LocalDateTime dateTime = userNumbers.dateTimeDraw();
-        return new AllUsersNumbersDto(List.of(new UserNumbersDto(uuid, numbersInput, dateTime)));
+        LocalDateTime dateTimeDraw = numberReceiverRepository.findDate(date);
+        UserNumbers userNumbers = new UserNumbers(uuid, Set.of(1,2,3,4,5,6), dateTimeDraw);
+        UserNumbers saveUserNumbers = numberReceiverRepository.save(userNumbers);
+        return new AllUsersNumbersDto(List.of(new UserNumbersDto(saveUserNumbers.uuid(), saveUserNumbers.numbersFromUser(), saveUserNumbers.dateTimeDraw())));
     }
 }
