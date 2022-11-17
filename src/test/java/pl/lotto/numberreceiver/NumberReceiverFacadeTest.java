@@ -12,6 +12,8 @@ import java.util.Set;
 import static java.time.Month.DECEMBER;
 import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class NumberReceiverFacadeTest {
 
@@ -111,5 +113,23 @@ class NumberReceiverFacadeTest {
                 .withHour(12).withMinute(0);
 
         assertThat(numberReceiver.dateTimeDraw()).isEqualTo(nextSaturday);
+    }
+
+    @Test
+    @DisplayName("return success when user gave incorrect draw date time")
+    public void should_return_failed_when_user_gave_incorrect_date_time_draw() {
+        // given
+        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
+        Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
+        Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
+        // when
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
+        // then
+        LocalDateTime nextSaturday = LocalDateTime.now(clock)
+                .withYear(2022).withMonth(DECEMBER.getValue()).withDayOfMonth(9)
+                .withHour(12).withMinute(0);
+
+        assertNotEquals(numberReceiver.dateTimeDraw(), nextSaturday);
     }
 }
