@@ -23,7 +23,7 @@ public class NumbersReceiverValidator {
         } else if(isEmptyNumbers(inputNumbers)){
             messages.add(NUMBERS_IS_EMPTY);
         }
-        return false;
+        return true;
     }
 
     public boolean isEmptyNumbers(Set<Integer> inputNumbers) {
