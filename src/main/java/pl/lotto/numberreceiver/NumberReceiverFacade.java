@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class NumberReceiverFacade {
 
@@ -32,8 +33,8 @@ public class NumberReceiverFacade {
             UUID uuid = uuidGenerator.generateUUID();
             LocalDateTime dateTimeDraw = dateTimeGenerator.generateNextDrawDate();
             UserNumbers userNumbers = new UserNumbers(uuid, numbersFromUser, dateTimeDraw);
-            UserNumbers save = numberReceiverRepository.save(userNumbers);
-            return new NumberReceiverDto(save.uuid(), save.numbersFromUser(), save.dateTimeDraw());
+            UserNumbers savedUserNumbers = numberReceiverRepository.save(userNumbers);
+            return new NumberReceiverDto(savedUserNumbers.uuid(), savedUserNumbers.numbersFromUser(), savedUserNumbers.dateTimeDraw());
         }
 
     public AllUsersNumbersDto usersNumbers(LocalDateTime date) {

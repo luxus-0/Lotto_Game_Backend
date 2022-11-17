@@ -12,7 +12,7 @@ public class NumbersReceiverValidator {
     List<String> messages = new LinkedList<>();
 
     public boolean validate(Set<Integer> inputNumbers) {
-        if (isEqualsSixNumbers(inputNumbers) && isPositiveNumbers(inputNumbers)) {
+        if (isEqualsSixNumbers(inputNumbers)) {
             messages.add(EQUALS_SIX_NUMBERS);
         } else if (isLessThanSixNumbers(inputNumbers)) {
             messages.add(LESS_THAN_SIX_NUMBERS);
@@ -22,14 +22,6 @@ public class NumbersReceiverValidator {
             messages.add(NOT_IN_RANGE_NUMBERS);
         } else if(isEmptyNumbers(inputNumbers)){
             messages.add(NUMBERS_IS_EMPTY);
-        }
-        return false;
-    }
-
-    public boolean isPositiveNumbers(Set<Integer> inputNumbers) {
-        Integer positiveNumber = inputNumbers.stream().findAny().orElse(0);
-        if(positiveNumber > 0){
-            return true;
         }
         return false;
     }
