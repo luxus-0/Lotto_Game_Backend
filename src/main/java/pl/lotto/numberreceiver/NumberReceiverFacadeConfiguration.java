@@ -7,9 +7,9 @@ import java.time.Clock;
 @Configuration
 class NumberReceiverFacadeConfiguration {
     NumberReceiverFacade createModuleForTests(Clock clock, NumberReceiverRepository numberReceiverRepository) {
-        NumbersReceiverValidator numbersValidator = new NumbersReceiverValidator();
+        NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
         DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
         UUIDGenerator uuidGenerator = new UUIDGenerator();
-        return new NumberReceiverFacade(numbersValidator, numberReceiverRepository, dateTimeDrawGenerator, uuidGenerator);
+        return new NumberReceiverFacade(numbersReceiverValidator, numberReceiverRepository, dateTimeDrawGenerator, uuidGenerator);
     }
 }

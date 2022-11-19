@@ -1,13 +1,13 @@
 package pl.lotto.resultchecker;
 
-import pl.lotto.numberreceiver.NumbersReceiverValidator;
+
+import java.time.Clock;
 
 public class ResultsCheckerFacadeConfiguration {
 
-    ResultsCheckerFacade createModuleForTests(ResultsCheckerValidator validator) {
+    ResultsCheckerFacade createModuleForTests(Clock clock) {
         ResultsCheckerValidator resultsCheckerValidator = new ResultsCheckerValidator();
-        NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
-        ResultsCheckerRepository resultsCheckerRepository = new InMemoryResultsCheckerRepository(validator);
-        return new ResultsCheckerFacade(resultsCheckerValidator, numbersReceiverValidator, resultsCheckerRepository);
+        ResultsCheckerRepository resultsCheckerRepository = new InMemoryResultsCheckerRepository(clock);
+        return new ResultsCheckerFacade(resultsCheckerValidator, resultsCheckerRepository);
     }
 }

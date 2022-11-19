@@ -1,12 +1,10 @@
 package pl.lotto.resultchecker;
 
-import pl.lotto.numbergenerator.NumberGenerator;
-
 import java.util.Set;
 
-import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.SIZE_MAX;
-
 class ResultsCheckerValidator {
+
+    private final static Integer SIZE_MAX = 6;
 
     public boolean isWinnerNumbers(Set<Integer> inputNumbers) {
         NumberGenerator generateLottoNumbers = new NumberGenerator();
