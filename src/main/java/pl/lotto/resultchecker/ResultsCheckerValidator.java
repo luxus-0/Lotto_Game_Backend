@@ -11,6 +11,8 @@ class ResultsCheckerValidator {
     public boolean isWinnerNumbers(Set<Integer> inputNumbers) {
         NumberGenerator generateLottoNumbers = new NumberGenerator();
         Set<Integer> lottoNumbers = generateLottoNumbers.generate();
-        return inputNumbers.stream().filter(checkNumbers -> inputNumbers.size() <= SIZE_MAX).anyMatch(lottoNumbers::contains);
+        return inputNumbers.stream()
+                .filter(checkNumbers -> inputNumbers.size() <= SIZE_MAX)
+                .anyMatch(lottoNumbers::contains);
     }
 }

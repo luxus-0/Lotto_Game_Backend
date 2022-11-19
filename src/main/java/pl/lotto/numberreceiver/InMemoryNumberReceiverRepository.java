@@ -20,7 +20,8 @@ class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
                 .stream()
                 .map(UserNumbers::dateTimeDraw)
                 .filter(userNumbers -> userNumbers.equals(dateTime))
-                .findAny().orElse(dateTime);
+                .findAny()
+                .orElse(dateTime);
     }
 }
 

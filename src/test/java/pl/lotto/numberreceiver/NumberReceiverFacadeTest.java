@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import static java.time.Month.DECEMBER;
 import static java.time.ZoneOffset.UTC;
@@ -137,8 +136,8 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("return success when user gave correct draw date time user numbers")
-    public void should_return_success_when_user_gave_correct_date_time_draw_user_numbers() {
+    @DisplayName("return failed when user gave incorrect draw date time user numbers")
+    public void should_return_failed_when_user_gave_incorrect_date_time_draw_user_numbers() {
         // given
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
@@ -147,9 +146,10 @@ class NumberReceiverFacadeTest {
         // when
         AllUsersNumbersDto allUsersNumbers = numberReceiverFacade.usersNumbers(datetimeDraw);
         // then
-        List<UserNumbersDto> usersNumbers = List.of(new UserNumbersDto(UUID.randomUUID(), numbersFromUser, datetimeDraw));
-        AllUsersNumbersDto resultAllUsersNumbers = new AllUsersNumbersDto(usersNumbers);
+        UUIDGenerator uuid = new UUIDGenerator();
+        UserNumbersDto usersNumbers = new UserNumbersDto(uuid.generateUUID(), numbersFromUser, datetimeDraw);
+        AllUsersNumbersDto resultAllUsersNumbers = new AllUsersNumbersDto(List.of(usersNumbers));
 
-        assertThat(allUsersNumbers).isEqualTo(resultAllUsersNumbers);
+        assertThat(allUsersNumbers).isNotEqualTo(resultAllUsersNumbers);
     }
 }
