@@ -4,7 +4,6 @@ import pl.lotto.numberreceiver.NumbersReceiverValidator;
 import pl.lotto.resultchecker.dto.ResultsLotto;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,27 +24,24 @@ public class ResultsCheckerFacade {
 
     public ResultsLotto getWinnerNumbers(Set<Integer> userNumbers) {
         return userNumbers.stream()
-                .filter(winNumbers -> resultsValidator.isWinnerNumbers(userNumbers))
-                .filter(isSizeSixNumbers -> receiverValidator.isEqualsSixNumbers(userNumbers))
-                .sorted(Integer::compare)
-                .map(winnerMapper -> new ResultsLotto(userNumbers, WIN))
+                .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(userNumbers))
+                .filter(checkSixNumbers -> receiverValidator.isEqualsSixNumbers(userNumbers))
+                .map(toDto -> new ResultsLotto(userNumbers, WIN))
                 .findAny()
                 .orElse(new ResultsLotto(userNumbers, NOT_WIN));
     }
 
     public Set<Integer> getWinnerNumbersByUUID(UUID uuid, Set<Integer> numbersInput) {
-        boolean checkWinnerNumbers = resultsValidator.isWinnerNumbers(numbersInput);
         Set<Integer> winNumbers = resultsCheckerRepository.findWinnerNumbersByUUID(uuid, numbersInput);
         return winNumbers.stream()
-                .filter(Objects::nonNull)
-                .filter(isWin -> checkWinnerNumbers)
+                .filter(isWin -> resultsValidator.isWinnerNumbers(numbersInput))
                 .collect(toSet());
     }
 
-    public Set<Integer> getWinnersNumbersByDate(LocalDateTime dateTime, Set<Integer> userNumbers, Set<Integer> lottoNumbers) {
+    public Set<Integer> getWinnersNumbersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
         Set<Integer> winNumbersByDate = resultsCheckerRepository.findWinnerNumbersByDate(dateTime, userNumbers);
         return winNumbersByDate.stream()
-                .filter(checkWin -> isWinningNumbers(userNumbers))
+                .filter(checkWin -> resultsValidator.isWinnerNumbers(userNumbers))
                 .collect(toSet());
     }
 
@@ -53,9 +49,5 @@ public class ResultsCheckerFacade {
         ResultsLotto winnerNumbers = getWinnerNumbers(inputNumbers);
         Set<Integer> winNumbers = resultsCheckerRepository.findWinnerNumbersByUUID(uuid, winnerNumbers.resultNumbers());
         return resultsCheckerRepository.save(uuid, winNumbers);
-    }
-
-    private boolean isWinningNumbers(Set<Integer> userNumbers) {
-        return resultsValidator.isWinnerNumbers(userNumbers);
     }
 }

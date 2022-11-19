@@ -7,7 +7,7 @@ import java.util.Set;
 
 import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
-public class NumbersReceiverValidator {
+class NumbersReceiverValidator {
 
     List<String> messages = new LinkedList<>();
 
