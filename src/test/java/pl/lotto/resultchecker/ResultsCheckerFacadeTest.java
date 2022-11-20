@@ -162,4 +162,21 @@ class ResultsCheckerFacadeTest {
         //then
         assertTrue(checkMoreThanOneWinner);
     }
+
+    @Test
+    @DisplayName("return failed when user get no winner numbers")
+    public void should_return_failed_message_when_user_get_no_winner_numbers() {
+        //given
+        Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
+        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
+        Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .createModuleForTests(clock);
+
+        //when
+        Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
+        boolean checkNoWinnerNumber = resultWinnerNumbers.size() == 0;
+        //then
+        assertFalse(checkNoWinnerNumber);
+    }
 }
