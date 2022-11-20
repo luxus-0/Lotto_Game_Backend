@@ -19,15 +19,15 @@ class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
     }
 
     @Override
-    public ResultsLotto findWinnerNumbersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
-       LocalDateTime dateTimeDraw =  resultDateTimeDraw();
-        return databaseInMemory.values()
-                .stream()
-                .filter(winner -> userNumbers.size() == 6)
-                .filter(checkDateDraw -> dateTime.equals(dateTimeDraw))
-                .findAny()
-                .orElseThrow();
-    }
+    public ResultsLotto getWinnersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
+            LocalDateTime dateTimeDraw =  resultDateTimeDraw();
+            return databaseInMemory.values()
+                    .stream()
+                    .filter(winner -> userNumbers.size() == 6)
+                    .filter(checkDateDraw -> dateTime.equals(dateTimeDraw))
+                    .findAny()
+                    .orElseThrow();
+        }
 
     @Override
     public ResultsLotto save(ResultsLotto resultsLotto) {

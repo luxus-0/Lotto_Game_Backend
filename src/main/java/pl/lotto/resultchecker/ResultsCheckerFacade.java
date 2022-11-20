@@ -9,6 +9,7 @@ import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 
 public class ResultsCheckerFacade {
+    private static final int SIX_NUMBERS = 6;
     private final ResultsCheckerValidator resultsValidator;
     private final ResultsCheckerRepository resultsCheckerRepository;
 
@@ -17,17 +18,17 @@ public class ResultsCheckerFacade {
         this.resultsCheckerRepository = resultsCheckerRepository;
     }
 
-    public ResultsLottoDto getWinnerNumbers(Set<Integer> userNumbers) {
-        return userNumbers.stream()
-                .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(userNumbers))
-                .filter(checkSixNumbers -> userNumbers.size() == 6)
-                .map(toDto -> new ResultsLottoDto(userNumbers, WIN))
+    public ResultsLottoDto getWinnerNumbers(Set<Integer> numbers) {
+        return numbers.stream()
+                .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(numbers))
+                .filter(checkSixNumbers -> numbers.size() <= SIX_NUMBERS)
+                .map(toDto -> new ResultsLottoDto(numbers, WIN))
                 .findAny()
-                .orElse(new ResultsLottoDto(userNumbers, NOT_WIN));
+                .orElse(new ResultsLottoDto(numbers, NOT_WIN));
     }
 
-    public ResultsLottoDto getWinnersNumbersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
-        ResultsLotto resultsLotto = resultsCheckerRepository.findWinnerNumbersByDate(dateTime, userNumbers);
+    public ResultsLottoDto getWinnersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
+        ResultsLotto resultsLotto = resultsCheckerRepository.getWinnersByDate(dateTime, userNumbers);
         ResultsLotto resultLottoCreator = new ResultsLotto(resultsLotto.uuid, resultsLotto.inputNumbers, resultsLotto.dateTimeDraw);
         ResultsLotto savedResultsLotto = resultsCheckerRepository.save(resultLottoCreator);
         return new ResultsLottoDto(savedResultsLotto.inputNumbers, WIN);
