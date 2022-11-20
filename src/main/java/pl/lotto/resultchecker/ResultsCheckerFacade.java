@@ -18,12 +18,12 @@ public class ResultsCheckerFacade {
         this.resultsCheckerRepository = new InMemoryResultsCheckerRepository(clock);
     }
 
-    public ResultsLottoDto getWinnerNumbers(Set<Integer> numbers) {
+    public ResultsLottoDto getWinnerNumbers(Set<Integer> numbers, LocalDateTime dateTimeDraw) {
         return numbers.stream()
                 .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(numbers))
-                .map(toDto -> new ResultsLottoDto(numbers, WIN))
+                .map(toDto -> new ResultsLottoDto(numbers, dateTimeDraw, WIN))
                 .findAny()
-                .orElse(new ResultsLottoDto(numbers, NOT_WIN));
+                .orElse(new ResultsLottoDto(numbers, dateTimeDraw, NOT_WIN));
     }
 
     public ResultsLottoDto getWinnerNumbersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
@@ -31,8 +31,8 @@ public class ResultsCheckerFacade {
             ResultsLotto resultsLotto = resultsCheckerRepository.getWinnersByDate(dateTime, userNumbers);
             ResultsLotto resultLottoCreator = new ResultsLotto(resultsLotto.uuid, resultsLotto.inputNumbers, resultsLotto.dateTimeDraw);
             ResultsLotto savedResultsLotto = resultsCheckerRepository.save(resultLottoCreator);
-            return new ResultsLottoDto(savedResultsLotto.inputNumbers, WIN);
+            return new ResultsLottoDto(savedResultsLotto.inputNumbers, savedResultsLotto.dateTimeDraw, WIN);
         }
-        return new ResultsLottoDto(null, NOT_WIN);
+        return new ResultsLottoDto(null, null, NOT_WIN);
     }
 }

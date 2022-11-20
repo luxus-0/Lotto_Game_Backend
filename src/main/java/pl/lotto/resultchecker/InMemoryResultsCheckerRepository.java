@@ -35,7 +35,7 @@ class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
         return databaseInMemory.put(resultsLotto.uuid, resultsLotto);
     }
 
-    LocalDateTime resultDateTimeDraw(){
+    public LocalDateTime resultDateTimeDraw(){
         return LocalDateTime.now(clock)
                 .with(next(SATURDAY))
                 .withHour(12)
