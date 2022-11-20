@@ -8,6 +8,6 @@ public class ResultsCheckerFacadeConfiguration {
     ResultsCheckerFacade createModuleForTests(Clock clock) {
         ResultsCheckerValidator resultsCheckerValidator = new ResultsCheckerValidator();
         ResultsCheckerRepository resultsCheckerRepository = new InMemoryResultsCheckerRepository(clock);
-        return new ResultsCheckerFacade(resultsCheckerValidator, resultsCheckerRepository);
+        return new ResultsCheckerFacade(resultsCheckerValidator);
     }
 }

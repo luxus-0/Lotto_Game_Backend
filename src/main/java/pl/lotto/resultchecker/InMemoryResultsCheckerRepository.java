@@ -11,6 +11,7 @@ import static java.time.DayOfWeek.SATURDAY;
 import static java.time.temporal.TemporalAdjusters.next;
 
 class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
+    private static final int SIX_NUMBERS = 6;
     private final Map<UUID, ResultsLotto> databaseInMemory = new ConcurrentHashMap<>();
     private final Clock clock;
 
@@ -23,7 +24,7 @@ class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
             LocalDateTime dateTimeDraw =  resultDateTimeDraw();
             return databaseInMemory.values()
                     .stream()
-                    .filter(winner -> userNumbers.size() == 6)
+                    .filter(winner -> userNumbers.size() == SIX_NUMBERS)
                     .filter(checkDateDraw -> dateTime.equals(dateTimeDraw))
                     .findAny()
                     .orElseThrow();
