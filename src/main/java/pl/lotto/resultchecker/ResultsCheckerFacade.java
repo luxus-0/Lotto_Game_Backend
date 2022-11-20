@@ -21,7 +21,6 @@ public class ResultsCheckerFacade {
     public ResultsLottoDto getWinnerNumbers(Set<Integer> numbers) {
         return numbers.stream()
                 .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(numbers))
-                .filter(checkSixNumbers -> numbers.size() <= SIX_NUMBERS)
                 .map(toDto -> new ResultsLottoDto(numbers, WIN))
                 .findAny()
                 .orElse(new ResultsLottoDto(numbers, NOT_WIN));
