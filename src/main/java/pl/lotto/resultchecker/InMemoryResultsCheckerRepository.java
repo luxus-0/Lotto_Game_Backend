@@ -1,30 +1,28 @@
 package pl.lotto.resultchecker;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.time.DayOfWeek.SATURDAY;
-import static java.time.temporal.TemporalAdjusters.next;
+import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.SIZE_NUMBERS;
 
 class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
-    private static final int SIX_NUMBERS = 6;
     private final Map<UUID, ResultsLotto> databaseInMemory = new ConcurrentHashMap<>();
-    private final Clock clock;
+    private final ResultCheckerDateTime resultDateTime;
 
-    InMemoryResultsCheckerRepository(Clock clock) {
-        this.clock = clock;
+    InMemoryResultsCheckerRepository(ResultCheckerDateTime resultDateTime) {
+        this.resultDateTime = resultDateTime;
     }
+
 
     @Override
     public ResultsLotto getWinnersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
-            LocalDateTime dateTimeDraw =  resultDateTimeDraw();
+            LocalDateTime dateTimeDraw =  resultDateTime.readDateTimeDraw();
             return databaseInMemory.values()
                     .stream()
-                    .filter(winner -> userNumbers.size() == SIX_NUMBERS)
+                    .filter(winner -> userNumbers.size() == SIZE_NUMBERS)
                     .filter(checkDateDraw -> dateTime.equals(dateTimeDraw))
                     .findAny()
                     .orElseThrow();
@@ -33,12 +31,5 @@ class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
     @Override
     public ResultsLotto save(ResultsLotto resultsLotto) {
         return databaseInMemory.put(resultsLotto.uuid, resultsLotto);
-    }
-
-    public LocalDateTime resultDateTimeDraw(){
-        return LocalDateTime.now(clock)
-                .with(next(SATURDAY))
-                .withHour(12)
-                .withMinute(0);
     }
 }

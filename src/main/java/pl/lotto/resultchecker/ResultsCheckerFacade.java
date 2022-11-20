@@ -2,7 +2,6 @@ package pl.lotto.resultchecker;
 
 import pl.lotto.resultchecker.dto.ResultsLottoDto;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -13,9 +12,9 @@ public class ResultsCheckerFacade {
     private final ResultsCheckerValidator resultsValidator;
     private final ResultsCheckerRepository resultsCheckerRepository;
 
-    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator, Clock clock) {
+    public ResultsCheckerFacade(ResultCheckerDateTime resultCheckerDateTime, ResultsCheckerValidator resultsValidator) {
         this.resultsValidator = resultsValidator;
-        this.resultsCheckerRepository = new InMemoryResultsCheckerRepository(clock);
+        this.resultsCheckerRepository = new InMemoryResultsCheckerRepository(resultCheckerDateTime);
     }
 
     public ResultsLottoDto getWinnerNumbers(Set<Integer> numbers, LocalDateTime dateTimeDraw) {

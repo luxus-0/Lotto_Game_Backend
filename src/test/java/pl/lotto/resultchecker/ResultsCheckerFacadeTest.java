@@ -179,4 +179,23 @@ class ResultsCheckerFacadeTest {
         //then
         assertFalse(checkNoWinnerNumber);
     }
+
+    @Test
+    @DisplayName("return failed date time draw when user get incorrect date time")
+    public void should_return_failed_date_time_draw_when_user_get_incorrect_date_time() {
+        //given
+        Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
+        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 15, 12, 0);
+        Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
+        ResultCheckerDateTime resultCheckerDateTime = new ResultCheckerDateTime(clock);
+        LocalDateTime dateTime = resultCheckerDateTime.readDateTimeDraw();
+
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .createModuleForTests(clock);
+
+        //when
+        LocalDateTime resultDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
+        //then
+        assertNotEquals(resultDateTime, dateTime);
+    }
 }
