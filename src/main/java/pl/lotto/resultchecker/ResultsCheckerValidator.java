@@ -6,7 +6,7 @@ class ResultsCheckerValidator {
 
     private final static Integer SIZE_MAX = 6;
 
-    public boolean isWinnerNumbers(Set<Integer> inputNumbers) {
+    boolean isWinnerNumbers(Set<Integer> inputNumbers) {
         NumberGenerator numberGenerator = new NumberGenerator();
         Set<Integer> lottoNumbers = numberGenerator.generate();
         return inputNumbers.stream()

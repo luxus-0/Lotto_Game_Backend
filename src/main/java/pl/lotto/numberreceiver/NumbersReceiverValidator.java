@@ -11,7 +11,7 @@ class NumbersReceiverValidator {
 
     List<String> messages = new LinkedList<>();
 
-    public boolean validate(Set<Integer> inputNumbers) {
+    boolean validate(Set<Integer> inputNumbers) {
         if (isEqualsSixNumbers(inputNumbers)) {
             messages.add(EQUALS_SIX_NUMBERS);
         } else if (isLessThanSixNumbers(inputNumbers)) {
@@ -26,23 +26,23 @@ class NumbersReceiverValidator {
         return true;
     }
 
-    public boolean isEmptyNumbers(Set<Integer> inputNumbers) {
+    boolean isEmptyNumbers(Set<Integer> inputNumbers) {
         return inputNumbers.isEmpty();
     }
 
-    public boolean isLessThanSixNumbers(Collection<Integer> inputNumbers) {
+    boolean isLessThanSixNumbers(Collection<Integer> inputNumbers) {
         return inputNumbers.size() < SIZE_MAX;
     }
 
-    public boolean isEqualsSixNumbers(Collection<Integer> inputNumbers) {
+    boolean isEqualsSixNumbers(Collection<Integer> inputNumbers) {
         return inputNumbers.size() == SIZE_MAX;
     }
 
-    public boolean isNotInRangeNumbers(Collection<Integer> inputNumbers) {
+    boolean isNotInRangeNumbers(Collection<Integer> inputNumbers) {
         return inputNumbers.stream().anyMatch(validNumbers -> inputNumbers.size() > SIZE_MAX);
     }
 
-    public boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {
+    boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {
         return inputNumbers.size() > SIZE_MAX;
     }
 }

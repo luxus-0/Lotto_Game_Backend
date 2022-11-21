@@ -27,7 +27,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
         ResultsLottoDto winnerResultLotto = new ResultsLottoDto(inputNumbers, datetimeDraw, WIN);
@@ -45,7 +45,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
         ResultsLottoDto notWinner = new ResultsLottoDto(inputNumbers, datetimeDraw, NOT_WIN);
@@ -63,7 +63,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45);
         ResultsLottoDto winner = new ResultsLottoDto(inputNumbers, datetimeDraw, WIN);
@@ -82,7 +82,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 88, 31);
 
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         ResultsLottoDto result = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
@@ -100,7 +100,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
@@ -118,7 +118,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime actualDateTime = LocalDateTime.of(2022, SEPTEMBER, 7, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         LocalDateTime resultDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
@@ -136,7 +136,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         boolean resultWinners = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw)
@@ -154,7 +154,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
@@ -171,7 +171,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
@@ -191,7 +191,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime dateTime = resultCheckerDateTime.readDateTimeDraw();
 
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         LocalDateTime resultDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();

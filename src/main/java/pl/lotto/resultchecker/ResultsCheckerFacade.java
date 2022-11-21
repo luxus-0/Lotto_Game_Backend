@@ -13,9 +13,9 @@ public class ResultsCheckerFacade {
     private final ResultsCheckerValidator resultsValidator;
     private final ResultsCheckerRepository resultsCheckerRepository;
 
-    public ResultsCheckerFacade(ResultCheckerDateTime resultCheckerDateTime, ResultsCheckerValidator resultsValidator) {
+    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator) {
         this.resultsValidator = resultsValidator;
-        this.resultsCheckerRepository = new InMemoryResultsCheckerRepository(resultCheckerDateTime);
+        this.resultsCheckerRepository = new InMemoryResultsCheckerRepository();
     }
 
     public ResultsLottoDto getWinnerNumbers(Set<Integer> numbers, LocalDateTime dateTimeDraw) {
