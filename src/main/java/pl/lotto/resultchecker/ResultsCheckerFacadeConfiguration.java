@@ -1,10 +1,11 @@
 package pl.lotto.resultchecker;
 
-class ResultsCheckerFacadeConfiguration {
+import java.time.Clock;
 
-    ResultsCheckerFacade createModuleForTests() {
+class ResultsCheckerFacadeConfiguration {
+    ResultsCheckerFacade createModuleForTests(Clock clock) {
         ResultsCheckerValidator resultsCheckerValidator = new ResultsCheckerValidator();
         NumberGenerator numberGenerator = new NumberGenerator();
-        return new ResultsCheckerFacade(resultsCheckerValidator, numberGenerator);
+        return new ResultsCheckerFacade(resultsCheckerValidator, numberGenerator, clock);
     }
 }

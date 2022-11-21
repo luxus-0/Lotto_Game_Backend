@@ -3,7 +3,6 @@ package pl.lotto.resultchecker;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,18 +14,18 @@ class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
 
 
     @Override
-    public ResultsLotto getWinnersByUUID(UUID uuid, Set<Integer> userNumbers) {
+    public ResultsLotto getWinnersByUUID(UUID uuid) {
         return databaseInMemory.get(uuid);
     }
 
     @Override
-    public ResultsLotto getWinnersByDate(LocalDateTime dateTime, Set<Integer> userNumbers) {
+    public ResultsLotto getWinnersByDate(LocalDateTime dateTimeDraw) {
         ResultCheckerDateTime resultDateTime = new ResultCheckerDateTime(clock);
-        LocalDateTime dateTimeDraw = resultDateTime.readDateTimeDraw();
+        LocalDateTime dateTime = resultDateTime.readDateTimeDraw();
         return databaseInMemory.values()
                 .stream()
-                .filter(winner -> userNumbers.size() == SIZE_NUMBERS)
-                .filter(checkDateDraw -> dateTime.equals(dateTimeDraw))
+                .filter(winner -> winner.inputNumbers.size() == SIZE_NUMBERS)
+                .filter(drawDate -> dateTimeDraw.equals(dateTime))
                 .findAny()
                 .orElseThrow();
     }
