@@ -6,7 +6,7 @@ import java.util.UUID;
 public interface NumberReceiverRepository {
     <S extends UserNumbers> S save(S entity);
 
-    UserNumbers findByDate(LocalDateTime dateTime);
+    LocalDateTime findByDate(LocalDateTime dateTime);
 
     UserNumbers findByUUID(UUID uuid);
 }

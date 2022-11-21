@@ -37,9 +37,8 @@ public class NumberReceiverFacade {
 
     public AllUsersNumbersDto usersNumbers(LocalDateTime dateTimeDraw) {
         UUID uuid = uuidGenerator.generateUUID();
-        UserNumbers userByDate = numberReceiverRepository.findByDate(dateTimeDraw);
-        UserNumbers userByUUID = numberReceiverRepository.findByUUID(uuid);
-        UserNumbers userNumbers = new UserNumbers(userByUUID.uuid(), userByUUID.numbersFromUser(), userByDate.dateTimeDraw());
+        LocalDateTime dateTime = numberReceiverRepository.findByDate(dateTimeDraw);
+        UserNumbers userNumbers = new UserNumbers(uuid, Set.of(1, 2, 3, 4, 5, 6), dateTime);
         UserNumbers saveUserNumbers = numberReceiverRepository.save(userNumbers);
         return new AllUsersNumbersDto(List.of(new UserNumbersDto(saveUserNumbers.uuid(), saveUserNumbers.numbersFromUser(), saveUserNumbers.dateTimeDraw())));
     }

@@ -7,6 +7,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
     private final Map<UUID, UserNumbers> inMemoryUserNumbers = new ConcurrentHashMap<>();
+    private final DateTimeDrawGenerator dateTimeDraw;
+
+    InMemoryNumberReceiverRepository(DateTimeDrawGenerator dateTimeDraw) {
+        this.dateTimeDraw = dateTimeDraw;
+    }
 
     @Override
     public <S extends UserNumbers> S save(S entity) {
@@ -15,12 +20,14 @@ class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
     }
 
     @Override
-    public UserNumbers findByDate(LocalDateTime dateTime) {
+    public LocalDateTime findByDate(LocalDateTime dateTime) {
+        LocalDateTime drawDate = dateTimeDraw.generateNextDrawDate();
         return inMemoryUserNumbers.values()
                 .stream()
-                .filter(userNumbers -> userNumbers.dateTimeDraw().equals(dateTime))
+                .map(UserNumbers::dateTimeDraw)
+                .filter(dateTimeDraw -> dateTime.equals(drawDate))
                 .findAny()
-                .orElse(null);
+                .orElse(dateTime);
     }
 
     @Override

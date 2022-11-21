@@ -19,7 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class NumberReceiverFacadeTest {
 
-    NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository();
+    Clock clock = Clock.systemUTC();
+    DateTimeDrawGenerator dateTimeDraw = new DateTimeDrawGenerator(clock);
+    NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository(dateTimeDraw);
 
     @Test
     @DisplayName("return success when user gave six numbers")
@@ -136,10 +138,10 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("return failed when user gave incorrect draw date time user numbers")
-    public void should_return_failed_when_user_gave_incorrect_date_time_draw_user_numbers() {
+    @DisplayName("return not equal uuid when user gave incorrect draw date time draw")
+    public void should_return_not_equal_uuid_when_user_gave_incorrect_date_time_draw() {
         // given
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
+        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 14, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
