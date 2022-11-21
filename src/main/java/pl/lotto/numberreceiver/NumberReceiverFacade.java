@@ -28,17 +28,18 @@ public class NumberReceiverFacade {
         if (!validate) {
             return new NumberReceiverDto(null, numbersFromUser, null);
         }
-            UUID uuid = uuidGenerator.generateUUID();
-            LocalDateTime dateTimeDraw = dateTimeGenerator.generateNextDrawDate();
-            UserNumbers userNumbers = new UserNumbers(uuid, numbersFromUser, dateTimeDraw);
-            UserNumbers savedUserNumbers = numberReceiverRepository.save(userNumbers);
-            return new NumberReceiverDto(savedUserNumbers.uuid(), savedUserNumbers.numbersFromUser(), savedUserNumbers.dateTimeDraw());
-        }
-
-    public AllUsersNumbersDto usersNumbers(LocalDateTime date) {
         UUID uuid = uuidGenerator.generateUUID();
-        LocalDateTime dateTimeDraw = numberReceiverRepository.findDate(date);
-        UserNumbers userNumbers = new UserNumbers(uuid, Set.of(1,2,3,4,5,6), dateTimeDraw);
+        LocalDateTime dateTimeDraw = dateTimeGenerator.generateNextDrawDate();
+        UserNumbers userNumbers = new UserNumbers(uuid, numbersFromUser, dateTimeDraw);
+        UserNumbers savedUserNumbers = numberReceiverRepository.save(userNumbers);
+        return new NumberReceiverDto(savedUserNumbers.uuid(), savedUserNumbers.numbersFromUser(), savedUserNumbers.dateTimeDraw());
+    }
+
+    public AllUsersNumbersDto usersNumbers(LocalDateTime dateTimeDraw) {
+        UUID uuid = uuidGenerator.generateUUID();
+        UserNumbers userByDate = numberReceiverRepository.findByDate(dateTimeDraw);
+        UserNumbers userByUUID = numberReceiverRepository.findByUUID(uuid);
+        UserNumbers userNumbers = new UserNumbers(userByUUID.uuid(), userByUUID.numbersFromUser(), userByDate.dateTimeDraw());
         UserNumbers saveUserNumbers = numberReceiverRepository.save(userNumbers);
         return new AllUsersNumbersDto(List.of(new UserNumbersDto(saveUserNumbers.uuid(), saveUserNumbers.numbersFromUser(), saveUserNumbers.dateTimeDraw())));
     }

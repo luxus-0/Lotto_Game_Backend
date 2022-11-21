@@ -1,8 +1,12 @@
 package pl.lotto.numberreceiver;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public interface NumberReceiverRepository {
     <S extends UserNumbers> S save(S entity);
-    LocalDateTime findDate(LocalDateTime dateTime);
+
+    UserNumbers findByDate(LocalDateTime dateTime);
+
+    UserNumbers findByUUID(UUID uuid);
 }

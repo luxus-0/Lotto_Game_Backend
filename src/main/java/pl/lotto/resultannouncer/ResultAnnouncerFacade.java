@@ -17,11 +17,11 @@ public class ResultAnnouncerFacade {
         this.resultsCheckerFacade = resultsCheckerFacade;
     }
 
-    ResultAnnouncerDto getResultAnnouncerByUUID(UUID uuid, Set<Integer> winningNumbers){
+    ResultAnnouncerDto getResultAnnouncerByUUID(UUID uuid, Set<Integer> winningNumbers) {
         ResultsLottoDto resultsLottoDto = resultsCheckerFacade.getWinnerNumbersByUUID(uuid, winningNumbers);
         LocalDateTime dateTimeResult = resultsLottoDto.dateTimeDraw();
         boolean checkWinnerNumbers = resultsLottoDto.winnerNumbers().size() > 0;
-        if(resultsLottoDto.message().equals(WIN)) {
+        if (resultsLottoDto.message().equals(WIN)) {
             return new ResultAnnouncerDto(uuid, winningNumbers, dateTimeResult, checkWinnerNumbers);
         }
         return new ResultAnnouncerDto(null, null, null, false);

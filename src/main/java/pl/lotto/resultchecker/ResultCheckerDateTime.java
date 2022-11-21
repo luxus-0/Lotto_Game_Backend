@@ -13,7 +13,7 @@ class ResultCheckerDateTime {
         this.clock = clock;
     }
 
-    public LocalDateTime readDateTimeDraw(){
+    public LocalDateTime readDateTimeDraw() {
         return LocalDateTime.now(clock)
                 .with(next(SATURDAY))
                 .withHour(12)

@@ -68,7 +68,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45);
         ResultsLottoDto winner = new ResultsLottoDto(inputNumbers, datetimeDraw, WIN);
         //when
-        ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers,datetimeDraw);
+        ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
         //then
         assertNotEquals(winner, resultsLotto);
     }

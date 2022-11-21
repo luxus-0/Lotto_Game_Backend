@@ -66,7 +66,7 @@ class NumberReceiverFacadeTest {
         // given
         Clock clock = Clock.systemUTC();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
-        Set<Integer> numbersFromUser = Set.of(1, 2, 100, 4, 5, 135,900);
+        Set<Integer> numbersFromUser = Set.of(1, 2, 100, 4, 5, 135, 900);
         // when
         NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
@@ -92,7 +92,7 @@ class NumberReceiverFacadeTest {
         // given
         Clock clock = Clock.systemUTC();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
-        Set<Integer> numbersFromUser = Set.of(-20,-34, 3, -13, 5, -44);
+        Set<Integer> numbersFromUser = Set.of(-20, -34, 3, -13, 5, -44);
         // when
         NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then

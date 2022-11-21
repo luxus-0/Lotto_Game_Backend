@@ -15,13 +15,21 @@ class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
     }
 
     @Override
-    public LocalDateTime findDate(LocalDateTime dateTime) {
+    public UserNumbers findByDate(LocalDateTime dateTime) {
         return inMemoryUserNumbers.values()
                 .stream()
-                .map(UserNumbers::dateTimeDraw)
-                .filter(userNumbers -> userNumbers.equals(dateTime))
+                .filter(userNumbers -> userNumbers.dateTimeDraw().equals(dateTime))
                 .findAny()
-                .orElse(dateTime);
+                .orElse(null);
+    }
+
+    @Override
+    public UserNumbers findByUUID(UUID uuid) {
+        return inMemoryUserNumbers.values()
+                .stream()
+                .filter(userNumbers -> userNumbers.uuid().equals(uuid))
+                .findAny()
+                .orElseGet(() -> new UserNumbers(null, null, null));
     }
 }
 

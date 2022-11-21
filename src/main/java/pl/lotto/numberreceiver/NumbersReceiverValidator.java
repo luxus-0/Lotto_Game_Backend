@@ -20,7 +20,7 @@ class NumbersReceiverValidator {
             messages.add(MORE_THAN_SIX_NUMBERS);
         } else if (isNotInRangeNumbers(inputNumbers)) {
             messages.add(NOT_IN_RANGE_NUMBERS);
-        } else if(isEmptyNumbers(inputNumbers)){
+        } else if (isEmptyNumbers(inputNumbers)) {
             messages.add(NUMBERS_IS_EMPTY);
         }
         return true;

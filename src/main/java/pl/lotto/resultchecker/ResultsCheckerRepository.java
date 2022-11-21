@@ -5,9 +5,9 @@ import java.util.Set;
 import java.util.UUID;
 
 interface ResultsCheckerRepository {
+    ResultsLotto getWinnersByUUID(UUID uuid, Set<Integer> userNumbers);
+
     ResultsLotto getWinnersByDate(LocalDateTime dateTime, Set<Integer> userNumbers);
 
     ResultsLotto save(ResultsLotto resultsLotto);
-
-    ResultsLotto getWinnersByUUID(UUID uuid, Set<Integer> userNumbers);
 }
