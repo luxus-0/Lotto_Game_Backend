@@ -4,6 +4,7 @@ class ResultsCheckerFacadeConfiguration {
 
     ResultsCheckerFacade createModuleForTests() {
         ResultsCheckerValidator resultsCheckerValidator = new ResultsCheckerValidator();
-        return new ResultsCheckerFacade(resultsCheckerValidator);
+        NumberGenerator numberGenerator = new NumberGenerator();
+        return new ResultsCheckerFacade(resultsCheckerValidator, numberGenerator);
     }
 }

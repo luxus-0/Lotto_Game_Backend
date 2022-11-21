@@ -39,7 +39,13 @@ class NumbersReceiverValidator {
     }
 
     boolean isNotInRangeNumbers(Collection<Integer> inputNumbers) {
-        return inputNumbers.stream().anyMatch(validNumbers -> inputNumbers.size() > SIZE_MAX);
+        return inputNumbers.stream()
+                .anyMatch(validNumbers -> numberIsMoreThan99AndLessThan1(inputNumbers));
+    }
+
+    boolean numberIsMoreThan99AndLessThan1(Collection<Integer> inputNumbers) {
+        return inputNumbers.stream().findAny().orElse(0) > RANGE_TO_NUMBER &&
+                inputNumbers.stream().findAny().orElse(0) < RANGE_FROM_NUMBER;
     }
 
     boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {

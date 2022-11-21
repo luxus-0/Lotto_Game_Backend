@@ -12,18 +12,21 @@ import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 public class ResultsCheckerFacade {
     private final ResultsCheckerValidator resultsValidator;
     private final ResultsCheckerRepository resultsCheckerRepository;
+    private final NumberGenerator numberGenerator;
 
-    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator) {
+    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator, NumberGenerator numberGenerator) {
         this.resultsValidator = resultsValidator;
+        this.numberGenerator = numberGenerator;
         this.resultsCheckerRepository = new InMemoryResultsCheckerRepository();
     }
 
-    public ResultsLottoDto getWinnerNumbers(Set<Integer> numbers, LocalDateTime dateTimeDraw) {
-        return numbers.stream()
-                .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(numbers))
-                .map(toDto -> new ResultsLottoDto(numbers, dateTimeDraw, WIN))
+    public ResultsLottoDto getWinnerNumbers(Set<Integer> userNumbers, LocalDateTime dateTimeDraw) {
+        Set<Integer> lottoNumbers = numberGenerator.generate();
+        return userNumbers.stream()
+                .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(userNumbers, lottoNumbers))
+                .map(toDto -> new ResultsLottoDto(userNumbers, dateTimeDraw, WIN))
                 .findAny()
-                .orElse(new ResultsLottoDto(numbers, dateTimeDraw, NOT_WIN));
+                .orElse(new ResultsLottoDto(null, null, NOT_WIN));
     }
 
     public ResultsLottoDto getWinnerNumbersByUUID(UUID uuid, Set<Integer> userNumbers) {

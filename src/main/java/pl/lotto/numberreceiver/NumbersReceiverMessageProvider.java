@@ -1,7 +1,6 @@
 package pl.lotto.numberreceiver;
 
 class NumbersReceiverMessageProvider {
-    public static final int SIZE_MIN = 1;
     public static final int SIZE_MAX = 6;
     public static final int RANGE_FROM_NUMBER = 1;
     public static final int RANGE_TO_NUMBER = 99;
