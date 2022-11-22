@@ -25,50 +25,45 @@ class ResultsCheckerFacadeTest {
     @DisplayName("return success when user get 6 numbers and is winner numbers")
     public void should_return_success_when_user_get_six_numbers_and_is_winner_numbers() {
         //given
+        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .createModuleForTests(clock);
-
-        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
-        ResultsLottoDto winnerResultLotto = new ResultsLottoDto(inputNumbers, datetimeDraw, WIN);
         //when
         ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
 
         //then
-        assertNotEquals(winnerResultLotto.message(), resultsLotto.message());
+        assertNotEquals(resultsLotto.message(), WIN);
     }
 
     @Test
     @DisplayName("return failed when user get 6 numbers and is not winner numbers")
     public void should_return_failed_when_user_get_six_numbers_and_is_not_winner_numbers() {
         //given
+        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .createModuleForTests(clock);
 
-        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
-        ResultsLottoDto notWinner = new ResultsLottoDto(inputNumbers, datetimeDraw, NOT_WIN);
-
         //when
-        ResultsLottoDto result = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
+        ResultsLottoDto resultWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
         //then
-        assertEquals(notWinner, result);
+        assertEquals(resultWinner.message(), NOT_WIN);
     }
 
     @Test
     @DisplayName("return failed when user get 5 numbers and is not winner numbers")
     public void should_return_failed_when_user_get_five_numbers_and_is_winner_numbers() {
         //given
+        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .createModuleForTests(clock);
 
-        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45);
-        ResultsLottoDto winner = new ResultsLottoDto(inputNumbers, datetimeDraw, WIN);
         //when
-        ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
+        ResultsLottoDto resultsWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
         //then
-        assertNotEquals(winner, resultsLotto);
+        assertThat(resultsWinner.message()).isEqualTo(NOT_WIN);
     }
 
     @Test
@@ -82,11 +77,9 @@ class ResultsCheckerFacadeTest {
                 .createModuleForTests(clock);
 
         //when
-        ResultsLottoDto result = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
+        String resultMessageWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).message();
         //then
-        ResultsLottoDto resultWinner = new ResultsLottoDto(inputNumbers, datetimeDraw, WIN);
-
-        assertNotEquals(resultWinner.message(), result.message());
+        assertThat(resultMessageWinner).isNotEqualTo(WIN);
     }
 
     @Test
@@ -111,15 +104,15 @@ class ResultsCheckerFacadeTest {
         //given
         Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
-        LocalDateTime actualDateTime = LocalDateTime.of(2022, SEPTEMBER, 7, 12, 0);
+
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .createModuleForTests(clock);
 
         //when
         LocalDateTime resultDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
-
         //then
-        assertNotEquals(resultDateTime, actualDateTime);
+       LocalDateTime expectedDateTime = LocalDateTime.of(2022, SEPTEMBER, 7, 12, 0);
+       assertNotEquals(resultDateTime, expectedDateTime);
     }
 
     @Test
@@ -134,14 +127,12 @@ class ResultsCheckerFacadeTest {
         //when
         String actualWinnersMessage = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).message();
         //then
-        String expectedWinnersMessage = "NOT WIN";
-
-        assertThat(actualWinnersMessage).isEqualTo(expectedWinnersMessage);
+        assertThat(actualWinnersMessage).isEqualTo("NOT WIN");
     }
 
     @Test
     @DisplayName("return success when user get more than 1 winner numbers")
-    public void should_return_success_message_when_user_get_more_than_one_winner_numbers() {
+    public void should_return_success_message_when_user_get_winner_numbers() {
         //given
         Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
@@ -151,9 +142,9 @@ class ResultsCheckerFacadeTest {
         //when
         Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
         //then
-        boolean checkWinnerNumbers = !resultWinnerNumbers.isEmpty();
+        boolean checkEmptyWinnerNumbers = resultWinnerNumbers.isEmpty();
 
-        assertTrue(checkWinnerNumbers);
+        assertThat(checkEmptyWinnerNumbers).isFalse();
     }
 
     @Test
@@ -167,9 +158,8 @@ class ResultsCheckerFacadeTest {
 
         //when
         Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
-        boolean checkNoWinnerNumber = resultWinnerNumbers.size() == 0;
         //then
-        assertFalse(checkNoWinnerNumber);
+        assertThat(resultWinnerNumbers.isEmpty()).isEqualTo(false);
     }
 
     @Test
