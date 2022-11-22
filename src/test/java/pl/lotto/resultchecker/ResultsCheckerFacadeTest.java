@@ -150,9 +150,10 @@ class ResultsCheckerFacadeTest {
 
         //when
         Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
-        boolean checkMoreThanOneWinner = resultWinnerNumbers.size() > 0;
         //then
-        assertTrue(checkMoreThanOneWinner);
+        boolean checkWinnerNumbers = !resultWinnerNumbers.isEmpty();
+
+        assertTrue(checkWinnerNumbers);
     }
 
     @Test
