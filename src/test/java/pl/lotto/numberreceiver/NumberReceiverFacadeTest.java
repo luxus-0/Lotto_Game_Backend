@@ -138,8 +138,8 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("return not equal uuid when user gave incorrect draw date time draw")
-    public void should_return_not_equal_uuid_when_user_gave_incorrect_date_time_draw() {
+    @DisplayName("return user numbers when user gave incorrect draw date time draw")
+    public void should_return_user_numbers_when_user_gave_incorrect_date_time_draw() {
         // given
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 14, 12, 0);
         Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
