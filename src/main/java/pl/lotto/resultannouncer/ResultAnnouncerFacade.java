@@ -5,6 +5,7 @@ import pl.lotto.resultchecker.ResultsCheckerFacade;
 import pl.lotto.resultchecker.dto.ResultsLottoDto;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,13 +16,14 @@ public class ResultAnnouncerFacade {
         this.resultsCheckerFacade = resultsCheckerFacade;
     }
 
-    public ResultAnnouncerDto getResultAnnouncerByUUID(UUID uuid, Set<Integer> winningNumbers) {
-        ResultsLottoDto resultsLottoDto = resultsCheckerFacade.getWinnerNumbersByUUID(uuid);
-        LocalDateTime dateTimeResult = resultsLottoDto.dateTimeDraw();
-        boolean checkWinnerNumbers = resultsLottoDto.winnerNumbers().size() > 0;
-        if (checkWinnerNumbers) {
-            return new ResultAnnouncerDto(uuid, winningNumbers, dateTimeResult, checkWinnerNumbers);
+    public ResultAnnouncerDto getResultAnnouncerByUUID(UUID uuid) {
+        ResultsLottoDto resultWinner = resultsCheckerFacade.getWinnerNumbersByUUID(uuid);
+        LocalDateTime winnerDateTime = resultWinner.dateTimeDraw();
+        Set<Integer> winnerNumbers = resultWinner.winnerNumbers();
+        ResultAnnouncerDto resultAnnouncer = new ResultAnnouncerDto(uuid, winnerNumbers, winnerDateTime, true);
+        if (!winnerNumbers.isEmpty()) {
+            return resultAnnouncer;
         }
-        return new ResultAnnouncerDto(null, null, null, false);
+        return Optional.of(resultAnnouncer).get();
     }
 }

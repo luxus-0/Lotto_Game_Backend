@@ -12,13 +12,13 @@ import java.util.Set;
 
 import static java.time.Month.DECEMBER;
 import static java.time.Month.SEPTEMBER;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 
 class ResultsCheckerFacadeTest {
 
-    NumberGenerator numberGenerator = new NumberGenerator();
     Clock clock = Clock.fixed(Instant.now(Clock.systemUTC()), ZoneId.systemDefault());
 
     @Test
@@ -127,17 +127,16 @@ class ResultsCheckerFacadeTest {
     public void should_return_failed_message_when_user_get_not_winner_numbers() {
         //given
         Set<Integer> inputNumbers = Set.of(25, 78, 94, 11, 34, 45);
-        Integer randomNumber = numberGenerator.generate().stream().findAny().orElse(0);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .createModuleForTests(clock);
 
         //when
-        boolean resultWinners = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw)
-                .winnerNumbers().contains(randomNumber);
+        Set<Integer> resultWinners = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw)
+                .winnerNumbers();
 
         //then
-        assertFalse(resultWinners);
+        assertThat(resultWinners).isNotEqualTo(inputNumbers);
     }
 
     @Test

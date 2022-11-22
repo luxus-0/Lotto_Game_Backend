@@ -22,9 +22,8 @@ public class ResultsCheckerFacade {
     }
 
     public ResultsLottoDto getWinnerNumbers(Set<Integer> userNumbers, LocalDateTime dateTimeDraw) {
-        Set<Integer> lottoNumbers = numberGenerator.generate();
         return userNumbers.stream()
-                .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(userNumbers, lottoNumbers))
+                .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(userNumbers))
                 .map(toDto -> new ResultsLottoDto(userNumbers, dateTimeDraw, WIN))
                 .findAny()
                 .orElse(new ResultsLottoDto(userNumbers, dateTimeDraw, NOT_WIN));
