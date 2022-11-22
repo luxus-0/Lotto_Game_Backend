@@ -6,6 +6,6 @@ class ResultsCheckerFacadeConfiguration {
     ResultsCheckerFacade createModuleForTests(Clock clock) {
         ResultsCheckerValidator resultsCheckerValidator = new ResultsCheckerValidator();
         NumberGenerator numberGenerator = new NumberGenerator();
-        return new ResultsCheckerFacade(resultsCheckerValidator, numberGenerator, clock);
+        return new ResultsCheckerFacade(resultsCheckerValidator, clock);
     }
 }

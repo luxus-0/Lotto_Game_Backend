@@ -13,12 +13,12 @@ import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 public class ResultsCheckerFacade {
     private final ResultsCheckerValidator resultsValidator;
     private final ResultsCheckerRepository resultsCheckerRepository;
-    private final NumberGenerator numberGenerator;
+    Clock clock;
 
-    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator, NumberGenerator numberGenerator, Clock clock) {
+    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator, Clock clock) {
         this.resultsValidator = resultsValidator;
-        this.numberGenerator = numberGenerator;
         this.resultsCheckerRepository = new InMemoryResultsCheckerRepository();
+        this.clock = clock;
     }
 
     public ResultsLottoDto getWinnerNumbers(Set<Integer> userNumbers, LocalDateTime dateTimeDraw) {
