@@ -123,8 +123,8 @@ class ResultsCheckerFacadeTest {
     }
 
     @Test
-    @DisplayName("return failed message when user get not winner numbers")
-    public void should_return_failed_message_when_user_get_not_winner_numbers() {
+    @DisplayName("return not win message when user get no_winner numbers")
+    public void should_return_not_win_message_when_user_get_no_winner_numbers() {
         //given
         Set<Integer> inputNumbers = Set.of(25, 78, 94, 11, 34, 45);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
@@ -132,11 +132,11 @@ class ResultsCheckerFacadeTest {
                 .createModuleForTests(clock);
 
         //when
-        Set<Integer> resultWinners = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw)
-                .winnerNumbers();
-
+        String actualWinnersMessage = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).message();
         //then
-        assertThat(resultWinners).isNotEqualTo(inputNumbers);
+        String expectedWinnersMessage = "NOT WIN";
+
+        assertThat(actualWinnersMessage).isEqualTo(expectedWinnersMessage);
     }
 
     @Test
