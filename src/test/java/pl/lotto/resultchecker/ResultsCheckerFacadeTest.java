@@ -20,6 +20,7 @@ import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 class ResultsCheckerFacadeTest {
 
     Clock clock = Clock.fixed(Instant.now(Clock.systemUTC()), ZoneId.systemDefault());
+    ResultCheckerDateTime resultCheckerDateTime = new ResultCheckerDateTime(clock);
 
     @Test
     @DisplayName("return success when user get 6 numbers and is winner numbers")
@@ -168,15 +169,15 @@ class ResultsCheckerFacadeTest {
         //given
         Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 15, 12, 0);
-        ResultCheckerDateTime resultCheckerDateTime = new ResultCheckerDateTime(clock);
-        LocalDateTime dateTime = resultCheckerDateTime.readDateTimeDraw();
 
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .createModuleForTests(clock);
 
         //when
-        LocalDateTime resultDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
+        LocalDateTime resultWinnerDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
         //then
-        assertNotEquals(resultDateTime, dateTime);
+        LocalDateTime nextSaturdayAt12am = resultCheckerDateTime.readDateTimeDraw();
+
+        assertNotEquals(resultWinnerDateTime, nextSaturdayAt12am);
     }
 }
