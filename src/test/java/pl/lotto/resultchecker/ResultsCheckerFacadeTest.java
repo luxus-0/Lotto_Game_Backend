@@ -19,8 +19,8 @@ import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 
 class ResultsCheckerFacadeTest {
 
-    Clock clock = Clock.fixed(Instant.now(Clock.systemUTC()), ZoneId.systemDefault());
-    ResultCheckerDateTime resultCheckerDateTime = new ResultCheckerDateTime(clock);
+    private final Clock clock = Clock.fixed(Instant.now(Clock.systemUTC()), ZoneId.systemDefault());
+    private final ResultCheckerDateTime resultCheckerDateTime = new ResultCheckerDateTime(clock);
 
     @Test
     @DisplayName("return success when user get 6 numbers and is winner numbers")
