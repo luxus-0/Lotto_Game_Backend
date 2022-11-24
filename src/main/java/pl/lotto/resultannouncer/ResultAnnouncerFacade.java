@@ -16,12 +16,12 @@ public class ResultAnnouncerFacade {
         this.resultsCheckerFacade = resultsCheckerFacade;
     }
 
-    public ResultAnnouncerDto getResultAnnouncerByUUID(UUID uuid) {
-        ResultsLottoDto resultWinner = resultsCheckerFacade.getWinnerNumbersByUUID(uuid);
-        LocalDateTime winnerDateTime = resultWinner.dateTimeDraw();
-        Set<Integer> winnerNumbers = resultWinner.winnerNumbers();
-        ResultAnnouncerDto resultAnnouncer = new ResultAnnouncerDto(uuid, winnerNumbers, winnerDateTime, true);
-        if (!winnerNumbers.isEmpty()) {
+    public ResultAnnouncerDto getResultByUUID(UUID uuid) {
+        ResultsLottoDto resultLotto = resultsCheckerFacade.getWinnerNumbersByUUID(uuid);
+        LocalDateTime resultDateTime = resultLotto.dateTimeDraw();
+        Set<Integer> resultNumbersInput = resultLotto.winnerNumbers();
+        ResultAnnouncerDto resultAnnouncer = new ResultAnnouncerDto(uuid, resultNumbersInput, resultDateTime, true);
+        if (!resultNumbersInput.isEmpty()) {
             return resultAnnouncer;
         }
         return Optional.of(resultAnnouncer).get();

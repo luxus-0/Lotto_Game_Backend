@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.time.Month.DECEMBER;
 import static java.time.ZoneOffset.UTC;
@@ -22,12 +23,12 @@ class NumberReceiverFacadeTest {
     Clock clock = Clock.systemUTC();
     DateTimeDrawGenerator dateTimeDraw = new DateTimeDrawGenerator(clock);
     NumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverRepository(dateTimeDraw);
+    UUIDGenerator uuid = new UUIDGenerator();
 
     @Test
     @DisplayName("return success when user gave six numbers")
     public void should_return_success_when_user_gave_six_numbers() {
         // given
-        Clock clock = Clock.systemUTC();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         // when
@@ -40,7 +41,6 @@ class NumberReceiverFacadeTest {
     @DisplayName("return failed when user gave less than six numbers")
     public void should_return_failed_when_user_gave_less_than_six_numbers() {
         // given
-        Clock clock = Clock.systemUTC();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4);
         // when
@@ -53,7 +53,6 @@ class NumberReceiverFacadeTest {
     @DisplayName("return failed when user gave more than six numbers")
     public void should_return_failed_when_user_gave_more_than_six_numbers() {
         // given
-        Clock clock = Clock.systemUTC();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6, 7, 8);
         // when
@@ -66,7 +65,6 @@ class NumberReceiverFacadeTest {
     @DisplayName("return failed when user gave number out of range")
     public void should_return_failed_when_user_gave_number_out_of_range() {
         // given
-        Clock clock = Clock.systemUTC();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 100, 4, 5, 135, 900);
         // when
@@ -79,7 +77,6 @@ class NumberReceiverFacadeTest {
     @DisplayName("return failed when user gave empty numbers")
     public void should_return_failed_when_user_gave_empty_numbers() {
         // given
-        Clock clock = Clock.systemUTC();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of();
         // when
@@ -92,7 +89,6 @@ class NumberReceiverFacadeTest {
     @DisplayName("return failed when user gave six minus numbers")
     public void should_return_failed_when_user_gave_six_minus_numbers() {
         // given
-        Clock clock = Clock.systemUTC();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(-20, -34, 3, -13, 5, -44);
         // when
@@ -138,18 +134,18 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("return user numbers when user gave incorrect draw date time draw")
-    public void should_return_user_numbers_when_user_gave_incorrect_date_time_draw() {
+    @DisplayName("return failed user numbers when user gave incorrect date time draw")
+    public void should_return_failed_user_numbers_when_user_gave_incorrect_date_time_draw() {
         // given
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 14, 12, 0);
-        Clock clock = Clock.fixed(datetimeDraw.toInstant(UTC), ZoneId.systemDefault());
+        LocalDateTime datetime = LocalDateTime.of(2022, DECEMBER, 14, 12, 0);
+        Clock clock = Clock.fixed(datetime.toInstant(UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
-        Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
+        Set<Integer> numbersFromUser = Set.of(12, 23, 45, 11, 90, 50);
         // when
-        AllUsersNumbersDto allUsersNumbers = numberReceiverFacade.usersNumbers(datetimeDraw);
+        AllUsersNumbersDto allUsersNumbers = numberReceiverFacade.usersNumbers(numbersFromUser, datetime);
         // then
-        UUIDGenerator uuid = new UUIDGenerator();
-        UserNumbersDto usersNumbers = new UserNumbersDto(uuid.generateUUID(), numbersFromUser, datetimeDraw);
+        UUID uuid = UUID.fromString("0de5f8c1-e926-48dd-92fb-6652d982426c");
+        UserNumbersDto usersNumbers = new UserNumbersDto(uuid, numbersFromUser, datetime);
         AllUsersNumbersDto resultAllUsersNumbers = new AllUsersNumbersDto(List.of(usersNumbers));
 
         assertThat(allUsersNumbers).isNotEqualTo(resultAllUsersNumbers);

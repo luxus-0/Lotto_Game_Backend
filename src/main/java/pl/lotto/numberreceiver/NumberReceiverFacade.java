@@ -16,11 +16,11 @@ public class NumberReceiverFacade {
     private final DateTimeDrawGenerator dateTimeGenerator;
     private final UUIDGenerator uuidGenerator;
 
-    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, DateTimeDrawGenerator dateTimeGenerator, UUIDGenerator uuidGenerator) {
+    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, DateTimeDrawGenerator dateTimeGenerator) {
         this.numberValidator = numberValidator;
         this.numberReceiverRepository = numberReceiverRepository;
         this.dateTimeGenerator = dateTimeGenerator;
-        this.uuidGenerator = uuidGenerator;
+        this.uuidGenerator = new UUIDGenerator();
     }
 
     public NumberReceiverDto inputNumbers(Set<Integer> numbersFromUser) {
@@ -35,10 +35,9 @@ public class NumberReceiverFacade {
         return new NumberReceiverDto(savedUserNumbers.uuid(), savedUserNumbers.numbersFromUser(), savedUserNumbers.dateTimeDraw());
     }
 
-    public AllUsersNumbersDto usersNumbers(LocalDateTime dateTimeDraw) {
+    public AllUsersNumbersDto usersNumbers(Set<Integer> numbersInput, LocalDateTime dateTimeDraw) {
         UUID uuid = uuidGenerator.generateUUID();
         LocalDateTime dateTime = numberReceiverRepository.findByDate(dateTimeDraw);
-        Set<Integer> numbersInput = numberReceiverRepository.findByUUID(uuid).numbersFromUser();
         UserNumbers userNumbers = new UserNumbers(uuid, numbersInput, dateTime);
         UserNumbers saveUserNumbers = numberReceiverRepository.save(userNumbers);
         return new AllUsersNumbersDto(List.of(new UserNumbersDto(saveUserNumbers.uuid(), saveUserNumbers.numbersFromUser(), saveUserNumbers.dateTimeDraw())));

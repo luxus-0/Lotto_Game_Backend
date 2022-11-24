@@ -32,11 +32,7 @@ class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
 
     @Override
     public UserNumbers findByUUID(UUID uuid) {
-        return inMemoryUserNumbers.values()
-                .stream()
-                .filter(userNumbers -> userNumbers.uuid().equals(uuid))
-                .findAny()
-                .orElseGet(() -> new UserNumbers(null, null, null));
+        return inMemoryUserNumbers.get(uuid);
     }
 }
 
