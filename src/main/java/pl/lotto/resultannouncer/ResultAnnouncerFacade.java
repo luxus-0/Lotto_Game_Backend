@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import static pl.lotto.resultannouncer.ResultAnnouncerMessage.WIN;
+
 public class ResultAnnouncerFacade {
     private final ResultsCheckerFacade resultsCheckerFacade;
 
@@ -19,11 +21,8 @@ public class ResultAnnouncerFacade {
     public ResultAnnouncerDto getResultByUUID(UUID uuid) {
         ResultsLottoDto resultLotto = resultsCheckerFacade.getWinnerNumbersByUUID(uuid);
         LocalDateTime resultDateTime = resultLotto.dateTimeDraw();
-        Set<Integer> resultNumbersInput = resultLotto.winnerNumbers();
-        ResultAnnouncerDto resultAnnouncer = new ResultAnnouncerDto(uuid, resultNumbersInput, resultDateTime, true);
-        if (!resultNumbersInput.isEmpty()) {
-            return resultAnnouncer;
-        }
+        Set<Integer> resultWinningNumbers = resultLotto.winnerNumbers();
+        ResultAnnouncerDto resultAnnouncer = new ResultAnnouncerDto(resultWinningNumbers, resultDateTime, WIN);
         return Optional.of(resultAnnouncer).get();
     }
 }
