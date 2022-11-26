@@ -30,12 +30,9 @@ public class ResultsCheckerFacade {
     }
 
     public ResultsLottoDto getWinnerNumbersByUUID(UUID uuid) {
-        if (uuid != null) {
             ResultsLotto resultsLotto = resultsCheckerRepository.getWinnersByUUID(uuid);
             ResultsLotto resultLottoCreator = new ResultsLotto(resultsLotto.uuid, resultsLotto.inputNumbers, resultsLotto.dateTimeDraw);
             ResultsLotto savedResultsLotto = resultsCheckerRepository.save(resultLottoCreator);
             return new ResultsLottoDto(savedResultsLotto.inputNumbers, savedResultsLotto.dateTimeDraw, WIN);
         }
-        return new ResultsLottoDto(null, null, NOT_WIN);
-    }
 }
