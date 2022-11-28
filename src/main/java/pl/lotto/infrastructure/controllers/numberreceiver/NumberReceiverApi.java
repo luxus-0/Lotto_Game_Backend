@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.controllers;
+package pl.lotto.infrastructure.controllers.numberreceiver;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
