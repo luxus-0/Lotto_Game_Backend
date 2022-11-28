@@ -22,14 +22,14 @@ public class NumberReceiverApi {
     }
 
     @GetMapping("/numbers")
-    public ResponseEntity<NumberReceiverDto> inputNumbers(@RequestBody NumberReceiverDto numberReceiverDto){
+    public ResponseEntity<NumberReceiverDto> inputNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         NumberReceiverDto numberReceiverResponse = numberReceiverFacade.inputNumbers(responseNumbers);
         return new ResponseEntity<>(numberReceiverResponse, HttpStatus.OK);
     }
 
     @GetMapping("/user/numbers")
-    public ResponseEntity<AllUsersNumbersDto> usersNumbers(@RequestBody NumberReceiverDto numberReceiverDto){
+    public ResponseEntity<AllUsersNumbersDto> usersNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
         AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseNumbers, responseDateTime);
