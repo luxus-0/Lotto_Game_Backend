@@ -28,8 +28,8 @@ public class NumberReceiverApi {
         return new ResponseEntity<>(numberReceiverResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/user_numbers")
-    public ResponseEntity<AllUsersNumbersDto> userNumbers(@RequestBody NumberReceiverDto numberReceiverDto){
+    @GetMapping("/user/numbers")
+    public ResponseEntity<AllUsersNumbersDto> usersNumbers(@RequestBody NumberReceiverDto numberReceiverDto){
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
         AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseNumbers, responseDateTime);
