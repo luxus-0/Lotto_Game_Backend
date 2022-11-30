@@ -8,9 +8,12 @@ class NumbersGeneratorValidator {
     NumbersGeneratorFacade numbersGeneratorFacade;
 
     boolean checkWinnerNumbers(Set<Integer> inputNumbers) {
-        Set<Integer> lottoNumbers = numbersGeneratorFacade.generateNumbersLotto();
+        Set<Integer> lottoNumbers = numbersGeneratorFacade.generateLottoNumbers();
         return inputNumbers.stream()
                 .filter(checkUserNumbers -> inputNumbers.size() <= SIZE_MAX)
-                .anyMatch(containingLottoNumbers -> inputNumbers.contains(lottoNumbers.stream().findAny().orElse(0)));
+                .anyMatch(containingLottoNumbers -> inputNumbers.contains(
+                        lottoNumbers.stream()
+                        .findAny()
+                        .orElse(0)));
     }
 }
