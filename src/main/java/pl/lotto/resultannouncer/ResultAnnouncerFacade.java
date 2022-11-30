@@ -14,9 +14,9 @@ import static pl.lotto.resultannouncer.ResultAnnouncerMessage.WIN;
 public class ResultAnnouncerFacade {
     ResultsCheckerFacade resultsCheckerFacade;
 
-    public ResultAnnouncerDto getResultByUUID(UUID uuid) {
-        if(uuid == null) {
-            ResultsLottoDto resultLotto = resultsCheckerFacade.getWinnerNumbersByUUID(uuid);
+    public ResultAnnouncerDto getResults(UUID uuid) {
+        if (uuid == null) {
+            ResultsLottoDto resultLotto = resultsCheckerFacade.getWinnerNumbers(uuid);
             LocalDateTime resultDateTime = resultLotto.dateTimeDraw();
             Set<Integer> resultWinningNumbers = resultLotto.winnerNumbers();
             return new ResultAnnouncerDto(uuid, resultWinningNumbers, resultDateTime, WIN);

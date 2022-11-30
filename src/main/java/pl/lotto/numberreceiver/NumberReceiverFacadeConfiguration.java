@@ -1,6 +1,7 @@
 package pl.lotto.numberreceiver;
 
 import org.springframework.context.annotation.Configuration;
+
 import java.time.Clock;
 
 @Configuration

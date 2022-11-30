@@ -22,7 +22,7 @@ class ResultAnnouncerFacadeTest {
 
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().createModuleForTests();
         // when
-        ResultAnnouncerDto resultAnnouncer = resultAnnouncerFacade.getResultByUUID(uuid);
+        ResultAnnouncerDto resultAnnouncer = resultAnnouncerFacade.getResults(uuid);
         // then
         LocalDateTime datetime = LocalDateTime.of(2022, DECEMBER, 14, 12, 0);
 

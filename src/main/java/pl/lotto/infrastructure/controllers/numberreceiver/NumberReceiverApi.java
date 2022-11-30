@@ -13,23 +13,23 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @RestController
-public class NumberReceiverApi {
+class NumberReceiverApi {
 
     private final NumberReceiverFacade numberReceiverFacade;
 
-    public NumberReceiverApi(NumberReceiverFacade numberReceiverFacade) {
+    NumberReceiverApi(NumberReceiverFacade numberReceiverFacade) {
         this.numberReceiverFacade = numberReceiverFacade;
     }
 
     @GetMapping("/input_numbers")
-    public ResponseEntity<NumberReceiverDto> inputNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
+    ResponseEntity<NumberReceiverDto> inputNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         NumberReceiverDto numberReceiverResponse = numberReceiverFacade.inputNumbers(responseNumbers);
         return new ResponseEntity<>(numberReceiverResponse, HttpStatus.OK);
     }
 
     @GetMapping("/users_numbers")
-    public ResponseEntity<AllUsersNumbersDto> usersNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
+    ResponseEntity<AllUsersNumbersDto> usersNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
         AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseNumbers, responseDateTime);

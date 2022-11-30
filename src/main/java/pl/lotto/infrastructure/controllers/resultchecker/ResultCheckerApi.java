@@ -14,16 +14,16 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-public class ResultCheckerApi {
+class ResultCheckerApi {
 
     private final ResultsCheckerFacade resultsCheckerFacade;
 
-    public ResultCheckerApi(ResultsCheckerFacade resultsCheckerFacade) {
+    ResultCheckerApi(ResultsCheckerFacade resultsCheckerFacade) {
         this.resultsCheckerFacade = resultsCheckerFacade;
     }
 
     @GetMapping("/winners")
-    public ResponseEntity<ResultsLottoDto> readWinners(@RequestBody ResultsLottoDto resultsLottoDto) {
+    ResponseEntity<ResultsLottoDto> readWinners(@RequestBody ResultsLottoDto resultsLottoDto) {
         Set<Integer> resultNumbers = resultsLottoDto.winnerNumbers();
         LocalDateTime resultDateTime = resultsLottoDto.dateTimeDraw();
         ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(resultNumbers, resultDateTime);
@@ -31,7 +31,7 @@ public class ResultCheckerApi {
     }
 
     @GetMapping("/winners/{uuid}")
-    public ResponseEntity<ResultsLottoDto> readWinners(@PathVariable UUID uuid) {
+    ResponseEntity<ResultsLottoDto> readWinners(@PathVariable UUID uuid) {
         ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(uuid);
         return new ResponseEntity<>(resultsLotto, HttpStatus.OK);
     }

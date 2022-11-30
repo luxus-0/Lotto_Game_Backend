@@ -29,10 +29,10 @@ public class ResultsCheckerFacade {
                 .orElse(new ResultsLottoDto(userNumbers, dateTimeDraw, NOT_WIN));
     }
 
-    public ResultsLottoDto getWinnerNumbersByUUID(UUID uuid) {
-            ResultsLotto resultsLotto = resultsCheckerRepository.getWinnersByUUID(uuid);
-            ResultsLotto resultLottoCreator = new ResultsLotto(resultsLotto.uuid, resultsLotto.inputNumbers, resultsLotto.dateTimeDraw);
-            ResultsLotto savedResultsLotto = resultsCheckerRepository.save(resultLottoCreator);
-            return new ResultsLottoDto(savedResultsLotto.inputNumbers, savedResultsLotto.dateTimeDraw, WIN);
-        }
+    public ResultsLottoDto getWinnerNumbers(UUID uuid) {
+        ResultsLotto resultsLotto = resultsCheckerRepository.getWinnersByUUID(uuid);
+        ResultsLotto resultLottoCreator = new ResultsLotto(resultsLotto.uuid, resultsLotto.inputNumbers, resultsLotto.dateTimeDraw);
+        ResultsLotto savedResultsLotto = resultsCheckerRepository.save(resultLottoCreator);
+        return new ResultsLottoDto(savedResultsLotto.inputNumbers, savedResultsLotto.dateTimeDraw, WIN);
+    }
 }
