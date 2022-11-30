@@ -24,7 +24,7 @@ public class NumbersGeneratorFacade {
                 .collect(Collectors.toSet());
     }
 
-   public WinningNumbersDto showWinnerNumbers() {
+    public WinningNumbersDto showWinnerNumbers() {
         Set<Integer> lottoNumbers = generateLottoNumbers();
         for (Integer lottoNumber : lottoNumbers) {
             return new WinningNumbersDto(Set.of(lottoNumber));

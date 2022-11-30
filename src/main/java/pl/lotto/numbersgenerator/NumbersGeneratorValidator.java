@@ -13,7 +13,7 @@ class NumbersGeneratorValidator {
                 .filter(checkUserNumbers -> inputNumbers.size() <= SIZE_MAX)
                 .anyMatch(containingLottoNumbers -> inputNumbers.contains(
                         lottoNumbers.stream()
-                        .findAny()
-                        .orElse(0)));
+                                .findAny()
+                                .orElse(0)));
     }
 }
