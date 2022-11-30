@@ -21,14 +21,14 @@ public class NumberReceiverApi {
         this.numberReceiverFacade = numberReceiverFacade;
     }
 
-    @GetMapping("/numbers")
+    @GetMapping("/input_numbers")
     public ResponseEntity<NumberReceiverDto> inputNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         NumberReceiverDto numberReceiverResponse = numberReceiverFacade.inputNumbers(responseNumbers);
         return new ResponseEntity<>(numberReceiverResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/user/numbers")
+    @GetMapping("/users_numbers")
     public ResponseEntity<AllUsersNumbersDto> usersNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
