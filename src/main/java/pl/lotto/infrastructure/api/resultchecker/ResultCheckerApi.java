@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.controllers.resultchecker;
+package pl.lotto.infrastructure.api.resultchecker;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

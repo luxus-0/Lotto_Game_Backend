@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.controllers.numbersgenerator;
+package pl.lotto.infrastructure.api.numbersgenerator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
