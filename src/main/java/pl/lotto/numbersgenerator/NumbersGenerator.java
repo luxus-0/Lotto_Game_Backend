@@ -7,6 +7,6 @@ import java.util.UUID;
 
 @Data
 class NumbersGenerator {
-   private UUID uuid;
-   private Set<Integer> lottoNumbers;
+    private UUID uuid;
+    private Set<Integer> lottoNumbers;
 }
