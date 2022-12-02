@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Service
 class DatabaseNumberReceiverRepositoryImpl {
-    
+
     private final DatabaseNumberReceiverRepository databaseNumberReceiverRepository;
 
     DatabaseNumberReceiverRepositoryImpl(DatabaseNumberReceiverRepository databaseNumberReceiverRepository) {
@@ -23,7 +23,7 @@ class DatabaseNumberReceiverRepositoryImpl {
                 .findAny()
                 .orElse(null);
     }
-    
+
     UserNumbers findUserByUUID(UUID uuid) {
         return databaseNumberReceiverRepository.findAll()
                 .stream()
