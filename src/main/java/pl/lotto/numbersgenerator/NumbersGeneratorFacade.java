@@ -1,6 +1,5 @@
 package pl.lotto.numbersgenerator;
 
-import lombok.extern.log4j.Log4j;
 import pl.lotto.numbersgenerator.dto.WinningNumbersDto;
 
 import java.util.Random;
@@ -10,7 +9,6 @@ import java.util.stream.IntStream;
 
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.winningNumbersNotFound;
 
-@Log4j
 public class NumbersGeneratorFacade {
 
     private static final Integer MIN_NUMBER = 1;

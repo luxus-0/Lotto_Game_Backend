@@ -1,5 +1,7 @@
 package pl.lotto.numberreceiver;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Set;
 
 import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
+@Service
 class NumbersReceiverValidator {
 
     List<String> messages = new LinkedList<>();
