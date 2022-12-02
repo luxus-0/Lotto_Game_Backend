@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.api.numberreceiver;
+package pl.lotto.infrastructure.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
