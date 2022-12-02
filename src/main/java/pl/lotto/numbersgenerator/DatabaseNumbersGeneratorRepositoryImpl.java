@@ -27,15 +27,15 @@ class DatabaseNumbersGeneratorRepositoryImpl {
                 .orElse(null);
     }
 
-    NumbersGenerator createNumbersGenerator(NumbersGenerator numbersGenerator){
+    NumbersGenerator createNumbersGenerator(NumbersGenerator numbersGenerator) {
         return numbersGeneratorRepository.save(numbersGenerator);
     }
 
-    void removalNumbersGenerator(){
-        numbersGeneratorRepository.deleteAll();;
+    void removalNumbersGenerator() {
+        numbersGeneratorRepository.deleteAll();
     }
 
-    void removalNumbersByUUID(UUID uuid){
+    void removalNumbersByUUID(UUID uuid) {
         numbersGeneratorRepository.deleteById(uuid);
     }
 }
