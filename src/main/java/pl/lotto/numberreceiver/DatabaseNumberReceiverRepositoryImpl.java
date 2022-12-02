@@ -15,7 +15,7 @@ class DatabaseNumberReceiverRepositoryImpl {
         this.databaseNumberReceiverRepository = databaseNumberReceiverRepository;
     }
 
-    public UserNumbers findUserByDateTime(LocalDateTime dateTime) {
+    UserNumbers findUserByDateTime(LocalDateTime dateTime) {
         return databaseNumberReceiverRepository.findAll()
                 .stream()
                 .filter(Objects::nonNull)
@@ -24,7 +24,7 @@ class DatabaseNumberReceiverRepositoryImpl {
                 .orElse(null);
     }
     
-    public UserNumbers findUserByUUID(UUID uuid) {
+    UserNumbers findUserByUUID(UUID uuid) {
         return databaseNumberReceiverRepository.findAll()
                 .stream()
                 .filter(Objects::nonNull)
