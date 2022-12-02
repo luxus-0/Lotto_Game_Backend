@@ -3,7 +3,7 @@ package pl.lotto.numbersgenerator;
 import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 
 class NumbersGeneratorMapper {
-    static LottoNumbersDto toDto(NumbersGenerator numbersGenerator){
+    static LottoNumbersDto toDto(NumbersGenerator numbersGenerator) {
         return new LottoNumbersDto(numbersGenerator.getLottoNumbers());
     }
 }
