@@ -9,5 +9,6 @@ import java.util.UUID;
 @Repository
 public interface DatabaseNumberReceiverRepository extends MongoRepository<UserNumbers, UUID> {
     UserNumbers findUserByDateTime(LocalDateTime dateTime);
+
     UserNumbers findUserByUUID(UUID uuid);
 }
