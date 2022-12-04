@@ -12,11 +12,11 @@ class NumberReceiverFacadeConfiguration {
         DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
         UUIDGenerator uuidGenerator = new UUIDGenerator();
         InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository = new InMemoryNumberReceiverImpl();
-        return new NumberReceiverFacade(numbersReceiverValidator, inMemoryNumberReceiverRepository ,dateTimeDrawGenerator, uuidGenerator);
+        return new NumberReceiverFacade(numbersReceiverValidator, inMemoryNumberReceiverRepository, dateTimeDrawGenerator, uuidGenerator);
     }
 
     @Bean
-    Clock clock(){
+    Clock clock() {
         return Clock.systemUTC();
     }
 }

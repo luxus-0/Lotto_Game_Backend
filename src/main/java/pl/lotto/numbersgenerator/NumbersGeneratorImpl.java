@@ -6,10 +6,10 @@ import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 import java.util.UUID;
 
 @Service
-class DatabaseNumbersGeneratorRepositoryImpl {
-    private final DatabaseNumbersGeneratorRepository numbersGeneratorRepository;
+class NumbersGeneratorImpl {
+    private final NumbersGeneratorRepository numbersGeneratorRepository;
 
-    DatabaseNumbersGeneratorRepositoryImpl(DatabaseNumbersGeneratorRepository numbersGeneratorRepository) {
+    NumbersGeneratorImpl(NumbersGeneratorRepository numbersGeneratorRepository) {
         this.numbersGeneratorRepository = numbersGeneratorRepository;
     }
 

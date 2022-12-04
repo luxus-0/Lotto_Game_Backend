@@ -18,7 +18,7 @@ public class NumberReceiverFacade {
     private final DateTimeDrawGenerator dateTimeGenerator;
     private final UUIDGenerator uuidGenerator;
 
-    public NumberReceiverFacade(NumbersReceiverValidator numberValidator,InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository, DateTimeDrawGenerator dateTimeGenerator, UUIDGenerator uuidGenerator) {
+    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository, DateTimeDrawGenerator dateTimeGenerator, UUIDGenerator uuidGenerator) {
         this.numberValidator = numberValidator;
         this.inMemoryNumberReceiverRepository = inMemoryNumberReceiverRepository;
         this.dateTimeGenerator = dateTimeGenerator;
