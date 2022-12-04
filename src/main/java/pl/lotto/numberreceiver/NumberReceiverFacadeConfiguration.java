@@ -7,11 +7,11 @@ import java.time.Clock;
 
 @Configuration
 class NumberReceiverFacadeConfiguration {
-    NumberReceiverFacade createModuleForTests(InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository, Clock clock) {
+    NumberReceiverFacade createModuleForTests(Clock clock) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
         DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
         UUIDGenerator uuidGenerator = new UUIDGenerator();
-        return new NumberReceiverFacade(numbersReceiverValidator, inMemoryNumberReceiverRepository, dateTimeDrawGenerator, uuidGenerator);
+        return new NumberReceiverFacade(numbersReceiverValidator, dateTimeDrawGenerator, uuidGenerator);
     }
 
     @Bean
