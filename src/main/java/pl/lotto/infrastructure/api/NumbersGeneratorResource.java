@@ -11,11 +11,11 @@ import pl.lotto.numbersgenerator.dto.WinningNumbersDto;
 import java.util.Set;
 
 @RestController
-class InMemoryNumbersGeneratorResource {
+class NumbersGeneratorResource {
 
     private final NumbersGeneratorFacade numbersGeneratorFacade;
 
-    InMemoryNumbersGeneratorResource(NumbersGeneratorFacade numbersGeneratorFacade) {
+    NumbersGeneratorResource(NumbersGeneratorFacade numbersGeneratorFacade) {
         this.numbersGeneratorFacade = numbersGeneratorFacade;
     }
 
