@@ -1,11 +1,14 @@
 package pl.lotto.numberreceiver;
 
+import org.springframework.stereotype.Service;
+
 import java.time.Clock;
 import java.time.LocalDateTime;
 
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.temporal.TemporalAdjusters.next;
 
+@Service
 class DateTimeDrawGenerator {
 
     private final Clock clock;

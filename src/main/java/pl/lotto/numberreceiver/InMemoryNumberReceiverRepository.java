@@ -1,10 +1,13 @@
 package pl.lotto.numberreceiver;
 
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Service
 class InMemoryNumberReceiverRepository implements NumberReceiverRepository {
     private final Map<UUID, UserNumbers> inMemoryUserNumbers = new ConcurrentHashMap<>();
     private final DateTimeDrawGenerator dateTimeDraw;
