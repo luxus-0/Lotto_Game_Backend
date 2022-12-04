@@ -45,6 +45,4 @@ public class NumberReceiverFacade {
         UserNumbers saveUserNumbers = inMemoryNumberReceiverRepository.save(userNumbers);
         return new AllUsersNumbersDto(List.of(new UserNumbersDto(saveUserNumbers.uuid(), saveUserNumbers.numbersFromUser(), saveUserNumbers.dateTimeDraw())));
     }
-
-
 }
