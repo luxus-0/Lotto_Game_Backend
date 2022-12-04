@@ -29,7 +29,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
         //when
         ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
 
@@ -44,7 +44,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         ResultsLottoDto resultWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
@@ -59,7 +59,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         ResultsLottoDto resultsWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
@@ -75,7 +75,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 88, 31);
 
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         String resultMessageWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).message();
@@ -90,7 +90,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(1, 2, 3);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
@@ -107,7 +107,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
 
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         LocalDateTime resultDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
@@ -123,7 +123,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(25, 78, 94, 11, 34, 45);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         String actualWinnersMessage = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).message();
@@ -138,7 +138,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
@@ -155,7 +155,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
@@ -171,7 +171,7 @@ class ResultsCheckerFacadeTest {
         LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 15, 12, 0);
 
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests(clock);
+                .createModuleForTests();
 
         //when
         LocalDateTime resultWinnerDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();

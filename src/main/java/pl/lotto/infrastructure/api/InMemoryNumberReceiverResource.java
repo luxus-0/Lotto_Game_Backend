@@ -13,23 +13,23 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @RestController
-class NumberReceiverApi {
+class InMemoryNumberReceiverResource {
 
     private final NumberReceiverFacade numberReceiverFacade;
 
-    NumberReceiverApi(NumberReceiverFacade numberReceiverFacade) {
+    InMemoryNumberReceiverResource(NumberReceiverFacade numberReceiverFacade) {
         this.numberReceiverFacade = numberReceiverFacade;
     }
 
-    @GetMapping("/input_numbers")
+    @GetMapping("/numbers")
     ResponseEntity<NumberReceiverDto> inputNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
-        NumberReceiverDto numberReceiverResponse = numberReceiverFacade.inputNumbers(responseNumbers);
-        return new ResponseEntity<>(numberReceiverResponse, HttpStatus.OK);
+        NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(responseNumbers);
+        return new ResponseEntity<>(numberReceiver, HttpStatus.OK);
     }
 
-    @GetMapping("/users_numbers")
-    ResponseEntity<AllUsersNumbersDto> usersNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
+    @GetMapping("/users")
+    ResponseEntity<AllUsersNumbersDto> readUsers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
         AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseNumbers, responseDateTime);

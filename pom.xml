@@ -59,9 +59,5 @@
             <version>1.18.24</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-        </dependency>
     </dependencies>
 </project>

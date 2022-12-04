@@ -7,12 +7,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-class DatabaseNumberReceiverRepositoryImpl {
+class NumberReceiverRepositoryImpl {
 
-    private final DatabaseNumberReceiverRepository databaseNumberReceiverRepository;
+    private final NumberReceiverRepository databaseNumberReceiverRepository;
 
-    DatabaseNumberReceiverRepositoryImpl(DatabaseNumberReceiverRepository databaseNumberReceiverRepository) {
-        this.databaseNumberReceiverRepository = databaseNumberReceiverRepository;
+    NumberReceiverRepositoryImpl(NumberReceiverRepository numberReceiverRepository) {
+        this.databaseNumberReceiverRepository = numberReceiverRepository;
     }
 
     UserNumbers findUserByDateTime(LocalDateTime dateTime) {

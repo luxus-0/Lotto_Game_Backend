@@ -1,5 +1,6 @@
 package pl.lotto.numbersgenerator;
 
+import org.springframework.stereotype.Service;
 import pl.lotto.numbersgenerator.dto.WinningNumbersDto;
 
 import java.util.Random;
@@ -9,6 +10,7 @@ import java.util.stream.IntStream;
 
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.winningNumbersNotFound;
 
+@Service
 public class NumbersGeneratorFacade {
 
     private static final Integer MIN_NUMBER = 1;

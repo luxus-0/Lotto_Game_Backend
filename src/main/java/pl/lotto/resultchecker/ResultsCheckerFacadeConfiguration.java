@@ -1,10 +1,13 @@
 package pl.lotto.resultchecker;
 
-import java.time.Clock;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 class ResultsCheckerFacadeConfiguration {
-    ResultsCheckerFacade createModuleForTests(Clock clock) {
-        ResultsCheckerValidator resultsCheckerValidator = new ResultsCheckerValidator();
-        return new ResultsCheckerFacade(resultsCheckerValidator, clock);
+    ResultsCheckerFacade createModuleForTests() {
+        NumbersGenerator numbersGenerator = new NumbersGenerator();
+        ResultsCheckerValidator resultsCheckerValidator = new ResultsCheckerValidator(numbersGenerator);
+        ResultsCheckerRepository resultsCheckerRepository = new InMemoryResultsCheckerRepository();
+        return new ResultsCheckerFacade(resultsCheckerValidator, resultsCheckerRepository);
     }
 }

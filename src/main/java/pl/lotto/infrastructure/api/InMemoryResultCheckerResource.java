@@ -14,11 +14,11 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-class ResultCheckerApi {
+class InMemoryResultCheckerResource {
 
     private final ResultsCheckerFacade resultsCheckerFacade;
 
-    ResultCheckerApi(ResultsCheckerFacade resultsCheckerFacade) {
+    InMemoryResultCheckerResource(ResultsCheckerFacade resultsCheckerFacade) {
         this.resultsCheckerFacade = resultsCheckerFacade;
     }
 

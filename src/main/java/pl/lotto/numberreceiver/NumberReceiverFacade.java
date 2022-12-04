@@ -14,16 +14,17 @@ import java.util.UUID;
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
-    private final NumberReceiverRepository numberReceiverRepository;
+    private final InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository;
     private final DateTimeDrawGenerator dateTimeGenerator;
     private final UUIDGenerator uuidGenerator;
 
-    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepository numberReceiverRepository, DateTimeDrawGenerator dateTimeGenerator) {
+    public NumberReceiverFacade(NumbersReceiverValidator numberValidator,InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository, DateTimeDrawGenerator dateTimeGenerator, UUIDGenerator uuidGenerator) {
         this.numberValidator = numberValidator;
-        this.numberReceiverRepository = numberReceiverRepository;
+        this.inMemoryNumberReceiverRepository = inMemoryNumberReceiverRepository;
         this.dateTimeGenerator = dateTimeGenerator;
-        this.uuidGenerator = new UUIDGenerator();
+        this.uuidGenerator = uuidGenerator;
     }
+
 
     public NumberReceiverDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
@@ -33,15 +34,15 @@ public class NumberReceiverFacade {
         UUID uuid = uuidGenerator.generateUUID();
         LocalDateTime dateTimeDraw = dateTimeGenerator.generateNextDrawDate();
         UserNumbers userNumbers = new UserNumbers(uuid, numbersFromUser, dateTimeDraw);
-        UserNumbers savedUserNumbers = numberReceiverRepository.save(userNumbers);
+        UserNumbers savedUserNumbers = inMemoryNumberReceiverRepository.save(userNumbers);
         return new NumberReceiverDto(savedUserNumbers.uuid(), savedUserNumbers.numbersFromUser(), savedUserNumbers.dateTimeDraw());
     }
 
     public AllUsersNumbersDto usersNumbers(Set<Integer> numbersInput, LocalDateTime dateTimeDraw) {
         UUID uuid = uuidGenerator.generateUUID();
-        LocalDateTime dateTime = numberReceiverRepository.findByDate(dateTimeDraw);
+        LocalDateTime dateTime = inMemoryNumberReceiverRepository.findByDate(dateTimeDraw);
         UserNumbers userNumbers = new UserNumbers(uuid, numbersInput, dateTime);
-        UserNumbers saveUserNumbers = numberReceiverRepository.save(userNumbers);
+        UserNumbers saveUserNumbers = inMemoryNumberReceiverRepository.save(userNumbers);
         return new AllUsersNumbersDto(List.of(new UserNumbersDto(saveUserNumbers.uuid(), saveUserNumbers.numbersFromUser(), saveUserNumbers.dateTimeDraw())));
     }
 }

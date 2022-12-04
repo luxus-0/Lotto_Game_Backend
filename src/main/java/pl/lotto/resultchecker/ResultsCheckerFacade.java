@@ -1,8 +1,8 @@
 package pl.lotto.resultchecker;
 
+import org.springframework.stereotype.Service;
 import pl.lotto.resultchecker.dto.ResultsLottoDto;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -10,16 +10,16 @@ import java.util.UUID;
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 
+@Service
 public class ResultsCheckerFacade {
     private final ResultsCheckerValidator resultsValidator;
     private final ResultsCheckerRepository resultsCheckerRepository;
-    Clock clock;
 
-    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator, Clock clock) {
+    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator, ResultsCheckerRepository resultsCheckerRepository) {
         this.resultsValidator = resultsValidator;
-        this.resultsCheckerRepository = new InMemoryResultsCheckerRepository();
-        this.clock = clock;
+        this.resultsCheckerRepository = resultsCheckerRepository;
     }
+
 
     public ResultsLottoDto getWinnerNumbers(Set<Integer> userNumbers, LocalDateTime dateTimeDraw) {
         return userNumbers.stream()
