@@ -22,7 +22,6 @@ class NumberReceiverFacadeTest {
 
     Clock clock = Clock.systemUTC();
     DateTimeDrawGenerator dateTimeDraw = new DateTimeDrawGenerator(clock);
-    InMemoryNumberReceiverRepository numberReceiverRepository = new InMemoryNumberReceiverImpl(dateTimeDraw);
 
     @Test
     @DisplayName("return success when user gave six numbers")
