@@ -20,9 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class NumberReceiverFacadeTest {
 
-    Clock clock = Clock.systemUTC();
-    DateTimeDrawGenerator dateTimeDraw = new DateTimeDrawGenerator(clock);
-
     @Test
     @DisplayName("return success when user gave six numbers")
     public void should_return_success_when_user_gave_six_numbers() {
