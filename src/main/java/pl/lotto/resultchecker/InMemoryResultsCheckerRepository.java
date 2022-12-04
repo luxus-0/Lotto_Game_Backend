@@ -1,5 +1,7 @@
 package pl.lotto.resultchecker;
 
+import org.springframework.stereotype.Service;
+
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.SIZE_NUMBERS;
 
+@Service
 class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
     private final Map<UUID, ResultsLotto> databaseInMemory = new ConcurrentHashMap<>();
     Clock clock;

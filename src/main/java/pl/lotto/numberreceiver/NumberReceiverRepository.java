@@ -1,11 +1,12 @@
 package pl.lotto.numberreceiver;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public interface NumberReceiverRepository extends Repository<UserNumbers, UUID> {
+@Repository
+public interface NumberReceiverRepository {
     <S extends UserNumbers> S save(S entity);
 
     LocalDateTime findByDate(LocalDateTime dateTime);
