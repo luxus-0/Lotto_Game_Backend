@@ -15,7 +15,7 @@ class NumberReceiverFacadeConfiguration {
     }
 
     @Bean
-    Clock clock(){
+    Clock clock() {
         return Clock.systemDefaultZone();
     }
 }
