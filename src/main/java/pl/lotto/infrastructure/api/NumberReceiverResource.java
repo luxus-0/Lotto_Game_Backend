@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 import pl.lotto.numberreceiver.dto.AllUsersNumbersDto;
 import pl.lotto.numberreceiver.dto.NumberReceiverDto;
+import pl.lotto.numberreceiver.dto.UserNumbersDto;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 class NumberReceiverResource {
@@ -34,5 +36,14 @@ class NumberReceiverResource {
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
         AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseNumbers, responseDateTime);
         return new ResponseEntity<>(allUsersNumbersDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{dateTime}")
+    UserNumbersDto findUser(LocalDateTime dateTime) {
+        return numberReceiverFacade.readUserByDateTime(dateTime);
+    }
+
+    UserNumbersDto findUser(UUID uuid) {
+        return numberReceiverFacade.readUserByUUID(uuid);
     }
 }

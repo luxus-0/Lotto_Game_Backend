@@ -7,11 +7,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-class NumberReceiverImpl {
+class NumberReceiverRepositoryImpl {
 
     private final NumberReceiverRepository databaseNumberReceiverRepository;
 
-    NumberReceiverImpl(NumberReceiverRepository numberReceiverRepository) {
+    NumberReceiverRepositoryImpl(NumberReceiverRepository numberReceiverRepository) {
         this.databaseNumberReceiverRepository = numberReceiverRepository;
     }
 

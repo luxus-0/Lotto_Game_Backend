@@ -1,21 +1,17 @@
 package pl.lotto.numberreceiver;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.Clock;
 
 @Configuration
 class NumberReceiverFacadeConfiguration {
-    NumberReceiverFacade createModuleForTests(Clock clock) {
+    NumberReceiverFacade createModuleForTests(Clock clock, InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository, NumberReceiverRepository numberReceiverRepository) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
         DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
         UUIDGenerator uuidGenerator = new UUIDGenerator();
-        return new NumberReceiverFacade(numbersReceiverValidator, dateTimeDrawGenerator, uuidGenerator);
+        return new NumberReceiverFacade(numbersReceiverValidator,inMemoryNumberReceiverRepository, numberReceiverRepository, dateTimeDrawGenerator, uuidGenerator);
     }
 
-    @Bean
-    Clock clock() {
-        return Clock.systemDefaultZone();
-    }
+
 }
