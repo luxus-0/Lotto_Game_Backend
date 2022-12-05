@@ -3,6 +3,7 @@ package pl.lotto.infrastructure.api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
@@ -32,18 +33,20 @@ class NumberReceiverResource {
 
     @GetMapping("/users")
     ResponseEntity<AllUsersNumbersDto> readUsers(@RequestBody NumberReceiverDto numberReceiverDto) {
-        Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
         AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseDateTime);
         return new ResponseEntity<>(allUsersNumbersDto, HttpStatus.OK);
     }
 
     @GetMapping("/user/{dateTime}")
-    UserNumbersDto findUser(LocalDateTime dateTime) {
-        return numberReceiverFacade.readUserByDateTime(dateTime);
+    ResponseEntity<UserNumbersDto> findUser(@PathVariable LocalDateTime dateTime) {
+        UserNumbersDto userNumbersDto = numberReceiverFacade.readUserByDateTime(dateTime);
+        return ResponseEntity.ok(userNumbersDto);
     }
 
-    UserNumbersDto findUser(UUID uuid) {
-        return numberReceiverFacade.readUserByUUID(uuid);
+    @GetMapping("/user/{uuid}")
+    ResponseEntity<UserNumbersDto> findUser(@PathVariable UUID uuid) {
+        UserNumbersDto userNumbersDto = numberReceiverFacade.readUserByUUID(uuid);
+        return new ResponseEntity<>(userNumbersDto, HttpStatus.OK);
     }
 }
