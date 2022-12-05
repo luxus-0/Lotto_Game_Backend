@@ -6,11 +6,11 @@ import java.time.Clock;
 
 @Configuration
 class NumberReceiverFacadeConfiguration {
-    NumberReceiverFacade createModuleForTests(Clock clock, InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository, NumberReceiverRepository numberReceiverRepository) {
+    NumberReceiverFacade createModuleForTests(Clock clock, NumberReceiverRepositoryImpl numberReceiverRepositoryImpl) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
         DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
         UUIDGenerator uuidGenerator = new UUIDGenerator();
-        return new NumberReceiverFacade(numbersReceiverValidator,inMemoryNumberReceiverRepository, numberReceiverRepository, dateTimeDrawGenerator, uuidGenerator);
+        return new NumberReceiverFacade(numbersReceiverValidator, numberReceiverRepositoryImpl, dateTimeDrawGenerator, uuidGenerator);
     }
 
 

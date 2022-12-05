@@ -9,20 +9,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
     private final InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository;
-    private final NumberReceiverRepository numberReceiverRepository;
+    private final NumberReceiverRepositoryImpl numberReceiverRepository;
     private final DateTimeDrawGenerator dateTimeGenerator;
     private final UUIDGenerator uuidGenerator;
 
-    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository, NumberReceiverRepository numberReceiverRepository, DateTimeDrawGenerator dateTimeGenerator, UUIDGenerator uuidGenerator) {
+    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, NumberReceiverRepositoryImpl numberReceiverRepositoryImpl, DateTimeDrawGenerator dateTimeGenerator, UUIDGenerator uuidGenerator) {
         this.numberValidator = numberValidator;
-        this.inMemoryNumberReceiverRepository = inMemoryNumberReceiverRepository;
-        this.numberReceiverRepository = numberReceiverRepository;
+        this.inMemoryNumberReceiverRepository = new InMemoryNumberReceiverImpl();
+        this.numberReceiverRepository = new NumberReceiverRepositoryImpl();
         this.dateTimeGenerator = dateTimeGenerator;
         this.uuidGenerator = uuidGenerator;
     }
@@ -49,17 +50,18 @@ public class NumberReceiverFacade {
     }
 
     public UserNumbersDto readUserByDateTime(LocalDateTime dateTime) {
-        return numberReceiverRepository.findAll()
-                .stream()
-                .filter(user -> user.dateTimeDraw().equals(dateTime))
-                .map(user -> new UserNumbersDto(user.uuid(), user.numbersFromUser(), user.dateTimeDraw()))
+        UserNumbers userNumbers = numberReceiverRepository.findUserByDateTime(dateTime);
+        return Stream.of(userNumbers)
+                .map(dto -> new UserNumbersDto(userNumbers.uuid(), userNumbers.numbersFromUser(), userNumbers.dateTimeDraw()))
                 .findAny()
                 .orElseThrow();
     }
 
     public UserNumbersDto readUserByUUID(UUID uuid) {
-        return numberReceiverRepository.findById(uuid)
-                .map(user -> new UserNumbersDto(user.uuid(), user.numbersFromUser(), user.dateTimeDraw()))
+        UserNumbers userNumbers = numberReceiverRepository.findUserByUUID(uuid);
+        return Stream.of(new UserNumbersDto(userNumbers.uuid(), userNumbers.numbersFromUser(), userNumbers.dateTimeDraw()))
+                .filter(user -> user.uuid() != null && user.userNumbersInput() != null && user.date() != null)
+                .findAny()
                 .orElse(null);
     }
 }

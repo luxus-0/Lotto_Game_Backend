@@ -1,22 +1,18 @@
 package pl.lotto.numberreceiver;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-@Service
+@Component
 class NumberReceiverRepositoryImpl {
 
-    private final NumberReceiverRepository databaseNumberReceiverRepository;
-
-    NumberReceiverRepositoryImpl(NumberReceiverRepository numberReceiverRepository) {
-        this.databaseNumberReceiverRepository = numberReceiverRepository;
-    }
+    NumberReceiverRepository numberReceiverRepository;
 
     UserNumbers findUserByDateTime(LocalDateTime dateTime) {
-        return databaseNumberReceiverRepository.findAll()
+        return numberReceiverRepository.findAll()
                 .stream()
                 .filter(Objects::nonNull)
                 .filter(user -> user.dateTimeDraw().equals(dateTime))
@@ -25,7 +21,7 @@ class NumberReceiverRepositoryImpl {
     }
 
     UserNumbers findUserByUUID(UUID uuid) {
-        return databaseNumberReceiverRepository.findAll()
+        return numberReceiverRepository.findAll()
                 .stream()
                 .filter(Objects::nonNull)
                 .filter(user -> user.uuid().equals(uuid))
