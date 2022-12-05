@@ -34,7 +34,7 @@ class NumberReceiverResource {
     ResponseEntity<AllUsersNumbersDto> readUsers(@RequestBody NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
-        AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseNumbers, responseDateTime);
+        AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseDateTime);
         return new ResponseEntity<>(allUsersNumbersDto, HttpStatus.OK);
     }
 

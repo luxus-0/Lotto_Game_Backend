@@ -1,13 +1,16 @@
 package pl.lotto.numberreceiver;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 class InMemoryNumberReceiverImpl implements InMemoryNumberReceiverRepository {
     private final Map<UUID, UserNumbers> inMemoryUserNumbers = new ConcurrentHashMap<>();
-    DateTimeDrawGenerator dateTimeDraw;
+    Clock clock = Clock.systemDefaultZone();
+    DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
 
     @Override
     public <S extends UserNumbers> S save(S entity) {
@@ -16,14 +19,13 @@ class InMemoryNumberReceiverImpl implements InMemoryNumberReceiverRepository {
     }
 
     @Override
-    public LocalDateTime findByDate(LocalDateTime dateTime) {
-        LocalDateTime drawDate = dateTimeDraw.generateNextDrawDate();
-        return inMemoryUserNumbers.values()
-                .stream()
-                .map(UserNumbers::dateTimeDraw)
-                .filter(dateTimeDraw -> dateTime.equals(drawDate))
-                .findAny()
-                .orElse(dateTime);
+    public UserNumbers findByDate(LocalDateTime dateTime) {
+        UUID uuid = UUID.randomUUID();
+        LocalDateTime localDateTime = dateTimeDrawGenerator.generateNextDrawDate();
+        if(dateTime != null) {
+            return new UserNumbers(uuid, Set.of(), localDateTime);
+        }
+        return new UserNumbers(null, null, null);
     }
 
     @Override
