@@ -16,6 +16,11 @@ public class NumbersGeneratorFacade {
     private static final Integer MIN_NUMBER = 1;
     private static final Integer MAX_NUMBER = 99;
 
+    private final NumbersGeneratorValidator numbersGeneratorValidator;
+
+    public NumbersGeneratorFacade(NumbersGeneratorValidator numbersGeneratorValidator) {
+        this.numbersGeneratorValidator = numbersGeneratorValidator;
+    }
 
     public Set<Integer> generateLottoNumbers() {
         return IntStream.rangeClosed(MIN_NUMBER, MAX_NUMBER)
@@ -26,8 +31,10 @@ public class NumbersGeneratorFacade {
 
     public WinningNumbersDto showWinnerNumbers() {
         Set<Integer> lottoNumbers = generateLottoNumbers();
-        for (Integer lottoNumber : lottoNumbers) {
-            return new WinningNumbersDto(Set.of(lottoNumber));
+        if (numbersGeneratorValidator.valid(lottoNumbers)) {
+            for (Integer lottoNumber : lottoNumbers) {
+                return new WinningNumbersDto(Set.of(lottoNumber));
+            }
         }
         winningNumbersNotFound();
         return new WinningNumbersDto(Set.of(0));

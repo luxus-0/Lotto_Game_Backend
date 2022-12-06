@@ -13,7 +13,8 @@ import java.util.Set;
 import static java.time.Month.DECEMBER;
 import static java.time.Month.SEPTEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
 import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
 
@@ -112,8 +113,8 @@ class ResultsCheckerFacadeTest {
         //when
         LocalDateTime resultDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
         //then
-       LocalDateTime expectedDateTime = LocalDateTime.of(2022, SEPTEMBER, 7, 12, 0);
-       assertNotEquals(resultDateTime, expectedDateTime);
+        LocalDateTime expectedDateTime = LocalDateTime.of(2022, SEPTEMBER, 7, 12, 0);
+        assertNotEquals(resultDateTime, expectedDateTime);
     }
 
     @Test

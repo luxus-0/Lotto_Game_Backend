@@ -22,7 +22,7 @@ class InMemoryNumberReceiverImpl implements InMemoryNumberReceiverRepository {
     public UserNumbers findByDate(LocalDateTime dateTime) {
         UUID uuid = UUID.randomUUID();
         LocalDateTime localDateTime = dateTimeDrawGenerator.generateNextDrawDate();
-        if(dateTime != null) {
+        if (dateTime != null) {
             return new UserNumbers(uuid, Set.of(), localDateTime);
         }
         return new UserNumbers(null, null, null);
