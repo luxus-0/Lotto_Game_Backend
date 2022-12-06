@@ -13,7 +13,7 @@ services:
       - ./database-data:/data/db
 
   mongodb-express:
-    image: mongo-express:latest
+    image: mongodb-express:latest
     container_name: mongodb-express
     restart: unless-stopped
     ports:
