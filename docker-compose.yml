@@ -1,24 +1,24 @@
-# Use root/example as user/password credentials
-version: '3.1'
-
+version: '3.8'
 services:
-  # actual database image
-  mongo:
-    image: mongo
-    restart: always
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: lukasz
-      MONGO_INITDB_ROOT_PASSWORD: lukasz
-      MONGO_INITDB_DATABASE: lotto
-  # web access point service, for created mongo db
-  mongo-express:
-    image: mongo-express
-    restart: always  #restart the container regardless of the exit status
+    volumes:
+      - ./database-data:/data/db
+
+  mongodb-express:
+    image: mongo-express:latest
+    container_name: mongodb-express
+    restart: unless-stopped
     ports:
-      - "8080:8080"  # port forwarding
+      - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: lukasz
-      ME_CONFIG_MONGODB_ADMINPASSWORD: lukasz
-      ME_CONFIG_MONGODB_URL: mongodb://localhost:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_SERVER: mongodb
