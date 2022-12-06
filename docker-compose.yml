@@ -1,0 +1,24 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  # actual database image
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lukasz
+      MONGO_INITDB_ROOT_PASSWORD: lukasz
+      MONGO_INITDB_DATABASE: lotto
+  # web access point service, for created mongo db
+  mongo-express:
+    image: mongo-express
+    restart: always  #restart the container regardless of the exit status
+    ports:
+      - "8080:8080"  # port forwarding
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: lukasz
+      ME_CONFIG_MONGODB_ADMINPASSWORD: lukasz
+      ME_CONFIG_MONGODB_URL: mongodb://localhost:27017/
