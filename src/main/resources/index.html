@@ -41,13 +41,22 @@
 <button>Generate</button>
 <script>
             const result = [];
+
             const generateRandomNumber = function(){
                 if(result.length === 6) return;
 
+                const resultLotto = Math.floor(Math.random() * 99 + 1);
+
+                for(let i = 0; i < result.length; i++){
+                    if(resultLotto === result[i]){
+                        return generateRandomNumber()
+                    }
+                }
+
                 const div = document.createElement("div");
-                div.textContent = Math.floor(Math.random() * 99 + 1);
-                document.body.appendChild(div)
+                div.textContent = resultLotto;
                 result.push(div);//dodajemy do tablicy wyników
+                document.body.appendChild(div)
             }
 
             const button = document.querySelector("button");
