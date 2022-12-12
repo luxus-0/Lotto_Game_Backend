@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate random numbers</title>
+    <style>
+            html {
+                font-family: arial;
+            }
+
+            button {
+                display: block;
+                margin: auto;
+                background-color: #fff;
+                border: 3px solid black;
+                padding: 10px 20px;
+                font-size: 20px;
+                transition: .3s;
+            }
+
+            button:hover {
+                background-color: #000;
+                color: white;
+            }
+
+            div {
+                float: left;
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                background-color: cornflowerblue;
+                margin: 10px;
+                line-height: 60px;
+                text-align: center;
+                font-weight: bold;
+                color: white;
+            }
+        </style>
+</head>
+<body>
+<button>Generate</button>
+<script>
+            const result = [];
+            const generateRandomNumber = function(){
+                if(result.length === 6) return;
+
+                const div = document.createElement("div");
+                div.textContent = Math.floor(Math.random() * 99 + 1);
+                document.body.appendChild(div)
+                result.push(div);//dodajemy do tablicy wyników
+            }
+
+            const button = document.querySelector("button");
+            button.addEventListener("click", generateRandomNumber)
+        </script>
+</body>
+</html>
