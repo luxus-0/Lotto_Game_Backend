@@ -2,9 +2,10 @@ package pl.lotto.numbersgenerator;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-@Document(collection = "numbers_generator")
-record NumbersGenerator(UUID uuid, Set<Integer> lottoNumbers) {
+@Document
+record NumbersGenerator(UUID uuid, Set<Integer> lottoNumbers, LocalDateTime dateTimeDraw) {
 }
