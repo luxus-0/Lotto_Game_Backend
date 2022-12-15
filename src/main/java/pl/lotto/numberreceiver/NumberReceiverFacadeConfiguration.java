@@ -12,6 +12,4 @@ class NumberReceiverFacadeConfiguration {
         UUIDGenerator uuidGenerator = new UUIDGenerator();
         return new NumberReceiverFacade(numbersReceiverValidator, dateTimeDrawGenerator, uuidGenerator);
     }
-
-
 }
