@@ -10,7 +10,7 @@ public class NumbersLottoNotFoundException extends RuntimeException {
 
     private final static String errorMessage = "Lotto numbers not found";
 
-    public NumbersLottoNotFoundException(){
-       log.info(errorMessage);
+    public NumbersLottoNotFoundException() {
+        log.info(errorMessage);
     }
 }
