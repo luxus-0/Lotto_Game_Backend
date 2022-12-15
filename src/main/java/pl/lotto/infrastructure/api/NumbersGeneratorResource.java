@@ -1,14 +1,14 @@
 package pl.lotto.infrastructure.api;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import pl.lotto.numbersgenerator.NumbersGeneratorFacade;
 import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 import pl.lotto.numbersgenerator.dto.WinningNumbersDto;
 
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 class NumbersGeneratorResource {
@@ -20,15 +20,14 @@ class NumbersGeneratorResource {
     }
 
     @GetMapping("/lotto_numbers")
-    @ResponseStatus(HttpStatus.OK)
-    LottoNumbersDto readLottoNumbers() {
+    ResponseEntity<LottoNumbersDto> readLottoNumbers() {
+        UUID uuid = UUID.randomUUID();
         Set<Integer> randomNumbersLotto = numbersGeneratorFacade.generateLottoNumbers();
-        return new LottoNumbersDto(randomNumbersLotto);
+        return ResponseEntity.ok(new LottoNumbersDto(uuid, randomNumbersLotto));
     }
 
     @GetMapping("/winner_numbers")
-    @ResponseStatus(HttpStatus.OK)
-    WinningNumbersDto printWinnerNumbers() {
-        return numbersGeneratorFacade.showWinnerNumbers();
+    ResponseEntity<WinningNumbersDto> printWinnerNumbers() {
+        return ResponseEntity.ok(numbersGeneratorFacade.showWinnerNumbers());
     }
 }

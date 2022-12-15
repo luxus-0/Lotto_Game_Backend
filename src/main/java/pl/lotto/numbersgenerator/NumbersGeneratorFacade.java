@@ -19,11 +19,11 @@ public class NumbersGeneratorFacade {
     private static final Integer MAX_NUMBER = 99;
 
     private final NumbersGeneratorValidator numbersGeneratorValidator;
-    private final NumbersGeneratorRepository numbersGeneratorRepository;
+    private final NumbersGeneratorRepositoryImpl numbersGeneratorRepositoryImpl;
 
-    public NumbersGeneratorFacade(NumbersGeneratorValidator numbersGeneratorValidator, NumbersGeneratorRepository numbersGeneratorRepository) {
+    public NumbersGeneratorFacade(NumbersGeneratorValidator numbersGeneratorValidator, NumbersGeneratorRepositoryImpl numbersGeneratorRepositoryImpl) {
         this.numbersGeneratorValidator = numbersGeneratorValidator;
-        this.numbersGeneratorRepository = numbersGeneratorRepository;
+        this.numbersGeneratorRepositoryImpl = numbersGeneratorRepositoryImpl;
     }
 
     public Set<Integer> generateLottoNumbers() {
@@ -45,20 +45,14 @@ public class NumbersGeneratorFacade {
     }
 
     public LottoNumbersDto findNumbersGeneratorById(UUID uuid) {
-        return numbersGeneratorRepository.findById(uuid)
-                .map(NumbersGeneratorMapper::toDto)
-                .orElseThrow(IllegalArgumentException::new);
+        return numbersGeneratorRepositoryImpl.searchByUUID(uuid);
     }
 
-    public LottoNumbersDto findNumbersGenerator() {
-        return numbersGeneratorRepository.findAll()
-                .stream()
-                .map(NumbersGeneratorMapper::toDto)
-                .findAny()
-                .orElse(null);
+    public LottoNumbersDto findNumbersGenerator(UUID id) {
+        return numbersGeneratorRepositoryImpl.searchByUUID(id);
     }
 
-    public NumbersGenerator createNumbersGenerator(NumbersGenerator numbersGenerator) {
-        return numbersGeneratorRepository.save(numbersGenerator);
+    public LottoNumbersDto createNumbersGenerator(NumbersGenerator numbersGenerator) {
+        return numbersGeneratorRepositoryImpl.createLottoNumbers(numbersGenerator);
     }
 }

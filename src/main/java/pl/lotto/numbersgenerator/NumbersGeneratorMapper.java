@@ -4,6 +4,6 @@ import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 
 class NumbersGeneratorMapper {
     static LottoNumbersDto toDto(NumbersGenerator numbersGenerator) {
-        return new LottoNumbersDto(numbersGenerator.lottoNumbers());
+        return new LottoNumbersDto(numbersGenerator.uuid(), numbersGenerator.lottoNumbers());
     }
 }
