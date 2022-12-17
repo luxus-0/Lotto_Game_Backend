@@ -1,24 +1,25 @@
 version: '3.8'
 services:
   mongodb:
-    image: mongo:latest
+    image: mongo
     container_name: mongodb
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
+    restart: always
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: lotto
+      MONGO_INITDB_ROOT_USERNAME: lukasz
+      MONGO_INITDB_ROOT_PASSWORD: lukasz1986
     volumes:
       - ./database-data:/data/db
 
   mongodb-express:
     image: mongodb-express:latest
     container_name: mongodb-express
-    restart: unless-stopped
+    restart: always
     ports:
       - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_ADMINUSERNAME: lukasz
+      ME_CONFIG_MONGODB_ADMINPASSWORD: lukasz1986
       ME_CONFIG_MONGODB_SERVER: mongodb

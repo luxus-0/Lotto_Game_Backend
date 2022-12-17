@@ -1,5 +1,6 @@
 package pl.lotto.numbersgenerator;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 import pl.lotto.numbersgenerator.dto.WinningNumbersDto;
@@ -12,7 +13,7 @@ import java.util.stream.IntStream;
 
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.winningNumbersNotFound;
 
-@Service
+@Component
 public class NumbersGeneratorFacade {
 
     private static final Integer MIN_NUMBER = 1;
@@ -42,10 +43,6 @@ public class NumbersGeneratorFacade {
         }
         winningNumbersNotFound();
         return new WinningNumbersDto(Set.of(0));
-    }
-
-    public LottoNumbersDto findNumbersGeneratorById(UUID uuid) {
-        return numbersGeneratorRepositoryImpl.searchByUUID(uuid);
     }
 
     public LottoNumbersDto findNumbersGenerator(UUID id) {
