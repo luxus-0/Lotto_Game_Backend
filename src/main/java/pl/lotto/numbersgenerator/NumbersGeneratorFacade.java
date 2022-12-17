@@ -1,7 +1,6 @@
 package pl.lotto.numbersgenerator;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 import pl.lotto.numbersgenerator.dto.WinningNumbersDto;
 
@@ -18,14 +17,14 @@ public class NumbersGeneratorFacade {
 
     private static final Integer MIN_NUMBER = 1;
     private static final Integer MAX_NUMBER = 99;
-
+    private final NumbersGeneratorRepository numbersGeneratorRepository;
     private final NumbersGeneratorValidator numbersGeneratorValidator;
-    private final NumbersGeneratorRepositoryImpl numbersGeneratorRepositoryImpl;
 
-    public NumbersGeneratorFacade(NumbersGeneratorValidator numbersGeneratorValidator, NumbersGeneratorRepositoryImpl numbersGeneratorRepositoryImpl) {
+    public NumbersGeneratorFacade(NumbersGeneratorRepository numbersGeneratorRepository, NumbersGeneratorValidator numbersGeneratorValidator) {
+        this.numbersGeneratorRepository = numbersGeneratorRepository;
         this.numbersGeneratorValidator = numbersGeneratorValidator;
-        this.numbersGeneratorRepositoryImpl = numbersGeneratorRepositoryImpl;
     }
+
 
     public Set<Integer> generateLottoNumbers() {
         return IntStream.rangeClosed(MIN_NUMBER, MAX_NUMBER)
@@ -45,11 +44,10 @@ public class NumbersGeneratorFacade {
         return new WinningNumbersDto(Set.of(0));
     }
 
-    public LottoNumbersDto findNumbersGenerator(UUID id) {
-        return numbersGeneratorRepositoryImpl.searchByUUID(id);
-    }
-
-    public LottoNumbersDto createNumbersGenerator(NumbersGenerator numbersGenerator) {
-        return numbersGeneratorRepositoryImpl.createLottoNumbers(numbersGenerator);
+    public LottoNumbersDto findNumbersGenerator(NumbersGenerator numbersGenerator) {
+        return numbersGeneratorRepository
+                .findById(numbersGenerator.uuid())
+                .map(toDto -> new LottoNumbersDto(numbersGenerator.uuid(), numbersGenerator.lottoNumbers()))
+                .orElseThrow();
     }
 }

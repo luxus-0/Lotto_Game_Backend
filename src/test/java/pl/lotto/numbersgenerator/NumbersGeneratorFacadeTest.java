@@ -17,6 +17,7 @@ class NumbersGeneratorFacadeTest {
     private final Clock clock = Clock.systemDefaultZone();
     private final DateTimeDrawFacade dateTimeDrawFacade = new DateTimeDrawFacade(clock);
     private final NumbersGeneratorRepository numbersGeneratorRepository;
+    NumbersGeneratorValidator numbersGeneratorValidator = new NumbersGeneratorValidator();
 
     NumbersGeneratorFacadeTest(NumbersGeneratorRepository numbersGeneratorRepository) {
         this.numbersGeneratorRepository = numbersGeneratorRepository;
