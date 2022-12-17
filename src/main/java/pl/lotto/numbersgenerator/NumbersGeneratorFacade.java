@@ -17,8 +17,8 @@ public class NumbersGeneratorFacade {
 
     private static final Integer MIN_NUMBER = 1;
     private static final Integer MAX_NUMBER = 99;
-    private final NumbersGeneratorRepository numbersGeneratorRepository;
-    private final NumbersGeneratorValidator numbersGeneratorValidator;
+    NumbersGeneratorRepository numbersGeneratorRepository;
+    NumbersGeneratorValidator numbersGeneratorValidator;
 
     public NumbersGeneratorFacade(NumbersGeneratorRepository numbersGeneratorRepository, NumbersGeneratorValidator numbersGeneratorValidator) {
         this.numbersGeneratorRepository = numbersGeneratorRepository;
