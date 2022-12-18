@@ -1,15 +1,14 @@
 package pl.lotto.numbersgenerator;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 import pl.lotto.numbersgenerator.exception.NumbersLottoNotFoundException;
 
 import java.util.UUID;
 
-@Service
 class NumbersGeneratorRepositoryImpl {
 
-    NumbersGeneratorRepository numbersGeneratorRepository;
+    private final NumbersGeneratorRepository numbersGeneratorRepository;
 
     NumbersGeneratorRepositoryImpl(NumbersGeneratorRepository numbersGeneratorRepository) {
         this.numbersGeneratorRepository = numbersGeneratorRepository;
