@@ -1,12 +1,13 @@
-LOTTO GAME BACKEND WITH FRONTEND
+<img src="https://img.shields.io/badge/LOTTO GAME-%20brightgreen" height="50" />
 
-<img scr = "https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/Lotto_architecture.jpg">
-<img scr = "https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/Lotto_architecture2.jpg">
-
-
-> VERSION: 1.0.0 <br>
-> AUTHOR: ŁUKASZ NOWOGÓRSKI <br>
+<b>VERSION: 1.0.0<b><br>
+<b>COPYRIGHT: ŁUKASZ NOWOGÓRSKI<b><br>
 <b>MAIL: nowogorski.lukasz0@gmail.com<b>
+  
+  <video src='https://drive.google.com/file/d/1W2HGDkcdbiQxd1mT6tkTnVb8yd9NmkX3/view?usp=sharing' width=180/>
+
+![alt text](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Lotto_architecture2.jpg?raw=true)
+![alt text](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Lotto_architecture.jpg?raw=true)
 
 ## Specification
 
@@ -49,19 +50,22 @@ NOT FINISHED YET
 ## Installation and run
 [Docker](https://www.docker.com/products/docker-desktop/) to run.
   
--Dockerfile **[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile/DockerFile)** 
- Run DockerFile generate Jar file.
+-[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile/DockerFile)
+ Run DockerFile generate Jar file.<br>
 
--Docker-compose **[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml)** 
- RUN IN Powershell or IntelliJ command -> docker compose-up
+-[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml) 
+ RUN IN Powershell or IntelliJ command -> docker compose-up<br>
   
+After that build a container docker.<br><br>
 
-After that build a container docker.
-
-## Rest-API Endpoints
-
-We have two endpoints: 
-1.Input numbers from user
-2.Result lotto search by UUID
-
-GO TO PATH WITH REST API -> https://github.com/kalqa/LukaszLottoExcelent/tree/master/src/main/java/pl/lotto/infrastructure/api
+<div style="text-align:center">
+  <img src="https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
+  <br><br>
+  <div>
+<ul>
+  <li><a href="http://localhost:8080/numbers" target="_blank" title="INPUT NUMBERS FOR USER">INPUT NUMBERS</a></li>
+  <li> <a href="http://localhost:8080/users" target="_blank" title="READ ALL USERS LOTTO">READ USERS</a></li>
+  <li><a href="http://localhost:8080/winners" target="_blank" title="READ WINNERS LOTTO">WINNERS</a></li>
+  <li><a href="http://localhost:8080/winners/{UUID}" target="_blank" title="READ WINNERS BY UUID">WINNERS/{ID}</a>   </li>
+</ul>
+</div>
