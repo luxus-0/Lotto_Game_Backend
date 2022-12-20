@@ -46,13 +46,15 @@ Front:<br>
 NOT FINISHED YET
 
 ## Installation and run
+[Docker](https://www.docker.com/products/docker-desktop/) to run.
+  
+-Dockerfile **[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile/DockerFile)** 
+ Run DockerFile generate Jar file.
 
-Lotto|Web requires [Docker](https://www.docker.com/products/docker-desktop/) to run.
-Both Winning Numbers microservice and main application (Lottery|Web) are pushed as an images into the Docker Hub.
-Docker-compose file **[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml)** 
-Dockerfile **[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile/DockerFile)** 
+-Docker-compose **[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml)** 
+ RUN IN Powershell or IntelliJ command -> docker compose-up
+  
 
-RUN IN Powershell or IntelliJ command -> docker compose-up
 After that build a container docker.
 
 ## Rest-API Endpoints
