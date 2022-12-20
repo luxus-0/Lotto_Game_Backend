@@ -39,23 +39,18 @@ Testing:<br>
 Front:<br>
 ![image](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) &nbsp;
 ![image](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) &nbsp;
-![image](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=whitee) &nbsp;
-
-Deployed on:<br>
-![image](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) &nbsp;
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) &nbsp;
 
 ## C3 diagram
 
-The C3 diagram blow presents main application components and module dependencies. <br>
-Click on image below to review it more readable size.
-
-<a href="https://raw.githubusercontent.com/pjazdzyk/lottery-web/master/architecture/C3_Architecture.png"><img src="architecture/C3_Architecture.png" width="850"/><br></a>
+NOT FINISHED YET
 
 ## Installation and run
 
 Lotto|Web requires [Docker](https://www.docker.com/products/docker-desktop/) to run.
 Both Winning Numbers microservice and main application (Lottery|Web) are pushed as an images into the Docker Hub.
-Docker-compose file **[docker-compose](https://github.com/pjazdzyk/lottery-web/blob/master/src/docker/docker-compose.yml)** 
+Docker-compose file **[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml)** 
+Dockerfile **[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile/DockerFile)** 
 
 RUN IN Powershell or IntelliJ command -> docker compose-up
 After that build a container docker.
