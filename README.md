@@ -3,6 +3,8 @@
 <b>VERSION: 1.0.0<b><br>
 <b>COPYRIGHT: ŁUKASZ NOWOGÓRSKI<b><br>
 <b>MAIL: nowogorski.lukasz0@gmail.com<b>
+  
+  <video src='https://drive.google.com/file/d/1W2HGDkcdbiQxd1mT6tkTnVb8yd9NmkX3/view?usp=sharing' width=180/>
 
 ![alt text](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Lotto_architecture2.jpg?raw=true)
 ![alt text](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Lotto_architecture.jpg?raw=true)
