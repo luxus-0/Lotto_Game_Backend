@@ -1,7 +1,8 @@
-LOTTO GAME
+LOTTO GAME BACKEND WITH FRONTEND
 
-<img scr = "https://github.com/kalqa/LukaszLottoExcelent/blob/master/architecture/Lotto%20architecture%20-%20%C5%81ukasz%20Nowog%C3%B3rski%20(1).jpg" alt = "Wymagania lotto">
-I create this project because I like coding and learn new think.
+<img scr = "https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/Lotto_architecture.jpg">
+<img scr = "https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/Lotto_architecture2.jpg">
+
 
 > VERSION: 1.0.0 <br>
 > AUTHOR: ŁUKASZ NOWOGÓRSKI <br>
