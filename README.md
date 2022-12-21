@@ -23,9 +23,7 @@ RANDOM LOTTO GENERATOR
 - Docker generate contener
 - Basic html and Javascript file
 
-## Tech
-
-Lotto|Web is developed using following technologies: <br>
+## Tech STACK PROJECT
 
 Core: <br>
 ![image](https://img.shields.io/badge/17-Java-orange?style=for-the-badge) &nbsp;
