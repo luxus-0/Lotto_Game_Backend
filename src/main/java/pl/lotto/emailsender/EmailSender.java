@@ -13,18 +13,11 @@ import static pl.lotto.emailsender.EmailSenderMessage.*;
 @Service
 class EmailSender {
 
-    private final EmailReader emailPasswordReader;
-
-    EmailSender(EmailReader emailReader) {
-        this.emailPasswordReader = emailReader;
-    }
-
-    void send() throws Exception {
-        String PASSWORD = emailPasswordReader.readPasswordFromCSV();
-
+    void send() {
         Email email = EmailBuilder.startingBlank()
                 .from(FROM_EMAIL_DESCRIPTION, FROM_EMAIL)
                 .to(TO_EMAIL_DESCRIPTION, TO_EMAIL)
+                .withReplyTo(TO_EMAIL)
                 .withSubject(SUBJECT)
                 .withHTMLText(HTML)
                 .buildEmail();

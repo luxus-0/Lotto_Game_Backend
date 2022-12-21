@@ -1,30 +1,27 @@
 package pl.lotto.emailsender;
 
 import com.opencsv.CSVReader;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
-import java.util.List;
+import java.util.*;
+
+import static pl.lotto.emailsender.FileMessage.FILE_PATH;
 
 @Service
+@Log4j2
 class EmailReader {
 
-    public static final String FILE_NAME = "Email.csv";
-
-        String readPasswordFromCSV() throws Exception {
-        FileReader fileReader = new FileReader(FILE_NAME);
-
-        CSVReader csvReader = new CSVReader(fileReader);
-        List<String[]> readAllLines = csvReader.readAll();
-        return readAllLines.stream()
-                .findFirst()
-                .map(String::valueOf)
-                .orElseThrow();
+        static String readUsernameAndPasswordFromCSV() throws Exception {
+            FileReader fileReader = new FileReader(FILE_PATH);
+            CSVReader csvReader = new CSVReader(fileReader);
+            List<String[]> readAllLines = csvReader.readAll();
+            for (var userAndPasswd : readAllLines)
+                if(userAndPasswd.length == 0){
+                    log.info("Empty file Email.csv");
+                }
+                    log.info(Arrays.toString(readAllLines.get(0)));
+            return "";
+        }
     }
-
-    public static void main(String[] args) throws Exception {
-        EmailReader emailPasswordReader = new EmailReader();
-        String password = emailPasswordReader.readPasswordFromCSV();
-        System.out.println(password);
-    }
-}
