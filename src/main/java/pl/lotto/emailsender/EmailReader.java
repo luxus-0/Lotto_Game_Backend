@@ -1,10 +1,12 @@
 package pl.lotto.emailsender;
 
 import com.opencsv.CSVReader;
+import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.util.List;
 
+@Service
 class EmailReader {
 
     public static final String FILE_NAME = "Email.csv";
