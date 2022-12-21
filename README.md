@@ -48,16 +48,20 @@ Front:<br>
 IN PROGRESS!!!
 
 ## INFORMATION ABOUT DOCKER
-[Docker](https://www.docker.com/products/docker-desktop/) to run.
-  
--[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile)
- Run DockerFile generate Jar file.<br>
 
--[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml) 
- Run Powershell or IntelliJ in command -> docker compose-up<br>
-  
-After that build a container docker.<br><br>
+Install Docker
+[Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
+Run Install docker, when Install finished Run application Docker desktop.
+
+Go to Powershell:
+1. GO TO PATH FILE : 
+cd C:\Users\Łukasz\Desktop\Lotto<br>
+2.BUILD IMAGE DOCKER docker:  
+build -t Łukasz/lotto/container_lotto:v1 ./<br>
+3.Run container
+docker run -d --name lotto:v1 -p 80:80 lotto/container_lotto:v1<br>
+  
 <div style="text-align:center">
   <img src="https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
   <br><br>
