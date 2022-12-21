@@ -55,12 +55,12 @@ Install Docker
 Run Install docker, when Install finished Run application Docker desktop.
 
 Go to Powershell:
-1. GO TO PATH FILE : cd C:\Users\Łukasz\Desktop\Lotto
+1. GO TO PATH FILE : cd C:\Users\Łukasz\Desktop\Lotto<br>
 2.BUILD IMAGE DOCKER docker:  
-build -t Łukasz/lotto/container_lotto:v1 ./  
-OR RUN FROM HERE: https://github.com/luxus-0/Lotto_Game/blob/master/DockerFile
-3.docker run -d --name lotto:v1 -p 80:80 lotto/container_lotto:v1
-OR RUN FILE FROM INTELLIJ: -[docker-compose](https://github.com/luxus-0/Lotto_Game/blob/master/docker-compose.yml) 
+build -t Łukasz/lotto/container_lotto:v1 ./<br>
+OR RUN FROM HERE: https://github.com/luxus-0/Lotto_Game/blob/master/DockerFile<br>
+3.docker run -d --name lotto:v1 -p 80:80 lotto/container_lotto:v1<br>
+OR RUN FILE FROM INTELLIJ: -[docker-compose](https://github.com/luxus-0/Lotto_Game/blob/master/docker-compose.yml) <br>
 Container running...
   
 <div style="text-align:center">
