@@ -52,7 +52,7 @@ NOT FINISHED YET
 ## Installation and run
 [Docker](https://www.docker.com/products/docker-desktop/) to run.
   
--[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile/DockerFile)
+-[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile)
  Run DockerFile generate Jar file.<br>
 
 -[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml) 
