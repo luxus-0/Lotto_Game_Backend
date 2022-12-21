@@ -1,20 +1,17 @@
 package pl.lotto.numbersgenerator;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 import pl.lotto.numbersgenerator.exception.NumbersLottoNotFoundException;
 
 import java.util.UUID;
 
+@Service
 class NumbersGeneratorRepositoryImpl {
 
-    private final NumbersGeneratorRepository numbersGeneratorRepository;
+    NumbersGeneratorRepository numbersGeneratorRepository;
 
-    NumbersGeneratorRepositoryImpl(NumbersGeneratorRepository numbersGeneratorRepository) {
-        this.numbersGeneratorRepository = numbersGeneratorRepository;
-    }
-
-    LottoNumbersDto createLottoNumbers(NumbersGenerator numbersGenerator) {
+    LottoNumbersDto createUserLottoNumbers(NumbersGenerator numbersGenerator) {
         return numbersGeneratorRepository.save(numbersGenerator)
                 .lottoNumbers()
                 .stream()
@@ -23,13 +20,13 @@ class NumbersGeneratorRepositoryImpl {
                 .orElse(new LottoNumbersDto(UUID.randomUUID(), null));
     }
 
-    LottoNumbersDto searchByUUID(UUID uuid) {
+    LottoNumbersDto searchUserLottoNumbersByUUID(UUID uuid) {
         return numbersGeneratorRepository.findById(uuid)
                 .map(NumbersGeneratorMapper::toDto)
                 .orElseThrow(NumbersLottoNotFoundException::new);
     }
 
-    void removalByUUID(UUID uuid) {
+    void removalUserLottoNumbersByUUID(UUID uuid) {
         numbersGeneratorRepository.deleteById(uuid);
     }
 }

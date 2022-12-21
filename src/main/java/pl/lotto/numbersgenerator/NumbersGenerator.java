@@ -7,5 +7,5 @@ import java.util.Set;
 import java.util.UUID;
 
 @Document
-record NumbersGenerator(UUID uuid, Set<Integer> lottoNumbers, LocalDateTime dateTimeDraw) {
+public record NumbersGenerator(UUID uuid, Set<Integer> lottoNumbers, LocalDateTime dateTimeDraw) {
 }

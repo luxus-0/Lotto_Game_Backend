@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 class NumbersGeneratorFacadeConfiguration {
-    NumbersGeneratorFacade createModuleForTests(NumbersGeneratorRepository numbersGeneratorRepository) {
+    NumbersGeneratorFacade createModuleForTests(NumbersGeneratorRepositoryImpl numbersGeneratorRepositoryImpl) {
         NumbersGeneratorValidator numbersGeneratorValidator = new NumbersGeneratorValidator();
-        return new NumbersGeneratorFacade(numbersGeneratorValidator);
+        return new NumbersGeneratorFacade(numbersGeneratorValidator, numbersGeneratorRepositoryImpl);
     }
 }
