@@ -6,7 +6,6 @@ import org.simplejavamail.config.ConfigLoader;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 import org.springframework.stereotype.Service;
-import pl.lotto.emailsender.dto.MessageMailDto;
 
 import static pl.lotto.emailsender.EmailConfigMessage.SMTP_HOST;
 import static pl.lotto.emailsender.EmailConfigMessage.SMTP_PORT;
@@ -18,7 +17,7 @@ class EmailSender {
 
     private final EmailReader emailPasswordReader;
 
-    MessageMailDto send() throws Exception {
+    void send() throws Exception {
         String PASSWORD = emailPasswordReader.readPasswordFromCSV();
 
         Email email = EmailBuilder.startingBlank()
@@ -35,7 +34,5 @@ class EmailSender {
                 .sendMail(email);
 
         ConfigLoader.loadProperties("application.properties", true);
-
-        return new MessageMailDto("SEND");
     }
 }
