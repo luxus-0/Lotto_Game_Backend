@@ -1,7 +1,6 @@
 package pl.lotto.numbersgenerator;
 
-import org.springframework.stereotype.Component;
-import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
+import org.springframework.stereotype.Service;
 import pl.lotto.numbersgenerator.dto.WinningNumbersDto;
 
 import java.util.Random;
@@ -11,16 +10,14 @@ import java.util.stream.IntStream;
 
 import static pl.lotto.numbersgenerator.WinningNumbersMessageProvider.winningNumbersNotFound;
 
-@Component
+@Service
 public class NumbersGeneratorFacade {
 
     private static final Integer MIN_NUMBER = 1;
     private static final Integer MAX_NUMBER = 99;
-    private final NumbersGeneratorRepository numbersGeneratorRepository;
     private final NumbersGeneratorValidator numbersGeneratorValidator;
 
-    public NumbersGeneratorFacade(NumbersGeneratorRepository numbersGeneratorRepository, NumbersGeneratorValidator numbersGeneratorValidator) {
-        this.numbersGeneratorRepository = numbersGeneratorRepository;
+    public NumbersGeneratorFacade(NumbersGeneratorValidator numbersGeneratorValidator) {
         this.numbersGeneratorValidator = numbersGeneratorValidator;
     }
 
@@ -40,12 +37,5 @@ public class NumbersGeneratorFacade {
         }
         winningNumbersNotFound();
         return new WinningNumbersDto(Set.of(0));
-    }
-
-    public LottoNumbersDto findNumbersGenerator(NumbersGenerator numbersGenerator) {
-        return numbersGeneratorRepository
-                .findById(numbersGenerator.uuid())
-                .map(toDto -> new LottoNumbersDto(numbersGenerator.uuid(), numbersGenerator.lottoNumbers()))
-                .orElseThrow();
     }
 }
