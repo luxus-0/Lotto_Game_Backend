@@ -1,6 +1,5 @@
 package pl.lotto.emailsender;
 
-import lombok.RequiredArgsConstructor;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.config.ConfigLoader;
 import org.simplejavamail.email.EmailBuilder;
@@ -12,10 +11,13 @@ import static pl.lotto.emailsender.EmailConfigMessage.SMTP_PORT;
 import static pl.lotto.emailsender.EmailSenderMessage.*;
 
 @Service
-@RequiredArgsConstructor
 class EmailSender {
 
     private final EmailReader emailPasswordReader;
+
+    EmailSender(EmailReader emailReader) {
+        this.emailPasswordReader = emailReader;
+    }
 
     void send() throws Exception {
         String PASSWORD = emailPasswordReader.readPasswordFromCSV();
