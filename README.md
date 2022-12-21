@@ -56,7 +56,7 @@ NOT FINISHED YET
  Run DockerFile generate Jar file.<br>
 
 -[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml) 
- RUN IN Powershell or IntelliJ command -> docker compose-up<br>
+ Run Powershell or IntelliJ in command -> docker compose-up<br>
   
 After that build a container docker.<br><br>
 
