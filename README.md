@@ -4,14 +4,14 @@
 <b>COPYRIGHT: ŁUKASZ NOWOGÓRSKI<b><br>
 <b>MAIL: nowogorski.lukasz0@gmail.com<b>
   
-RANDOM LOTTO GENERATOR
+VIDEO LOTTO
  
 [![Watch the video](https://www.galeriatwierdzazamosc.pl/_cache/shops/510-255/fill/lotto.png)](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/Lotto.mp4)
   
 ![alt text](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Lotto_architecture2.jpg?raw=true)
 ![alt text](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Lotto_architecture.jpg?raw=true)
 
-## Specification
+## SPECIFICATION
 
 - Spring Boot
 - Modular monolith hexagonal architecture
@@ -45,9 +45,9 @@ Front:<br>
 
 ## C3 diagram
 
-NOT FINISHED YET
+IN PROGRESS!!!
 
-## Installation and run
+## INFORMATION ABOUT DOCKER
 [Docker](https://www.docker.com/products/docker-desktop/) to run.
   
 -[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile)
