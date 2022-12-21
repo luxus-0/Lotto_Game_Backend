@@ -4,12 +4,14 @@
 <b>COPYRIGHT: ŁUKASZ NOWOGÓRSKI<b><br>
 <b>MAIL: nowogorski.lukasz0@gmail.com<b>
   
- [![Watch the video](https://www.galeriatwierdzazamosc.pl/_cache/shops/510-255/fill/lotto.png)](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/Lotto.mp4)
+VIDEO LOTTO
+ 
+[![Watch the video](https://www.galeriatwierdzazamosc.pl/_cache/shops/510-255/fill/lotto.png)](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/Lotto.mp4)
   
 ![alt text](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Lotto_architecture2.jpg?raw=true)
 ![alt text](https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Lotto_architecture.jpg?raw=true)
 
-## Specification
+## SPECIFICATION
 
 - Spring Boot
 - Modular monolith hexagonal architecture
@@ -21,9 +23,7 @@
 - Docker generate contener
 - Basic html and Javascript file
 
-## Tech
-
-Lotto|Web is developed using following technologies: <br>
+## Tech STACK PROJECT
 
 Core: <br>
 ![image](https://img.shields.io/badge/17-Java-orange?style=for-the-badge) &nbsp;
@@ -45,16 +45,16 @@ Front:<br>
 
 ## C3 diagram
 
-NOT FINISHED YET
+IN PROGRESS!!!
 
-## Installation and run
+## INFORMATION ABOUT DOCKER
 [Docker](https://www.docker.com/products/docker-desktop/) to run.
   
--[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile/DockerFile)
+-[docker-file](https://github.com/kalqa/LukaszLottoExcelent/blob/master/Dockerfile)
  Run DockerFile generate Jar file.<br>
 
 -[docker-compose](https://github.com/kalqa/LukaszLottoExcelent/blob/master/docker-compose.yml) 
- RUN IN Powershell or IntelliJ command -> docker compose-up<br>
+ Run Powershell or IntelliJ in command -> docker compose-up<br>
   
 After that build a container docker.<br><br>
 
