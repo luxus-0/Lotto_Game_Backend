@@ -14,6 +14,9 @@ import static pl.lotto.emailsender.EmailSenderMessage.*;
 class EmailSender {
 
     void send() {
+
+        ConfigLoader.loadProperties("application.properties", true);
+        
         Email email = EmailBuilder.startingBlank()
                 .from(FROM_EMAIL_DESCRIPTION, FROM_EMAIL)
                 .to(TO_EMAIL_DESCRIPTION, TO_EMAIL)
@@ -27,7 +30,5 @@ class EmailSender {
                 .async()
                 .buildMailer()
                 .sendMail(email);
-
-        ConfigLoader.loadProperties("application.properties", true);
     }
 }
