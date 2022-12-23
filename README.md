@@ -49,16 +49,16 @@ IN PROGRESS!!!
 
 ## DOCKER 
   
-1.Build docker images
-  <b>docker build -f Dockerfile -t lotto_image:v1 .<b>
-  <b<docker build -f Dockerfile_test -t lotto_image_test:v1 .<b>             ---DOCKER IMAGE FOR TEST
-  <b>docker build -f Dockerfile_prod -t lotto_image_prod:v1 .<b>            ---DOCKER IMAGE FOR PRODUCTION
+1.Build docker images<b>
+  <b>docker build -f Dockerfile -t lotto_image:v1 .<b><br>
+  <b<docker build -f Dockerfile_test -t lotto_image_test:v1 .<b><br>            ---DOCKER IMAGE FOR TEST
+  <b>docker build -f Dockerfile_prod -t lotto_image_prod:v1 .<b><br>           ---DOCKER IMAGE FOR PRODUCTION
 2.Show docker images
-  <b>docker images<b>
-3.Run docker images
-  <b>docker run -p 9090:8080 IMAGE_ID_lotto_image<b>
-  <b>docker run -p 8000:8080 IMAGE_id_lotto_image_test<b>
-  <b>docker run -p 7000:8080 IMAGE_id_lotto_image_prod<b>
+  <b>docker images<b><br>
+3.Run docker images<br>
+  <b>docker run -p 9090:8080 IMAGE_ID_lotto_image<b><br>
+  <b>docker run -p 8000:8080 IMAGE_id_lotto_image_test<b><br>
+  <b>docker run -p 7000:8080 IMAGE_id_lotto_image_prod<b><br>
   
   Docker image is running...
   
