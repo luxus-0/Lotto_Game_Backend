@@ -75,7 +75,7 @@ GO TO PATH LOTTO ON DISK
     <br><br>
     
 <div style="text-align:center">
-  <img src="https://github.com/luxus-0/Lotto_Game/tree/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
+  <img src="https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
   <div>
      <br><br>
   ::ENDPOINTS::
