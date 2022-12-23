@@ -48,7 +48,20 @@ Front:<br>
 IN PROGRESS!!!
 
 ## DOCKER 
-
+  
+1.Build docker images
+  docker build -f Dockerfile -t lotto_image:v1 .
+  docker build -f Dockerfile_test -t lotto_image_test:v1 .             ---DOCKER IMAGE FOR TEST
+  docker build -f Dockerfile_prod -t lotto_image_prod:v1 .             ---DOCKER IMAGE FOR PRODUCTION
+2.Show docker images
+  docker images
+3.Run docker images
+  docker run -p 9090:8080 IMAGE_ID_lotto_image
+  docker run -p 8000:8080 IMAGE_id_lotto_image_test
+  docker run -p 7000:8080 IMAGE_id_lotto_image_prod
+  
+  Docker image is running...
+  
 <div style="text-align:center">
   <img src="https://bykowski.pl/wp-content/uploads/2020/09/docker-sciaga-komand.jpg" width="300" height="300"/>
   <br><br>
