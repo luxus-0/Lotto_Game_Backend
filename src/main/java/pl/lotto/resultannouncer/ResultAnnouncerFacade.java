@@ -15,12 +15,9 @@ public class ResultAnnouncerFacade {
     ResultsCheckerFacade resultsCheckerFacade;
 
     public ResultAnnouncerDto getResults(UUID uuid) {
-        if (uuid == null) {
             ResultsLottoDto resultLotto = resultsCheckerFacade.getWinnerNumbers(uuid);
             LocalDateTime resultDateTime = resultLotto.dateTimeDraw();
             Set<Integer> resultWinningNumbers = resultLotto.winnerNumbers();
             return new ResultAnnouncerDto(uuid, resultWinningNumbers, resultDateTime, WIN);
-        }
-        return new ResultAnnouncerDto(null, null, null, NOT_WIN);
     }
 }

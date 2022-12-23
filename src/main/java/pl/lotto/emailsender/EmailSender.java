@@ -4,7 +4,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import static pl.lotto.emailsender.EmailSenderMessage.*;
+import static pl.lotto.emailsender.EmailMessageProvider.*;
 
 @Service
 class EmailSender {
@@ -19,9 +19,9 @@ class EmailSender {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(FROM_EMAIL);
         message.setTo(TO_EMAIL);
+        message.setReplyTo(TO_EMAIL);
         message.setSubject(SUBJECT);
         message.setText(TEXT);
         mailSender.send(message);
-
     }
 }

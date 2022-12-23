@@ -1,6 +1,6 @@
 package pl.lotto.emailsender;
 
-class EmailSenderMessage {
+class EmailMessageProvider {
     public static final String FROM_EMAIL = "lotto_generator@op.pl";
     public static final String FROM_EMAIL_DESCRIPTION = "Lotto s.a";
     public static final String TO_EMAIL = "nowogorski.lukasz0@gmail.com";
