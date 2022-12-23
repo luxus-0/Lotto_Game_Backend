@@ -1,6 +1,5 @@
 package pl.lotto.emailsender;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ public class EmailReceiverFacade {
         this.emailSender = emailSender;
     }
 
-    public ResponseEntity<String> sendEmailToUser(){
+    public ResponseEntity<String> sendEmailToUser() {
         emailSender.send();
         return ResponseEntity.ok("SENDING EMAIL...");
     }

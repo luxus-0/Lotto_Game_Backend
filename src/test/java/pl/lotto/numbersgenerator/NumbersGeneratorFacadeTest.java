@@ -16,19 +16,16 @@ class NumbersGeneratorFacadeTest {
 
     private final Clock clock = Clock.systemDefaultZone();
     private final DateTimeDrawFacade dateTimeDrawFacade = new DateTimeDrawFacade(clock);
-    private final NumbersGeneratorRepository numbersGeneratorRepository;
-    NumbersGeneratorValidator numbersGeneratorValidator = new NumbersGeneratorValidator();
+    private final NumbersGeneratorRepositoryImpl numbersGeneratorRepositoryImpl = new NumbersGeneratorRepositoryImpl();
 
-    NumbersGeneratorFacadeTest(NumbersGeneratorRepository numbersGeneratorRepository) {
-        this.numbersGeneratorRepository = numbersGeneratorRepository;
-    }
+
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6})
-    void shouldReturnFalseWhenUserGaveNotRandomNumbers(int randomNumber){
+    void shouldReturnFalseWhenUserGaveNotRandomNumbers(int randomNumber) {
         //given
         NumbersGeneratorFacade numbersGeneratorFacade = new NumbersGeneratorFacadeConfiguration()
-                .createModuleForTests(numbersGeneratorRepository);
+                .createModuleForTests(numbersGeneratorRepositoryImpl);
         //when
         Set<Integer> lottoNumbers = numbersGeneratorFacade.generateLottoNumbers();
         //then
@@ -37,13 +34,13 @@ class NumbersGeneratorFacadeTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"234-078", "111-231"})
-    void shouldReturnTrueWhenUserSaveRandomNumbersToDatabase(String uuid){
+    void shouldReturnTrueWhenUserSaveRandomNumbersToDatabase(String uuid) {
         //given
         NumbersGeneratorFacade numbersGeneratorFacade = new NumbersGeneratorFacadeConfiguration()
-                .createModuleForTests(numbersGeneratorRepository);
+                .createModuleForTests(numbersGeneratorRepositoryImpl);
         NumbersGenerator numbersGenerator = new NumbersGenerator(UUID.randomUUID(), Set.of(1, 2, 3, 4, 5, 6), dateTimeDrawFacade.readNextDrawDate());
         //when
-        LottoNumbersDto savedNumberGenerator = numbersGeneratorFacade.createNumbersGenerator(numbersGenerator);
+        LottoNumbersDto savedNumberGenerator = numbersGeneratorFacade.selectLottoNumbers(numbersGenerator);
         //then
         assertThat(savedNumberGenerator.uuid().toString()).isEqualTo(uuid);
     }

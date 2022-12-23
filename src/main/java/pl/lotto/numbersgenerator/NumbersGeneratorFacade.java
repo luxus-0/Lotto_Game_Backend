@@ -45,15 +45,15 @@ public class NumbersGeneratorFacade {
         return new WinningNumbersDto(Set.of(0));
     }
 
-    public LottoNumbersDto selectLottoNumbers(NumbersGenerator numbersGenerator){
-        if(numbersGenerator != null) {
+    public LottoNumbersDto selectLottoNumbers(NumbersGenerator numbersGenerator) {
+        if (numbersGenerator != null) {
             return numbersGeneratorRepositoryImpl.createUserLottoNumbers(numbersGenerator);
         }
         throw new IllegalArgumentException();
     }
 
-    public LottoNumbersDto findLottoNumbers(UUID uuid){
-        if(uuid == null){
+    public LottoNumbersDto findLottoNumbers(UUID uuid) {
+        if (uuid == null) {
             log.info("lotto numbers id not found");
         }
         return numbersGeneratorRepositoryImpl.searchUserLottoNumbersByUUID(uuid);

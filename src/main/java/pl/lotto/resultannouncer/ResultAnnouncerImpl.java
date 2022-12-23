@@ -14,7 +14,7 @@ class ResultAnnouncerImpl {
         this.resultAnnouncerRepository = resultAnnouncerRepository;
     }
 
-    Set<ResultMessageDto> readResultForUser(String message){
+    Set<ResultMessageDto> readResultForUser(String message) {
         return resultAnnouncerRepository.findByResult(message)
                 .stream()
                 .map(resultMessage -> new ResultMessageDto(message))

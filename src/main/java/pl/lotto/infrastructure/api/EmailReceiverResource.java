@@ -15,7 +15,7 @@ class EmailReceiverResource {
     }
 
     @PostMapping("/send")
-    ResponseEntity<String> sendEmail(){
-       return emailReceiverFacade.sendEmailToUser();
+    ResponseEntity<String> sendEmail() {
+        return emailReceiverFacade.sendEmailToUser();
     }
 }
