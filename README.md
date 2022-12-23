@@ -49,6 +49,9 @@ IN PROGRESS!!!
 
 ## DOCKER 
   
+  RUN POWERSHELL<br>
+  GO TO PATH LOTTO ON DISK
+  
 1.Build docker images<b><br>
   <b>docker build -f Dockerfile -t lotto_image:v1 .<b><br>
   <b>docker build -f Dockerfile_test -t lotto_image_test:v1 .<b><br>
