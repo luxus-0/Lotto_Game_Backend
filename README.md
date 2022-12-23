@@ -49,18 +49,10 @@ IN PROGRESS!!!
 
 ## INFORMATION ABOUT DOCKER
 
-Install Docker
-[Docker Desktop](https://www.docker.com/products/docker-desktop/)
-
-Run Install docker, when Install finished Run application Docker desktop.
-
-Go to Powershell:
-1. GO TO PATH FILE : 
-cd C:\Users\Łukasz\Desktop\Lotto<br>
-2.BUILD IMAGE DOCKER docker:  
-build -t Łukasz/lotto/container_lotto:v1 ./<br>
-3.Run container
-docker run -d --name lotto:v1 -p 80:80 lotto/container_lotto:v1<br>
+<div style="text-align:center">
+  <img src="https://bykowski.pl/wp-content/uploads/2020/09/docker-sciaga-komand.jpg" width="400" height="150"/>
+  <br><br>
+  <div>
   
 <div style="text-align:center">
   <img src="https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
