@@ -59,9 +59,9 @@ IN PROGRESS!!!
 2.Show docker images<br>
   <b>docker images<b><br><br>
 3.Run docker images<br>
-  <b>docker run -p 9090:8080 IMAGE_ID_lotto_image<b><br>
-  <b>docker run -p 8000:8080 IMAGE_id_lotto_image_test<b><br>
-  <b>docker run -p 7000:8080 IMAGE_id_lotto_image_prod<b><br><br>
+  <b>docker run -p 9090:8080 IMAGE_ID for lotto_image<b><br>
+  <b>docker run -p 8000:8080 IMAGE_id for lotto_image_test<b><br>
+  <b>docker run -p 7000:8080 IMAGE_id for lotto_image_prod<b><br><br>
   
   Docker image is running...
   
