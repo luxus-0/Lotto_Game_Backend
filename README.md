@@ -47,10 +47,10 @@ Front:<br>
 
 IN PROGRESS!!!
 
-## INFORMATION ABOUT DOCKER
+## DOCKER 
 
 <div style="text-align:center">
-  <img src="https://bykowski.pl/wp-content/uploads/2020/09/docker-sciaga-komand.jpg" width="400" height="150"/>
+  <img src="https://bykowski.pl/wp-content/uploads/2020/09/docker-sciaga-komand.jpg" width="400" height="400"/>
   <br><br>
   <div>
   
