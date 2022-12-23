@@ -23,7 +23,7 @@ VIDEO LOTTO
 - Docker generate contener
 - Basic html and Javascript file
 
-## Tech STACK PROJECT
+## TECH STACK PROJECT
 
 Core: <br>
 ![image](https://img.shields.io/badge/17-Java-orange?style=for-the-badge) &nbsp;
@@ -43,7 +43,7 @@ Front:<br>
 ![image](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) &nbsp;
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) &nbsp;
 
-## C3 diagram
+## C3 DIAGRAM
 
 IN PROGRESS!!!
 
@@ -72,11 +72,12 @@ GO TO PATH LOTTO ON DISK
   <ul>
   <li><a href="https://bykowski.pl/wp-content/uploads/2020/09/docker-sciaga-komand.jpg" target="_blank" title="DOCKER COMMAND LIST">DOCKER COMMAND LIST</a></li>
   <ul>
+    <br><br>
     
 <div style="text-align:center">
   <img src="https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
-  <br><br>
   <div>
+     <br><br>
   ::ENDPOINTS::
 <ul>
   <li><a href="http://localhost:8080/numbers" target="_blank" title="INPUT NUMBERS FOR USER">INPUT NUMBERS</a></li>
