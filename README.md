@@ -68,11 +68,13 @@ GO TO PATH LOTTO ON DISK
   <b>docker run -p 7000:8080 IMAGE_id for lotto_image_prod<b><br><br>
   
   Docker image is running...
+    <br><br>
   
 <div style="text-align:center">
   <img src="https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
   <br><br>
   <div>
+  ::ENDPOINTS::
 <ul>
   <li><a href="http://localhost:8080/numbers" target="_blank" title="INPUT NUMBERS FOR USER">INPUT NUMBERS</a></li>
   <li> <a href="http://localhost:8080/users" target="_blank" title="READ ALL USERS LOTTO">READ USERS</a></li>
