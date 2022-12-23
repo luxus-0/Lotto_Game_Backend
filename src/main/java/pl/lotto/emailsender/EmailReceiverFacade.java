@@ -23,7 +23,7 @@ public class EmailReceiverFacade {
                 "date winner: " + resultsLotto.dateTimeDraw().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
     }
 
-    public String sendEmailToClient(ResultsLottoDto resultsLotto) throws Exception {
+    public void sendEmailToClient(ResultsLottoDto resultsLotto) throws Exception {
         if(resultsLotto != null) {
             emailSender.send();
             String message = createEmailMessage(resultsLotto);
