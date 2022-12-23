@@ -71,7 +71,7 @@ GO TO PATH LOTTO ON DISK
   
   <ul>
   <li><a href="https://bykowski.pl/wp-content/uploads/2020/09/docker-sciaga-komand.jpg" target="_blank" title="DOCKER COMMAND LIST">DOCKER COMMAND LIST</a></li>
-  <ul>
+  </ul>
     <br><br>
     
 <div style="text-align:center">
