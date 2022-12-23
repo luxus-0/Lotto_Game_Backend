@@ -49,9 +49,9 @@ IN PROGRESS!!!
 
 ## DOCKER 
   
-1.Build docker images<b>
+1.Build docker images<b><br>
   <b>docker build -f Dockerfile -t lotto_image:v1 .<b><br>
-  <b<docker build -f Dockerfile_test -t lotto_image_test:v1 .<b><br>            ---DOCKER IMAGE FOR TEST
+  <b>docker build -f Dockerfile_test -t lotto_image_test:v1 .<b><br>            ---DOCKER IMAGE FOR TEST
   <b>docker build -f Dockerfile_prod -t lotto_image_prod:v1 .<b><br>           ---DOCKER IMAGE FOR PRODUCTION
 2.Show docker images
   <b>docker images<b><br>
