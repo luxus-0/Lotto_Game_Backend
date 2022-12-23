@@ -67,9 +67,12 @@ GO TO PATH LOTTO ON DISK
   <b>docker run -p 8000:8080 IMAGE_ID for lotto_image_test<b><br>
   <b>docker run -p 7000:8080 IMAGE_ID for lotto_image_prod<b><br><br>
   
-  Docker image is running...
-    <br><br>
+  Docker image is running...<br><br>
   
+  <ul>
+  <li><a href="https://bykowski.pl/wp-content/uploads/2020/09/docker-sciaga-komand.jpg" target="_blank" title="DOCKER COMMAND LIST">DOCKER COMMAND LIST</a></li>
+  <ul>
+    
 <div style="text-align:center">
   <img src="https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
   <br><br>
