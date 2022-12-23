@@ -1,5 +1,6 @@
 /.idea/
 /target/
+/resources/
 /database-data/.mongodb/mongosh/639e178c6fc48200c4ae7e17_log
 /database-data/.mongodb/mongosh/639e1793f967a2de5129ccb9_log
 /database-data/_mdb_catalog.wt
