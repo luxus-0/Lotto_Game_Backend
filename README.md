@@ -63,11 +63,6 @@ IN PROGRESS!!!
   Docker image is running...
   
 <div style="text-align:center">
-  <img src="https://bykowski.pl/wp-content/uploads/2020/09/docker-sciaga-komand.jpg" width="300" height="300"/>
-  <br><br>
-  <div>
-  
-<div style="text-align:center">
   <img src="https://github.com/kalqa/LukaszLottoExcelent/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
   <br><br>
   <div>
