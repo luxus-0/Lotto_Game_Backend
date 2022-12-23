@@ -48,9 +48,13 @@ Front:<br>
 IN PROGRESS!!!
 
 ## DOCKER 
+
+INSTALL DOCKER
+https://docs.docker.com/desktop/install/windows-install/<br>
+RUN DOCKER DESKTOP<br><br>
   
-  RUN POWERSHELL<br>
-  GO TO PATH LOTTO ON DISK
+RUN POWERSHELL<br>
+GO TO PATH LOTTO ON DISK
   
 1.Build docker images<b><br>
   <b>docker build -f Dockerfile -t lotto_image:v1 .<b><br>
