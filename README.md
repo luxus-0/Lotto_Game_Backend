@@ -17,7 +17,7 @@ VIDEO LOTTO
 - Modular monolith hexagonal architecture
 - Facade design pattern
 - MongoDb database NoSql
-- JUnit with Mock and Integration test and Wiremock
+- JUnit with Mock, Wiremock
 - RestApi
 - Redis cache for optimized results queries
 - Docker generate contener
