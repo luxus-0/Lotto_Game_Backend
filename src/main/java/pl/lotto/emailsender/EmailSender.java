@@ -1,6 +1,9 @@
 package pl.lotto.emailsender;
 
+import pl.lotto.emailsender.dto.MailMessageDto;
+
 public interface EmailSender {
-    void sendEmail();
-    void sendEmailWithAttachment(String attachment);
+    MailMessageDto sendEmail();
+
+    MailMessageDto sendEmailWithAttachment(String attachment);
 }

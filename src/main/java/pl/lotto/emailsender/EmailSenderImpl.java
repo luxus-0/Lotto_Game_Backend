@@ -10,14 +10,13 @@ import pl.lotto.emailsender.dto.MailMessageDto;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 import java.io.File;
 
 import static pl.lotto.emailsender.EmailMessageProvider.*;
 
 @Service
 @Log4j2
-class EmailSenderImpl {
+class EmailSenderImpl implements EmailSender {
 
     private final JavaMailSender mailSender;
 
@@ -35,16 +34,16 @@ class EmailSenderImpl {
             message.setText(TEXT);
             mailSender.send(message);
             return new MailMessageDto("Email send successfully");
-        }catch (Exception e){
+        } catch (Exception e) {
             return new MailMessageDto("Email not send!!!");
         }
     }
 
-    public MailMessageDto sendEmailWithAttachment(String attachment) throws MessagingException {
+    public MailMessageDto sendEmailWithAttachment(String attachment) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper;
+
         try {
-            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(FROM_EMAIL);
             mimeMessageHelper.setTo(TO_EMAIL);
             mimeMessageHelper.setReplyTo(TO_EMAIL);
@@ -55,7 +54,7 @@ class EmailSenderImpl {
             mimeMessageHelper.addAttachment(attachment, file);
             mailSender.send(mimeMessage);
             return new MailMessageDto("Email send successfully");
-        }catch (MessagingException e){
+        } catch (MessagingException e) {
             return new MailMessageDto("Email not send");
         }
     }
