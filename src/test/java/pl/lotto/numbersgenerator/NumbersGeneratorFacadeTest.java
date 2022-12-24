@@ -19,7 +19,6 @@ class NumbersGeneratorFacadeTest {
     private final NumbersGeneratorRepositoryImpl numbersGeneratorRepositoryImpl = new NumbersGeneratorRepositoryImpl();
 
 
-
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6})
     void shouldReturnFalseWhenUserGaveNotRandomNumbers(int randomNumber) {

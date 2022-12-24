@@ -8,16 +8,15 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-import static pl.lotto.resultannouncer.ResultAnnouncerMessage.NOT_WIN;
 import static pl.lotto.resultannouncer.ResultAnnouncerMessage.WIN;
 
 public class ResultAnnouncerFacade {
     ResultsCheckerFacade resultsCheckerFacade;
 
     public ResultAnnouncerDto getResults(UUID uuid) {
-            ResultsLottoDto resultLotto = resultsCheckerFacade.getWinnerNumbers(uuid);
-            LocalDateTime resultDateTime = resultLotto.dateTimeDraw();
-            Set<Integer> resultWinningNumbers = resultLotto.winnerNumbers();
-            return new ResultAnnouncerDto(uuid, resultWinningNumbers, resultDateTime, WIN);
+        ResultsLottoDto resultLotto = resultsCheckerFacade.getWinnerNumbers(uuid);
+        LocalDateTime resultDateTime = resultLotto.dateTimeDraw();
+        Set<Integer> resultWinningNumbers = resultLotto.winnerNumbers();
+        return new ResultAnnouncerDto(uuid, resultWinningNumbers, resultDateTime, WIN);
     }
 }
