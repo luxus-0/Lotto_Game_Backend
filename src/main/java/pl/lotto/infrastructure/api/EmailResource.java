@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Log4j2
-class EmailReceiverResource {
-
+class EmailResource {
 
     @PostMapping("/send")
     @ResponseStatus(HttpStatus.CREATED)

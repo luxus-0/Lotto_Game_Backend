@@ -6,7 +6,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import pl.lotto.emailsender.dto.MailMessageDto;
+import pl.lotto.emailsender.dto.EmailMessageDto;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -16,14 +16,14 @@ import java.io.File;
 @Log4j2
 class EmailSenderImpl implements EmailSender {
 
-    private final JavaMailSender mailSender;
     private static final String FROM_EMAIL = "lotto_generator@op.pl";
+    private final JavaMailSender mailSender;
 
     public EmailSenderImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-    public MailMessageDto sendEmail(String to, String subject, String text) {
+    public EmailMessageDto sendEmail(String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(FROM_EMAIL);
@@ -32,29 +32,30 @@ class EmailSenderImpl implements EmailSender {
             message.setSubject(subject);
             message.setText(text);
             mailSender.send(message);
-            return new MailMessageDto("Email send successfully");
+            return new EmailMessageDto("Email send successfully");
         } catch (Exception e) {
-            return new MailMessageDto("Email not send!!!");
+            return new EmailMessageDto("Email not send!!!");
         }
     }
 
-    public MailMessageDto sendEmailWithAttachment(String to, String subject, String text, String attachment) {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+    public EmailMessageDto sendEmailWithAttachment(String to, String subject, String text, String attachment) throws MessagingException {
+        {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            try {
+                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+                mimeMessageHelper.setFrom(FROM_EMAIL);
+                mimeMessageHelper.setTo(to);
+                mimeMessageHelper.setReplyTo(subject);
+                mimeMessageHelper.setSubject(text);
+                mimeMessageHelper.setText(attachment);
 
-        try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom(FROM_EMAIL);
-            mimeMessageHelper.setTo(to);
-            mimeMessageHelper.setReplyTo(subject);
-            mimeMessageHelper.setSubject(text);
-            mimeMessageHelper.setText(attachment);
-
-            FileSystemResource file = new FileSystemResource(new File(attachment));
-            mimeMessageHelper.addAttachment(attachment, file);
-            mailSender.send(mimeMessage);
-            return new MailMessageDto("Email send successfully");
-        } catch (MessagingException e) {
-            return new MailMessageDto("Email not send");
+                FileSystemResource file = new FileSystemResource(new File(attachment));
+                mimeMessageHelper.addAttachment(attachment, file);
+                mailSender.send(mimeMessage);
+                return new EmailMessageDto("Email send successfully");
+            } catch (Exception e) {
+                return new EmailMessageDto("Email not send");
+            }
         }
     }
 }
