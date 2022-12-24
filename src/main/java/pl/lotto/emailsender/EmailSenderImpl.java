@@ -6,7 +6,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import pl.lotto.emailsender.dto.EmailMessageDto;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -23,7 +22,7 @@ class EmailSenderImpl implements EmailSender {
         this.mailSender = mailSender;
     }
 
-    public EmailMessageDto sendEmail(String to, String subject, String text) {
+    public EmailMessage sendEmail(String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(FROM_EMAIL);
@@ -32,13 +31,13 @@ class EmailSenderImpl implements EmailSender {
             message.setSubject(subject);
             message.setText(text);
             mailSender.send(message);
-            return new EmailMessageDto("Email send successfully");
+            return new EmailMessage("Email send successfully");
         } catch (Exception e) {
-            return new EmailMessageDto("Email not send!!!");
+            return new EmailMessage("Email not send!!!");
         }
     }
 
-    public EmailMessageDto sendEmailWithAttachment(String to, String subject, String text, String attachment) throws MessagingException {
+    public EmailMessage sendEmailWithAttachment(String to, String subject, String text, String attachment) throws MessagingException {
         {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             try {
@@ -52,9 +51,9 @@ class EmailSenderImpl implements EmailSender {
                 FileSystemResource file = new FileSystemResource(new File(attachment));
                 mimeMessageHelper.addAttachment(attachment, file);
                 mailSender.send(mimeMessage);
-                return new EmailMessageDto("Email send successfully");
+                return new EmailMessage("Email send successfully");
             } catch (Exception e) {
-                return new EmailMessageDto("Email not send");
+                return new EmailMessage("Email not send");
             }
         }
     }

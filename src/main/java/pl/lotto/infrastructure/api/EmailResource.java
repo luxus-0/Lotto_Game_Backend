@@ -5,14 +5,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import pl.lotto.emailsender.EmailMessage;
+import pl.lotto.emailsender.EmailSenderFacade;
+import pl.lotto.emailsender.dto.EmailDetailsDto;
 
 @RestController
 @Log4j2
 class EmailResource {
 
+    private final EmailSenderFacade emailSenderFacade;
+
+    EmailResource(EmailSenderFacade emailSenderFacade) {
+        this.emailSenderFacade = emailSenderFacade;
+    }
+
     @PostMapping("/send")
     @ResponseStatus(HttpStatus.CREATED)
-    String sendEmail() {
-        return "";
+    EmailMessage sendEmail(EmailDetailsDto emailDetails) {
+        return emailSenderFacade.sendToClient(emailDetails);
     }
 }

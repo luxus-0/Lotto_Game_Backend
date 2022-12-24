@@ -1,10 +1,6 @@
 package pl.lotto.emailsender;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import pl.lotto.emailsender.dto.EmailMessageDto;
+import pl.lotto.emailsender.dto.EmailDetailsDto;
 
 public class EmailSenderFacade {
     private final EmailSender emailSender;
@@ -13,9 +9,11 @@ public class EmailSenderFacade {
         this.emailSender = emailSender;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public EmailMessageDto sendToClient(@RequestParam String to, @RequestParam String subject, @RequestParam String text) {
-        return emailSender.sendEmail(to, subject, text);
+    public EmailMessage sendToClient(EmailDetailsDto emailDetails) {
+        return emailSender.sendEmail(emailDetails.to(), emailDetails.subject(), emailDetails.text());
+    }
+
+    public EmailMessage sendToClientWithAttachment(EmailDetailsDto emailDetails) throws Exception {
+        return emailSender.sendEmailWithAttachment(emailDetails.to(), emailDetails.subject(), emailDetails.text(), emailDetails.attachment());
     }
 }
