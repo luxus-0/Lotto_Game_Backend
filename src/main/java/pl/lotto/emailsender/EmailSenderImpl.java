@@ -25,7 +25,6 @@ class EmailSenderImpl {
         this.mailSender = mailSender;
     }
 
-
     public MailMessageDto sendEmail() {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
