@@ -37,7 +37,7 @@ class EmailSenderImpl implements EmailSender {
         }
     }
 
-    public EmailMessage sendEmailWithAttachment(String to, String subject, String text, String attachment) throws MessagingException {
+    public EmailMessage sendEmailWithAttachment(String to, String subject, String text, String attachment) {
         {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             try {
