@@ -1,7 +1,8 @@
 package pl.lotto.emailsender;
 
-import pl.lotto.emailsender.dto.EmailDetailsDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailSenderFacade {
     private final EmailSender emailSender;
 
@@ -9,11 +10,11 @@ public class EmailSenderFacade {
         this.emailSender = emailSender;
     }
 
-    public EmailMessage sendToClient(EmailDetailsDto emailDetails) {
-        return emailSender.sendEmail(emailDetails.to(), emailDetails.subject(), emailDetails.text());
+    public EmailMessage sendToClient(EmailDetails emailDetails) {
+        return emailSender.sendEmail(emailDetails);
     }
 
-    public EmailMessage sendToClientWithAttachment(EmailDetailsDto emailDetails) throws Exception {
-        return emailSender.sendEmailWithAttachment(emailDetails.to(), emailDetails.subject(), emailDetails.text(), emailDetails.attachment());
+    public EmailMessage sendToClientWithAttachment(EmailDetails emailDetails) throws Exception {
+        return emailSender.sendEmailWithAttachment(emailDetails);
     }
 }

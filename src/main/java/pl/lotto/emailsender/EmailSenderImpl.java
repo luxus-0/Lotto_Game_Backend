@@ -1,7 +1,6 @@
 package pl.lotto.emailsender;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,39 +21,28 @@ class EmailSenderImpl implements EmailSender {
         this.mailSender = mailSender;
     }
 
-    public EmailMessage sendEmail(String to, String subject, String text) {
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(FROM_EMAIL);
-            message.setTo(to);
-            message.setReplyTo(to);
-            message.setSubject(subject);
-            message.setText(text);
-            mailSender.send(message);
-            return new EmailMessage("Email send successfully");
-        } catch (Exception e) {
-            return new EmailMessage("Email not send!!!");
-        }
+    public EmailMessage sendEmail(EmailDetails emailDetails) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(emailDetails.to());
+        message.setReplyTo(emailDetails.to());
+        message.setSubject(emailDetails.subject());
+        message.setText(emailDetails.text());
+        mailSender.send(message);
+        return new EmailMessage("Email send successfully");
     }
 
-    public EmailMessage sendEmailWithAttachment(String to, String subject, String text, String attachment) {
+    public EmailMessage sendEmailWithAttachment(EmailDetails emailDetails) throws MessagingException {
         {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
-            try {
-                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-                mimeMessageHelper.setFrom(FROM_EMAIL);
-                mimeMessageHelper.setTo(to);
-                mimeMessageHelper.setReplyTo(subject);
-                mimeMessageHelper.setSubject(text);
-                mimeMessageHelper.setText(attachment);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setTo(emailDetails.to());
+            mimeMessageHelper.setReplyTo(emailDetails.to());
+            mimeMessageHelper.setSubject(emailDetails.subject());
+            mimeMessageHelper.setText(emailDetails.text());
 
-                FileSystemResource file = new FileSystemResource(new File(attachment));
-                mimeMessageHelper.addAttachment(attachment, file);
-                mailSender.send(mimeMessage);
-                return new EmailMessage("Email send successfully");
-            } catch (Exception e) {
-                return new EmailMessage("Email not send");
-            }
+            mimeMessageHelper.addAttachment("lotto.png", new File("src/main/resources/Lotto_logo.png"));
+            mailSender.send(mimeMessage);
+            return new EmailMessage("Email send successfully");
         }
     }
 }
