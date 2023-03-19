@@ -9,4 +9,7 @@ class NumbersReceiverMessageProvider {
     public static final String EQUALS_SIX_NUMBERS = "equals six numbers";
     public static final String NOT_IN_RANGE_NUMBERS = "not in range numbers";
     public static final String NUMBERS_IS_EMPTY = "numbers is empty";
+    public static final String SUCCESS_MESSAGE = "success";
+    public static final String FAILED_MESSAGE = "failed";
 }
+
