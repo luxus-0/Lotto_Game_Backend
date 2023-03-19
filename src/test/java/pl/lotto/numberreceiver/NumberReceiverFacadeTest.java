@@ -64,7 +64,7 @@ class NumberReceiverFacadeTest {
     public void should_return_failed_when_user_gave_number_out_of_range() {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
-        Set<Integer> numbersFromUser = Set.of(1, 2, 100, 4, 5, 135, 900);
+        Set<Integer> numbersFromUser = Set.of(1, 2, 100, 4, 5, 12, 17);
         // when
         NumberReceiverDto numberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
