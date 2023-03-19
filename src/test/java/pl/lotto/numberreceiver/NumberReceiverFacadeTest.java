@@ -3,7 +3,7 @@ package pl.lotto.numberreceiver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.lotto.numberreceiver.dto.AllUsersNumbersDto;
-import pl.lotto.numberreceiver.dto.ResultDto;
+import pl.lotto.numberreceiver.dto.ResultMessageDto;
 import pl.lotto.numberreceiver.dto.UserNumbersDto;
 
 import java.time.Clock;
@@ -29,7 +29,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         // when
-        ResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        ResultMessageDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
         assertThat(result.message()).isEqualTo("success");
     }
@@ -41,7 +41,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4);
         // when
-        ResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        ResultMessageDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
         assertThat(result.message()).isEqualTo("failed");
     }
@@ -53,7 +53,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6, 7, 8);
         // when
-        ResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        ResultMessageDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
         assertThat(result.message()).isEqualTo("failed");
     }
@@ -65,7 +65,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 100, 4, 5, 12);
         // when
-        ResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        ResultMessageDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
         assertThat(result.message()).isEqualTo("failed");
     }
@@ -77,7 +77,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, numberReceiverRepository);
         Set<Integer> numbersFromUser = Set.of();
         // when
-        ResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        ResultMessageDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
         assertThat(result.message()).isEqualTo("failed");
     }
@@ -91,7 +91,7 @@ class NumberReceiverFacadeTest {
 
         Set<Integer> numbersFromUser = Set.of(34, 3, 13, 5, -44, 7);
         // when
-        ResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        ResultMessageDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
         assertThat(result.message()).isEqualTo("failed");
     }
@@ -108,7 +108,7 @@ class NumberReceiverFacadeTest {
 
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         // when
-        ResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        ResultMessageDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
 
         assertThat(result.message()).isEqualTo("success");
@@ -126,7 +126,7 @@ class NumberReceiverFacadeTest {
 
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         // when
-        ResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        ResultMessageDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
         assertThat(result.message()).isEqualTo("success");
     }

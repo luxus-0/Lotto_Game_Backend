@@ -7,5 +7,5 @@ import java.util.Set;
 import java.util.UUID;
 
 @Document("user_numbers")
-record UserNumbers(UUID uuid, Set<Integer> numbersFromUser, LocalDateTime dateTimeDraw) {
+public record UserNumbers(UUID uuid, Set<Integer> numbersFromUser, LocalDateTime dateTimeDraw) {
 }

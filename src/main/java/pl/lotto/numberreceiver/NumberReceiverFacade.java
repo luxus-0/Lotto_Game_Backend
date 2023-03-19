@@ -2,7 +2,7 @@ package pl.lotto.numberreceiver;
 
 import org.springframework.stereotype.Service;
 import pl.lotto.numberreceiver.dto.AllUsersNumbersDto;
-import pl.lotto.numberreceiver.dto.ResultDto;
+import pl.lotto.numberreceiver.dto.ResultMessageDto;
 import pl.lotto.numberreceiver.dto.UserNumbersDto;
 
 import java.time.LocalDateTime;
@@ -31,17 +31,17 @@ public class NumberReceiverFacade {
         this.uuidGenerator = uuidGenerator;
     }
 
-    public ResultDto inputNumbers(Set<Integer> numbersFromUser) {
+    public ResultMessageDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (!validate) {
-            return new ResultDto(numbersFromUser, FAILED_MESSAGE);
+            return new ResultMessageDto(numbersFromUser, FAILED_MESSAGE);
         }
         UUID uuid = uuidGenerator.generateUUID();
         LocalDateTime dateTimeDraw = dateTimeGenerator.generateNextDrawDate();
         UserNumbers userNumbers = new UserNumbers(uuid, numbersFromUser, dateTimeDraw);
         UserNumbers savedUserNumbers = inMemoryNumberReceiverRepository.save(userNumbers);
         Set<Integer> numbers = savedUserNumbers.numbersFromUser();
-        return new ResultDto(numbers, SUCCESS_MESSAGE);
+        return new ResultMessageDto(numbers, SUCCESS_MESSAGE);
     }
 
     public AllUsersNumbersDto usersNumbers(LocalDateTime dateTimeDraw) {
