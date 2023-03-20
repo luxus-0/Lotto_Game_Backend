@@ -1,9 +1,9 @@
-package pl.lotto.domain.numberreceiver;
+package pl.lotto.numberreceiver;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.dto.TicketDto;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

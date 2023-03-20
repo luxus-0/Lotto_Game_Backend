@@ -1,6 +1,6 @@
-package pl.lotto.numberreceiver;
+package pl.lotto.domain.numberreceiver;
 
-import pl.lotto.domain.numberreceiver.HashGenerable;
+import pl.lotto.numberreceiver.HashGenerable;
 
 public class HashGeneratorTestImpl implements HashGenerable {
 

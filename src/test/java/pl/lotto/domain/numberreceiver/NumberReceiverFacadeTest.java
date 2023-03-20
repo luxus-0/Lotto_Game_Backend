@@ -1,16 +1,19 @@
-package pl.lotto.numberreceiver;
+package pl.lotto.domain.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.numberreceiver.*;
-import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.numberreceiver.*;
+import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.dto.TicketDto;
 
-import java.time.*;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.lotto.domain.numberreceiver.ValidationResult.EQUALS_SIX_NUMBERS;
+import static pl.lotto.numberreceiver.ValidationResult.EQUALS_SIX_NUMBERS;
 
 class NumberReceiverFacadeTest {
     private final TicketRepository ticketRepository = new TicketRepositoryTestImpl();

@@ -1,6 +1,6 @@
-package pl.lotto.domain.numberreceiver;
+package pl.lotto.numberreceiver;
 
-import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.numberreceiver.dto.TicketDto;
 
 class TicketMapper {
     static TicketDto mapToDto(Ticket ticket){

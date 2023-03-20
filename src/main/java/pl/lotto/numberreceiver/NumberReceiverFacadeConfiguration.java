@@ -1,4 +1,4 @@
-package pl.lotto.domain.numberreceiver;
+package pl.lotto.numberreceiver;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
