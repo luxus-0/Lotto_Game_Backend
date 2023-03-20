@@ -1,4 +1,4 @@
-package pl.lotto.datetimegenerator;
+package pl.lotto.datetime;
 
 import java.time.Clock;
 import java.time.LocalDateTime;

@@ -2,7 +2,7 @@ package pl.lotto.numbersgenerator;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import pl.lotto.datetimegenerator.DateTimeDrawFacade;
+import pl.lotto.datetime.DateTimeDrawFacade;
 import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
 
 import java.time.Clock;

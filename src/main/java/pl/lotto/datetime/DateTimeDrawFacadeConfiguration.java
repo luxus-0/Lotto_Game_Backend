@@ -1,4 +1,4 @@
-package pl.lotto.datetimegenerator;
+package pl.lotto.datetime;
 
 import org.springframework.context.annotation.Configuration;
 
