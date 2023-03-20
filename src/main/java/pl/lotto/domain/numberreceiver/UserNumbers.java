@@ -1,4 +1,4 @@
-package pl.lotto.numberreceiver;
+package pl.lotto.domain.numberreceiver;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

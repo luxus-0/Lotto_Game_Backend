@@ -1,66 +1,63 @@
-package pl.lotto.numberreceiver;
+package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import pl.lotto.datetimegenerator.DateTimeDrawFacade;
-import pl.lotto.numberreceiver.dto.NumberResultDto;
-import pl.lotto.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Log4j2
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
-    private final DateTimeDrawFacade dateTimeDrawFacade;
+    private final DateTimeDrawGenerator dateTimeDrawGenerator;
     private final TicketRepository ticketRepository;
-    private final HashGenerator hashGenerator;
+    private final HashGenerable hashGenerator;
 
 
-    public NumberResultDto inputNumbers(Set<Integer> numbersFromUser) {
+    public NumberReceiverResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (!validate) {
            String ticketId = hashGenerator.getHash();
-           LocalDateTime drawDate = dateTimeDrawFacade.readNextDrawDate();
+           LocalDateTime drawDate = dateTimeDrawGenerator.readNextDrawDate();
            Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
-           String message = getResultMessage();
-            return NumberResultDto.builder()
-                    .ticketId(ticketSaved.hash())
-                    .drawDate(ticketSaved.drawDate())
-                    .numbersFromUser(numbersFromUser)
-                    .message(message)
+            return NumberReceiverResultDto.builder()
+                    .ticketDto(new TicketDto(ticketSaved.hash(), ticketSaved.numbersFromUser(), ticketSaved.drawDate()))
+                    .message(createResultMessage())
                     .build();
         }
-        return NumberResultDto.builder()
-                .message(getResultMessage())
+        return NumberReceiverResultDto.builder()
+                .message(createResultMessage())
                 .build();
     }
 
-    private String getResultMessage() {
-        List<String> messagesResult = numberValidator.messages;
+    private String createResultMessage() {
+        List<ValidationResult> messagesResult = numberValidator.errors;
         return messagesResult.stream()
-                .findAny()
-                .orElse("not found validation message");
+                .map(ValidationResult::getInfo)
+                .collect(Collectors.joining(","));
     }
 
 
-    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime dateTime){
+    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime drawDate){
         LocalDateTime nextDrawDate = retrieveNextDrawDate();
-        if(dateTime.isAfter(nextDrawDate)) {
+        if(drawDate.isAfter(nextDrawDate)) {
             return Collections.emptyList();
         }
-            List<Ticket> allTicketByDrawDate = ticketRepository.findAllTicketsByDrawDate(dateTime);
+            List<Ticket> allTicketByDrawDate = ticketRepository.findAllTicketsByDrawDate(drawDate);
             return allTicketByDrawDate.stream()
                     .map(TicketMapper::mapToDto)
                     .toList();
     }
 
     public LocalDateTime retrieveNextDrawDate(){
-        return dateTimeDrawFacade.readNextDrawDate();
+        return dateTimeDrawGenerator.readNextDrawDate();
     }
 
     public TicketDto findByHash(String hash){

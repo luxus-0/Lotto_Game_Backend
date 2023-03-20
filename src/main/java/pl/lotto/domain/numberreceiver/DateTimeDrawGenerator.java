@@ -1,4 +1,4 @@
-package pl.lotto.datetimegenerator;
+package pl.lotto.domain.numberreceiver;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.temporal.TemporalAdjusters.next;
 
-public class DateTimeDrawFacade {
+public class DateTimeDrawGenerator {
 
     private final Clock clock;
 
-    public DateTimeDrawFacade(Clock clock) {
+    public DateTimeDrawGenerator(Clock clock) {
         this.clock = clock;
     }
 

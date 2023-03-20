@@ -1,4 +1,4 @@
-package pl.lotto.numberreceiver;
+package pl.lotto.domain.numberreceiver;
 
 import org.springframework.stereotype.Service;
 
@@ -7,26 +7,28 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
-
 @Service
 class NumbersReceiverValidator {
 
-    List<String> messages = new LinkedList<>();
+    private static final int QUANTITY_NUMBERS_FROM_USER = 6;
+    private static final int MIN_NUMBER_FROM_USER = 1;
+    private static final int MAX_NUMBER_FROM_USER = 99;
+
+    List<ValidationResult> errors = new LinkedList<>();
 
     boolean validate(Set<Integer> inputNumbers) {
         if (isLessThanSixNumbers(inputNumbers)) {
-            messages.add(LESS_THAN_SIX_NUMBERS);
+            errors.add(ValidationResult.LESS_THAN_SIX_NUMBERS);
         } else if (isMoreThanSixNumbers(inputNumbers)) {
-            messages.add(MORE_THAN_SIX_NUMBERS);
+            errors.add(ValidationResult.MORE_THAN_SIX_NUMBERS);
         } else if (isEmptyNumbers(inputNumbers)) {
-            messages.add(NO_NUMBERS);
+            errors.add(ValidationResult.EMPTY_NUMBERS);
         }
         else if(isNumberNotInRange(inputNumbers)){
-            messages.add(OUT_OF_RANGE_NUMBERS);
+            errors.add(ValidationResult.OUT_OF_RANGE_NUMBERS);
         }
         else {
-            messages.add(EQUALS_SIX_NUMBERS);
+            errors.add(ValidationResult.EQUALS_SIX_NUMBERS);
             return isEqualsSixNumberFrom1To99(inputNumbers);
         }
         return false;
@@ -38,11 +40,11 @@ class NumbersReceiverValidator {
     }
 
     boolean isLessThanSixNumbers(Collection<Integer> inputNumbers) {
-        return inputNumbers.size() >= MIN_NUMBER_FROM_USER && inputNumbers.size() < MAX_NUMBERS_FROM_USER;
+        return inputNumbers.size() >= MIN_NUMBER_FROM_USER && inputNumbers.size() < QUANTITY_NUMBERS_FROM_USER;
     }
 
     boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {
-        return inputNumbers.size() > MAX_NUMBERS_FROM_USER;
+        return inputNumbers.size() > QUANTITY_NUMBERS_FROM_USER;
     }
 
     boolean isEqualsSixNumberFrom1To99(Collection<Integer> inputNumbers) {
@@ -56,12 +58,12 @@ class NumbersReceiverValidator {
         return inputNumbers.stream()
                 .filter(number -> number >= MIN_NUMBER_FROM_USER)
                 .filter(number -> number <= MAX_NUMBER_FROM_USER)
-                .count() == MAX_NUMBERS_FROM_USER;
+                .count() == QUANTITY_NUMBERS_FROM_USER;
     }
 
     boolean isNumberNotInRange(Collection<Integer> inputNumbers) {
         return inputNumbers.stream()
-                .anyMatch(number -> number < MIN_NUMBER_FROM_USER || number > MAX_NUMBERS_FROM_USER);
+                .anyMatch(number -> number < MIN_NUMBER_FROM_USER || number > MAX_NUMBER_FROM_USER);
 
     }
 }

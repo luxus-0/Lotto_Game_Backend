@@ -1,4 +1,4 @@
-package pl.lotto.numberreceiver;
+package pl.lotto.domain.numberreceiver;
 
 import java.time.LocalDateTime;
 import java.util.Set;

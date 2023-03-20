@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.lotto.numberreceiver.NumberReceiverFacade;
-import pl.lotto.numberreceiver.Ticket;
-import pl.lotto.numberreceiver.dto.NumberResultDto;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.Ticket;
+import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 
 import java.util.Set;
 
@@ -17,10 +17,10 @@ class NumberReceiverResource {
     private final NumberReceiverFacade numberReceiverFacade;
 
     @GetMapping
-    ResponseEntity<NumberResultDto> inputNumbers(@RequestBody Ticket ticket) {
+    ResponseEntity<NumberReceiverResultDto> inputNumbers(@RequestBody Ticket ticket) {
         Set<Integer> responseNumbers = ticket.numbersFromUser();
-        NumberResultDto numberResultDto = numberReceiverFacade.inputNumbers(responseNumbers);
-        return new ResponseEntity<>(numberResultDto, HttpStatus.OK);
+        NumberReceiverResultDto numberReceiverResultDto = numberReceiverFacade.inputNumbers(responseNumbers);
+        return new ResponseEntity<>(numberReceiverResultDto, HttpStatus.OK);
     }
 
     /*@GetMapping("/users")

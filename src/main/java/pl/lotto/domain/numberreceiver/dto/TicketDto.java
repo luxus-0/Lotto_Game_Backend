@@ -1,4 +1,4 @@
-package pl.lotto.numberreceiver.dto;
+package pl.lotto.domain.numberreceiver.dto;
 
 import lombok.Builder;
 
