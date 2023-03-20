@@ -15,8 +15,8 @@ import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.*;
 
 class NumberReceiverFacadeTest {
 
-    private final Clock clock = Clock.systemUTC();
-    NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
+    NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
+            .createModuleForTests(Clock.systemUTC());
 
     @Test
     @DisplayName("return 6 numbers message when user gave correct numbers")
@@ -90,7 +90,7 @@ class NumberReceiverFacadeTest {
         //given
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         NumberResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
-        LocalDateTime drawDate = LocalDateTime.of(2023,3,25,12,0,0,0);
+        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 2, 12, 0);
         // when
         List<TicketDto> ticketDtos = numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate);
         //then
