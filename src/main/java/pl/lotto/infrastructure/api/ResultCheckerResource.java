@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pl.lotto.resultchecker.ResultsCheckerFacade;
-import pl.lotto.resultchecker.dto.ResultsLottoDto;
+import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
+import pl.lotto.domain.resultchecker.dto.ResultsLottoDto;
 
 import java.time.LocalDateTime;
 import java.util.Set;

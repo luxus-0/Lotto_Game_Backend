@@ -4,10 +4,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.lotto.numbersgenerator.NumbersGenerator;
-import pl.lotto.numbersgenerator.NumbersGeneratorFacade;
-import pl.lotto.numbersgenerator.dto.LottoNumbersDto;
-import pl.lotto.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.NumbersGenerator;
+import pl.lotto.domain.numbersgenerator.NumbersGeneratorFacade;
+import pl.lotto.domain.numbersgenerator.dto.LottoNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
 import java.util.Set;
 import java.util.UUID;

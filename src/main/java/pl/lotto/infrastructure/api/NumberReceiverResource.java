@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.lotto.numberreceiver.NumberReceiverFacade;
-import pl.lotto.numberreceiver.Ticket;
-import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.Ticket;
+import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 
 import java.util.Set;
 

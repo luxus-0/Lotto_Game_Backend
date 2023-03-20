@@ -1,7 +1,5 @@
 package pl.lotto.domain.numberreceiver;
 
-import pl.lotto.numberreceiver.HashGenerable;
-
 public class HashGeneratorTestImpl implements HashGenerable {
 
     private final String hash;

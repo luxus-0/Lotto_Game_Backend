@@ -2,9 +2,8 @@ package pl.lotto.domain.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.numberreceiver.*;
-import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -13,19 +12,19 @@ import java.time.ZoneOffset;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.lotto.numberreceiver.ValidationResult.EQUALS_SIX_NUMBERS;
+import static pl.lotto.domain.numberreceiver.ValidationResult.EQUALS_SIX_NUMBERS;
 
 class NumberReceiverFacadeTest {
     private final TicketRepository ticketRepository = new TicketRepositoryTestImpl();
     Clock clock = Clock.fixed(LocalDateTime.of(2023,2,18,12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
 
-
+    HashGenerable hashGenerator = new HashGeneratorTestImpl();
 
     @Test
     @DisplayName("return 6 numbers message when user gave correct numbers")
     public void should_return_six_numbers_message_when_user_gave_6_numbers() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+
 
         DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
