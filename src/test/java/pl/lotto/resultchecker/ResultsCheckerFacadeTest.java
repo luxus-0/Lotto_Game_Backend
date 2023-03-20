@@ -2,7 +2,10 @@ package pl.lotto.resultchecker;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.resultchecker.dto.ResultsLottoDto;
+import pl.lotto.domain.resultchecker.ResultCheckerDateTime;
+import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
+import pl.lotto.domain.resultchecker.ResultsCheckerFacadeConfiguration;
+import pl.lotto.domain.resultchecker.dto.ResultsLottoDto;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -15,8 +18,8 @@ import static java.time.Month.SEPTEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
-import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.WIN;
+import static pl.lotto.domain.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
+import static pl.lotto.domain.resultchecker.ResultsCheckerMessageProvider.WIN;
 
 class ResultsCheckerFacadeTest {
 

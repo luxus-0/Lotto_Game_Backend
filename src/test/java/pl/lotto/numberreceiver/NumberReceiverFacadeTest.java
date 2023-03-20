@@ -2,9 +2,12 @@ package pl.lotto.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.numberreceiver.dto.AllUsersNumbersDto;
-import pl.lotto.numberreceiver.dto.ResultMessageDto;
-import pl.lotto.numberreceiver.dto.UserNumbersDto;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacadeConfiguration;
+import pl.lotto.domain.numberreceiver.NumberReceiverRepositoryImpl;
+import pl.lotto.domain.numberreceiver.dto.AllUsersNumbersDto;
+import pl.lotto.domain.numberreceiver.dto.ResultMessageDto;
+import pl.lotto.domain.numberreceiver.dto.UserNumbersDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
