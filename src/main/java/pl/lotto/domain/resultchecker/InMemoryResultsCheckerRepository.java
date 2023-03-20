@@ -1,4 +1,4 @@
-package pl.lotto.resultchecker;
+package pl.lotto.domain.resultchecker;
 
 import org.springframework.stereotype.Service;
 
@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static pl.lotto.resultchecker.ResultsCheckerMessageProvider.SIZE_NUMBERS;
 
 @Service
 class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
@@ -27,7 +25,7 @@ class InMemoryResultsCheckerRepository implements ResultsCheckerRepository {
         LocalDateTime dateTime = resultDateTime.readDateTimeDraw();
         return databaseInMemory.values()
                 .stream()
-                .filter(winner -> winner.inputNumbers.size() == SIZE_NUMBERS)
+                .filter(winner -> winner.inputNumbers.size() == ResultsCheckerMessageProvider.SIZE_NUMBERS)
                 .filter(drawDate -> dateTimeDraw.equals(dateTime))
                 .findAny()
                 .orElseThrow();

@@ -1,4 +1,4 @@
-package pl.lotto.resultchecker;
+package pl.lotto.domain.resultchecker;
 
 class LottoNumbersGenerator {
     Integer lottoNumber;

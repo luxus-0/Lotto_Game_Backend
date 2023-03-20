@@ -1,10 +1,11 @@
-package pl.lotto.resultchecker;
+package pl.lotto.domain.resultchecker;
 
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+public
 class ResultsCheckerFacadeConfiguration {
-    ResultsCheckerFacade createModuleForTests() {
+    public ResultsCheckerFacade createModuleForTests() {
         NumbersGenerator numbersGenerator = new NumbersGenerator();
         ResultsCheckerValidator resultsCheckerValidator = new ResultsCheckerValidator(numbersGenerator);
         ResultsCheckerRepository resultsCheckerRepository = new InMemoryResultsCheckerRepository();

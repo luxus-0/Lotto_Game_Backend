@@ -1,4 +1,4 @@
-package pl.lotto.resultchecker;
+package pl.lotto.domain.resultchecker;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -6,14 +6,14 @@ import java.time.LocalDateTime;
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.temporal.TemporalAdjusters.next;
 
-class ResultCheckerDateTime {
+public class ResultCheckerDateTime {
     private final Clock clock;
 
-    ResultCheckerDateTime(Clock clock) {
+    public ResultCheckerDateTime(Clock clock) {
         this.clock = clock;
     }
 
-    LocalDateTime readDateTimeDraw() {
+    public LocalDateTime readDateTimeDraw() {
         return LocalDateTime.now(clock)
                 .with(next(SATURDAY))
                 .withHour(12)
