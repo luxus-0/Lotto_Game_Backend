@@ -1,39 +1,30 @@
 package pl.lotto.infrastructure.api;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
-import pl.lotto.numberreceiver.dto.AllUsersNumbersDto;
-import pl.lotto.numberreceiver.dto.NumberReceiverDto;
-import pl.lotto.numberreceiver.dto.ResultMessageDto;
-import pl.lotto.numberreceiver.dto.UserNumbersDto;
+import pl.lotto.numberreceiver.Ticket;
+import pl.lotto.numberreceiver.dto.NumberResultDto;
 
-import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/user_numbers")
 class NumberReceiverResource {
-
     private final NumberReceiverFacade numberReceiverFacade;
 
-    NumberReceiverResource(NumberReceiverFacade numberReceiverFacade) {
-        this.numberReceiverFacade = numberReceiverFacade;
+    @GetMapping
+    ResponseEntity<NumberResultDto> inputNumbers(@RequestBody Ticket ticket) {
+        Set<Integer> responseNumbers = ticket.numbersFromUser();
+        NumberResultDto numberResultDto = numberReceiverFacade.inputNumbers(responseNumbers);
+        return new ResponseEntity<>(numberResultDto, HttpStatus.OK);
     }
 
-    @GetMapping("/numbers")
-    ResponseEntity<ResultMessageDto> inputNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
-        Set<Integer> responseNumbers = numberReceiverDto.numbersFromUser();
-        ResultMessageDto resultMessageDto = numberReceiverFacade.inputNumbers(responseNumbers);
-        return new ResponseEntity<>(resultMessageDto, HttpStatus.OK);
-    }
-
-    @GetMapping("/users")
-    ResponseEntity<AllUsersNumbersDto> readUsers(@RequestBody NumberReceiverDto numberReceiverDto) {
+    /*@GetMapping("/users")
+    ResponseEntity<AllUsersNumbersDto> readUsers(@RequestBody Ticket numberReceiverDto) {
         LocalDateTime responseDateTime = numberReceiverDto.dateTimeDraw();
         AllUsersNumbersDto allUsersNumbersDto = numberReceiverFacade.usersNumbers(responseDateTime);
         return new ResponseEntity<>(allUsersNumbersDto, HttpStatus.OK);
@@ -49,5 +40,5 @@ class NumberReceiverResource {
     ResponseEntity<UserNumbersDto> findUser(@PathVariable UUID uuid) {
         UserNumbersDto userNumbersDto = numberReceiverFacade.readUserByUUID(uuid);
         return new ResponseEntity<>(userNumbersDto, HttpStatus.OK);
-    }
+    }*/
 }

@@ -20,8 +20,12 @@ class NumbersReceiverValidator {
         } else if (isMoreThanSixNumbers(inputNumbers)) {
             messages.add(MORE_THAN_SIX_NUMBERS);
         } else if (isEmptyNumbers(inputNumbers)) {
-            messages.add(NUMBERS_IS_EMPTY);
-        } else {
+            messages.add(NO_NUMBERS);
+        }
+        else if(isNumberNotInRange(inputNumbers)){
+            messages.add(OUT_OF_RANGE_NUMBERS);
+        }
+        else {
             messages.add(EQUALS_SIX_NUMBERS);
             return isEqualsSixNumberFrom1To99(inputNumbers);
         }
@@ -30,23 +34,34 @@ class NumbersReceiverValidator {
 
 
     boolean isEmptyNumbers(Set<Integer> inputNumbers) {
-        return inputNumbers.isEmpty();
+        return inputNumbers.size() == 0;
     }
 
     boolean isLessThanSixNumbers(Collection<Integer> inputNumbers) {
-        return inputNumbers.size() < SIZE_MAX;
+        return inputNumbers.size() >= MIN_NUMBER_FROM_USER && inputNumbers.size() < MAX_NUMBERS_FROM_USER;
     }
 
     boolean isMoreThanSixNumbers(Collection<Integer> inputNumbers) {
-        return inputNumbers.size() > SIZE_MAX;
+        return inputNumbers.size() > MAX_NUMBERS_FROM_USER;
     }
 
     boolean isEqualsSixNumberFrom1To99(Collection<Integer> inputNumbers) {
-        List<Integer> rangeNumbers = inputNumbers.stream()
-                .filter(number -> number >= FROM_NUMBER)
-                .filter(number -> number <= TO_NUMBER)
-                .toList();
+        if(areAllNumbersInRange(inputNumbers)){
+            return true;
+        }
+        return false;
+    }
 
-        return rangeNumbers.stream().anyMatch(number -> number == SIZE_MAX);
+    boolean areAllNumbersInRange(Collection<Integer> inputNumbers) {
+        return inputNumbers.stream()
+                .filter(number -> number >= MIN_NUMBER_FROM_USER)
+                .filter(number -> number <= MAX_NUMBER_FROM_USER)
+                .count() == MAX_NUMBERS_FROM_USER;
+    }
+
+    boolean isNumberNotInRange(Collection<Integer> inputNumbers) {
+        return inputNumbers.stream()
+                .anyMatch(number -> number < MIN_NUMBER_FROM_USER || number > MAX_NUMBERS_FROM_USER);
+
     }
 }

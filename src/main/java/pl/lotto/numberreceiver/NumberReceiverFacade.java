@@ -1,68 +1,74 @@
 package pl.lotto.numberreceiver;
 
-import org.springframework.stereotype.Service;
-import pl.lotto.numberreceiver.dto.AllUsersNumbersDto;
-import pl.lotto.numberreceiver.dto.ResultMessageDto;
-import pl.lotto.numberreceiver.dto.UserNumbersDto;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import pl.lotto.datetimegenerator.DateTimeDrawFacade;
+import pl.lotto.numberreceiver.dto.NumberResultDto;
+import pl.lotto.numberreceiver.dto.TicketDto;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Stream;
 
-import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.FAILED_MESSAGE;
-import static pl.lotto.numberreceiver.NumbersReceiverMessageProvider.SUCCESS_MESSAGE;
-
-@Service
+@AllArgsConstructor
+@Log4j2
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
-    private final InMemoryNumberReceiverRepository inMemoryNumberReceiverRepository;
-    private final NumberReceiverRepositoryImpl numberReceiverRepository;
-    private final DateTimeDrawGenerator dateTimeGenerator;
-    private final UUIDGenerator uuidGenerator;
+    private final DateTimeDrawFacade dateTimeDrawFacade;
+    private final TicketRepository ticketRepository;
+    private final HashGenerator hashGenerator;
 
-    public NumberReceiverFacade(NumbersReceiverValidator numberValidator, DateTimeDrawGenerator dateTimeGenerator, UUIDGenerator uuidGenerator) {
-        this.numberValidator = numberValidator;
-        this.inMemoryNumberReceiverRepository = new InMemoryNumberReceiverImpl();
-        this.numberReceiverRepository = new NumberReceiverRepositoryImpl();
-        this.dateTimeGenerator = dateTimeGenerator;
-        this.uuidGenerator = uuidGenerator;
-    }
 
-    public ResultMessageDto inputNumbers(Set<Integer> numbersFromUser) {
+    public NumberResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (!validate) {
-            return new ResultMessageDto(numbersFromUser, FAILED_MESSAGE);
+           String ticketId = hashGenerator.getHash();
+           LocalDateTime drawDate = dateTimeDrawFacade.readNextDrawDate();
+           Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
+           String message = getResultMessage();
+            return NumberResultDto.builder()
+                    .ticketId(ticketSaved.hash())
+                    .drawDate(ticketSaved.drawDate())
+                    .numbersFromUser(numbersFromUser)
+                    .message(message)
+                    .build();
         }
-        UUID uuid = uuidGenerator.generateUUID();
-        LocalDateTime dateTimeDraw = dateTimeGenerator.generateNextDrawDate();
-        UserNumbers userNumbers = new UserNumbers(uuid, numbersFromUser, dateTimeDraw);
-        UserNumbers savedUserNumbers = inMemoryNumberReceiverRepository.save(userNumbers);
-        Set<Integer> numbers = savedUserNumbers.numbersFromUser();
-        return new ResultMessageDto(numbers, SUCCESS_MESSAGE);
+        return NumberResultDto.builder()
+                .message(getResultMessage())
+                .build();
     }
 
-    public AllUsersNumbersDto usersNumbers(LocalDateTime dateTimeDraw) {
-        UserNumbers userNumbers = inMemoryNumberReceiverRepository.findByDate(dateTimeDraw);
-        UserNumbers saveUserNumbers = inMemoryNumberReceiverRepository.save(new UserNumbers(userNumbers.uuid(), userNumbers.numbersFromUser(), userNumbers.dateTimeDraw()));
-        return new AllUsersNumbersDto(List.of(new UserNumbersDto(saveUserNumbers.uuid(), saveUserNumbers.numbersFromUser(), saveUserNumbers.dateTimeDraw())));
-    }
-
-    public UserNumbersDto readUserByDateTime(LocalDateTime dateTime) {
-        UserNumbers userNumbers = numberReceiverRepository.findUserByDateTime(dateTime);
-        return Stream.of(userNumbers)
-                .map(dto -> new UserNumbersDto(userNumbers.uuid(), userNumbers.numbersFromUser(), userNumbers.dateTimeDraw()))
+    private String getResultMessage() {
+        List<String> messagesResult = numberValidator.messages;
+        return messagesResult.stream()
                 .findAny()
-                .orElseThrow();
+                .orElse("not found validation message");
     }
 
-    public UserNumbersDto readUserByUUID(UUID uuid) {
-        UserNumbers userNumbers = numberReceiverRepository.findUserByUUID(uuid);
-        return Stream.of(new UserNumbersDto(userNumbers.uuid(), userNumbers.numbersFromUser(), userNumbers.dateTimeDraw()))
-                .filter(user -> user.uuid() != null && user.userNumbersInput() != null && user.date() != null)
-                .findAny()
-                .orElse(null);
+
+    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime dateTime){
+        LocalDateTime nextDrawDate = retrieveNextDrawDate();
+        if(dateTime.isAfter(nextDrawDate)) {
+            return Collections.emptyList();
+        }
+            List<Ticket> allTicketByDrawDate = ticketRepository.findAllTicketsByDrawDate(dateTime);
+            return allTicketByDrawDate.stream()
+                    .map(TicketMapper::mapToDto)
+                    .toList();
+    }
+
+    public LocalDateTime retrieveNextDrawDate(){
+        return dateTimeDrawFacade.readNextDrawDate();
+    }
+
+    public TicketDto findByHash(String hash){
+        Ticket ticket = ticketRepository.findByHash(hash);
+        return TicketDto.builder()
+                .hash(ticket.hash())
+                .numbersFromUser(ticket.numbersFromUser())
+                .drawDate(ticket.drawDate())
+                .build();
     }
 }
