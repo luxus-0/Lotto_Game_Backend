@@ -1,8 +1,8 @@
 package pl.lotto.domain.numbersgenerator;
 
 import org.springframework.stereotype.Service;
-import pl.lotto.domain.numbersgenerator.exception.NumbersLottoNotFoundException;
 import pl.lotto.domain.numbersgenerator.dto.LottoNumbersDto;
+import pl.lotto.domain.numbersgenerator.exception.NumbersLottoNotFoundException;
 
 import java.util.UUID;
 

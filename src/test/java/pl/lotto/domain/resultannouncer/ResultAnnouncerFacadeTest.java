@@ -1,9 +1,7 @@
-package pl.lotto.resultannouncer;
+package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
-import pl.lotto.domain.resultannouncer.ResultAnnouncerFacadeConfiguration;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerDto;
 
 import java.time.LocalDateTime;

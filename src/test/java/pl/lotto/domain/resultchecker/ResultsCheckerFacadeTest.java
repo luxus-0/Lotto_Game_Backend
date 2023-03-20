@@ -1,10 +1,7 @@
-package pl.lotto.resultchecker;
+package pl.lotto.domain.resultchecker;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.resultchecker.ResultCheckerDateTime;
-import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.ResultsCheckerFacadeConfiguration;
 import pl.lotto.domain.resultchecker.dto.ResultsLottoDto;
 
 import java.time.Clock;
