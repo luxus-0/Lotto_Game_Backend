@@ -1,4 +1,4 @@
-package pl.lotto.resultannouncer;
+package pl.lotto.domain.resultannouncer;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

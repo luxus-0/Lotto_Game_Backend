@@ -1,14 +1,12 @@
-package pl.lotto.resultannouncer;
+package pl.lotto.domain.resultannouncer;
 
-import pl.lotto.resultannouncer.dto.ResultAnnouncerDto;
-import pl.lotto.resultchecker.ResultsCheckerFacade;
-import pl.lotto.resultchecker.dto.ResultsLottoDto;
+import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerDto;
+import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
+import pl.lotto.domain.resultchecker.dto.ResultsLottoDto;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
-
-import static pl.lotto.resultannouncer.ResultAnnouncerMessage.WIN;
 
 public class ResultAnnouncerFacade {
     ResultsCheckerFacade resultsCheckerFacade;
@@ -17,6 +15,6 @@ public class ResultAnnouncerFacade {
         ResultsLottoDto resultLotto = resultsCheckerFacade.getWinnerNumbers(uuid);
         LocalDateTime resultDateTime = resultLotto.dateTimeDraw();
         Set<Integer> resultWinningNumbers = resultLotto.winnerNumbers();
-        return new ResultAnnouncerDto(uuid, resultWinningNumbers, resultDateTime, WIN);
+        return new ResultAnnouncerDto(uuid, resultWinningNumbers, resultDateTime, ResultAnnouncerMessage.WIN);
     }
 }

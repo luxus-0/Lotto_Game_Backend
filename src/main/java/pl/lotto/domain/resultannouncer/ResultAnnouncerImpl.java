@@ -1,7 +1,7 @@
-package pl.lotto.resultannouncer;
+package pl.lotto.domain.resultannouncer;
 
 import org.springframework.stereotype.Service;
-import pl.lotto.resultannouncer.dto.ResultMessageDto;
+import pl.lotto.domain.resultannouncer.dto.ResultMessageDto;
 
 import java.util.Set;
 import java.util.stream.Collectors;

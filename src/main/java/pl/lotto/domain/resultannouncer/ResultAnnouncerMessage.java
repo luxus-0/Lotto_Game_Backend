@@ -1,4 +1,4 @@
-package pl.lotto.resultannouncer;
+package pl.lotto.domain.resultannouncer;
 
 class ResultAnnouncerMessage {
     public final static String WIN = "win";

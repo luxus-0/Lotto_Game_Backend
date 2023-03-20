@@ -1,4 +1,4 @@
-package pl.lotto.resultannouncer.dto;
+package pl.lotto.domain.resultannouncer.dto;
 
 import java.time.LocalDateTime;
 import java.util.Set;
