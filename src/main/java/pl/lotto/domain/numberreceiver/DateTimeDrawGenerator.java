@@ -1,23 +1,21 @@
 package pl.lotto.domain.numberreceiver;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.lotto.domain.AdjustableClock;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.temporal.TemporalAdjusters.next;
 
 @Service
+@AllArgsConstructor
 class DateTimeDrawGenerator {
 
-    private final Clock clock;
+    private final AdjustableClock clock;
 
-    DateTimeDrawGenerator(Clock clock) {
-        this.clock = clock;
-    }
-
-    LocalDateTime generateNextDrawDate() {
+    LocalDateTime generateNextDrawDate(AdjustableClock clock) {
         return LocalDateTime.now(clock)
                 .with(next(SATURDAY))
                 .withHour(12)
