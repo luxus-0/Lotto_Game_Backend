@@ -26,7 +26,7 @@ public class NumberReceiverFacade {
 
     public NumberReceiverResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
-        if (!validate) {
+        if (validate) {
            String ticketId = hashGenerator.getHash();
            LocalDateTime drawDate = dateTimeDrawGenerator.generateNextDrawDate();
            Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
