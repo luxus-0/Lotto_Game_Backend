@@ -12,13 +12,14 @@ import static java.time.temporal.TemporalAdjusters.next;
 @Service
 @AllArgsConstructor
 class DateTimeDrawGenerator {
-
     private final AdjustableClock clock;
 
-    LocalDateTime generateNextDrawDate(AdjustableClock clock) {
+    LocalDateTime generateNextDrawDate() {
         return LocalDateTime.now(clock)
                 .with(next(SATURDAY))
                 .withHour(12)
-                .withMinute(0);
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
     }
 }

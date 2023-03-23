@@ -14,16 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class TicketRepositoryTestImpl implements TicketRepository {
+public class InMemoryTicketRepositoryTestImpl implements TicketRepository {
     private final Map<String, Ticket> tickets = new ConcurrentHashMap<>();
-    @Override
-    public Ticket save(Ticket ticket) {
-        tickets.put(ticket.hash(), ticket);
-        return ticket;
-    }
 
     @Override
-    public List<Ticket> findAllTicketsByDrawDate(LocalDateTime drawDate) {
+    public List<Ticket> findAllByDrawDate(LocalDateTime drawDate) {
         return tickets.values()
                 .stream()
                 .filter(ticket -> ticket.drawDate().isEqual(drawDate))
@@ -34,6 +29,13 @@ public class TicketRepositoryTestImpl implements TicketRepository {
     public Ticket findByHash(String hash) {
         return tickets.get(hash);
     }
+
+    @Override
+    public Ticket save(Ticket ticket) {
+        tickets.put(ticket.hash(), ticket);
+        return ticket;
+    }
+
 
     @Override
     public <S extends Ticket> List<S> saveAll(Iterable<S> entities) {

@@ -2,14 +2,19 @@ package pl.lotto.domain.numberreceiver;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.lotto.domain.AdjustableClock;
+import wiremock.org.checkerframework.checker.units.qual.A;
 
-import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 @Configuration
 public class NumberReceiverFacadeConfiguration {
+
     @Bean
-    Clock clock() {
-        return Clock.systemUTC();
+    AdjustableClock adjustableClock(){
+        return new AdjustableClock(LocalDateTime.of(2023, 2, 15, 11, 0, 0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
     }
 
     @Bean
@@ -18,9 +23,10 @@ public class NumberReceiverFacadeConfiguration {
     }
 
     @Bean
-    public NumberReceiverFacade createModuleForTests(Clock clock, HashGenerable hashGenerator, TicketRepository ticketRepository) {
+    public NumberReceiverFacade createModuleForTests(HashGenerable hashGenerator, TicketRepository ticketRepository) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
-        DateTimeDrawGenerator dateTimeDraw = new DateTimeDrawGenerator(clock);
-        return new NumberReceiverFacade(numbersReceiverValidator, dateTimeDraw, ticketRepository, hashGenerator);
+        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 15, 11, 0, 0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
+        return new NumberReceiverFacade(numbersReceiverValidator, dateTimeDrawGenerator, ticketRepository, hashGenerator);
     }
 }

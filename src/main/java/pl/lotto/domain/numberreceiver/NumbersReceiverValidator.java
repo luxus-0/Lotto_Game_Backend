@@ -19,15 +19,13 @@ class NumbersReceiverValidator {
     boolean validate(Set<Integer> inputNumbers) {
         if (isLessThanSixNumbers(inputNumbers)) {
             errors.add(ValidationResult.LESS_THAN_SIX_NUMBERS);
-        } else if (isMoreThanSixNumbers(inputNumbers)) {
+        } if (isMoreThanSixNumbers(inputNumbers)) {
             errors.add(ValidationResult.MORE_THAN_SIX_NUMBERS);
-        } else if (isEmptyNumbers(inputNumbers)) {
+        } if (isEmptyNumbers(inputNumbers)) {
             errors.add(ValidationResult.EMPTY_NUMBERS);
-        }
-        else if(isNumberNotInRange(inputNumbers)){
+        }if(isNumberNotInRange(inputNumbers)){
             errors.add(ValidationResult.OUT_OF_RANGE_NUMBERS);
-        }
-        else {
+        } else {
             errors.add(ValidationResult.EQUALS_SIX_NUMBERS);
             return isEqualsSixNumberFrom1To99(inputNumbers);
         }
@@ -48,13 +46,6 @@ class NumbersReceiverValidator {
     }
 
     boolean isEqualsSixNumberFrom1To99(Collection<Integer> inputNumbers) {
-        if(areAllNumbersInRange(inputNumbers)){
-            return true;
-        }
-        return false;
-    }
-
-    boolean areAllNumbersInRange(Collection<Integer> inputNumbers) {
         return inputNumbers.stream()
                 .filter(number -> number >= MIN_NUMBER_FROM_USER)
                 .filter(number -> number <= MAX_NUMBER_FROM_USER)

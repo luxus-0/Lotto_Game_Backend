@@ -2,34 +2,39 @@ package pl.lotto.domain.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.lotto.domain.AdjustableClock;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.resultannouncer.dto.ResultMessageDto;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.lotto.domain.numberreceiver.ValidationResult.EQUALS_SIX_NUMBERS;
+import static pl.lotto.domain.numberreceiver.ValidationResult.*;
 
 class NumberReceiverFacadeTest {
-    private final TicketRepository ticketRepository = new TicketRepositoryTestImpl();
-    Clock clock = Clock.fixed(LocalDateTime.of(2023,2,18,12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
 
-    HashGenerable hashGenerator = new HashGeneratorTestImpl();
+    private final HashGenerable hashGenerator;
+    private final DateTimeDrawGenerator dateTimeDrawGenerator;
+
+    private final NumberReceiverFacade numberReceiverFacade;
+
+    NumberReceiverFacadeTest() {
+        TicketRepository ticketRepository = new InMemoryTicketRepositoryTestImpl();
+        this.hashGenerator = new HashGeneratorTestImpl();
+        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 15, 11, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        this.dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
+        this.numberReceiverFacade = new NumberReceiverFacadeConfiguration()
+                .createModuleForTests(hashGenerator, ticketRepository);
+    }
 
     @Test
     @DisplayName("return 6 numbers message when user gave correct numbers")
     public void should_return_six_numbers_message_when_user_gave_6_numbers() {
         // given
-
-
-        DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         LocalDateTime nextDrawDate = dateTimeDrawGenerator.generateNextDrawDate();
 
@@ -38,16 +43,14 @@ class NumberReceiverFacadeTest {
                 .numbersFromUser(numbersFromUser)
                 .drawDate(nextDrawDate)
                 .build();
-
         // when
         NumberReceiverResultDto response = numberReceiverFacade.inputNumbers(numbersFromUser);
-
         // then
         NumberReceiverResultDto expectedResponse = new NumberReceiverResultDto(createdTicket, EQUALS_SIX_NUMBERS.getInfo());
-        assertThat(response.message()).isEqualTo(expectedResponse.message());
+        assertThat(response).isEqualTo(expectedResponse);
     }
 
-    /*@Test
+    @Test
     @DisplayName("return less than 6 numbers message when user gave less than 6 numbers")
     public void should_return_less_than_six_numbers_message_when_user_gave_less_than_6_numbers() {
         // given
@@ -55,7 +58,7 @@ class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.message()).isEqualTo(LESS_THAN_SIX_NUMBERS.info);
+        assertThat(result.message()).isEqualTo(LESS_THAN_SIX_NUMBERS.getInfo());
     }
 
     @Test
@@ -66,7 +69,7 @@ class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.message()).isEqualTo(MORE_THAN_SIX_NUMBERS.info);
+        assertThat(result.message()).isEqualTo(MORE_THAN_SIX_NUMBERS.getInfo());
     }
 
     @Test
@@ -77,7 +80,7 @@ class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.message()).isEqualTo(OUT_OF_RANGE_NUMBERS.info);
+        assertThat(result.message()).isEqualTo(OUT_OF_RANGE_NUMBERS.getInfo());
     }
 
     @Test
@@ -88,7 +91,7 @@ class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.message()).isEqualTo(EMPTY_NUMBERS.info);
+        assertThat(result.message()).isEqualTo(EMPTY_NUMBERS.getInfo());
     }
 
     @Test
@@ -99,7 +102,7 @@ class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.message()).isEqualTo(OUT_OF_RANGE_NUMBERS.info);
+        assertThat(result.message()).isEqualTo(OUT_OF_RANGE_NUMBERS.getInfo());
     }
 
     @Test
@@ -107,17 +110,20 @@ class NumberReceiverFacadeTest {
     public void should_save_to_database_when_user_gave_6_numbers(){
         //given
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
-        LocalDateTime drawDate = numberReceiverFacade.retrieveNextDrawDate();
+        LocalDateTime drawDate = LocalDateTime.of(2023,2,15,12,0,0,0);
         List<TicketDto> ticketDtos = numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate);
         //when
         NumberReceiverResultDto resultDto = numberReceiverFacade.inputNumbers(numbersFromUser);
 
+        assertThat(ticketDtos).isNotNull();
+        assertThat(resultDto).isNotNull();
+
         assertThat(ticketDtos).contains(
                 TicketDto.builder()
-                        .hash(hashGenerator.getHash())
-                        .drawDate(drawDate)
-                        .numbersFromUser(numbersFromUser)
+                        .hash(resultDto.ticketDto().hash())
+                        .drawDate(resultDto.ticketDto().drawDate())
+                        .numbersFromUser(resultDto.ticketDto().numbersFromUser())
                         .build()
         );
-    }*/
+    }
 }
