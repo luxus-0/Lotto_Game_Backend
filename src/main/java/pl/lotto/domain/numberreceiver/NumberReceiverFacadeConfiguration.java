@@ -23,9 +23,8 @@ public class NumberReceiverFacadeConfiguration {
     }
 
     @Bean
-    public NumberReceiverFacade createModuleForTests(HashGenerable hashGenerator, TicketRepository ticketRepository) {
+    public NumberReceiverFacade createModuleForTests(AdjustableClock clock, HashGenerable hashGenerator, TicketRepository ticketRepository) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 15, 11, 0, 0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
         return new NumberReceiverFacade(numbersReceiverValidator, dateTimeDrawGenerator, ticketRepository, hashGenerator);
     }
