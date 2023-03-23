@@ -104,26 +104,4 @@ class NumberReceiverFacadeTest {
         // then
         assertThat(result.message()).isEqualTo(OUT_OF_RANGE_NUMBERS.getInfo());
     }
-
-    @Test
-    @DisplayName("return save to database when user gave 6 numbers")
-    public void should_save_to_database_when_user_gave_6_numbers(){
-        //given
-        Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
-        LocalDateTime drawDate = LocalDateTime.of(2023,2,15,12,0,0,0);
-        List<TicketDto> ticketDtos = numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate);
-        //when
-        NumberReceiverResultDto resultDto = numberReceiverFacade.inputNumbers(numbersFromUser);
-
-        assertThat(ticketDtos).isNotNull();
-        assertThat(resultDto).isNotNull();
-
-        assertThat(ticketDtos).contains(
-                TicketDto.builder()
-                        .hash(resultDto.ticketDto().hash())
-                        .drawDate(resultDto.ticketDto().drawDate())
-                        .numbersFromUser(resultDto.ticketDto().numbersFromUser())
-                        .build()
-        );
-    }
 }

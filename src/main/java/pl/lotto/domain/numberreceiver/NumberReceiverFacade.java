@@ -5,15 +5,12 @@ import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Log4j2
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
@@ -61,9 +58,8 @@ public class NumberReceiverFacade {
 
     public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime drawDate){
         LocalDateTime nextDrawDate = dateTimeDrawGenerator.generateNextDrawDate();
-        log.info(nextDrawDate);
         if (drawDate.isAfter(nextDrawDate)) {
-            return Collections.emptyList();
+            return List.of(new TicketDto("", Set.of(), drawDate));
         }
         return ticketRepository.findAllByDrawDate(drawDate)
                 .stream()
@@ -72,7 +68,7 @@ public class NumberReceiverFacade {
                 .toList();
     }
 
-    public TicketDto findByHash(String hash){
+    public TicketDto findByHash(String hash) {
         Ticket ticket = ticketRepository.findByHash(hash);
         return TicketDto.builder()
                 .hash(ticket.hash())
