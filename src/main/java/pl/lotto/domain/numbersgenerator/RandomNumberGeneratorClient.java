@@ -1,13 +1,12 @@
-package pl.lotto.domain.numbersgenerator.exception;
+package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.RandomNumberDto;
 
 import java.util.Collections;
-import java.util.Set;
 
 @AllArgsConstructor
 public class RandomNumberGeneratorClient {
@@ -16,8 +15,8 @@ public class RandomNumberGeneratorClient {
     private final RestTemplate restTemplate;
     private final static int LOWER_BAND = 1;
     private final static int UPPER_BAND = 99;
-    private final static int SIZE_NUMBERS = 6;
-    public ResponseEntity<RandomNumbersDto> generateSixRandomNumbers(){
+    private final static int QUANTITY_NUMBERS = 6;
+    public ResponseEntity<RandomNumberDto> generateSixRandomNumbers(){
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -27,13 +26,13 @@ public class RandomNumberGeneratorClient {
                 url,
                 HttpMethod.GET,
                 entity,
-                RandomNumbersDto.class
+                RandomNumberDto.class
                 );
     }
 
     private String getRandomNumbersApi() {
         return RANDOM_NUMBERS_API +
-                "?num=" + SIZE_NUMBERS +
+                "?num=" + QUANTITY_NUMBERS +
                 "&min=" + LOWER_BAND +
                 "&max=" + UPPER_BAND +
                 "&format=plain" +
