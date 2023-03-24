@@ -1,4 +1,4 @@
-package pl.lotto.domain.numberreceiver;
+package pl.lotto.domain.drawdate;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import static java.time.temporal.TemporalAdjusters.next;
 
 @Service
 @AllArgsConstructor
-class DateTimeDrawGenerator {
+public class DrawDateGenerator {
     private final AdjustableClock clock;
 
     LocalDateTime generateNextDrawDate() {
