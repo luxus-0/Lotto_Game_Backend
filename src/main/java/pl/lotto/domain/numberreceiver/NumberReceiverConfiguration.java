@@ -3,14 +3,16 @@ package pl.lotto.domain.numberreceiver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.lotto.domain.AdjustableClock;
-import wiremock.org.checkerframework.checker.units.qual.A;
+import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.drawdate.DrawDateGenerator;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 @Configuration
-public class NumberReceiverFacadeConfiguration {
+public class NumberReceiverConfiguration {
+
 
     @Bean
     AdjustableClock adjustableClock(){
@@ -25,7 +27,8 @@ public class NumberReceiverFacadeConfiguration {
     @Bean
     public NumberReceiverFacade createModuleForTests(AdjustableClock clock, HashGenerable hashGenerator, TicketRepository ticketRepository) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
-        DateTimeDrawGenerator dateTimeDrawGenerator = new DateTimeDrawGenerator(clock);
-        return new NumberReceiverFacade(numbersReceiverValidator, dateTimeDrawGenerator, ticketRepository, hashGenerator);
+        DrawDateGenerator drawDateGenerator = new DrawDateGenerator(clock);
+        DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
+        return new NumberReceiverFacade(numbersReceiverValidator, drawDateFacade, ticketRepository, hashGenerator);
     }
 }

@@ -3,10 +3,14 @@ package pl.lotto.domain.numberreceiver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.AdjustableClock;
+import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.drawdate.DrawDateGenerator;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -16,29 +20,22 @@ import static pl.lotto.domain.numberreceiver.ValidationResult.*;
 
 class NumberReceiverFacadeTest {
 
-    private final HashGenerable hashGenerator;
-    private final NumberReceiverFacade numberReceiverFacade;
-    private final TicketRepository ticketRepository;
-
-    NumberReceiverFacadeTest() {
-        this.ticketRepository = new InMemoryTicketRepositoryTestImpl();
-        this.hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 15, 14, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
-        this.numberReceiverFacade = new NumberReceiverFacadeConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
-    }
+    HashGenerable hashGenerator = new HashGeneratorTestImpl();
+    AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 15, 14, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+    DrawDateGenerator drawDateGenerator = new DrawDateGenerator(clock);
+    DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
+    TicketRepository ticketRepository = new InMemoryTicketRepositoryTestImpl();
+    NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().createModuleForTests(clock, hashGenerator, ticketRepository);
 
     @Test
     public void should_return_six_numbers_message_when_user_gave_6_numbers() {
         // given
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 15, 11, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
-        DateTimeDrawGenerator date = new DateTimeDrawGenerator(clock);
 
         TicketDto createdTicket = TicketDto.builder()
                 .hash(hashGenerator.getHash())
                 .numbersFromUser(numbersFromUser)
-                .drawDate(date.generateNextDrawDate())
+                .drawDate(drawDateFacade.retrieveNextDrawDate())
                 .build();
         // when
         NumberReceiverResultDto response = numberReceiverFacade.inputNumbers(numbersFromUser);
@@ -126,7 +123,7 @@ class NumberReceiverFacadeTest {
         // given
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022, 2, 19, 14, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .createModuleForTests(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
@@ -144,7 +141,7 @@ class NumberReceiverFacadeTest {
         //given
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 15, 14, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .createModuleForTests(clock, hashGenerator, ticketRepository);
 
         Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
@@ -162,7 +159,7 @@ class NumberReceiverFacadeTest {
         //given
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 20, 12, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration()
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .createModuleForTests(clock, hashGenerator, ticketRepository);
 
         Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
@@ -177,12 +174,7 @@ class NumberReceiverFacadeTest {
 
     @Test
     public void should_return_tickets_with_correct_draw_date() {
-        HashGenerable hashGenerator = new HashGenerator();
-
-        Instant fixedInstant = LocalDateTime.of(2022, 12, 15, 12, 0, 0).toInstant(ZoneOffset.UTC);
-        ZoneId of = ZoneId.of("Europe/London");
-        AdjustableClock clock = new AdjustableClock(fixedInstant, of);
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, hashGenerator, ticketRepository);
+        //given
         NumberReceiverResultDto numberReceiverResponseDto = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 6));
         clock.plusDays(1);
         NumberReceiverResultDto numberReceiverResponseDto1 = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 6));
@@ -198,14 +190,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_empty_collection_if_there_are_no_ticket() {
         //given
-        HashGenerable hashGenerator = new HashGenerator();
-        Instant fixedInstant = LocalDateTime.of(2022, 12, 19, 12, 0, 0).toInstant(ZoneOffset.UTC);
-        ZoneId of = ZoneId.of("Europe/London");
-        AdjustableClock clock = new AdjustableClock(fixedInstant, of);
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, hashGenerator, ticketRepository);
-
         LocalDateTime dateTimeDraw = LocalDateTime.now(clock);
-
         //when
         List<TicketDto> ticketsByDrawDate = numberReceiverFacade.retrieveAllTicketByDrawDate(dateTimeDraw);
         //then
@@ -215,11 +200,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void it_should_return_empty_collections_if_given_date_is_after_next_drawDate() {
         // given
-        HashGenerable hashGenerator = new HashGenerator();
-        Instant fixedInstant = LocalDateTime.of(2022, 12, 19, 12, 0, 0).toInstant(ZoneOffset.UTC);
-        ZoneId of = ZoneId.of("Europe/London");
-        AdjustableClock clock = new AdjustableClock(fixedInstant, of);
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, hashGenerator, ticketRepository);
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().createModuleForTests(clock, hashGenerator, ticketRepository);
         NumberReceiverResultDto numberReceiverResponseDto = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 6));
 
         LocalDateTime drawDate = numberReceiverResponseDto.ticketDto().drawDate();
@@ -233,17 +214,10 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_next_draw_date() {
         // given
-        HashGenerable hashGenerator = new HashGenerator();
-        Instant fixedInstant = LocalDateTime.of(2022, 12, 19, 12, 0, 0, 0).toInstant(ZoneOffset.UTC);
-        ZoneId of = ZoneId.systemDefault();
-        AdjustableClock clock = new AdjustableClock(fixedInstant, of);
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, hashGenerator, ticketRepository);
-
+        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 2, 18, 12, 0, 0, 0);
         // when
-        LocalDateTime testedDrawDate = numberReceiverFacade.createDrawDateForTicket();
-
+        LocalDateTime testedDrawDate = drawDateFacade.retrieveNextDrawDate();
         // then
-        LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 12, 24, 12, 0, 0, 0);
         assertThat(testedDrawDate).isEqualTo(expectedDrawDate);
     }
 

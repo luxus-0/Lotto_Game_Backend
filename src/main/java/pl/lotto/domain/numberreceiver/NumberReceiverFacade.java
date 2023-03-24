@@ -1,11 +1,14 @@
 package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
+import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -13,7 +16,7 @@ public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
 
-    private final DateTimeDrawGenerator dateTimeDrawGenerator;
+    private final DrawDateFacade drawDateFacade;
 
     private final TicketRepository ticketRepository;
     private final HashGenerable hashGenerator;
@@ -23,7 +26,7 @@ public class NumberReceiverFacade {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (validate) {
            String ticketId = hashGenerator.getHash();
-           LocalDateTime drawDate = dateTimeDrawGenerator.generateNextDrawDate();
+           LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
            Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
             return getNumberReceiverResultDto(ticketSaved);
         }
@@ -50,7 +53,7 @@ public class NumberReceiverFacade {
     }
 
     public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime drawDate){
-        LocalDateTime nextDrawDate = dateTimeDrawGenerator.generateNextDrawDate();
+        LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         if (drawDate.isAfter(nextDrawDate)) {
             return Collections.emptyList();
         }
@@ -59,10 +62,6 @@ public class NumberReceiverFacade {
                 .filter(ticket -> ticket.drawDate().isEqual(drawDate))
                 .map(TicketMapper::mapToTicketDto)
                 .toList();
-    }
-
-    LocalDateTime createDrawDateForTicket(){
-        return dateTimeDrawGenerator.generateNextDrawDate();
     }
 
     public TicketDto findByHash(String hash) {
