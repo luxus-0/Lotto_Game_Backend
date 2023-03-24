@@ -1,17 +1,19 @@
 package pl.lotto.domain.numbersgenerator;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumberDto;
 
 import java.util.Collections;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Service
 public class RandomNumberGeneratorClient {
     @Value("${random.numbers.api}")
-    private final String RANDOM_NUMBERS_API;
+    private String RANDOM_NUMBERS_API;
     private final RestTemplate restTemplate;
     private final static int LOWER_BAND = 1;
     private final static int UPPER_BAND = 99;
