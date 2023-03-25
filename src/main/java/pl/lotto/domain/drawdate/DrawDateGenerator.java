@@ -2,7 +2,6 @@ package pl.lotto.domain.drawdate;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.lotto.domain.AdjustableClock;
 
 import java.time.LocalDateTime;
 

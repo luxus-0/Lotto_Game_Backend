@@ -1,4 +1,4 @@
-package pl.lotto.domain;
+package pl.lotto.domain.drawdate;
 
 import java.time.*;
 
