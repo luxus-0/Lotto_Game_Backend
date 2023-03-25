@@ -3,16 +3,13 @@ package pl.lotto.infrastructure.numbergenerator.client;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumberDto;
 
 import java.util.Collections;
 
 @RequiredArgsConstructor
-@Service
-public
-class NumberGeneratorClient {
+public class NumberGeneratorClient {
     @Value("${random.numbers.api}")
     private String RANDOM_NUMBERS_API;
     @Value("${range.from.number}")
