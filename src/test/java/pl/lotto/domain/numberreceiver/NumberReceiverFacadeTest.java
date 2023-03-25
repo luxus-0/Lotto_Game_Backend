@@ -2,7 +2,7 @@ package pl.lotto.domain.numberreceiver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.AdjustableClock;
+import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateGenerator;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;

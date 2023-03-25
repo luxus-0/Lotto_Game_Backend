@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.api;
+package pl.lotto.infrastructure.numbereceiver.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user_numbers")
-class NumberReceiverResource {
+class NumberReceiverController {
     private final NumberReceiverFacade numberReceiverFacade;
 
     @GetMapping
