@@ -8,7 +8,9 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.exception.RandomNumbersNotFoundException;
 
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
@@ -17,7 +19,6 @@ public class RandomNumbersGeneratorFacade {
 
     private final RandomNumberGeneratorClient randomNumberGeneratorClient;
     private final RandomNumberRepository randomNumberRepository;
-    private static final String RANDOM_NUMBERS_RESPONSE = "random numbers not found";
 
     public RandomNumbersDto generateSixRandomNumbers(){
         ResponseEntity<RandomNumbersDto> response = randomNumberGeneratorClient.generateSixRandomNumbers();
@@ -28,8 +29,8 @@ public class RandomNumbersGeneratorFacade {
             log.info("UUID: " + randomNumberSaved.uuid() + "random numbers: " +randomNumberSaved.randomNumbers());
             return new RandomNumbersDto(randomNumberSaved.randomNumbers());
         }
-        log.info(RANDOM_NUMBERS_RESPONSE);
-        throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        log.info("Status code: " + response.getStatusCode());
+        return new RandomNumbersDto(Collections.emptySet());
     }
 
     private RandomNumber readRandomNumber(RandomNumbersDto randomNumbersDto) {
