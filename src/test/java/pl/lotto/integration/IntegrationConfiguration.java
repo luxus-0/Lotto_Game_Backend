@@ -1,10 +1,10 @@
-package pl.lotto.infrastructure.configuration;
+package pl.lotto.integration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import pl.lotto.domain.AdjustableClock;
+import pl.lotto.domain.drawdate.AdjustableClock;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
