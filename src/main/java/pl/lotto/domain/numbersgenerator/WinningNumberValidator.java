@@ -14,18 +14,13 @@ public class WinningNumberValidator {
     private int QUANTITY_NUMBERS;
 
     public WinningNumbersDto validate(Set<Integer> winningNumbers) {
-        boolean correctQuantityNumbers = isCorrectQuantityNumbers(winningNumbers);
         return winningNumbers.stream()
                 .filter(numbers -> numbers < RANGE_FROM_NUMBER)
                 .filter(numbers -> numbers > RANGE_TO_NUMBER)
-                .filter(numbers -> !correctQuantityNumbers)
                 .map(number -> WinningNumbersDto.builder()
                         .winningNumbers(winningNumbers)
                         .build())
                 .findAny()
                 .orElseThrow(() -> new IllegalStateException("Number out of range"));
-    }
-    private boolean isCorrectQuantityNumbers(Set<Integer> winningNumbers) {
-        return winningNumbers.size() <= QUANTITY_NUMBERS;
     }
 }
