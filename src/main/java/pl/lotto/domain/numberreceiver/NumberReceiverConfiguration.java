@@ -2,7 +2,7 @@ package pl.lotto.domain.numberreceiver;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.lotto.domain.AdjustableClock;
+import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateGenerator;
 

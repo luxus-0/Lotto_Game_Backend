@@ -1,43 +1,47 @@
-package pl.lotto.infrastructure.client;
+package pl.lotto.infrastructure.numbergenerator.client;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.RandomNumberDto;
 
 import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
 public
-class RandomNumberGeneratorClient {
+class NumberGeneratorClient {
     @Value("${random.numbers.api}")
     private String RANDOM_NUMBERS_API;
+    @Value("${range.from.number}")
+    private int RANGE_FROM_NUMBER;
+    @Value("${range.to.number}")
+    private int RANGE_TO_NUMBER;
+    @Value("${quantity.numbers}")
+    private int QUANTITY_NUMBERS;
+
     private final RestTemplate restTemplate;
-    private final static int LOWER_BAND = 1;
-    private final static int UPPER_BAND = 99;
-    private final static int QUANTITY_NUMBERS = 6;
-    public ResponseEntity<RandomNumbersDto> generateSixRandomNumbers(){
+    public ResponseEntity<RandomNumberDto> generateSixRandomNumbers(){
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        String url = getRandomNumbersApi();
+        String url = getRandomNumbersUrl();
 
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 entity,
-                RandomNumbersDto.class
+                RandomNumberDto.class
                 );
     }
 
-    private String getRandomNumbersApi() {
+    private String getRandomNumbersUrl() {
         return RANDOM_NUMBERS_API +
                 "?num=" + QUANTITY_NUMBERS +
-                "&min=" + LOWER_BAND +
-                "&max=" + UPPER_BAND +
+                "&min=" + RANGE_FROM_NUMBER +
+                "&max=" + RANGE_TO_NUMBER +
                 "&format=plain" +
                 "&rnd=new";
     }

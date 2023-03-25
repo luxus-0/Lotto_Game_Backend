@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
-import pl.lotto.infrastructure.client.RandomNumberGeneratorClient;
+import pl.lotto.infrastructure.numbergenerator.client.NumberGeneratorClient;
 
 @Configuration
 @Profile("test")
@@ -15,8 +15,8 @@ public class RandomNumberGeneratorConfiguration {
         return new RestTemplate();
     }
     @Bean
-    public RandomNumbersGeneratorFacade createModuleForTests(RestTemplate restTemplate, RandomNumberRepository randomNumberRepository) {
-        RandomNumberGeneratorClient randomNumberGeneratorClient = new RandomNumberGeneratorClient(restTemplate);
-        return new RandomNumbersGeneratorFacade(randomNumberGeneratorClient, randomNumberRepository);
+    public RandomNumberGeneratorFacade createModuleForTests(RestTemplate restTemplate, RandomNumberRepository randomNumberRepository) {
+        NumberGeneratorClient numberGeneratorClient = new NumberGeneratorClient(restTemplate);
+        return new RandomNumberGeneratorFacade(numberGeneratorClient, randomNumberRepository);
     }
 }
