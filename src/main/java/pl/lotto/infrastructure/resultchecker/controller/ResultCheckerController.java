@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.api;
+package pl.lotto.infrastructure.resultchecker.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +14,11 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-class ResultCheckerResource {
+class ResultCheckerController {
 
     private final ResultsCheckerFacade resultsCheckerFacade;
 
-    ResultCheckerResource(ResultsCheckerFacade resultsCheckerFacade) {
+    ResultCheckerController(ResultsCheckerFacade resultsCheckerFacade) {
         this.resultsCheckerFacade = resultsCheckerFacade;
     }
 
