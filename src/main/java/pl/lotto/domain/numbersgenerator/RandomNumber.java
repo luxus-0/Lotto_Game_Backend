@@ -7,5 +7,5 @@ import java.util.Set;
 
 @Document
 @Builder
-public record RandomNumber(String uuid, Set<Integer> randomNumbers, String message) {
+record RandomNumber(String uuid, Set<Integer> randomNumbers, String message) {
 }

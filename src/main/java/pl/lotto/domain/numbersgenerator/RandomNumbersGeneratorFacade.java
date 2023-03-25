@@ -1,7 +1,10 @@
 package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumberDto;
 
 import java.util.Objects;
@@ -9,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
+@Log4j2
 public class RandomNumbersGeneratorFacade {
 
     private final RandomNumberGeneratorClient randomNumberGeneratorClient;
@@ -23,7 +27,7 @@ public class RandomNumbersGeneratorFacade {
             RandomNumber randomNumberSaved = randomNumberRepository.save(randomNumber);
             return new RandomNumberDto(randomNumberSaved.uuid(), randomNumberSaved.randomNumbers());
         }
-        return new RandomNumberDto("", Set.of());
+        throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 
     private RandomNumber readRandomNumber(RandomNumberDto randomNumbers) {

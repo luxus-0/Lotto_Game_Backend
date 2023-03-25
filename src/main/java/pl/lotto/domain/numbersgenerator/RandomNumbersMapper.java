@@ -2,7 +2,7 @@ package pl.lotto.domain.numbersgenerator;
 
 import pl.lotto.domain.numbersgenerator.dto.RandomNumberDto;
 
-public class RandomNumbersMapper {
+class RandomNumbersMapper {
     static RandomNumber toRandomNumber(RandomNumberDto dto){
         return RandomNumber.builder()
                 .uuid(dto.uuid())

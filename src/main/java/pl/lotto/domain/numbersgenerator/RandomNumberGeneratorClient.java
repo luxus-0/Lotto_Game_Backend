@@ -11,7 +11,7 @@ import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
-public class RandomNumberGeneratorClient {
+class RandomNumberGeneratorClient {
     @Value("${random.numbers.api}")
     private String RANDOM_NUMBERS_API;
     private final RestTemplate restTemplate;

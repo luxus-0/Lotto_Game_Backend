@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @Profile("test")
-class RandomNumberGeneratorConfiguration {
+public class RandomNumberGeneratorConfiguration {
 
     @Bean
     public RestTemplate restTemplate(){
