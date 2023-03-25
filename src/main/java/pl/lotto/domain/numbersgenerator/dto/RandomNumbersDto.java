@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.util.Set;
 
 @Builder
-public record RandomNumberDto(String uuid, Set<Integer> randomNumbers){
+public record RandomNumbersDto(Set<Integer> randomNumbers){
 }

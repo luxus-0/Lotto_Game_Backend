@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumberDto;
+import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 
 import java.util.Collections;
 
@@ -18,7 +18,7 @@ class RandomNumberGeneratorClient {
     private final static int LOWER_BAND = 1;
     private final static int UPPER_BAND = 99;
     private final static int QUANTITY_NUMBERS = 6;
-    public ResponseEntity<RandomNumberDto> generateSixRandomNumbers(){
+    public ResponseEntity<RandomNumbersDto> generateSixRandomNumbers(){
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -28,7 +28,7 @@ class RandomNumberGeneratorClient {
                 url,
                 HttpMethod.GET,
                 entity,
-                RandomNumberDto.class
+                RandomNumbersDto.class
                 );
     }
 
