@@ -2,15 +2,13 @@ package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.exception.RandomNumbersNotFoundException;
+import pl.lotto.infrastructure.client.RandomNumberGeneratorClient;
 
 import java.util.Collections;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Stream;
 
 @AllArgsConstructor

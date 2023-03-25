@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.infrastructure.client;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +11,7 @@ import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
+public
 class RandomNumberGeneratorClient {
     @Value("${random.numbers.api}")
     private String RANDOM_NUMBERS_API;
