@@ -25,7 +25,6 @@ public class WinningNumberValidator {
                 .findAny()
                 .orElseThrow(() -> new IllegalStateException("Number out of range"));
     }
-
     private boolean isCorrectQuantityNumbers(Set<Integer> winningNumbers) {
         return winningNumbers.size() <= QUANTITY_NUMBERS;
     }
