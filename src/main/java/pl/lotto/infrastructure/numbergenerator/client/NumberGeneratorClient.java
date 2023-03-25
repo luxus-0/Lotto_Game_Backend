@@ -18,7 +18,6 @@ public class NumberGeneratorClient {
     private int RANGE_TO_NUMBER;
     @Value("${quantity.numbers}")
     private int QUANTITY_NUMBERS;
-
     private final RestTemplate restTemplate;
     public ResponseEntity<RandomNumberDto> generateSixRandomNumbers(){
         HttpHeaders headers = new HttpHeaders();
