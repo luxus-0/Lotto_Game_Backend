@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumberDto;
+import pl.lotto.domain.numbersgenerator.exception.RandomNumbersNotFoundException;
 
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
@@ -35,6 +35,6 @@ public class RandomNumbersGeneratorFacade {
                 .filter(Objects::nonNull)
                 .map(RandomNumbersMapper::toRandomNumber)
                 .findAny()
-                .orElse(new RandomNumber("00000", Set.of(), RANDOM_NUMBERS_MESSAGE));
+                .orElseThrow(RandomNumbersNotFoundException::new);
     }
 }
