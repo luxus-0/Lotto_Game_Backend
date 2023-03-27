@@ -14,10 +14,8 @@ public class WinningNumberValidator {
     @Value("${validation.message.winning.numbers}")
     private String OUT_OF_RANGE_NUMBERS;
 
-    private String IN_RANGE_NUMBERS = "correct range winning numbers";
-
     public WinningNumbersDto validate(Set<Integer> winningNumbers) {
-        Optional<WinningNumbersDto> winningNumbersDto = winningNumbers.stream()
+        Optional<WinningNumbersDto> outOfRangeNumbers = winningNumbers.stream()
                 .filter(numbers -> numbers < RANGE_FROM_NUMBER)
                 .filter(numbers -> numbers > RANGE_TO_NUMBER)
                 .map(number -> WinningNumbersDto.builder()
@@ -25,14 +23,13 @@ public class WinningNumberValidator {
                         .build())
                 .findAny();
 
-        if (winningNumbersDto.isPresent()) {
+        if (outOfRangeNumbers.isPresent()) {
             return WinningNumbersDto.builder()
                     .validationMessage(OUT_OF_RANGE_NUMBERS)
                     .build();
         }
         return WinningNumbersDto.builder()
                 .winningNumbers(winningNumbers)
-                .validationMessage(IN_RANGE_NUMBERS)
                 .build();
     }
 }
