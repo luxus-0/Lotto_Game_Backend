@@ -17,7 +17,7 @@ public class WinningNumbersGeneratorFacade {
     private final WinningNumberValidator winningNumberValidator;
     private final WinningNumbersRepository winningNumbersRepository;
 
-    WinningNumbersDto generateWinningNumbers() throws JSONException, JsonProcessingException {
+    WinningNumbersDto generateWinningNumbers() {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
         Set<Integer> winningNumbers = randomNumberGeneratorFacade.generateSixRandomNumbers().winningNumbers();
         winningNumberValidator.validate(winningNumbers);

@@ -10,12 +10,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepository{
 
-    private final Map<LocalDateTime, WinningNumbers> winningNumbersList = new ConcurrentHashMap<>();
+    private final Map<Set<Integer>, WinningNumbers> winningNumbersList = new ConcurrentHashMap<>();
 
     @Override
     public Optional<WinningNumbers> findWinningNumbersByDate(LocalDateTime dateTime) {
@@ -23,8 +24,13 @@ public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepositor
     }
 
     @Override
+    public WinningNumbers findWinningNumbersByHash(String hash) {
+        return winningNumbersList.get(hash);
+    }
+
+    @Override
     public <S extends WinningNumbers> S save(S entity) {
-        winningNumbersList.put(entity.date(), entity);
+        winningNumbersList.put(entity.winningNumbers(), entity);
         return entity;
     }
 

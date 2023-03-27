@@ -15,8 +15,8 @@ public class RandomNumberGeneratorConfiguration {
         return new RestTemplate();
     }
     @Bean
-    public RandomNumberGeneratorFacade createModuleForTests(RandomNumberRepository randomNumberRepository) {
+    public RandomNumberGeneratorFacade createModuleForTests(WinningNumbersRepository winningNumbersRepository) {
         NumberGeneratorClient numberGeneratorClient = new NumberGeneratorClient();
-        return new RandomNumberGeneratorFacade(numberGeneratorClient, randomNumberRepository);
+        return new RandomNumberGeneratorFacade(numberGeneratorClient, winningNumbersRepository);
     }
 }

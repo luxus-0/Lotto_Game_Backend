@@ -1,5 +1,6 @@
 package pl.lotto.domain.numbersgenerator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,18 +17,13 @@ import static org.mockito.Mockito.when;
 @RequiredArgsConstructor
 class WinningNumbersGeneratorFacadeTest {
 
-    @Mock
-    RandomNumberRepository randomNumberRepository;
-
     WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
 
-    RandomNumberGeneratorFacade randomNumberGeneratorFacade = new RandomNumberGeneratorConfiguration().createModuleForTests(randomNumberRepository);
-
-    WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration().createModuleForTest(randomNumberGeneratorFacade, drawDateFacade, winningNumbersRepository);
+    RandomNumberGeneratorFacade randomNumberGeneratorFacade = new RandomNumberGeneratorConfiguration().createModuleForTests(winningNumbersRepository);
 
     @Test
-    public void should_return_set_of_required_size() throws JSONException {
+    public void should_return_set_of_required_size() {
         //given
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
 
