@@ -33,7 +33,11 @@ public class WinningNumbersGeneratorFacade {
                     .winningNumbers(winningNumbersSaved)
                     .build();
         }
-        throw new IllegalStateException();
+        return WinningNumbersDto.builder()
+                .winningNumbers(Set.of())
+                .drawDate(drawDate)
+                .validationMessage(NUMBERS_MESSAGE_VALIDATOR)
+                .build();
     }
 
     WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
