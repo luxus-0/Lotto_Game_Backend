@@ -1,12 +1,13 @@
 package pl.lotto.domain.numbersgenerator;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
@@ -14,11 +15,11 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RequiredArgsConstructor
+@Log4j2
 class WinningNumbersGeneratorFacadeTest {
 
     WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
@@ -77,6 +78,7 @@ class WinningNumbersGeneratorFacadeTest {
         int sizeWinningNumbers = generateWinningNumbers.winningNumbers().size();
         assertThat(sizeWinningNumbers).isEqualTo(6);
     }
+
     @Test
     public void should_return_false_when_size_numbers_is_less_than_six() {
         //given
@@ -121,5 +123,35 @@ class WinningNumbersGeneratorFacadeTest {
                 .winningNumbers(generatedWinningNumbers)
                 .build();
         assertThat(expectedWinningNumbersDto).isEqualTo(winningNumbersDto);
+    }
+
+    @Test
+    public void should_throw_an_exception_when_failed_numbers_by_given_date() {
+        //given
+        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
+        //when
+        when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
+        //then
+
+        assertThrows(WinningNumbersNotFoundException.class,
+                () -> {
+                    LocalDateTime winningNumbersByDate = winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate).drawDate();
+                    log.info("Winning numbers not found: " + winningNumbersByDate);
+                });
+    }
+
+    @Test
+    public void should_throw_an_exception_when_failed_date_by_given_incorrect_date() {
+        //given
+        LocalDateTime drawDate = LocalDateTime.of(1, 1, 1, 1, 1, 0);
+        //when
+        when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
+        //then
+
+        assertThrows(WinningNumbersNotFoundException.class,
+                () -> {
+                    LocalDateTime winningNumbersByDate = winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate).drawDate();
+                    log.info("Winning numbers not found: " + winningNumbersByDate);
+                });
     }
 }
