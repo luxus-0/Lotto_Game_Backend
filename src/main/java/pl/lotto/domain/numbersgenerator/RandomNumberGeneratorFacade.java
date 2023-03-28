@@ -32,12 +32,14 @@ public class RandomNumberGeneratorFacade {
                     .winningNumbers(winningNumbersSaved.winningNumbers())
                     .build();
         }
-        throw new IllegalStateException();
+        return WinningNumbersDto.builder()
+                .winningNumbers(Set.of())
+                .build();
     }
 
     public RandomNumberDto retrieveRandomNumbersByHash(String hash) {
-        WinningNumbers winningNumbers = winningNumbersRepository.findWinningNumbersByHash(hash);
-            return Set.of(winningNumbers)
+        Optional<WinningNumbers> winningNumbers = winningNumbersRepository.findWinningNumbersByHash(hash);
+            return winningNumbers
                     .stream()
                     .map(dto -> new RandomNumberDto(dto.winningNumbers()))
                     .findAny()

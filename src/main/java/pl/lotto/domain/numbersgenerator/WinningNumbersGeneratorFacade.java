@@ -1,17 +1,17 @@
 package pl.lotto.domain.numbersgenerator;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Set;
 
 @AllArgsConstructor
 public class WinningNumbersGeneratorFacade {
+
+    private static final String NUMBERS_MESSAGE_VALIDATOR = "Winning numbers not found";
     private final RandomNumberGeneratorFacade randomNumberGeneratorFacade;
     private final DrawDateFacade drawDateFacade;
     private final WinningNumberValidator winningNumberValidator;
@@ -24,7 +24,7 @@ public class WinningNumbersGeneratorFacade {
             winningNumberValidator.validate(winningNumbers);
             WinningNumbers winningNumbersCreator = WinningNumbers.builder()
                     .winningNumbers(winningNumbers)
-                    .date(drawDate)
+                    .drawDate(drawDate)
                     .build();
 
             Set<Integer> winningNumbersSaved = winningNumbersRepository.save(winningNumbersCreator).winningNumbers();
@@ -35,12 +35,12 @@ public class WinningNumbersGeneratorFacade {
         }
         throw new IllegalStateException();
     }
-    WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime date) {
-        Optional<WinningNumbers> winningNumbers = winningNumbersRepository.findWinningNumbersByDate(date);
-        return winningNumbers.stream()
-                .filter(Objects::nonNull)
-                .map(WinningNumbersMapper::toDto)
-                .findAny()
-                .orElseThrow(WinningNumbersNotFoundException::new);
+
+    WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
+        WinningNumbers numbersByDrawDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).orElseThrow(WinningNumbersNotFoundException::new);
+        return WinningNumbersDto.builder()
+                .winningNumbers(numbersByDrawDate.winningNumbers())
+                .drawDate(numbersByDrawDate.drawDate())
+                .build();
     }
 }

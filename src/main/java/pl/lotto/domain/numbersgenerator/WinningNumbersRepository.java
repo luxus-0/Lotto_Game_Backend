@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface WinningNumbersRepository extends MongoRepository<WinningNumbers, String> {
-    Optional<WinningNumbers> findWinningNumbersByDate(LocalDateTime dateTime);
-    WinningNumbers findWinningNumbersByHash(String hash);
+    Optional<WinningNumbers> findWinningNumbersByDrawDate(LocalDateTime drawDate);
+    Optional<WinningNumbers> findWinningNumbersByHash(String hash);
+
+    WinningNumbers create(WinningNumbers winningNumbers);
 }

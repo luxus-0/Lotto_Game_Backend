@@ -7,7 +7,8 @@ class WinningNumbersMapper {
     static WinningNumbersDto toDto(WinningNumbers winningNumbers) {
         return WinningNumbersDto.builder()
                 .winningNumbers(winningNumbers.winningNumbers())
-                .date(winningNumbers.date())
+                .drawDate(winningNumbers.drawDate())
+                .validationMessage(winningNumbers.validationMessage())
                 .build();
     }
 }

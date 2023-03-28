@@ -15,23 +15,29 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepository{
-
     private final Map<Set<Integer>, WinningNumbers> winningNumbersList = new ConcurrentHashMap<>();
+    private final Map<LocalDateTime, WinningNumbers> winningNumbersByDate = new ConcurrentHashMap<>();
 
     @Override
-    public Optional<WinningNumbers> findWinningNumbersByDate(LocalDateTime dateTime) {
-        return Optional.ofNullable(winningNumbersList.get(dateTime));
+    public Optional<WinningNumbers> findWinningNumbersByDrawDate(LocalDateTime drawDate) {
+       return Optional.ofNullable(winningNumbersByDate.get(drawDate));
     }
 
     @Override
-    public WinningNumbers findWinningNumbersByHash(String hash) {
-        return winningNumbersList.get(hash);
+    public Optional<WinningNumbers> findWinningNumbersByHash(String hash) {
+        return Optional.ofNullable(winningNumbersList.get(hash));
     }
 
     @Override
     public <S extends WinningNumbers> S save(S entity) {
         winningNumbersList.put(entity.winningNumbers(), entity);
         return entity;
+    }
+
+    @Override
+    public WinningNumbers create(WinningNumbers winningNumbers) {
+        winningNumbersByDate.put(winningNumbers.drawDate(), winningNumbers);
+        return winningNumbers;
     }
 
     @Override
@@ -49,8 +55,8 @@ public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepositor
         return false;
     }
 
-    public boolean existsByDate(LocalDateTime dateTime) {
-        winningNumbersList.get(dateTime);
+    public boolean existsByDrawDate(LocalDateTime drawDate) {
+        winningNumbersList.get(drawDate);
         return true;
     }
 
