@@ -6,11 +6,10 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
-import java.util.IllegalFormatCodePointException;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -56,10 +55,11 @@ class WinningNumbersGeneratorFacadeTest {
         //when
         Set<Integer> winningNumbers = winningNumbersGeneratorFacade.generateWinningNumbers().winningNumbers();
         //then
-        assertThatThrownBy(() ->
-                winningNumbers.stream()
-                        .filter(number -> number > 99 || number < 1)
-                        .findAny()
-                        .orElseThrow(() -> new IllegalStateException("Numbers out of range")), "Numbers in range");
+        assertThrows(Exception.class,
+                () ->
+                        winningNumbers.stream()
+                                .filter(number -> number > 99 || number < 1)
+                                .findAny()
+                                .orElseThrow(NoSuchElementException::new));
     }
 }
