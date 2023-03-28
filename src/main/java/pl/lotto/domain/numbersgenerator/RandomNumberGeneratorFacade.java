@@ -32,9 +32,7 @@ public class RandomNumberGeneratorFacade {
                     .winningNumbers(winningNumbersSaved.winningNumbers())
                     .build();
         }
-        return WinningNumbersDto.builder()
-                .winningNumbers(Set.of())
-                .build();
+        throw new IllegalStateException();
     }
 
     public RandomNumberDto retrieveRandomNumbersByHash(String hash) {

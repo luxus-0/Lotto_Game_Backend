@@ -24,9 +24,7 @@ public class WinningNumberValidator {
                 .findAny();
 
         if (outOfRangeNumbers.isPresent()) {
-            return WinningNumbersDto.builder()
-                    .validationMessage(OUT_OF_RANGE_NUMBERS)
-                    .build();
+            throw new IllegalStateException(OUT_OF_RANGE_NUMBERS);
         }
         return WinningNumbersDto.builder()
                 .winningNumbers(winningNumbers)

@@ -20,17 +20,20 @@ public class WinningNumbersGeneratorFacade {
     WinningNumbersDto generateWinningNumbers() {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
         Set<Integer> winningNumbers = randomNumberGeneratorFacade.generateSixRandomNumbers().winningNumbers();
-        winningNumberValidator.validate(winningNumbers);
-        WinningNumbers winningNumbersCreator = WinningNumbers.builder()
-                .winningNumbers(winningNumbers)
-                .date(drawDate)
-                .build();
+        if (winningNumbers != null && drawDate != null) {
+            winningNumberValidator.validate(winningNumbers);
+            WinningNumbers winningNumbersCreator = WinningNumbers.builder()
+                    .winningNumbers(winningNumbers)
+                    .date(drawDate)
+                    .build();
 
-        Set<Integer> winningNumbersSaved = winningNumbersRepository.save(winningNumbersCreator).winningNumbers();
+            Set<Integer> winningNumbersSaved = winningNumbersRepository.save(winningNumbersCreator).winningNumbers();
 
-        return WinningNumbersDto.builder()
-                .winningNumbers(winningNumbersSaved)
-                .build();
+            return WinningNumbersDto.builder()
+                    .winningNumbers(winningNumbersSaved)
+                    .build();
+        }
+        throw new IllegalStateException();
     }
     WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime date) {
         Optional<WinningNumbers> winningNumbers = winningNumbersRepository.findWinningNumbersByDate(date);
