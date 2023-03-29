@@ -6,5 +6,5 @@ import lombok.Builder;
 import java.util.Set;
 
 @Builder
-public record RandomNumberDto(@JsonProperty Set<Integer> randomNumbers){
+public record RandomNumberDto(Set<Integer> randomNumbers){
 }

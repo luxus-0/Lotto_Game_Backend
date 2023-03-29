@@ -1,9 +1,9 @@
 package pl.lotto.domain.numbersgenerator;
 
 import org.springframework.beans.factory.annotation.Value;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.exception.IncorrectSizeNumbersException;
+import pl.lotto.domain.numbersgenerator.exception.OutOfRangeNumbersException;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class WinningNumberValidator {
@@ -11,23 +11,33 @@ public class WinningNumberValidator {
     private int RANGE_FROM_NUMBER;
     @Value("${range.to.number}")
     private int RANGE_TO_NUMBER;
-    @Value("${validation.message.winning.numbers}")
+    @Value("${incorrect.size.numbers}")
+    private String INCORRECT_SIZE_NUMBERS;
+
+    @Value("${out.of.range.numbers}")
     private String OUT_OF_RANGE_NUMBERS;
 
-    public WinningNumbersDto validate(Set<Integer> winningNumbers) {
-        Optional<WinningNumbersDto> outOfRangeNumbers = winningNumbers.stream()
-                .filter(numbers -> numbers < RANGE_FROM_NUMBER)
-                .filter(numbers -> numbers > RANGE_TO_NUMBER)
-                .map(number -> WinningNumbersDto.builder()
-                        .winningNumbers(winningNumbers)
-                        .build())
-                .findAny();
+    @Value("${quantity.numbers}")
+    private int QUANTITY_NUMBERS;
 
-        if (outOfRangeNumbers.isPresent()) {
-            throw new IllegalStateException(OUT_OF_RANGE_NUMBERS);
+    public boolean validate(Set<Integer> winningNumbers) {
+        if (outOfRange(winningNumbers)) {
+            throw new OutOfRangeNumbersException(OUT_OF_RANGE_NUMBERS);
         }
-        return WinningNumbersDto.builder()
-                .winningNumbers(winningNumbers)
-                .build();
+        else if(notCorrectSize(winningNumbers)){
+            throw new IncorrectSizeNumbersException(INCORRECT_SIZE_NUMBERS);
+        }
+        else {
+            return true;
+        }
+    }
+
+    private boolean notCorrectSize(Set<Integer> winningNumbers) {
+        return winningNumbers.size() != QUANTITY_NUMBERS;
+    }
+
+    private boolean outOfRange(Set<Integer> winningNumbers) {
+        return winningNumbers.stream()
+                .anyMatch(number -> number < RANGE_FROM_NUMBER || number > RANGE_TO_NUMBER);
     }
 }
