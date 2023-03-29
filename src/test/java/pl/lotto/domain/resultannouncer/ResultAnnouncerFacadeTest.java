@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ResultAnnouncerFacadeTest {
 
     @Test
-    @DisplayName("return failed user numbers when user gave incorrect date time draw")
+    @DisplayName("return failed user numbers when user gave incorrect drawDate time draw")
     public void should_return_failed_user_numbers_when_user_gave_incorrect_date_time_draw() {
         // given
         Set<Integer> numbersFromUser = Set.of(12, 23, 45, 11, 90, 50);

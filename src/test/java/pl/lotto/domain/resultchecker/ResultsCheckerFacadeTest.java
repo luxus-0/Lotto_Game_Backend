@@ -101,7 +101,7 @@ class ResultsCheckerFacadeTest {
     }
 
     @Test
-    @DisplayName("return failed date time draw when user get numbers with date time")
+    @DisplayName("return failed drawDate time draw when user get numbers with drawDate time")
     public void should_return_failed_date_time_draw_when_user_get_numbers_with_date_time() {
         //given
         Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
@@ -165,7 +165,7 @@ class ResultsCheckerFacadeTest {
     }
 
     @Test
-    @DisplayName("return failed date time draw when user get incorrect date time")
+    @DisplayName("return failed drawDate time draw when user get incorrect drawDate time")
     public void should_return_failed_date_time_draw_when_user_get_incorrect_date_time() {
         //given
         Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
