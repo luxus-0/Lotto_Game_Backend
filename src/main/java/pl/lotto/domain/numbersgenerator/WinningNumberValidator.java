@@ -1,9 +1,9 @@
 package pl.lotto.domain.numbersgenerator;
 
 import org.springframework.beans.factory.annotation.Value;
-import pl.lotto.domain.numbersgenerator.exception.IncorrectSizeNumbersException;
-import pl.lotto.domain.numbersgenerator.exception.OutOfRangeNumbersException;
+import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class WinningNumberValidator {
@@ -20,24 +20,25 @@ public class WinningNumberValidator {
     @Value("${quantity.numbers}")
     private int QUANTITY_NUMBERS;
 
-    public boolean validate(Set<Integer> winningNumbers) {
-        if (outOfRange(winningNumbers)) {
-            throw new OutOfRangeNumbersException(OUT_OF_RANGE_NUMBERS);
-        }
-        else if(notCorrectSize(winningNumbers)){
-            throw new IncorrectSizeNumbersException(INCORRECT_SIZE_NUMBERS);
+    public WinningNumbersDto validate(Set<Integer> winningNumbers) {
+        if(isCorrectSize(winningNumbers) && isInRange(winningNumbers)){
+            return WinningNumbersDto.builder()
+                    .winningNumbers(winningNumbers)
+                    .build();
         }
         else {
-            return true;
+            return WinningNumbersDto.builder()
+                    .winningNumbers(Collections.emptySet())
+                    .build();
         }
     }
 
-    private boolean notCorrectSize(Set<Integer> winningNumbers) {
-        return winningNumbers.size() != QUANTITY_NUMBERS;
+    private boolean isCorrectSize(Set<Integer> winningNumbers) {
+        return winningNumbers.size() == QUANTITY_NUMBERS;
     }
 
-    private boolean outOfRange(Set<Integer> winningNumbers) {
+    private boolean isInRange(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
-                .anyMatch(number -> number < RANGE_FROM_NUMBER || number > RANGE_TO_NUMBER);
+                .anyMatch(number -> number >= RANGE_FROM_NUMBER && number <= RANGE_TO_NUMBER);
     }
 }

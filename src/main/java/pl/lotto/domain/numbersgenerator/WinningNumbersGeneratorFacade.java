@@ -7,7 +7,6 @@ import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundExceptio
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,20 +18,29 @@ public class WinningNumbersGeneratorFacade {
     private final DrawDateFacade drawDateFacade;
     private final WinningNumbersRepository winningNumbersRepository;
 
+    private final WinningNumberValidator winningNumberValidator;
+
     WinningNumbersDto generateWinningNumbers() {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
         WinningNumbersDto randomNumbers = randomNumberGeneratorFacade.generateSixRandomNumbers();
         Set<Integer> winningNumbers = randomNumbers.winningNumbers();
+        if (winningNumbers != null) {
+            winningNumberValidator.validate(winningNumbers);
             WinningNumbers winningNumbersCreator = WinningNumbers.builder()
                     .winningNumbers(winningNumbers)
                     .build();
 
-        winningNumbersRepository.save(winningNumbersCreator);
+            winningNumbersRepository.save(winningNumbersCreator);
 
             return WinningNumbersDto.builder()
                     .winningNumbers(winningNumbers)
                     .drawDate(drawDate)
                     .build();
+        }
+        return WinningNumbersDto.builder()
+                .winningNumbers(Collections.emptySet())
+                .validationMessage(NUMBERS_MESSAGE_VALIDATOR)
+                .build();
     }
 
     WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
