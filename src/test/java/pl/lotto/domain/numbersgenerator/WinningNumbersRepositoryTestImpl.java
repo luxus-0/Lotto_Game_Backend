@@ -19,8 +19,8 @@ public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepositor
     Map<LocalDateTime, WinningNumbers> winningNumbersByDate = new ConcurrentHashMap<>();
 
     @Override
-    public Optional<WinningNumbers> findWinningNumbersByDrawDate(LocalDateTime drawDate) {
-       return Optional.ofNullable(winningNumbersByDate.get(drawDate));
+    public WinningNumbers findNumbersByDrawDate(LocalDateTime drawDate) {
+       return winningNumbersByDate.get(drawDate);
     }
 
     @Override

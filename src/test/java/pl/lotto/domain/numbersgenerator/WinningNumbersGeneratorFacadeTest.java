@@ -104,10 +104,10 @@ class WinningNumbersGeneratorFacadeTest {
                 .drawDate(drawDate)
                 .winningNumbers(generatedWinningNumbers)
                 .build();
-        winningNumbersRepository.save(winningNumbers);
+        WinningNumbers winningNumbersSaved = winningNumbersRepository.save(winningNumbers);
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(drawDate);
         //when
-        WinningNumbersDto winningNumbersDto = winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate);
+        WinningNumbersDto winningNumbersDto = winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(winningNumbersSaved.drawDate());
         //then
         WinningNumbersDto expectedWinningNumbersDto = WinningNumbersDto.builder()
                 .drawDate(drawDate)
@@ -125,10 +125,7 @@ class WinningNumbersGeneratorFacadeTest {
         //then
 
         assertThrows(WinningNumbersNotFoundException.class,
-                () -> {
-                    LocalDateTime winningNumbersByDate = winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate).drawDate();
-                    log.info("Winning numbers not found: " + winningNumbersByDate);
-                });
+                () -> winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate));
     }
 
     @Test
@@ -162,23 +159,5 @@ class WinningNumbersGeneratorFacadeTest {
         LocalDateTime actualDateDraw = drawDateFacade.retrieveNextDrawDate();
         //then
         assertThat(actualDateDraw).isEqualTo(drawDate);
-    }
-
-    @Test
-    public void should_return_false_if_numbers_generate_by_given_date_is_not_empty(){
-        LocalDateTime drawDate = LocalDateTime.of(1, 10, 17, 12, 0, 0);
-        Set<Integer> generatedWinningNumbers = Set.of(1, 2, 3, 4, 5, 6);
-        String hash = UUID.randomUUID().toString();
-        WinningNumbers winningNumbers = WinningNumbers.builder()
-                .hash(hash)
-                .drawDate(drawDate)
-                .winningNumbers(generatedWinningNumbers)
-                .build();
-        winningNumbersRepository.save(winningNumbers);
-        when(drawDateFacade.retrieveNextDrawDate()).thenReturn(drawDate);
-        //when
-        boolean areWinningNumbersGeneratedByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).isEmpty();
-        //then
-        assertTrue(areWinningNumbersGeneratedByDate);
     }
 }

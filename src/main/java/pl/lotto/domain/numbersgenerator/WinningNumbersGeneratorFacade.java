@@ -1,15 +1,11 @@
 package pl.lotto.domain.numbersgenerator;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -18,7 +14,6 @@ public class WinningNumbersGeneratorFacade {
     private static final String NUMBERS_MESSAGE_VALIDATOR = "Winning numbers not found";
     private final RandomNumberGeneratorFacade randomNumberGeneratorFacade;
     private final DrawDateFacade drawDateFacade;
-    private final WinningNumberValidator winningNumberValidator;
     private final WinningNumbersRepository winningNumbersRepository;
 
     WinningNumbersDto generateWinningNumbers() {
@@ -38,16 +33,16 @@ public class WinningNumbersGeneratorFacade {
                     .drawDate(winningNumbersSaved.drawDate())
                     .build();
         }
-        throw new WinningNumbersNotFoundException("Winning numbers not found");
+        throw new WinningNumbersNotFoundException(NUMBERS_MESSAGE_VALIDATOR);
     }
 
     WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
-        WinningNumbers numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).orElseThrow(() -> new WinningNumbersNotFoundException("Winning numbers not found"));
-        return WinningNumbersDto.builder()
-                .winningNumbers(numbersByDate.winningNumbers())
-                .drawDate(numbersByDate.drawDate())
-                .build();
-    }
+        WinningNumbers numbersByDate = winningNumbersRepository.findNumbersByDrawDate(drawDate);
+            return WinningNumbersDto.builder()
+                    .winningNumbers(numbersByDate.winningNumbers())
+                    .drawDate(numbersByDate.drawDate())
+                    .build();
+        }
 
     public boolean areWinningNumbersGeneratedByDate() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();

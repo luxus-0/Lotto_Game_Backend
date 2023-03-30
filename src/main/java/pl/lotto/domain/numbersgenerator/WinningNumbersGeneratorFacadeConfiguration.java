@@ -9,6 +9,6 @@ public class WinningNumbersGeneratorFacadeConfiguration {
     @Bean
     public WinningNumbersGeneratorFacade createModuleForTest(RandomNumberGeneratorFacade randomNumberGeneratorFacade, DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository) {
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator();
-        return new WinningNumbersGeneratorFacade(randomNumberGeneratorFacade, drawDateFacade, winningNumberValidator, winningNumbersRepository);
+        return new WinningNumbersGeneratorFacade(randomNumberGeneratorFacade, drawDateFacade, winningNumbersRepository);
     }
 }
