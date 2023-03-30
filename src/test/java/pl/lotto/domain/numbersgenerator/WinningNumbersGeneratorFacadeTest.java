@@ -15,6 +15,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -128,5 +129,25 @@ class WinningNumbersGeneratorFacadeTest {
         LocalDateTime actualDateDraw = drawDateFacade.retrieveNextDrawDate();
         //then
         assertThat(actualDateDraw).isEqualTo(drawDate);
+    }
+
+    @Test
+    public void should_return_true_if_numbers_are_generated_by_given_date() {
+        //given
+        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
+        Set<Integer> generatedWinningNumbers = Set.of(1, 2, 3, 4, 5, 6);
+        String hash = UUID.randomUUID().toString();
+        WinningNumbers winningNumbers = WinningNumbers.builder()
+                .hash(hash)
+                .drawDate(drawDate)
+                .winningNumbers(generatedWinningNumbers)
+                .build();
+        winningNumbersRepository.save(winningNumbers);
+        when(drawDateFacade.retrieveNextDrawDate()).thenReturn(drawDate);
+        //when
+        boolean areWinningNumbersGeneratedByDate = winningNumbersGeneratorFacade.areWinningNumbersGeneratedByDate();
+        //then
+        assertTrue(areWinningNumbersGeneratedByDate);
+
     }
 }
