@@ -20,7 +20,7 @@ public class WinningNumbersGeneratorFacade {
 
     private final WinningNumberValidator winningNumberValidator;
 
-    WinningNumbersDto generateWinningNumbers() {
+    public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
         WinningNumbersDto randomNumbers = randomNumberGeneratorFacade.generateSixRandomNumbers();
         Set<Integer> winningNumbers = randomNumbers.winningNumbers();
@@ -43,7 +43,7 @@ public class WinningNumbersGeneratorFacade {
                 .build();
     }
 
-    WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
+    public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
         Optional<WinningNumbers> numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate);
         Set<Integer> winningNumbers = numbersByDate.map(WinningNumbers::winningNumbers).orElseThrow(() -> new WinningNumbersNotFoundException(NUMBERS_MESSAGE_VALIDATOR));
         return WinningNumbersDto.builder()
