@@ -1,184 +1,112 @@
 package pl.lotto.domain.resultchecker;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.resultchecker.dto.ResultsLottoDto;
+import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numbersgenerator.WinningNumbersGeneratorFacade;
+import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.resultchecker.dto.PlayersDto;
+import pl.lotto.domain.resultchecker.dto.ResultDto;
 
-import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.List;
 import java.util.Set;
 
-import static java.time.Month.DECEMBER;
-import static java.time.Month.SEPTEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static pl.lotto.domain.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
-import static pl.lotto.domain.resultchecker.ResultsCheckerMessageProvider.WIN;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ResultsCheckerFacadeTest {
 
-    private final Clock clock = Clock.fixed(Instant.now(Clock.systemUTC()), ZoneId.systemDefault());
-    private final ResultCheckerDateTime resultCheckerDateTime = new ResultCheckerDateTime(clock);
+    private final PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
+    private final WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = mock(WinningNumbersGeneratorFacade.class);
+    private final NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
+
+    private final DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
+    private final ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().createModuleForTests(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, playerRepository);
 
     @Test
-    @DisplayName("return success when user get 6 numbers and is winner numbers")
-    public void should_return_success_when_user_get_six_numbers_and_is_winner_numbers() {
+    public void it_should_generate_all_players_with_correct_message() {
         //given
-        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-        //when
-        ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
+        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
+        TicketDto ticket1 = getTicket1(drawDate);
+        TicketDto ticket2 = getTicket2(drawDate);
+        TicketDto ticket3 = getTicket3(drawDate);
 
+        ResultDto result1 = getResult1(drawDate);
+        ResultDto result2 = getResult2(drawDate);
+        ResultDto result3 = getResult3(drawDate);
+
+        when(winningNumbersGeneratorFacade.generateWinningNumbers()).thenReturn(getWinningNumbersDto());
+        when(numberReceiverFacade.retrieveAllTicketByNextDrawDate()).thenReturn(List.of(ticket1, ticket2, ticket3));
+        //when
+        PlayersDto playersDto = resultCheckerFacade.generateWinners();
         //then
-        assertNotEquals(resultsLotto.message(), WIN);
+        List<ResultDto> results = playersDto.results();
+        assertThat(results).contains(result1, result2, result3);
+        String message = playersDto.message();
+        assertThat(message).isEqualTo("Winners succeeded to retrieve");
     }
 
-    @Test
-    @DisplayName("return failed when user get 6 numbers and is not winner numbers")
-    public void should_return_failed_when_user_get_six_numbers_and_is_not_winner_numbers() {
-        //given
-        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 78);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        ResultsLottoDto resultWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
-        //then
-        assertEquals(resultWinner.message(), NOT_WIN);
+    static WinningNumbersDto getWinningNumbersDto() {
+        return WinningNumbersDto.builder()
+                .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .build();
     }
 
-    @Test
-    @DisplayName("return failed when user get 5 numbers and is not winner numbers")
-    public void should_return_failed_when_user_get_five_numbers_and_is_winner_numbers() {
-        //given
-        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        ResultsLottoDto resultsWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
-        //then
-        assertThat(resultsWinner.message()).isEqualTo(NOT_WIN);
+    static TicketDto getTicket3(LocalDateTime drawDate) {
+        return TicketDto.builder()
+                .hash("003")
+                .numbers(Set.of(7, 8, 9, 10, 11, 12))
+                .drawDate(drawDate)
+                .build();
     }
 
-    @Test
-    @DisplayName("return failed when user get more than 6 numbers and is not winner numbers")
-    public void should_return_failed_when_user_get_more_than_six_numbers_and_is_not_winner_numbers() {
-        //given
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
-        Set<Integer> inputNumbers = Set.of(12, 75, 11, 19, 45, 88, 31);
-
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        String resultMessageWinner = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).message();
-        //then
-        assertThat(resultMessageWinner).isNotEqualTo(WIN);
+    static TicketDto getTicket2(LocalDateTime drawDate) {
+        return TicketDto.builder()
+                .hash("002")
+                .numbers(Set.of(1, 2, 7, 8, 9, 10))
+                .drawDate(drawDate)
+                .build();
     }
 
-    @Test
-    @DisplayName("return failed when user get less than six numbers and is not winner numbers")
-    public void should_return_failed_when_user_get_less_than_six_numbers_and_is_not_winner_numbers() {
-        //given
-        Set<Integer> inputNumbers = Set.of(1, 2, 3);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        ResultsLottoDto resultsLotto = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw);
-
-        //then
-        assertEquals(resultsLotto.message(), NOT_WIN);
+    static TicketDto getTicket1(LocalDateTime drawDate) {
+        return TicketDto.builder()
+                .hash("001")
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .drawDate(drawDate)
+                .build();
     }
 
-    @Test
-    @DisplayName("return failed drawDate time draw when user get numbers with drawDate time")
-    public void should_return_failed_date_time_draw_when_user_get_numbers_with_date_time() {
-        //given
-        Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 3, 12, 0);
-
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        LocalDateTime resultDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
-        //then
-        LocalDateTime expectedDateTime = LocalDateTime.of(2022, SEPTEMBER, 7, 12, 0);
-        assertNotEquals(resultDateTime, expectedDateTime);
+    static ResultDto getResult3(LocalDateTime drawDate) {
+        return ResultDto.builder()
+                .hash("001")
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .drawDate(drawDate)
+                .isWinner(true)
+                .build();
     }
 
-    @Test
-    @DisplayName("return not win message when user get no_winner numbers")
-    public void should_return_not_win_message_when_user_get_no_winner_numbers() {
-        //given
-        Set<Integer> inputNumbers = Set.of(25, 78, 94, 11, 34, 45);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        String actualWinnersMessage = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).message();
-        //then
-        assertThat(actualWinnersMessage).isEqualTo("NOT WIN");
+    static ResultDto getResult2(LocalDateTime drawDate) {
+        return ResultDto.builder()
+                .hash("001")
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .drawDate(drawDate)
+                .isWinner(true)
+                .build();
     }
 
-    @Test
-    @DisplayName("return success when user get more than 1 winner numbers")
-    public void should_return_success_message_when_user_get_winner_numbers() {
-        //given
-        Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
-        //then
-        boolean checkEmptyWinnerNumbers = resultWinnerNumbers.isEmpty();
-
-        assertThat(checkEmptyWinnerNumbers).isFalse();
+    static ResultDto getResult1(LocalDateTime drawDate) {
+        return ResultDto.builder()
+                .hash("001")
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .drawDate(drawDate)
+                .isWinner(true)
+                .build();
     }
 
-    @Test
-    @DisplayName("return failed when user get no winner numbers")
-    public void should_return_failed_message_when_user_get_no_winner_numbers() {
-        //given
-        Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 10, 12, 0);
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        Set<Integer> resultWinnerNumbers = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).winnerNumbers();
-        //then
-        assertThat(resultWinnerNumbers.isEmpty()).isEqualTo(false);
-    }
-
-    @Test
-    @DisplayName("return failed drawDate time draw when user get incorrect drawDate time")
-    public void should_return_failed_date_time_draw_when_user_get_incorrect_date_time() {
-        //given
-        Set<Integer> inputNumbers = Set.of(45, 78, 94, 11, 34, 90);
-        LocalDateTime datetimeDraw = LocalDateTime.of(2022, DECEMBER, 15, 12, 0);
-
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .createModuleForTests();
-
-        //when
-        LocalDateTime resultWinnerDateTime = resultsCheckerFacade.getWinnerNumbers(inputNumbers, datetimeDraw).dateTimeDraw();
-        //then
-        LocalDateTime nextSaturdayAt12am = resultCheckerDateTime.readDateTimeDraw();
-
-        assertNotEquals(resultWinnerDateTime, nextSaturdayAt12am);
-    }
 }

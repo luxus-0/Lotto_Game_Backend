@@ -1,38 +1,46 @@
 package pl.lotto.domain.resultchecker;
 
-import org.springframework.stereotype.Service;
-import pl.lotto.domain.resultchecker.dto.ResultsLottoDto;
+import lombok.AllArgsConstructor;
+import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numbersgenerator.WinningNumbersGeneratorFacade;
+import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.resultchecker.dto.PlayersDto;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
-import static pl.lotto.domain.resultchecker.ResultsCheckerMessageProvider.NOT_WIN;
-import static pl.lotto.domain.resultchecker.ResultsCheckerMessageProvider.WIN;
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.*;
 
-@Service
+@AllArgsConstructor
 public class ResultsCheckerFacade {
-    private final ResultsCheckerValidator resultsValidator;
-    private final ResultsCheckerRepository resultsCheckerRepository;
 
-    public ResultsCheckerFacade(ResultsCheckerValidator resultsValidator, ResultsCheckerRepository resultsCheckerRepository) {
-        this.resultsValidator = resultsValidator;
-        this.resultsCheckerRepository = resultsCheckerRepository;
-    }
+    NumberReceiverFacade numberReceiverFacade;
 
+    DrawDateFacade drawDateFacade;
 
-    public ResultsLottoDto getWinnerNumbers(Set<Integer> userNumbers, LocalDateTime dateTimeDraw) {
-        return userNumbers.stream()
-                .filter(checkWinnerNumbers -> resultsValidator.isWinnerNumbers(userNumbers))
-                .map(toDto -> new ResultsLottoDto(userNumbers, dateTimeDraw, WIN))
-                .findAny()
-                .orElse(new ResultsLottoDto(userNumbers, dateTimeDraw, NOT_WIN));
-    }
+    WinningNumbersGeneratorFacade winningNumbersGeneratorFacade;
+    WinnersRetriever winnersRetriever;
 
-    public ResultsLottoDto getWinnerNumbers(UUID uuid) {
-        ResultsLotto resultsLotto = resultsCheckerRepository.getWinnersByUUID(uuid);
-        ResultsLotto resultLottoCreator = new ResultsLotto(resultsLotto.uuid, resultsLotto.inputNumbers, resultsLotto.dateTimeDraw);
-        ResultsLotto savedResultsLotto = resultsCheckerRepository.save(resultLottoCreator);
-        return new ResultsLottoDto(savedResultsLotto.inputNumbers, savedResultsLotto.dateTimeDraw, WIN);
+    PlayerRepository playerRepository;
+
+    public PlayersDto generateWinners() {
+       List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByNextDrawDate();
+        List<Ticket> tickets = mapToTickets(allTicketByDate);
+        WinningNumbersDto winningNumbersDto = winningNumbersGeneratorFacade.generateWinningNumbers();
+       Set<Integer> winningNumbers = winningNumbersDto.winningNumbers();
+       if(winningNumbers == null || winningNumbers.isEmpty()){
+           return PlayersDto.builder()
+                   .message("Winners not found")
+                   .build();
+       }
+
+        List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);
+       playerRepository.saveAll(players);
+       return PlayersDto.builder()
+               .results(mapPlayersToResults(players))
+               .message("Winners found")
+               .build();
     }
 }
