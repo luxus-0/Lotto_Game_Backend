@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TicketRepository extends MongoRepository<Ticket, String> {
-    List<Ticket> findAllByDrawDate(LocalDateTime localDate);
+    List<Ticket> findAllByDrawDate(LocalDateTime drawDate);
 
     Ticket findByHash(String hash);
 }

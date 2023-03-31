@@ -34,7 +34,7 @@ class NumberReceiverFacadeTest {
 
         TicketDto createdTicket = TicketDto.builder()
                 .hash(hashGenerator.getHash())
-                .numbersFromUser(numbersFromUser)
+                .numbers(numbersFromUser)
                 .drawDate(drawDateFacade.retrieveNextDrawDate())
                 .build();
         // when

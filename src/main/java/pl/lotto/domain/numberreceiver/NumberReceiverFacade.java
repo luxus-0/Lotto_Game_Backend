@@ -1,6 +1,7 @@
 package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Service
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
@@ -52,24 +54,20 @@ public class NumberReceiverFacade {
                 .collect(Collectors.joining(","));
     }
 
-    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime drawDate){
+    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date){
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        if (drawDate.isAfter(nextDrawDate)) {
+        if (date.isAfter(nextDrawDate)) {
             return Collections.emptyList();
         }
-        return ticketRepository.findAllByDrawDate(drawDate)
+        return ticketRepository.findAllByDrawDate(date)
                 .stream()
-                .filter(ticket -> ticket.drawDate().isEqual(drawDate))
+                .filter(ticket -> ticket.drawDate().isEqual(date))
                 .map(TicketMapper::mapToTicketDto)
                 .toList();
     }
 
-    public TicketDto findByHash(String hash) {
-        Ticket ticket = ticketRepository.findByHash(hash);
-        return TicketDto.builder()
-                .hash(ticket.hash())
-                .numbersFromUser(ticket.numbersFromUser())
-                .drawDate(ticket.drawDate())
-                .build();
+    public List<TicketDto> retrieveAllTicketByNextDrawDate(){
+        LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
+        return retrieveAllTicketByDrawDate(nextDrawDate);
     }
 }
