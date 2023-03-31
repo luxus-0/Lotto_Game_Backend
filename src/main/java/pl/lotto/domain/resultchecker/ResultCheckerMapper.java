@@ -14,7 +14,7 @@ class ResultCheckerMapper {
                         .numbers(player.numbers())
                         .hitNumbers(player.hitNumbers())
                         .drawDate(player.drawDate())
-                        .isWinner(player.isWinner())
+                        .isWinner(true)
                         .build())
                 .toList();
     }

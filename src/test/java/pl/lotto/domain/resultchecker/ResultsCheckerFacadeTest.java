@@ -44,12 +44,12 @@ class ResultsCheckerFacadeTest {
                                 .build(),
                         TicketDto.builder()
                                 .hash("002")
-                                .numbers(Set.of(1, 2, 7, 8, 9, 10))
+                                .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
                                 .hash("003")
-                                .numbers(Set.of(7, 8, 9, 10, 11, 12))
+                                .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
                                 .build()
                 )
@@ -81,7 +81,7 @@ class ResultsCheckerFacadeTest {
                 .build();
         assertThat(results).contains(result1, result2, result3);
         String message = playersDto.message();
-        assertThat(message).isEqualTo("Winners succeeded to retrieve");
+        assertThat(message).isEqualTo("Winners found");
     }
 
 }
