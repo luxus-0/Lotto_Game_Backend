@@ -7,11 +7,11 @@ import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersGeneratorFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
-
 import java.util.List;
 import java.util.Set;
 
-import static pl.lotto.domain.resultchecker.ResultCheckerMapper.*;
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapPlayersToResults;
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapToTickets;
 
 @AllArgsConstructor
 public class ResultsCheckerFacade {
