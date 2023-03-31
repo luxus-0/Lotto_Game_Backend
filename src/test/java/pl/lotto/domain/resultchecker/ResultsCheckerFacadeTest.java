@@ -33,23 +33,23 @@ class ResultsCheckerFacadeTest {
 
         when(winningNumbersGeneratorFacade.generateWinningNumbers()).thenReturn(
                 WinningNumbersDto.builder()
-                        .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                        .winningNumbers(Set.of(1, 3, 5, 7, 9, 11))
                         .build());
         when(numberReceiverFacade.retrieveAllTicketByNextDrawDate()).thenReturn(
                 List.of(
                         TicketDto.builder()
                                 .hash("001")
-                                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
                                 .hash("002")
-                                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
                                 .hash("003")
-                                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
                                 .drawDate(drawDate)
                                 .build()
                 )
@@ -60,22 +60,22 @@ class ResultsCheckerFacadeTest {
         List<ResultDto> results = playersDto.results();
         ResultDto result1 = ResultDto.builder()
                 .hash("001")
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
-                .hitNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                .hitNumbers(Set.of(1, 3, 5, 7, 9, 11))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
         ResultDto result2 = ResultDto.builder()
-                .hash("002")
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
-                .hitNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hash("001")
+                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                .hitNumbers(Set.of(1, 3, 5, 7, 9, 11))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
         ResultDto result3 = ResultDto.builder()
                 .hash("003")
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
-                .hitNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                .hitNumbers(Set.of(1, 3, 5, 7, 9, 11))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
