@@ -1,7 +1,7 @@
 package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.resultannouncer.dto.ResultLottoResponseDto;
+import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
@@ -34,7 +34,7 @@ class ResultAnnouncerFacadeTest {
                 .build();
         when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
         //when
-        ResultLottoResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
+        ResultResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
         //then
         ResultDto expectedResultDto = ResultDto.builder()
                 .hash(hash)
@@ -43,7 +43,7 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(false)
                 .build();
-        ResultLottoResponseDto expectedResult = new ResultLottoResponseDto(expectedResultDto, LOSE_MESSAGE);
+        ResultResponseDto expectedResult = new ResultResponseDto(expectedResultDto, LOSE_MESSAGE);
         assertThat(actualResult).isEqualTo(expectedResult);
 
     }
