@@ -172,7 +172,7 @@ class ResultsCheckerFacadeTest {
                 .build();
 
         assertThat(resultDto).isNotNull();
-        assertThat(resultDto.message()).isEqualTo(expectedResult.message());
+        assertThat(resultDto).isEqualTo(expectedResult);
 
     }
 
