@@ -84,4 +84,35 @@ class ResultsCheckerFacadeTest {
         assertThat(message).isEqualTo("Winners found");
     }
 
+    @Test
+    public void should_generate_fail_message_when_winning_numbers_equal_null(){
+        //given
+        when(winningNumbersGeneratorFacade.generateWinningNumbers()).thenReturn(
+            WinningNumbersDto.builder()
+                    .winningNumbers(Set.of())
+                    .build()
+        );
+        //when
+        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        String message = playersDto.message();
+        //then
+        assertThat(message).isEqualTo("Winners not found");
+    }
+
+    @Test
+    public void should_generate_correct_message_when_winning_numbers_appear(){
+        //given
+        when(winningNumbersGeneratorFacade.generateWinningNumbers()).thenReturn(
+                WinningNumbersDto.builder()
+                        .winningNumbers(Set.of(200))
+                        .build()
+        );
+        //when
+        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        String message = playersDto.message();
+        //then
+        assertThat(message).isEqualTo("Winners found");
+    }
+
+
 }
