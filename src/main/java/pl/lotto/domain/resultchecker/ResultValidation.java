@@ -1,9 +1,13 @@
 package pl.lotto.domain.resultchecker;
 
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 import java.util.Set;
 
+@Log4j2
+@Service
 public class ResultValidation {
 
     private static final int MIN_NUMBERS = 1;
@@ -16,9 +20,13 @@ public class ResultValidation {
                     .numbers(winnerNumbers)
                     .build();
         }
-        return ResultDto.builder()
-                .message("incorrect range or size numbers")
-                .build();
+        else if(!isInRange(winnerNumbers)) {
+            log.error("Winner numbers are not in range");
+        }
+        else if(!isCorrectSize(winnerNumbers)){
+            log.error("Winner numbers are incorrect size");
+        }
+        return ResultDto.builder().build();
     }
 
     private boolean isCorrectSize(Set<Integer> winnerNumbers) {

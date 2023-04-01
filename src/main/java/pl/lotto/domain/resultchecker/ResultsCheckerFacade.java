@@ -1,6 +1,7 @@
 package pl.lotto.domain.resultchecker;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
@@ -15,6 +16,7 @@ import java.util.Set;
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapPlayersToResults;
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapToTickets;
 
+@Service
 @AllArgsConstructor
 public class ResultsCheckerFacade {
 
@@ -50,7 +52,7 @@ public class ResultsCheckerFacade {
                 .build();
     }
 
-    ResultDto findByHash(String hash) {
+    public ResultDto findByHash(String hash) {
         Player player = playerRepository.findById(hash).orElseThrow(() -> new PlayerResultNotFoundException("Player not win"));
         if (player != null) {
             return ResultDto.builder()

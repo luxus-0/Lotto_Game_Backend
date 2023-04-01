@@ -1,10 +1,13 @@
 package pl.lotto.domain.resultchecker;
 
 import lombok.Builder;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record Player(String hash, Set<Integer> numbers, LocalDateTime drawDate, Set<Integer> hitNumbers, boolean isWinner, String message) {
+@Document
+public record Player(@Id String hash, Set<Integer> numbers, LocalDateTime drawDate, Set<Integer> hitNumbers, boolean isWinner, String message) {
 }
