@@ -1,10 +1,12 @@
 package pl.lotto.domain.numbersgenerator;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
 import java.util.Set;
 
+@Service
 public class WinningNumberValidator {
     @Value("${range.from.number}")
     private int RANGE_FROM_NUMBER;

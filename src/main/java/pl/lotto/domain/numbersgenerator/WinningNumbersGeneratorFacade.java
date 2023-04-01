@@ -1,6 +1,7 @@
 package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundException;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
+@Service
 public class WinningNumbersGeneratorFacade {
 
     private static final String NUMBERS_MESSAGE_VALIDATOR = "Winning numbers not found";
