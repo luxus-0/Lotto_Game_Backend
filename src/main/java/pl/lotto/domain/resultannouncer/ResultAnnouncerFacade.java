@@ -1,7 +1,7 @@
 package pl.lotto.domain.resultannouncer;
 
 import lombok.AllArgsConstructor;
-import pl.lotto.domain.resultannouncer.dto.ResultLottoResponseDto;
+import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
@@ -18,34 +18,34 @@ public class ResultAnnouncerFacade {
     private final ResultAnnouncerRepository resultAnnouncerRepository;
     private final Clock clock;
 
-    ResultLottoResponseDto findResult(String hash) {
-        if (resultAnnouncerRepository.existsById(hash)) {
-            Optional<ResultLotto> resultByHash = resultAnnouncerRepository.findById(hash);
-            if (resultByHash.isPresent()) {
-                resultByHash.stream()
+    ResultResponseDto findResult(String hash) {
+        ResultDto resultDto = resultsCheckerFacade.findByHash(hash);
+        boolean isResultExistByHash = resultAnnouncerRepository.existsById(hash);
+        if (isResultExistByHash) {
+            Optional<ResultLotto> findResultByHash = resultAnnouncerRepository.findById(hash);
+
+            if (findResultByHash.isPresent()) {
+                findResultByHash.stream()
                         .map(resultLotto -> mapToResultLottoResponseDto(mapToResultDto(resultLotto)))
                         .findAny()
                         .ifPresent(resultLottoSaved -> resultAnnouncerRepository.save(mapToResultLotto(resultLottoSaved)));
 
             }
-            ResultDto resultDto = resultsCheckerFacade.findByHash(hash);
             if (resultDto == null) {
-                return ResultLottoResponseDto.builder()
+                return ResultResponseDto.builder()
                         .resultDto(null)
                         .message(HASH_NOT_EXIST)
                         .build();
             }
-            if (resultAnnouncerRepository.existsById(hash) && !isAfterResultAnnouncementTime(resultDto)) {
-                return new ResultLottoResponseDto(resultDto, WAIT_MESSAGE);
+           if (!isAfterResultAnnouncementTime(resultDto)) {
+                return new ResultResponseDto(resultDto, WAIT_MESSAGE);
             }
-            if (resultsCheckerFacade.findByHash(hash).isWinner()) {
-                return new ResultLottoResponseDto(resultDto, WIN_MESSAGE);
+            if (resultDto.isWinner()) {
+                return new ResultResponseDto(resultDto, WIN_MESSAGE);
             }
-            return new ResultLottoResponseDto(resultDto, LOSE_MESSAGE);
         }
-        throw new ResultLottoNotFoundException("Result lotto not found");
+        return new ResultResponseDto(resultDto, LOSE_MESSAGE);
     }
-
 
     private boolean isAfterResultAnnouncementTime(ResultDto resultDto) {
         LocalDateTime announcementDateTime = resultDto.drawDate();
