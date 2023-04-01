@@ -3,7 +3,6 @@ package pl.lotto.domain.numbersgenerator;
 import org.springframework.beans.factory.annotation.Value;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
-import java.util.Collections;
 import java.util.Set;
 
 public class WinningNumberValidator {
@@ -21,16 +20,19 @@ public class WinningNumberValidator {
     private int QUANTITY_NUMBERS;
 
     public WinningNumbersDto validate(Set<Integer> winningNumbers) {
-        if(isCorrectSize(winningNumbers) && isInRange(winningNumbers)){
+        if(!isInRange(winningNumbers)){
             return WinningNumbersDto.builder()
-                    .winningNumbers(winningNumbers)
+                    .message(OUT_OF_RANGE_NUMBERS)
                     .build();
         }
-        else {
+        else if(!isCorrectSize(winningNumbers)){
             return WinningNumbersDto.builder()
-                    .winningNumbers(Collections.emptySet())
+                    .message(INCORRECT_SIZE_NUMBERS)
                     .build();
         }
+        return WinningNumbersDto.builder()
+                .winningNumbers(winningNumbers)
+                .build();
     }
 
     private boolean isCorrectSize(Set<Integer> winningNumbers) {

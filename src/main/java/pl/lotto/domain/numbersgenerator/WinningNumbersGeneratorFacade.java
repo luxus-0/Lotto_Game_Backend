@@ -39,7 +39,7 @@ public class WinningNumbersGeneratorFacade {
         }
         return WinningNumbersDto.builder()
                 .winningNumbers(Collections.emptySet())
-                .validationMessage(NUMBERS_MESSAGE_VALIDATOR)
+                .message(NUMBERS_MESSAGE_VALIDATOR)
                 .build();
     }
 
