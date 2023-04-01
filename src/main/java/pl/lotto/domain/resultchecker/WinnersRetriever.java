@@ -17,17 +17,18 @@ public class WinnersRetriever {
     }
 
     private Player createPlayer(Ticket ticket, Set<Integer> hitNumbers) {
-        if(isWinner(hitNumbers)){
-           Player.builder()
+        if (isWinner(hitNumbers)) {
+            Player.builder()
                     .isWinner(true)
                     .build();
         }
-        return Player.builder()
-                .hash(ticket.hash())
-                .numbers(ticket.numbers())
-                .hitNumbers(hitNumbers)
-                .drawDate(ticket.drawDate())
-                .build();
+            return Player.builder()
+                    .hash(ticket.hash())
+                    .numbers(ticket.numbers())
+                    .hitNumbers(hitNumbers)
+                    .drawDate(ticket.drawDate())
+                    .isWinner(true)
+                    .build();
     }
 
     private boolean isWinner(Set<Integer> hitNumbers) {

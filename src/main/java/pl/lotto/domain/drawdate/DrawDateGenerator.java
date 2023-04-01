@@ -26,7 +26,9 @@ public class DrawDateGenerator {
             log.error("Draw drawDate is saturday and after 12 pm");
             return LocalDateTime.of(currentDateTime.toLocalDate(), DRAW_TIME);
         }
-        return readNextDrawDate();
+        else {
+            return readNextDrawDate();
+        }
     }
 
     private boolean isSaturdayAndAfterNoon(LocalDateTime currentDateTime) {

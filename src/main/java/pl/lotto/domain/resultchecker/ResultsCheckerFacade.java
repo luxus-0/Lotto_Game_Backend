@@ -25,6 +25,8 @@ public class ResultsCheckerFacade {
 
     PlayerRepository playerRepository;
 
+    ResultValidation resultValidation;
+
     public PlayersDto generateWinners() {
        List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByNextDrawDate();
         List<Ticket> tickets = mapToTickets(allTicketByDate);
@@ -36,10 +38,12 @@ public class ResultsCheckerFacade {
                    .build();
        }
 
-        List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);
+       resultValidation.validate(winningNumbers);
+       List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);
        playerRepository.saveAll(players);
        return PlayersDto.builder()
                .results(mapPlayersToResults(players))
+               .tickets(tickets)
                .message("Winners found")
                .build();
     }

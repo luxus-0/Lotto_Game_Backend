@@ -11,6 +11,7 @@ class ResultsCheckerFacadeConfiguration {
     @Bean
     ResultsCheckerFacade createModuleForTests(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade , WinningNumbersGeneratorFacade winningNumbersGeneratorFacade, PlayerRepository playerRepository) {
         WinnersRetriever winnersRetriever = new WinnersRetriever();
-        return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, winnersRetriever, playerRepository);
+        ResultValidation resultValidation = new ResultValidation();
+        return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, winnersRetriever, playerRepository, resultValidation);
     }
 }
