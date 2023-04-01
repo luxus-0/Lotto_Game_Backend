@@ -7,6 +7,8 @@ import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersGeneratorFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
+import pl.lotto.domain.resultchecker.dto.ResultDto;
+
 import java.util.List;
 import java.util.Set;
 
@@ -46,5 +48,16 @@ public class ResultsCheckerFacade {
                .tickets(tickets)
                .message("Winners found")
                .build();
+    }
+
+    ResultDto findByHash(String hash){
+        Player player = playerRepository.findById(hash).orElseThrow(() -> new PlayerResultNotFoundException("Player not win"));
+        return ResultDto.builder()
+                .hash(hash)
+                .numbers(player.numbers())
+                .hitNumbers(player.hitNumbers())
+                .drawDate(player.drawDate())
+                .isWinner(player.isWinner())
+                .build();
     }
 }
