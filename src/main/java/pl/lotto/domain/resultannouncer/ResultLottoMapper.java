@@ -1,17 +1,17 @@
 package pl.lotto.domain.resultannouncer;
 
-import pl.lotto.domain.resultannouncer.dto.ResultLottoResponseDto;
+import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 public class ResultLottoMapper {
 
-    static ResultLottoResponseDto mapToResultLottoResponseDto(ResultDto resultLottoDto) {
-        return ResultLottoResponseDto.builder()
+    static ResultResponseDto mapToResultLottoResponseDto(ResultDto resultLottoDto) {
+        return ResultResponseDto.builder()
                 .resultDto(resultLottoDto)
                 .build();
     }
 
-    static ResultLotto mapToResultLotto(ResultLottoResponseDto resultLottoSaved) {
+    static ResultLotto mapToResultLotto(ResultResponseDto resultLottoSaved) {
         return ResultLotto.builder()
                 .hash(resultLottoSaved.resultDto().hash())
                 .numbers(resultLottoSaved.resultDto().numbers())
