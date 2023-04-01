@@ -10,8 +10,8 @@ import java.time.Clock;
 public class ResultAnnouncerFacadeConfiguration {
 
     @Bean
-    public ResultAnnouncerFacade createModuleForTest(ResultsCheckerFacade resultsCheckerFacade, ResultAnnouncerRepository resultAnnouncerRepository, Clock clock) {
-        return new ResultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
+    public ResultAnnouncerFacade createModuleForTest(ResultsCheckerFacade resultsCheckerFacade, ResultLottoRepository resultLottoRepository, Clock clock) {
+        return new ResultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
     }
 
 }

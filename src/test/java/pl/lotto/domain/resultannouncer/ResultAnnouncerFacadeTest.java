@@ -17,13 +17,13 @@ import static pl.lotto.domain.resultannouncer.ResultAnnouncerMessage.LOSE_MESSAG
 class ResultAnnouncerFacadeTest {
 
     ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
-    ResultAnnouncerRepository resultAnnouncerRepository = new ResultAnnouncerTestImpl();
+    ResultLottoRepository resultLottoRepository = new ResultLottoTestImpl();
 
     @Test
     public void should_return_lose_message_if_ticket_is_not_winning_ticket() {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().createModuleForTest(resultsCheckerFacade, resultAnnouncerRepository, Clock.systemUTC());
+        ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().createModuleForTest(resultsCheckerFacade, resultLottoRepository, Clock.systemUTC());
         String hash = "13579";
         ResultDto resultDto = ResultDto.builder()
                 .hash(hash)

@@ -5,7 +5,7 @@ import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 public class ResultLottoMapper {
 
-    static ResultResponseDto mapToResultLottoResponseDto(ResultDto resultLottoDto) {
+    static ResultResponseDto mapToResultResponseDto(ResultDto resultLottoDto) {
         return ResultResponseDto.builder()
                 .resultDto(resultLottoDto)
                 .build();

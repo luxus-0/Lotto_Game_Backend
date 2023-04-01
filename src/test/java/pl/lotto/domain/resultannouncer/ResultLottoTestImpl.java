@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-public class ResultAnnouncerTestImpl implements ResultAnnouncerRepository {
+public class ResultLottoTestImpl implements ResultLottoRepository {
     private final Map<String, ResultLotto> responseList = new ConcurrentHashMap<>();
 
     @Override
