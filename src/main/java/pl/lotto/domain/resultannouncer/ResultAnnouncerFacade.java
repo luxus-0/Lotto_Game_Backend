@@ -10,7 +10,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static pl.lotto.domain.resultannouncer.ResultLottoMapper.mapToResultResponseDto;
+import static pl.lotto.domain.resultannouncer.ResultLottoMapper.*;
 import static pl.lotto.domain.resultannouncer.ResultStatus.*;
 
 @AllArgsConstructor
@@ -29,26 +29,21 @@ public class ResultAnnouncerFacade {
                     .message(HASH_NOT_EXIST.message)
                     .build();
         }
+
         Optional<ResultLotto> resultByHash = resultLottoRepository.findById(hash);
+        ResultLotto buildResultLotto = mapToResultLotto(resultDto);
         if (resultByHash.isPresent()) {
-           ResultLotto resultLotto = getResultResponse(resultByHash.get());
-           ResultLotto resultLottoSaved = resultLottoRepository.save(resultLotto);
-           return mapToResultResponseDto(resultLottoSaved);
+            return mapToResultResponseDto(buildResultLotto, ALREADY_CHECKED.message);
         }
-
+        resultLottoRepository.save(buildResultLotto);
+        ResultDto resultDtoSaved = mapToResultDtoSaved(buildResultLotto);
         if (!isAfterResultAnnouncementTime(resultDto)) {
-            return new ResultResponseDto(resultDto, WAIT.message);
+            return new ResultResponseDto(resultDtoSaved, WAIT.message);
         } else if (resultDto.isWinner()) {
-            return new ResultResponseDto(resultDto, WIN.message);
+            return new ResultResponseDto(resultDtoSaved, WIN.message);
         } else {
-            return new ResultResponseDto(resultDto, LOSE.message);
+            return new ResultResponseDto(resultDtoSaved, LOSE.message);
         }
-    }
-
-    private ResultLotto getResultResponse(ResultLotto resultLotto) {
-        return Optional.ofNullable(resultLotto).stream()
-                .findAny()
-                .orElseThrow(() -> new ResultLottoNotFoundException(RESULT_MESSAGE_EXCEPTION.message));
     }
 
     private boolean isAfterResultAnnouncementTime(ResultDto resultDto) {

@@ -99,7 +99,7 @@ class ResultAnnouncerFacadeTest {
         ResultDto responseDto = ResultDto.builder()
                 .hash("12345")
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
-                .hitNumbers(Set.of(11, 4, 7 ,9))
+                .hitNumbers(Set.of(11, 4, 7, 9))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
@@ -108,4 +108,40 @@ class ResultAnnouncerFacadeTest {
         assertThat(actualResultResponseDto).isEqualTo(expectedResultResponseDto);
     }
 
+    @Test
+    public void should_return_hash_does_not_exist_message_when_hash_does_not_exist() {
+        //given
+        String hash = "12345";
+
+        when(resultsCheckerFacade.findByHash(hash)).thenReturn(null);
+        //when
+        ResultResponseDto actualResultResponseDto = resultAnnouncerFacade.findResult(hash);
+        //then
+        ResultResponseDto expectedResultResponseDto = new ResultResponseDto(null, HASH_NOT_EXIST.message);
+        assertThat(actualResultResponseDto).isEqualTo(expectedResultResponseDto);
+    }
+
+    @Test
+    public void it_should_return_response_with_hash_does_not_exist_message_if_response_is_not_saved_to_db_yet() {
+        //given
+        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
+        String hash = "123";
+        ResultDto resultDto = ResultDto.builder()
+                .hash("123")
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3, 4, 9, 0))
+                .drawDate(drawDate)
+                .isWinner(true)
+                .build();
+        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+
+        ResultResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
+        String resultByHash = resultAnnouncerResponseDto.resultDto().hash();
+        //when
+        ResultResponseDto actualResultDto = resultAnnouncerFacade.findResult(resultByHash);
+        //then
+        ResultResponseDto expectedResultDto = new ResultResponseDto(actualResultDto.resultDto()
+                , ALREADY_CHECKED.message);
+        assertThat(actualResultDto).isEqualTo(expectedResultDto);
+    }
 }

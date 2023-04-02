@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Document
 @Builder
-public record ResultLotto(@Id String hash, Set<Integer> numbers, Set<Integer> hitNumbers, LocalDateTime drawDate, boolean isWinner) {
+public record ResultLotto(@Id String hash, Set<Integer> numbers, Set<Integer> hitNumbers, LocalDateTime drawDate, boolean isWinner, String message) {
 }
