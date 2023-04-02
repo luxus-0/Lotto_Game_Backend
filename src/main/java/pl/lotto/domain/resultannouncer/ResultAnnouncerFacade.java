@@ -8,9 +8,9 @@ import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Optional;
 
+import static pl.lotto.domain.resultannouncer.ResultLottoMapper.mapToResultResponseDto;
 import static pl.lotto.domain.resultannouncer.ResultStatus.*;
 
 @AllArgsConstructor
@@ -31,9 +31,9 @@ public class ResultAnnouncerFacade {
         }
         Optional<ResultLotto> resultByHash = resultLottoRepository.findById(hash);
         if (resultByHash.isPresent()) {
-            ResultResponseDto resultResponseDto = getResultResponseDto(resultByHash.get());
-            ResultLotto resultLotto = ResultLottoMapper.mapToResultLotto(resultResponseDto);
-            resultLottoRepository.save(resultLotto);
+           ResultLotto resultLotto = getResultResponse(resultByHash.get());
+           ResultLotto resultLottoSaved = resultLottoRepository.save(resultLotto);
+           return mapToResultResponseDto(resultLottoSaved);
         }
 
         if (!isAfterResultAnnouncementTime(resultDto)) {
@@ -45,10 +45,8 @@ public class ResultAnnouncerFacade {
         }
     }
 
-    private static ResultResponseDto getResultResponseDto(ResultLotto resultByHash) {
-        return Optional.ofNullable(resultByHash).stream()
-                .map(ResultLottoMapper::mapToResultDto)
-                .map(ResultLottoMapper::mapToResultResponseDto)
+    private ResultLotto getResultResponse(ResultLotto resultLotto) {
+        return Optional.ofNullable(resultLotto).stream()
                 .findAny()
                 .orElseThrow(() -> new ResultLottoNotFoundException(RESULT_MESSAGE_EXCEPTION.message));
     }
