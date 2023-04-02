@@ -12,7 +12,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static pl.lotto.domain.resultannouncer.ResultAnnouncerMessage.LOSE_MESSAGE;
+import static pl.lotto.domain.resultannouncer.ResultStatus.LOSE;
+import static pl.lotto.domain.resultannouncer.ResultStatus.WIN;
 
 class ResultAnnouncerFacadeTest {
 
@@ -43,9 +44,36 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(false)
                 .build();
-        ResultResponseDto expectedResult = new ResultResponseDto(expectedResultDto, LOSE_MESSAGE);
+        ResultResponseDto expectedResult = new ResultResponseDto(expectedResultDto, LOSE.message);
         assertThat(actualResult).isEqualTo(expectedResult);
+    }
 
+    @Test
+    public void should_return_win_message_if_ticket_is_winning_ticket() {
+        //given
+        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
+        ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().createModuleForTest(resultsCheckerFacade, resultLottoRepository, Clock.systemUTC());
+        String hash = "13579";
+        ResultDto resultDto = ResultDto.builder()
+                .hash(hash)
+                .numbers(Set.of(3, 4, 5, 6, 7, 8))
+                .hitNumbers(Set.of(3,4,5))
+                .drawDate(drawDate)
+                .isWinner(true)
+                .build();
+        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        //when
+        ResultResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
+        //then
+        ResultDto expectedResultDto = ResultDto.builder()
+                .hash(hash)
+                .numbers(Set.of(3, 4, 5, 6, 7, 8))
+                .hitNumbers(Set.of(3,4,5))
+                .drawDate(drawDate)
+                .isWinner(true)
+                .build();
+        ResultResponseDto expectedResult = new ResultResponseDto(expectedResultDto, WIN.message);
+        assertThat(actualResult).isEqualTo(expectedResult);
     }
 
 }
