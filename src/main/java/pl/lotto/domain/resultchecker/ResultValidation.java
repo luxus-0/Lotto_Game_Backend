@@ -21,10 +21,10 @@ public class ResultValidation {
                     .build();
         }
         else if(!isInRange(winnerNumbers)) {
-            log.error("Winner numbers are not in range");
+            throw new NotInRangeNumbersException("Winning numbers not in range");
         }
         else if(!isCorrectSize(winnerNumbers)){
-            log.error("Winner numbers are incorrect size");
+            throw new NotCorrectSizeNumbersException("Winning numbers are not correct size");
         }
         return ResultDto.builder().build();
     }
