@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -119,7 +120,7 @@ class ResultsCheckerFacadeTest {
         //given
         when(winningNumbersGeneratorFacade.generateWinningNumbers()).thenReturn(
                 WinningNumbersDto.builder()
-                        .winningNumbers(Set.of(200))
+                        .winningNumbers(Set.of(99,80,70,60,50,11))
                         .build()
         );
         //when
