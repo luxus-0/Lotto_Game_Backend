@@ -23,7 +23,6 @@ public class NumberReceiverFacade {
     private final TicketRepository ticketRepository;
     private final HashGenerable hashGenerator;
 
-
     public NumberReceiverResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (validate) {
