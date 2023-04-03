@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Service
 public class DrawDateFacade {
     private final DrawDateGenerator drawDateGenerator;
-
     public LocalDateTime retrieveNextDrawDate(){
         return drawDateGenerator.generateNextDrawDate();
     }

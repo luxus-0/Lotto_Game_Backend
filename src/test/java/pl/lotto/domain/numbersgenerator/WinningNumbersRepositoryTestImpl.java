@@ -17,7 +17,6 @@ import java.util.function.Function;
 public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepository{
     private final Map<Set<Integer>, WinningNumbers> winningNumbersList = new ConcurrentHashMap<>();
     Map<LocalDateTime, WinningNumbers> winningNumbersByDate = new ConcurrentHashMap<>();
-
     @Override
     public Optional<WinningNumbers> findWinningNumbersByDrawDate(LocalDateTime drawDate) {
        return Optional.ofNullable(winningNumbersByDate.get(drawDate));

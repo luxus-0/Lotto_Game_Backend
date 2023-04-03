@@ -11,7 +11,6 @@ public class AdjustableClock extends Clock{
             this.instant = initialInstant;
             this.zone = zone;
         }
-
         public static AdjustableClock ofLocalDateAndLocalTime(LocalDate date, LocalTime time, ZoneId zone) {
             ZonedDateTime zoneDateTime = createZoneDateTime(date, time, zone);
             return new AdjustableClock(zoneDateTime.toInstant(), zone);

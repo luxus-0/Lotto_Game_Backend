@@ -53,7 +53,6 @@ class WinningNumbersGeneratorFacadeTest {
 
         assertThat(numbersInRange).isTrue();
     }
-
     @Test
     public void should_throw_an_exception_when_number_not_in_range(){
         //given

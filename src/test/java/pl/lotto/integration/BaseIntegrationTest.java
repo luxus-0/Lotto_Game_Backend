@@ -18,7 +18,6 @@ import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-
 @SpringBootTest(classes = {LottoApplication.class, IntegrationConfiguration.class})
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc

@@ -16,7 +16,6 @@ import static java.time.temporal.TemporalAdjusters.next;
 public class DrawDateGenerator {
     private final AdjustableClock clock;
     private final LocalTime DRAW_TIME = LocalTime.of(12,0,0,0);
-
     LocalDateTime generateNextDrawDate() {
        LocalDateTime currentDateTime = LocalDateTime.now(clock);
         if(isSaturdayAndBeforeNoon(currentDateTime)) {
