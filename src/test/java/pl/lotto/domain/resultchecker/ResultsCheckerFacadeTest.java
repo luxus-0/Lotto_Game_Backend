@@ -119,7 +119,7 @@ class ResultsCheckerFacadeTest {
         //given
         when(winningNumbersGeneratorFacade.generateWinningNumbers()).thenReturn(
                 WinningNumbersDto.builder()
-                        .winningNumbers(Set.of(200))
+                        .winningNumbers(Set.of(99,80,70,60,50,11))
                         .build()
         );
         //when

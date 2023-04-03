@@ -123,7 +123,7 @@ class NumberReceiverFacadeTest {
     public void should_return_correct_draw_date() {
         // given
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022, 2, 19, 12, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022, 2, 26, 12, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .createModuleForTests(clock, hashGenerator, ticketRepository);
 
@@ -133,7 +133,7 @@ class NumberReceiverFacadeTest {
         LocalDateTime testedDrawDate = numberReceiverFacade.inputNumbers(numbersFromUser).ticketDto().drawDate();
 
         // then
-        LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 2, 19, 12, 0, 0);
+        LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 3, 5, 12, 0, 0);
         assertThat(testedDrawDate).isEqualTo(expectedDrawDate);
     }
 
