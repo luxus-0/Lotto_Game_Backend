@@ -2,16 +2,19 @@ package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
+import pl.lotto.domain.resultchecker.PlayerResultNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.Set;
 
 import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static pl.lotto.domain.resultannouncer.ResultStatus.*;
@@ -143,5 +146,49 @@ class ResultAnnouncerFacadeTest {
         ResultResponseDto expectedResultDto = new ResultResponseDto(actualResultDto.resultDto()
                 , ALREADY_CHECKED.message);
         assertThat(actualResultDto).isEqualTo(expectedResultDto);
+    }
+
+    @Test
+    public void should_throw_an_exception_when_numbers_is_empty() {
+        //given
+        String hash = "1234";
+
+        ResultDto resultDto = ResultDto.builder()
+                .hash(hash)
+                .numbers(Collections.emptySet())
+                .hitNumbers(Set.of(1,2,3,4))
+                .drawDate(LocalDateTime.now())
+                .build();
+        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+
+        //when
+        Set<Integer> actualNumbers = resultsCheckerFacade.findByHash(hash).numbers();
+        //then
+        assertThrows(PlayerResultNotFoundException.class,
+                () -> actualNumbers.stream()
+                        .findAny()
+                        .orElseThrow(() -> new PlayerResultNotFoundException("Player not found")));
+    }
+
+    @Test
+    public void should_throw_an_exception_when_hit_numbers_is_empty() {
+        //given
+        String hash = "";
+
+        ResultDto resultDto = ResultDto.builder()
+                .hash(hash)
+                .numbers(Set.of())
+                .build();
+        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+
+        //when
+        ResultDto actualResult = resultsCheckerFacade.findByHash(hash);
+        //then
+        Set<Integer> numbersResult = actualResult.numbers();
+
+        assertThrows(PlayerResultNotFoundException.class,
+                () -> numbersResult.stream()
+                        .findAny()
+                        .orElseThrow(() -> new PlayerResultNotFoundException("Player not found")));
     }
 }

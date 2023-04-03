@@ -31,9 +31,10 @@ class NumberReceiverFacadeTest {
     public void should_return_six_numbers_message_when_user_gave_6_numbers() {
         // given
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
+        String hash = hashGenerator.getHash();
 
         TicketDto createdTicket = TicketDto.builder()
-                .hash(hashGenerator.getHash())
+                .hash(hash)
                 .numbers(numbersFromUser)
                 .drawDate(drawDateFacade.retrieveNextDrawDate())
                 .build();
