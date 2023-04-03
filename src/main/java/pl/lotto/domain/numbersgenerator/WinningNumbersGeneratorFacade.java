@@ -1,12 +1,9 @@
 package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
-import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundException;
-import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -14,19 +11,19 @@ import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
-@Service
 public class WinningNumbersGeneratorFacade {
 
     private static final String WINNING_NUMBERS_MESSAGE = "Winning numbers not found";
     private final DrawDateFacade drawDateFacade;
-    private final RandomNumberClient randomNumberClient;
+    private final RandomNumbersGenerable randomNumbersGenerable;
     private final WinningNumbersRepository winningNumbersRepository;
 
     private final WinningNumberValidator winningNumberValidator;
+    private final WinningNumbersFacadeConfigurationProperties properties;
 
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-        RandomNumbersDto randomNumbers = randomNumberClient.generateRandomNumbers();
+        RandomNumbersDto randomNumbers = randomNumbersGenerable.generateRandomNumbers(properties.parametersUrl());
         Set<Integer> winningNumbers = randomNumbers.randomNumbers();
         if (winningNumbers != null) {
             winningNumberValidator.validate(winningNumbers);

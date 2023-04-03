@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator.exception;
+package pl.lotto.domain.numbersgenerator.exceptions;
 
 public class IncorrectSizeNumbersException extends RuntimeException {
     public IncorrectSizeNumbersException(String message) {

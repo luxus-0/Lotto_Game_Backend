@@ -1,44 +1,31 @@
 package pl.lotto.domain.numbersgenerator;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
-import pl.lotto.domain.numbersgenerator.exception.IncorrectSizeNumbersException;
-import pl.lotto.domain.numbersgenerator.exception.OutOfRangeNumbersException;
+import lombok.AllArgsConstructor;
+import pl.lotto.domain.numbersgenerator.exceptions.IncorrectSizeNumbersException;
+import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 
 import java.util.Set;
 
-@Service
-public class WinningNumberValidator {
-    @Value("${min.number}")
-    private int MIN_NUMBER;
-    @Value("${max.number}")
-    private int MAX_NUMBER;
-    @Value("${quantity.numbers}")
-    private int QUANTITY_NUMBERS;
+@AllArgsConstructor
+class WinningNumberValidator {
+    private final WinningNumbersFacadeConfigurationProperties properties;
 
-    @Value("${out.of.range.numbers}")
-    private String OUT_OF_RANGE_NUMBERS;
-    @Value("${incorrect.size.numbers}")
-    private String INCORRECT_SIZE_NUMBERS;
-
-    public WinningNumbersDto validate(Set<Integer> winningNumbers) {
-        if (isNotInRange(winningNumbers)) {
-            throw new OutOfRangeNumbersException(OUT_OF_RANGE_NUMBERS);
-        } else if (isNotCorrectSize(winningNumbers)) {
-            throw new IncorrectSizeNumbersException(INCORRECT_SIZE_NUMBERS);
+    public Set<Integer> validate(Set<Integer> winningNumbers) {
+        if (!inRange(winningNumbers)) {
+            throw new OutOfRangeNumbersException("Numbers out of range");
         }
-        return WinningNumbersDto.builder()
-                .winningNumbers(winningNumbers)
-                .build();
+        if (isNotCorrectSize(winningNumbers)) {
+            throw new IncorrectSizeNumbersException("Incorrect size numbers");
+        }
+        return winningNumbers;
     }
 
     private boolean isNotCorrectSize(Set<Integer> winningNumbers) {
-        return winningNumbers.size() != QUANTITY_NUMBERS;
+        return winningNumbers.size() < properties.parametersUrl().count();
     }
 
-    private boolean isNotInRange(Set<Integer> winningNumbers) {
+    private boolean inRange(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
-                .anyMatch(number -> number < MIN_NUMBER || number > MAX_NUMBER);
+                .anyMatch(number -> number >= properties.parametersUrl().lowerBand() && number <= properties.parametersUrl().upperBand());
     }
 }
