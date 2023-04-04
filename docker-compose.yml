@@ -9,7 +9,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: lukasz
       MONGO_INITDB_ROOT_PASSWORD: lukasz1986
-      MONGO_INITDB_DATABASE: lotto-web
+      MONGO_INITDB_DATABASE: lotto_game
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
