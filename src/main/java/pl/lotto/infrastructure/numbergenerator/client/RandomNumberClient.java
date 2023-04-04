@@ -14,17 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class RandomNumberClient {
-    @Value("${api.url}")
-    private String url;
-    @Value("${quantity.numbers}")
-    private int quantityNumbers;
-
-    @Value("${min.number}")
-    private int minNumber;
-
-    @Value("${max.number}")
-    private int maxNumber;
-    private final static String API_URL = "https://www.random.org/integers/?num=6&min=1&max=99&col=1&base=10&format=plain&unique=1";
+    final String API_URL = "https://www.random.org/integers/?num=6&min=1&max=99&col=1&base=10&format=plain&unique=1";
 
     public RandomNumbersDto generateRandomNumbers() {
         RestTemplate restTemplate = new RestTemplate();
