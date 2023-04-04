@@ -8,26 +8,24 @@ import java.util.Set;
 
 @Service
 public class WinningNumberValidator {
-    @Value("${range.from.number}")
-    private int RANGE_FROM_NUMBER;
-    @Value("${range.to.number}")
-    private int RANGE_TO_NUMBER;
-    @Value("${incorrect.size.numbers}")
-    private String INCORRECT_SIZE_NUMBERS;
-
-    @Value("${out.of.range.numbers}")
-    private String OUT_OF_RANGE_NUMBERS;
-
+    @Value("${min.number}")
+    private int MIN_NUMBER;
+    @Value("${max.number}")
+    private int MAX_NUMBER;
     @Value("${quantity.numbers}")
     private int QUANTITY_NUMBERS;
 
+    @Value("${out.of.range.numbers}")
+    private String OUT_OF_RANGE_NUMBERS;
+    @Value("${incorrect.size.numbers}")
+    private String INCORRECT_SIZE_NUMBERS;
+
     public WinningNumbersDto validate(Set<Integer> winningNumbers) {
-        if(!isInRange(winningNumbers)){
+        if (!isInRange(winningNumbers)) {
             return WinningNumbersDto.builder()
                     .message(OUT_OF_RANGE_NUMBERS)
                     .build();
-        }
-        else if(!isCorrectSize(winningNumbers)){
+        } else if (!isCorrectSize(winningNumbers)) {
             return WinningNumbersDto.builder()
                     .message(INCORRECT_SIZE_NUMBERS)
                     .build();
@@ -43,6 +41,6 @@ public class WinningNumberValidator {
 
     private boolean isInRange(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
-                .anyMatch(number -> number >= RANGE_FROM_NUMBER && number <= RANGE_TO_NUMBER);
+                .anyMatch(number -> number >= MIN_NUMBER && number <= MAX_NUMBER);
     }
 }

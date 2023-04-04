@@ -3,8 +3,10 @@ package pl.lotto.domain.numbersgenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundException;
+import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -16,16 +18,16 @@ import java.util.Set;
 public class WinningNumbersGeneratorFacade {
 
     private static final String NUMBERS_MESSAGE_VALIDATOR = "Winning numbers not found";
-    private final RandomNumberGeneratorFacade randomNumberGeneratorFacade;
     private final DrawDateFacade drawDateFacade;
+    private final RandomNumberClient randomNumberClient;
     private final WinningNumbersRepository winningNumbersRepository;
 
     private final WinningNumberValidator winningNumberValidator;
 
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-        WinningNumbersDto randomNumbers = randomNumberGeneratorFacade.generateSixRandomNumbers();
-        Set<Integer> winningNumbers = randomNumbers.winningNumbers();
+        RandomNumbersDto randomNumbers = randomNumberClient.generateRandomNumbers();
+        Set<Integer> winningNumbers = randomNumbers.randomNumbers();
         if (winningNumbers != null) {
             winningNumberValidator.validate(winningNumbers);
             WinningNumbers winningNumbersCreator = WinningNumbers.builder()

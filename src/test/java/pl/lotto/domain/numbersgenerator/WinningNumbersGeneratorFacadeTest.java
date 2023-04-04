@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundException;
+import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
@@ -25,8 +26,8 @@ class WinningNumbersGeneratorFacadeTest {
 
     WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
-    RandomNumberGeneratorFacade randomNumberGeneratorFacade = new RandomNumberGeneratorConfiguration().createModuleForTests(winningNumbersRepository);
-    WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration().createModuleForTest(randomNumberGeneratorFacade, drawDateFacade, winningNumbersRepository);
+    RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
+    WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration().createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
 
     @Test
     public void should_return_set_of_required_size() {
