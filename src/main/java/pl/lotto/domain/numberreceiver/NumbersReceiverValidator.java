@@ -23,7 +23,7 @@ class NumbersReceiverValidator {
             errors.add(ValidationResult.MORE_THAN_SIX_NUMBERS);
         } else if (isEmptyNumbers(inputNumbers)) {
             errors.add(ValidationResult.EMPTY_NUMBERS);
-        }else if(isNumberNotInRange(inputNumbers)){
+        } else if (isNumberNotInRange(inputNumbers)) {
             errors.add(ValidationResult.OUT_OF_RANGE_NUMBERS);
         } else {
             errors.add(ValidationResult.EQUALS_SIX_NUMBERS);

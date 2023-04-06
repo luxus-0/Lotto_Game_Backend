@@ -14,16 +14,14 @@ public class ResultValidation {
     private static final int MAX_NUMBERS = 99;
     private static final int QUANTITY_NUMBERS = 6;
 
-    ResultDto validate(Set<Integer> winnerNumbers){
-        if(isInRange(winnerNumbers) && isCorrectSize(winnerNumbers)){
+    ResultDto validate(Set<Integer> winnerNumbers) {
+        if (isInRange(winnerNumbers) && isCorrectSize(winnerNumbers)) {
             return ResultDto.builder()
                     .numbers(winnerNumbers)
                     .build();
-        }
-        else if(!isInRange(winnerNumbers)) {
+        } else if (!isInRange(winnerNumbers)) {
             throw new NotInRangeNumbersException("Winning numbers not in range");
-        }
-        else if(!isCorrectSize(winnerNumbers)){
+        } else if (!isCorrectSize(winnerNumbers)) {
             throw new NotCorrectSizeNumbersException("Winning numbers are not correct size");
         }
         return ResultDto.builder().build();
