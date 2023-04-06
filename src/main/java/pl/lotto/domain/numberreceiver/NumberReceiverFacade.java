@@ -64,9 +64,4 @@ public class NumberReceiverFacade {
                 .map(TicketMapper::mapToTicketDto)
                 .toList();
     }
-
-    public List<TicketDto> retrieveAllTicketByNextDrawDate(){
-        LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        return retrieveAllTicketByDrawDate(nextDrawDate);
-    }
 }
