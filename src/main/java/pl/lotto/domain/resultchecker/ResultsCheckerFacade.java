@@ -10,6 +10,7 @@ import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +33,8 @@ public class ResultsCheckerFacade {
     ResultValidation resultValidation;
 
     public PlayersDto generateWinners() {
-        List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByNextDrawDate();
+        LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
+        List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByDrawDate(nextDrawDate);
         List<Ticket> tickets = mapToTickets(allTicketByDate);
         WinningNumbersDto winningNumbersDto = winningNumbersGeneratorFacade.generateWinningNumbers();
         Set<Integer> winningNumbers = winningNumbersDto.winningNumbers();
@@ -53,13 +55,14 @@ public class ResultsCheckerFacade {
     }
 
     public ResultDto findByHash(String hash) {
-        Player player = playerRepository.findById(hash).orElseThrow(() -> new PlayerResultNotFoundException("Player not win"));
+        Player player = playerRepository.findById(hash).orElseThrow(() -> new PlayerResultNotFoundException("Player not found"));
         if (player != null) {
             return ResultDto.builder()
                     .hash(player.hash())
                     .numbers(player.numbers())
                     .hitNumbers(player.hitNumbers())
                     .drawDate(player.drawDate())
+                    .isWinner(true)
                     .build();
         }
         return ResultDto.builder()
