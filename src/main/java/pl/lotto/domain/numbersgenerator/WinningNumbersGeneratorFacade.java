@@ -17,7 +17,7 @@ import java.util.Set;
 @Service
 public class WinningNumbersGeneratorFacade {
 
-    private static final String NUMBERS_MESSAGE_VALIDATOR = "Winning numbers not found";
+    private static final String WINNING_NUMBERS_MESSAGE = "Winning numbers not found";
     private final DrawDateFacade drawDateFacade;
     private final RandomNumberClient randomNumberClient;
     private final WinningNumbersRepository winningNumbersRepository;
@@ -43,13 +43,13 @@ public class WinningNumbersGeneratorFacade {
         }
         return WinningNumbersDto.builder()
                 .winningNumbers(Collections.emptySet())
-                .message(NUMBERS_MESSAGE_VALIDATOR)
+                .message(WINNING_NUMBERS_MESSAGE)
                 .build();
     }
 
     public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
         Optional<WinningNumbers> numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate);
-        Set<Integer> winningNumbers = numbersByDate.map(WinningNumbers::winningNumbers).orElseThrow(() -> new WinningNumbersNotFoundException(NUMBERS_MESSAGE_VALIDATOR));
+        Set<Integer> winningNumbers = numbersByDate.map(WinningNumbers::winningNumbers).orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE));
         return WinningNumbersDto.builder()
                 .winningNumbers(winningNumbers)
                 .drawDate(drawDate)
@@ -58,6 +58,9 @@ public class WinningNumbersGeneratorFacade {
 
     public boolean areWinningNumbersGeneratedByDate() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        return winningNumbersRepository.existsByDrawDate(nextDrawDate);
+        if(winningNumbersRepository.existsByDrawDate(nextDrawDate)){
+            return true;
+        }
+        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);
     }
 }
