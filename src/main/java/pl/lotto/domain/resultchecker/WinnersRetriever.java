@@ -22,6 +22,10 @@ public class WinnersRetriever {
     private Player createPlayer(Ticket ticket, Set<Integer> hitNumbers) {
         if (isWinner(hitNumbers)) {
             Player.builder()
+                    .hash(ticket.hash())
+                    .numbers(ticket.numbers())
+                    .hitNumbers(hitNumbers)
+                    .drawDate(ticket.drawDate())
                     .isWinner(true)
                     .build();
         }
@@ -30,7 +34,7 @@ public class WinnersRetriever {
                     .numbers(ticket.numbers())
                     .hitNumbers(hitNumbers)
                     .drawDate(ticket.drawDate())
-                    .isWinner(true)
+                    .isWinner(false)
                     .build();
     }
 
