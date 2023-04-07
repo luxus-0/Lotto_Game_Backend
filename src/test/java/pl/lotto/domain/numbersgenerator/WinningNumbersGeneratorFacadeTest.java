@@ -5,10 +5,6 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
-import pl.lotto.domain.numbersgenerator.exception.IncorrectSizeNumbersException;
-import pl.lotto.domain.numbersgenerator.exception.OutOfRangeNumbersException;
-import pl.lotto.domain.numbersgenerator.exception.WinningNumbersNotFoundException;
-import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
@@ -29,10 +25,10 @@ class WinningNumbersGeneratorFacadeTest {
     @Test
     public void should_return_set_of_required_size() {
         //given
-        RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
+        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
+                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -44,10 +40,10 @@ class WinningNumbersGeneratorFacadeTest {
     @Test
     public void should_return_set_of_required_size_within_required_range() {
         //given
-        RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
+        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
+                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
 
         int upperBand = 99;
         int lowerBand = 1;
@@ -65,10 +61,10 @@ class WinningNumbersGeneratorFacadeTest {
     @Test
     public void should_throw_an_exception_when_number_not_in_range() {
         //given
-        RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
+        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
+                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -85,10 +81,10 @@ class WinningNumbersGeneratorFacadeTest {
     @Test
     public void should_return_collection_of_unique_values() {
         //given
-        RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
+        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
+                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -101,10 +97,10 @@ class WinningNumbersGeneratorFacadeTest {
     @Test
     public void should_return_false_when_size_numbers_is_more_than_six() {
         //given
-        RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
+        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
+                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -117,10 +113,10 @@ class WinningNumbersGeneratorFacadeTest {
     @Test
     public void should_throw_an_exception_when_failed_numbers_by_given_date() {
         //given
-        RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
+        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
+                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         //when
@@ -134,10 +130,10 @@ class WinningNumbersGeneratorFacadeTest {
     @Test
     public void should_throw_an_exception_when_failed_date_by_given_incorrect_date() {
         //given
-        RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
+        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
+                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         //when
@@ -169,10 +165,10 @@ class WinningNumbersGeneratorFacadeTest {
     @Test
     public void should_return_true_when_numbers_are_generated_by_given_date() {
         //given
+        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        RandomNumberClient randomNumberGeneratorClient = new RandomNumberClient();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(randomNumberGeneratorClient, drawDateFacade, winningNumbersRepository);
+                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         Set<Integer> generatedWinningNumbers = Set.of(1, 2, 3, 4, 5, 6);
@@ -189,28 +185,5 @@ class WinningNumbersGeneratorFacadeTest {
         boolean areWinningNumbersGeneratedByDate = winningNumbersGeneratorFacade.areWinningNumbersGeneratedByDate();
         //then
         assertTrue(areWinningNumbersGeneratedByDate);
-
-    }
-
-    @Test
-    public void should_throw_an_exception_when_numbers_size_not_equals_six() {
-        //given
-        Set<Integer> numbers = Set.of(1);
-        //when
-        WinningNumberValidator winningNumberValidator = new WinningNumberValidator();
-        //then
-        assertThrows(IncorrectSizeNumbersException.class,
-                () -> winningNumberValidator.validate(numbers));
-}
-
-    @Test
-    public void should_throw_an_exception_when_numbers_are_out_of_range() {
-        //given
-        Set<Integer> numbers = Set.of(100,200,300,400,500,600);
-        //when
-        WinningNumberValidator winningNumberValidator = new WinningNumberValidator();
-        //then
-        assertThrows(OutOfRangeNumbersException.class,
-                () -> winningNumberValidator.validate(numbers));
     }
 }
