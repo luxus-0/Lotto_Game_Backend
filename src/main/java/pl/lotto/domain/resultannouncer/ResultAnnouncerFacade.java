@@ -20,6 +20,13 @@ public class ResultAnnouncerFacade {
     private final ResultLottoRepository resultLottoRepository;
     private final Clock clock;
 
+    private static ResultResponseDto getEmptyResultWithMessage() {
+        return ResultResponseDto.builder()
+                .resultDto(null)
+                .message(HASH_NOT_EXIST.message)
+                .build();
+    }
+
     ResultResponseDto findResult(String hash) {
         ResultDto resultDto = resultsCheckerFacade.findByHash(hash);
 
@@ -41,13 +48,6 @@ public class ResultAnnouncerFacade {
         } else {
             return new ResultResponseDto(resultDtoSaved, LOSE.message);
         }
-    }
-
-    private static ResultResponseDto getEmptyResultWithMessage() {
-        return ResultResponseDto.builder()
-                .resultDto(null)
-                .message(HASH_NOT_EXIST.message)
-                .build();
     }
 
     private boolean isAfterResultAnnouncementTime(ResultDto resultDto) {

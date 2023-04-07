@@ -58,7 +58,7 @@ public class WinningNumbersGeneratorFacade {
 
     public boolean areWinningNumbersGeneratedByDate() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        if(winningNumbersRepository.existsByDrawDate(nextDrawDate)){
+        if (winningNumbersRepository.existsByDrawDate(nextDrawDate)) {
             return true;
         }
         throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);

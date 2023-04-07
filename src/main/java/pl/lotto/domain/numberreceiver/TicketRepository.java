@@ -1,9 +1,7 @@
 package pl.lotto.domain.numberreceiver;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

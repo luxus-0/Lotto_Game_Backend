@@ -13,11 +13,11 @@ class ResultsCheckerFacadeConfiguration {
 
     @Bean
     PlayerRepository playerRepository() {
-       return new InMemoryPlayerDatabaseImpl();
+        return new InMemoryPlayerDatabaseImpl();
     }
 
     @Bean
-    ResultsCheckerFacade createModuleForTests(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade , WinningNumbersGeneratorFacade winningNumbersGeneratorFacade, PlayerRepository playerRepository) {
+    ResultsCheckerFacade createModuleForTests(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade, WinningNumbersGeneratorFacade winningNumbersGeneratorFacade, PlayerRepository playerRepository) {
         WinnersRetriever winnersRetriever = new WinnersRetriever();
         ResultValidation resultValidation = new ResultValidation();
         return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, winnersRetriever, playerRepository, resultValidation);

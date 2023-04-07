@@ -29,13 +29,13 @@ public class WinnersRetriever {
                     .isWinner(true)
                     .build();
         }
-            return Player.builder()
-                    .hash(ticket.hash())
-                    .numbers(ticket.numbers())
-                    .hitNumbers(hitNumbers)
-                    .drawDate(ticket.drawDate())
-                    .isWinner(false)
-                    .build();
+        return Player.builder()
+                .hash(ticket.hash())
+                .numbers(ticket.numbers())
+                .hitNumbers(hitNumbers)
+                .drawDate(ticket.drawDate())
+                .isWinner(false)
+                .build();
     }
 
     private boolean isWinner(Set<Integer> hitNumbers) {

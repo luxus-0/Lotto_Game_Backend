@@ -26,7 +26,7 @@ public class WinningNumberValidator {
         if (isNotInRange(winningNumbers)) {
             throw new OutOfRangeNumbersException(OUT_OF_RANGE_NUMBERS);
         } else if (isNotCorrectSize(winningNumbers)) {
-            throw  new IncorrectSizeNumbersException(INCORRECT_SIZE_NUMBERS);
+            throw new IncorrectSizeNumbersException(INCORRECT_SIZE_NUMBERS);
         }
         return WinningNumbersDto.builder()
                 .winningNumbers(winningNumbers)

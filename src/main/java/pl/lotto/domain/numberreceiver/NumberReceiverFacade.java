@@ -26,13 +26,14 @@ public class NumberReceiverFacade {
     public NumberReceiverResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (validate) {
-           String ticketId = hashGenerator.getHash();
-           LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-           Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
+            String ticketId = hashGenerator.getHash();
+            LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
+            Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
             return getNumberReceiverResultDto(ticketSaved);
         }
         return getReceiverResultDto();
     }
+
     private NumberReceiverResultDto getReceiverResultDto() {
         return NumberReceiverResultDto.builder()
                 .message(createResultMessage())
@@ -53,7 +54,7 @@ public class NumberReceiverFacade {
                 .collect(Collectors.joining(","));
     }
 
-    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date){
+    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         if (date.isAfter(nextDrawDate)) {
             return Collections.emptyList();

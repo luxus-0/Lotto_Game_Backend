@@ -5,5 +5,6 @@ import java.util.Optional;
 
 interface ResultsCheckerRepository {
     List<Player> saveAll(List<Player> players);
+
     Optional<Player> findById(String hash);
 }
