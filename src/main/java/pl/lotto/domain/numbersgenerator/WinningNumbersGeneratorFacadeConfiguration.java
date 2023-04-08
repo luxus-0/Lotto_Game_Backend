@@ -14,7 +14,6 @@ public class WinningNumbersGeneratorFacadeConfiguration {
         return new WinningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository, winningNumberValidator, properties);
     }
 
-    @Bean
     public WinningNumbersGeneratorFacade createModuleForTest(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
         WinningNumbersFacadeConfigurationProperties properties = WinningNumbersFacadeConfigurationProperties.builder()
                 .parametersUrl(RandomNumberParametersUrl.builder()
