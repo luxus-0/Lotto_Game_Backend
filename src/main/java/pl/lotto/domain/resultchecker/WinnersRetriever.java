@@ -1,12 +1,9 @@
 package pl.lotto.domain.resultchecker;
 
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
 public class WinnersRetriever {
     private static final int NUMBERS_WHEN_PLAYERS_WON = 3;
 
@@ -20,21 +17,15 @@ public class WinnersRetriever {
     }
 
     private Player createPlayer(Ticket ticket, Set<Integer> hitNumbers) {
+        Player.PlayerBuilder builder = Player.builder();
         if (isWinner(hitNumbers)) {
-            Player.builder()
-                    .hash(ticket.hash())
-                    .numbers(ticket.numbers())
-                    .hitNumbers(hitNumbers)
-                    .drawDate(ticket.drawDate())
-                    .isWinner(true)
-                    .build();
+            builder.isWinner(true);
         }
-        return Player.builder()
+        return builder
                 .hash(ticket.hash())
                 .numbers(ticket.numbers())
                 .hitNumbers(hitNumbers)
                 .drawDate(ticket.drawDate())
-                .isWinner(false)
                 .build();
     }
 
