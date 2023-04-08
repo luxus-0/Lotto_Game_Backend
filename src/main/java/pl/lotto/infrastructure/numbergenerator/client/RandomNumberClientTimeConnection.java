@@ -1,9 +1,14 @@
 package pl.lotto.infrastructure.numbergenerator.client;
 
-import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
-@Builder
-public record RandomNumberClientTimeConnection(@Value("${numbers.genenerator.connectionTimeout}") long connectionTimeOut,
-                                               @Value("${numbers.genenerator.readTimeOut}") long readTimeOut) {
+@Getter
+@NoArgsConstructor
+public class RandomNumberClientTimeConnection {
+    @Value("${numbers.genenerator.connectionTimeout}")
+    private long connectionTimeOut;
+    @Value("${numbers.genenerator.readTimeOut}")
+    private long readTimeOut;
 }
