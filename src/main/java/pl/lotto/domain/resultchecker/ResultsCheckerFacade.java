@@ -1,7 +1,6 @@
 package pl.lotto.domain.resultchecker;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
@@ -9,15 +8,15 @@ import pl.lotto.domain.numbersgenerator.WinningNumbersGeneratorFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
+import pl.lotto.domain.resultchecker.exceptions.HashNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapPlayersToResults;
-import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapToTickets;
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.*;
 
-@Service
 @AllArgsConstructor
 public class ResultsCheckerFacade {
 
@@ -55,13 +54,20 @@ public class ResultsCheckerFacade {
     }
 
     public ResultDto findByHash(String hash) {
-        Player player = playerRepository.findById(hash).orElseThrow(() -> new PlayerResultNotFoundException("Player not found"));
-        if (player != null) {
+        if(hash == null){
+            throw new HashNotFoundException("Hash not found");
+        }
+        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
+        List<TicketDto> ticketsDto = numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate);
+        List<Player> players = mapToPlayers(ticketsDto);
+        playerRepository.saveAll(players);
+        Optional<Player> player = playerRepository.findById(hash);
+        if (player.isPresent()) {
             return ResultDto.builder()
-                    .hash(player.hash())
-                    .numbers(player.numbers())
-                    .hitNumbers(player.hitNumbers())
-                    .drawDate(player.drawDate())
+                    .hash(hash)
+                    .numbers(player.get().numbers())
+                    .hitNumbers(player.get().hitNumbers())
+                    .drawDate(player.get().drawDate())
                     .isWinner(true)
                     .build();
         }
@@ -69,4 +75,5 @@ public class ResultsCheckerFacade {
                 .isWinner(false)
                 .build();
     }
+
 }

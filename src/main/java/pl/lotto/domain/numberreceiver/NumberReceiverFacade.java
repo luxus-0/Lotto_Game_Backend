@@ -42,7 +42,11 @@ public class NumberReceiverFacade {
 
     private NumberReceiverResultDto getNumberReceiverResultDto(Ticket ticketSaved) {
         return NumberReceiverResultDto.builder()
-                .ticketDto(new TicketDto(ticketSaved.hash(), ticketSaved.numbersFromUser(), ticketSaved.drawDate()))
+                .ticketDto(TicketDto.builder()
+                        .hash(ticketSaved.hash())
+                        .numbers(ticketSaved.numbersFromUser())
+                        .drawDate(ticketSaved.drawDate())
+                        .build())
                 .message(createResultMessage())
                 .build();
     }

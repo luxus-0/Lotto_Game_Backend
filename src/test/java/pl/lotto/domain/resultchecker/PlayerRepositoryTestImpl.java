@@ -1,7 +1,5 @@
 package pl.lotto.domain.resultchecker;
 
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +12,11 @@ public class PlayerRepositoryTestImpl implements PlayerRepository {
     public List<Player> saveAll(List<Player> players) {
         players.forEach(player -> playersList.put(player.hash(), player));
                 return players;
+    }
+
+    @Override
+    public Player save(Player player) {
+        return playersList.put(player.hash(), player);
     }
 
     @Override

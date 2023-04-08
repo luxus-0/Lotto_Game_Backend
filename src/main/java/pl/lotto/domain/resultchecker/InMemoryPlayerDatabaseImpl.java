@@ -16,6 +16,11 @@ public class InMemoryPlayerDatabaseImpl implements PlayerRepository {
     }
 
     @Override
+    public Player save(Player player) {
+        return inMemoryPlayers.put(player.hash(), player);
+    }
+
+    @Override
     public Optional<Player> findById(String hash) {
         return Optional.ofNullable(inMemoryPlayers.get(hash));
     }

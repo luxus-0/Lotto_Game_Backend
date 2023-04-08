@@ -2,7 +2,7 @@ package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
-import pl.lotto.domain.resultchecker.PlayerResultNotFoundException;
+import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 

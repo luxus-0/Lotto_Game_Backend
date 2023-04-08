@@ -21,11 +21,21 @@ class ResultCheckerMapper {
 
     static List<Ticket> mapToTickets(List<TicketDto> allTicketsByDate) {
         return allTicketsByDate.stream()
-                .map(ticketDto -> Ticket.builder()
-                        .drawDate(ticketDto.drawDate())
-                        .hash(ticketDto.hash())
-                        .numbers(ticketDto.numbers())
+                .map(ticket -> Ticket.builder()
+                        .drawDate(ticket.drawDate())
+                        .hash(ticket.hash())
+                        .numbers(ticket.numbers())
                         .build())
                 .toList();
+    }
+
+    static List<Player> mapToPlayers(List<TicketDto> ticketsDto) {
+        return ticketsDto.stream().map(player -> Player.builder()
+                .hash(player.hash())
+                .numbers(player.numbers())
+                .hitNumbers(player.hitNumbers())
+                .drawDate(player.drawDate())
+                .message(player.message())
+                .build()).toList();
     }
 }

@@ -8,6 +8,7 @@ import pl.lotto.domain.drawdate.DrawDateFacadeConfiguration;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -128,7 +129,7 @@ class NumberReceiverFacadeTest {
     public void should_return_correct_hash() {
         //given
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022, 12, 2,12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .createModuleForTests(clock, hashGenerator, ticketRepository);
 
@@ -215,7 +216,7 @@ class NumberReceiverFacadeTest {
     public void should_return_empty_collection_if_there_are_no_ticket() {
         //given
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022,10,8,12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .createModuleForTests(clock, hashGenerator, ticketRepository);
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
@@ -230,15 +231,17 @@ class NumberReceiverFacadeTest {
     public void it_should_return_empty_collections_if_given_date_is_after_next_drawDate() {
         // given
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        LocalDateTime actualDrawDate = LocalDateTime.of(2022,10,8,12,0,0);
+        AdjustableClock clock = new AdjustableClock(actualDrawDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .createModuleForTests(clock, hashGenerator, ticketRepository);
 
-        LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 11, 3, 12, 0, 0);
+        LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 10, 15, 12, 0, 0);
         // when
         List<TicketDto> allTicketsByDate = numberReceiverFacade.retrieveAllTicketByDrawDate(expectedDrawDate);
         // then
         assertThat(allTicketsByDate).isEmpty();
+        assertThat(expectedDrawDate).isAfter(actualDrawDate);
     }
 
     @Test
