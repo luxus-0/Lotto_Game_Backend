@@ -43,8 +43,8 @@ public class ResultsCheckerFacade {
                     .build();
         }
 
-        resultValidation.validate(winningNumbers);
-        List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);
+        ResultDto resultDto = resultValidation.validate(winningNumbers);
+        List<Player> players = winnersRetriever.retrieveWinners(tickets, resultDto.numbers());
         playerRepository.saveAll(players);
         return PlayersDto.builder()
                 .results(mapPlayersToResults(players))
