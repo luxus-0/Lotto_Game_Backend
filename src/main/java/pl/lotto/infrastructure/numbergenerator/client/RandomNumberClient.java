@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Service
 public class RandomNumberClient implements RandomNumbersGenerable {
     private final RestTemplate restTemplate;
 
