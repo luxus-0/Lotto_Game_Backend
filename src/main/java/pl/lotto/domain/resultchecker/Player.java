@@ -9,6 +9,12 @@ import java.util.Set;
 
 @Builder
 @Document
-public record Player(@Id String hash, Set<Integer> numbers, LocalDateTime drawDate, Set<Integer> hitNumbers,
-                     boolean isWinner, String message) {
+public record Player(@Id String hash,
+                     String name,
+                     String surname,
+                     Set<Integer> numbers,
+                     Set<Integer> hitNumbers,
+                     LocalDateTime drawDate,
+                     boolean isWinner,
+                     String message) {
 }
