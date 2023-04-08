@@ -16,7 +16,7 @@ public class RandomNumberClientConfig {
     }
 
     @Bean
-    public RandomNumberClientTimeConnection timeConnection(){
+    public RandomNumberClientTimeConnection randomNumberClientTimeConnection(){
         return new RandomNumberClientTimeConnection();
     }
 
@@ -24,8 +24,8 @@ public class RandomNumberClientConfig {
     RestTemplate restTemplate(RandomNumberClientTimeConnection timeConnection, ResponseErrorHandlerClient responseErrorHandlerClient) {
         return new RestTemplateBuilder()
                 .errorHandler(responseErrorHandlerClient)
-                .setConnectTimeout(Duration.ofMillis(timeConnection.connectionTimeOut()))
-                .setReadTimeout(Duration.ofMillis(timeConnection.readTimeOut()))
+                .setConnectTimeout(Duration.ofMillis(timeConnection.getConnectionTimeOut()))
+                .setReadTimeout(Duration.ofMillis(timeConnection.getReadTimeOut()))
                 .build();
     }
 
