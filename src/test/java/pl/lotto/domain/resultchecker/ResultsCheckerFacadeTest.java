@@ -11,10 +11,12 @@ import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -198,5 +200,212 @@ class ResultsCheckerFacadeTest {
                 .isWinner(true)
                 .build();
         assertThat(resultDto).isEqualTo(expectedResult);
+    }
+
+    @Test
+    public void should_return_win_player_when_hit_numbers_are_more_than_three() {
+        //given
+        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().createModuleForTests(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, playerRepository);
+
+        Ticket ticket1 = Ticket.builder()
+                .hash("1234")
+                .numbers(Set.of(1, 2, 3, 4, 11, 17, 19))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0)
+                )
+                .build();
+
+        Ticket ticket2 = Ticket.builder()
+                .hash("5678")
+                .numbers(Set.of(1, 2, 3, 4, 20, 35, 45))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0)
+                )
+                .build();
+
+        Ticket ticket3 = Ticket.builder()
+                .hash("1111")
+                .numbers(Set.of(1, 2, 3, 4, 6, 7, 8))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0)
+                )
+                .build();
+
+        List<Ticket> allTicketsByDate = List.of(ticket1, ticket2, ticket3);
+        Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
+
+        //when
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        List<Player> players = winnersRetriever.retrieveWinners(allTicketsByDate, winningNumbers);
+
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+        Player player3 = players.get(2);
+        //then
+        assertEquals(3, players.size());
+        assertTrue(player1.isWinner());
+        assertTrue(player2.isWinner());
+        assertTrue(player3.isWinner());
+    }
+
+    @Test
+    public void should_return_not_win_player_when_hit_numbers_are_less_than_three() {
+        //given
+        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().createModuleForTests(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, playerRepository);
+
+        Ticket ticket1 = Ticket.builder()
+                .hash("1234")
+                .numbers(Set.of(1, 2, 9, 10, 11, 17, 19))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        Ticket ticket2 = Ticket.builder()
+                .hash("5678")
+                .numbers(Set.of(1, 3, 22, 8, 20, 35, 45))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        Ticket ticket3 = Ticket.builder()
+                .hash("1111")
+                .numbers(Set.of(1, 6, 14, 20, 90, 30, 8))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        List<Ticket> allTicketsByDate = List.of(ticket1, ticket2, ticket3);
+        Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
+
+        //when
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        List<Player> players = winnersRetriever.retrieveWinners(allTicketsByDate, winningNumbers);
+
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+        Player player3 = players.get(2);
+        //then
+        assertThat(players).isNotNull();
+        assertFalse(player1.isWinner());
+        assertFalse(player2.isWinner());
+        assertFalse(player3.isWinner());
+
+        assertThat(player1.hitNumbers().size()).isEqualTo(2);
+        assertThat(player2.hitNumbers().size()).isEqualTo(2);
+        assertThat(player3.hitNumbers().size()).isEqualTo(2);
+    }
+
+    @Test
+    public void should_return_not_win_player_when_hit_numbers_are_empty() {
+        //given
+        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().createModuleForTests(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, playerRepository);
+
+        Ticket ticket1 = Ticket.builder()
+                .hash("1234")
+                .numbers(Set.of(22, 45, 9, 10, 11, 17, 19))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        Ticket ticket2 = Ticket.builder()
+                .hash("5678")
+                .numbers(Set.of(40, 17, 22, 12, 20, 35, 45))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        Ticket ticket3 = Ticket.builder()
+                .hash("1111")
+                .numbers(Set.of(60, 45, 14, 20, 90, 30, 8))
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        List<Ticket> allTicketsByDate = List.of(ticket1, ticket2, ticket3);
+        Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
+
+        //when
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        List<Player> players = winnersRetriever.retrieveWinners(allTicketsByDate, winningNumbers);
+
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+        Player player3 = players.get(2);
+        //then
+        assertThat(players).isNotNull();
+        assertFalse(player1.isWinner());
+        assertFalse(player2.isWinner());
+        assertFalse(player3.isWinner());
+
+        assertThat(player1.hitNumbers().size()).isEqualTo(0);
+        assertThat(player2.hitNumbers().size()).isEqualTo(0);
+        assertThat(player3.hitNumbers().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void should_return_not_win_player_when_input_numbers_are_empty() {
+        //given
+        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().createModuleForTests(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, playerRepository);
+
+        Ticket ticket1 = Ticket.builder()
+                .hash("1234")
+                .numbers(Set.of())
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        Ticket ticket2 = Ticket.builder()
+                .hash("5678")
+                .numbers(Set.of())
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        Ticket ticket3 = Ticket.builder()
+                .hash("1111")
+                .numbers(Set.of())
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
+                .build();
+
+        List<Ticket> allTicketsByDate = List.of(ticket1, ticket2, ticket3);
+        Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
+
+        //when
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        List<Player> players = winnersRetriever.retrieveWinners(allTicketsByDate, winningNumbers);
+
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+        Player player3 = players.get(2);
+        //then
+        assertThat(players).isNotNull();
+        assertFalse(player1.isWinner());
+        assertFalse(player2.isWinner());
+        assertFalse(player3.isWinner());
+
+        assertThat(player1.hitNumbers().size()).isEqualTo(0);
+        assertThat(player2.hitNumbers().size()).isEqualTo(0);
+        assertThat(player3.hitNumbers().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void should_return_null_player_when_tickets_collection_is_empty() {
+        //given
+        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().createModuleForTests(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, playerRepository);
+
+        Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
+        //when
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        List<Player> players = winnersRetriever.retrieveWinners(Collections.emptyList(), winningNumbers);
+        //then
+        assertTrue(players.isEmpty());
+    }
+
+    @Test
+    public void should_return_null_player_when_tickets_is_empty_and_winning_numbers_is_null() {
+        //given
+        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().createModuleForTests(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, playerRepository);
+
+        //when
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+
+        List<Player> players = winnersRetriever.retrieveWinners(Collections.emptyList(), null);
+        //then
+        assertThat(players).isNullOrEmpty();
     }
 }
