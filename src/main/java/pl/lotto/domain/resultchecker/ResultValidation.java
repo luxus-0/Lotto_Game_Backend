@@ -1,15 +1,11 @@
 package pl.lotto.domain.resultchecker;
 
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.NotCorrectSizeNumbersException;
 import pl.lotto.domain.resultchecker.exceptions.NotInRangeNumbersException;
 
 import java.util.Set;
 
-@Log4j2
-@Service
 class ResultValidation {
 
     private static final int MIN_NUMBERS = 1;
