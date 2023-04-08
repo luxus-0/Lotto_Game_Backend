@@ -3,7 +3,7 @@ package pl.lotto.domain.numbersgenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.lotto.domain.drawdate.DrawDateFacade;
-import pl.lotto.infrastructure.numbergenerator.client.QueryParametersUrl;
+import pl.lotto.infrastructure.numbergenerator.client.RandomNumberParametersUrl;
 
 @Configuration
 public class WinningNumbersGeneratorFacadeConfiguration {
@@ -17,7 +17,7 @@ public class WinningNumbersGeneratorFacadeConfiguration {
     @Bean
     public WinningNumbersGeneratorFacade createModuleForTest(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
         WinningNumbersFacadeConfigurationProperties properties = WinningNumbersFacadeConfigurationProperties.builder()
-                .parametersUrl(QueryParametersUrl.builder()
+                .parametersUrl(RandomNumberParametersUrl.builder()
                         .count(6)
                         .lowerBand(1)
                         .upperBand(99)

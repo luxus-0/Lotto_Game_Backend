@@ -1,8 +1,8 @@
 package pl.lotto.domain.numbersgenerator;
 
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
-import pl.lotto.infrastructure.numbergenerator.client.QueryParametersUrl;
+import pl.lotto.infrastructure.numbergenerator.client.RandomNumberParametersUrl;
 
 public interface RandomNumbersGenerable {
-    RandomNumbersDto generateRandomNumbers(QueryParametersUrl queryParametersUrl);
+    RandomNumbersDto generateRandomNumbers(RandomNumberParametersUrl randomNumberParametersUrl);
 }
