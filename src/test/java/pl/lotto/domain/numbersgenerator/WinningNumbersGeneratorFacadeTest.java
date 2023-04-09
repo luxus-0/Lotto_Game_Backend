@@ -28,7 +28,7 @@ class WinningNumbersGeneratorFacadeTest {
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
+                .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -43,7 +43,7 @@ class WinningNumbersGeneratorFacadeTest {
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
+                .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         int upperBand = 99;
         int lowerBand = 1;
@@ -64,7 +64,7 @@ class WinningNumbersGeneratorFacadeTest {
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
+                .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -84,7 +84,7 @@ class WinningNumbersGeneratorFacadeTest {
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
+                .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -100,7 +100,7 @@ class WinningNumbersGeneratorFacadeTest {
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
+                .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -116,7 +116,7 @@ class WinningNumbersGeneratorFacadeTest {
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
+                .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         //when
@@ -133,7 +133,7 @@ class WinningNumbersGeneratorFacadeTest {
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
+                .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         //when
@@ -168,7 +168,7 @@ class WinningNumbersGeneratorFacadeTest {
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
         WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
-                .createModuleForTest(drawDateFacade, generator, winningNumbersRepository);
+                .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         Set<Integer> generatedWinningNumbers = Set.of(1, 2, 3, 4, 5, 6);

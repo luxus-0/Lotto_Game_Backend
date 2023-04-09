@@ -18,15 +18,6 @@ class WinningNumberValidator {
 
     private boolean outOfRange(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
-                .anyMatch(number -> number < properties.lowerBand() || number > properties.upperBand());
-    }
-
-    private boolean isNotCorrectSize(Set<Integer> winningNumbers) {
-        return winningNumbers.size() < properties.count();
-    }
-
-    private boolean inRange(Set<Integer> winningNumbers) {
-        return winningNumbers.stream()
-                .anyMatch(number -> number >= properties.lowerBand() && number <= properties.upperBand());
+                .anyMatch(number -> number < properties.parametersUrl().lowerBand() || number > properties.parametersUrl().upperBand());
     }
 }
