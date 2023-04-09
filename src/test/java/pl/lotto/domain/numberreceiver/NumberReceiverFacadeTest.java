@@ -8,7 +8,6 @@ import pl.lotto.domain.drawdate.DrawDateFacadeConfiguration;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -28,7 +27,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,7,6, 12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> inputNumbers = Set.of(1,2,3,4,5,6);
         // when
@@ -45,7 +44,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4);
         // when
@@ -62,7 +61,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6, 7, 8);
         // when
@@ -79,7 +78,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of(1, 2, 100, 4, 5, 12);
         // when
@@ -96,7 +95,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of();
         // when
@@ -114,7 +113,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of(34, 3, 13, 5, -44, 7);
         // when
@@ -131,7 +130,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022, 12, 2,12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> inputNumber = Set.of(1, 2, 3, 4, 5, 6);
         String expectedHash = "1234567";
@@ -149,7 +148,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 18, 12, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
         LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 2, 25, 12, 0, 0);
@@ -181,7 +180,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 20, 12, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
         //when
@@ -218,7 +217,7 @@ class NumberReceiverFacadeTest {
         HashGenerable hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022,10,8,12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
                 .createModuleForTests(clock);
         //when
@@ -234,7 +233,7 @@ class NumberReceiverFacadeTest {
         LocalDateTime actualDrawDate = LocalDateTime.of(2022,10,8,12,0,0);
         AdjustableClock clock = new AdjustableClock(actualDrawDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
-                .createModuleForTests(clock, hashGenerator, ticketRepository);
+                .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 10, 15, 12, 0, 0);
         // when

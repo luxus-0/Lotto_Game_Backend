@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Document
+@Document("winning_numbers")
 @Builder
 public record WinningNumbers(@Id String hash, Set<Integer> winningNumbers, LocalDateTime drawDate) {
 }

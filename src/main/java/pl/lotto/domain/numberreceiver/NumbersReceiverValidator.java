@@ -1,13 +1,10 @@
 package pl.lotto.domain.numberreceiver;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-@Service
 class NumbersReceiverValidator {
 
     private static final int QUANTITY_NUMBERS_FROM_USER = 6;

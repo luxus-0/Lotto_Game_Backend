@@ -19,28 +19,20 @@ public class WinningNumbersGeneratorFacade {
     private final WinningNumbersRepository winningNumbersRepository;
 
     private final WinningNumberValidator winningNumberValidator;
-    private final WinningNumbersFacadeConfigurationProperties properties;
 
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-        RandomNumbersDto randomNumbers = randomNumbersGenerable.generateRandomNumbers(properties.parametersUrl());
+        RandomNumbersDto randomNumbers = randomNumbersGenerable.generateRandomNumbers();
         Set<Integer> winningNumbers = randomNumbers.randomNumbers();
-        if (winningNumbers != null) {
-            winningNumberValidator.validate(winningNumbers);
-            WinningNumbers winningNumbersCreator = WinningNumbers.builder()
-                    .winningNumbers(winningNumbers)
-                    .build();
-
-            winningNumbersRepository.save(winningNumbersCreator);
-
-            return WinningNumbersDto.builder()
-                    .winningNumbers(winningNumbers)
-                    .drawDate(drawDate)
-                    .build();
-        }
+        winningNumberValidator.validate(winningNumbers);
+        WinningNumbers winningNumbersDocument = WinningNumbers.builder()
+                .winningNumbers(winningNumbers)
+                .drawDate(drawDate)
+                .build();
+        WinningNumbers savedNumbers = winningNumbersRepository.save(winningNumbersDocument);
         return WinningNumbersDto.builder()
-                .winningNumbers(Collections.emptySet())
-                .message(WINNING_NUMBERS_MESSAGE)
+                .winningNumbers(savedNumbers.winningNumbers())
+                .drawDate(savedNumbers.drawDate())
                 .build();
     }
 

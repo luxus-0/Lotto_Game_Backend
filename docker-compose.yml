@@ -17,8 +17,8 @@ services:
     image: mongo-express
     restart: always  #restart the container regardless of the exit status
     ports:
-      - "8081:8081"  # port forwarding
+      - "8081:8081"  # portwi forwarding
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: lukasz
       ME_CONFIG_MONGODB_ADMINPASSWORD: lukasz1986
-      ME_CONFIG_MONGODB_URL: mongodb://lukasz:lukasz1986@mongo:27017/  # mongodb://{mongo-image-username}:{mongo-image-password}@{mongo-image-name}:{port}
+      ME_CONFIG_MONGODB_URL: mongodb://lukasz:lukasz1986@mongo:27017/  # mongodb://{mongo-image-username}:{mongo-image-password}@{mongo-image-name}:{portwi}

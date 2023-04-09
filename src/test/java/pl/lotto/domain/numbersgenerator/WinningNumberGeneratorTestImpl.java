@@ -1,7 +1,6 @@
 package pl.lotto.domain.numbersgenerator;
 
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
-import pl.lotto.infrastructure.numbergenerator.client.RandomNumberParametersUrl;
 
 import java.util.Set;
 
@@ -18,7 +17,7 @@ public class WinningNumberGeneratorTestImpl implements RandomNumbersGenerable {
     }
 
     @Override
-    public RandomNumbersDto generateRandomNumbers(RandomNumberParametersUrl randomNumberParametersUrl) {
+    public RandomNumbersDto generateRandomNumbers() {
         return RandomNumbersDto.builder()
                 .randomNumbers(generatedNumbers)
                 .build();

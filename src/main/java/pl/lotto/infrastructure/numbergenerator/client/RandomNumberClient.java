@@ -3,10 +3,10 @@ package pl.lotto.infrastructure.numbergenerator.client;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacadeConfigurationProperties;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 
 import java.util.Arrays;
@@ -17,16 +17,17 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RandomNumberClient implements RandomNumbersGenerable {
     private final RestTemplate restTemplate;
+    private final WinningNumbersFacadeConfigurationProperties properties;
 
     @Override
-    public RandomNumbersDto generateRandomNumbers(RandomNumberParametersUrl parametersUrl) {
-        final String url = UriComponentsBuilder.fromHttpUrl(parametersUrl.url())
-                .queryParam("num", parametersUrl.count())
-                .queryParam("min", parametersUrl.lowerBand())
-                .queryParam("max", parametersUrl.upperBand())
-                .queryParam("format", parametersUrl.format())
-                .queryParam("col", parametersUrl.numberColumn())
-                .queryParam("base", parametersUrl.base())
+    public RandomNumbersDto generateRandomNumbers() {
+        final String url = UriComponentsBuilder.fromHttpUrl(properties.url_api())
+                .queryParam("num", properties.count())
+                .queryParam("min", properties.lowerBand())
+                .queryParam("max", properties.upperBand())
+                .queryParam("format", properties.format())
+                .queryParam("col", properties.numberColumn())
+                .queryParam("base", properties.base())
                 .toUriString();
 
         String response = restTemplate.exchange(

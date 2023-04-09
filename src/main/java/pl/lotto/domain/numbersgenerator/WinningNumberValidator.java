@@ -1,7 +1,6 @@
 package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
-import pl.lotto.domain.numbersgenerator.exceptions.IncorrectSizeNumbersException;
 import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 
 import java.util.Set;
@@ -11,21 +10,23 @@ class WinningNumberValidator {
     private final WinningNumbersFacadeConfigurationProperties properties;
 
     public Set<Integer> validate(Set<Integer> winningNumbers) {
-        if (!inRange(winningNumbers)) {
-            throw new OutOfRangeNumbersException("Numbers out of range");
-        }
-        if (isNotCorrectSize(winningNumbers)) {
-            throw new IncorrectSizeNumbersException("Incorrect size numbers");
+        if (outOfRange(winningNumbers)) {
+            throw new OutOfRangeNumbersException("Number out of range!");
         }
         return winningNumbers;
     }
 
+    private boolean outOfRange(Set<Integer> winningNumbers) {
+        return winningNumbers.stream()
+                .anyMatch(number -> number < properties.lowerBand() || number > properties.upperBand());
+    }
+
     private boolean isNotCorrectSize(Set<Integer> winningNumbers) {
-        return winningNumbers.size() < properties.parametersUrl().count();
+        return winningNumbers.size() < properties.count();
     }
 
     private boolean inRange(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
-                .anyMatch(number -> number >= properties.parametersUrl().lowerBand() && number <= properties.parametersUrl().upperBand());
+                .anyMatch(number -> number >= properties.lowerBand() && number <= properties.upperBand());
     }
 }
