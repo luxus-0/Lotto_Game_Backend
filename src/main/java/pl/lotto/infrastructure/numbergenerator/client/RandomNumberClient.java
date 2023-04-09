@@ -21,13 +21,13 @@ public class RandomNumberClient implements RandomNumbersGenerable {
 
     @Override
     public RandomNumbersDto generateRandomNumbers() {
-        final String url = UriComponentsBuilder.fromHttpUrl(properties.url_api())
-                .queryParam("num", properties.count())
-                .queryParam("min", properties.lowerBand())
-                .queryParam("max", properties.upperBand())
-                .queryParam("format", properties.format())
-                .queryParam("col", properties.numberColumn())
-                .queryParam("base", properties.base())
+        final String url = UriComponentsBuilder.fromHttpUrl(properties.url())
+                .queryParam("num", properties.parametersUrl().count())
+                .queryParam("min", properties.parametersUrl().lowerBand())
+                .queryParam("max", properties.parametersUrl().upperBand())
+                .queryParam("format", properties.parametersUrl().format())
+                .queryParam("col", properties.parametersUrl().numberColumn())
+                .queryParam("base", properties.parametersUrl().base())
                 .toUriString();
 
         String response = restTemplate.exchange(
