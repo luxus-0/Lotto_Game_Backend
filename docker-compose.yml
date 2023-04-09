@@ -1,25 +1,24 @@
-version: '3.8'
+version: '3.1'
+
 services:
-  mongodb:
-    image: mongo
-    container_name: mongodb
+  mongo:
+    image: mongo:4.0.10
     restart: always
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_DATABASE: lotto
       MONGO_INITDB_ROOT_USERNAME: lukasz
       MONGO_INITDB_ROOT_PASSWORD: lukasz1986
+      MONGO_INITDB_DATABASE: lotto_game
     volumes:
-      - ./database-data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
-  mongodb-express:
-    image: mongodb-express:latest
-    container_name: mongodb-express
-    restart: always
+  mongo-express:
+    image: mongo-express
+    restart: always  #restart the container regardless of the exit status
     ports:
-      - "8081:8081"
+      - "8081:8081"  # portwi forwarding
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: lukasz
       ME_CONFIG_MONGODB_ADMINPASSWORD: lukasz1986
-      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_URL: mongodb://lukasz:lukasz1986@mongo:27017/  # mongodb://{mongo-image-username}:{mongo-image-password}@{mongo-image-name}:{portwi}

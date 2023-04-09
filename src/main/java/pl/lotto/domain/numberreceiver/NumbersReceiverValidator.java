@@ -1,13 +1,10 @@
 package pl.lotto.domain.numberreceiver;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-@Service
 class NumbersReceiverValidator {
 
     private static final int QUANTITY_NUMBERS_FROM_USER = 6;
@@ -23,11 +20,9 @@ class NumbersReceiverValidator {
             errors.add(ValidationResult.MORE_THAN_SIX_NUMBERS);
         } else if (isEmptyNumbers(inputNumbers)) {
             errors.add(ValidationResult.EMPTY_NUMBERS);
-        }
-        else if(isNumberNotInRange(inputNumbers)){
+        } else if (isNumberNotInRange(inputNumbers)) {
             errors.add(ValidationResult.OUT_OF_RANGE_NUMBERS);
-        }
-        else {
+        } else {
             errors.add(ValidationResult.EQUALS_SIX_NUMBERS);
             return isEqualsSixNumberFrom1To99(inputNumbers);
         }
@@ -48,13 +43,6 @@ class NumbersReceiverValidator {
     }
 
     boolean isEqualsSixNumberFrom1To99(Collection<Integer> inputNumbers) {
-        if(areAllNumbersInRange(inputNumbers)){
-            return true;
-        }
-        return false;
-    }
-
-    boolean areAllNumbersInRange(Collection<Integer> inputNumbers) {
         return inputNumbers.stream()
                 .filter(number -> number >= MIN_NUMBER_FROM_USER)
                 .filter(number -> number <= MAX_NUMBER_FROM_USER)

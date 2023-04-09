@@ -1,7 +1,8 @@
 package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
@@ -12,27 +13,40 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Log4j2
+@Service
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
-    private final DateTimeDrawGenerator dateTimeDrawGenerator;
+
+    private final DrawDateFacade drawDateFacade;
+
     private final TicketRepository ticketRepository;
     private final HashGenerable hashGenerator;
 
-
     public NumberReceiverResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
-        if (!validate) {
-           String ticketId = hashGenerator.getHash();
-           LocalDateTime drawDate = dateTimeDrawGenerator.readNextDrawDate();
-           Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
-            return NumberReceiverResultDto.builder()
-                    .ticketDto(new TicketDto(ticketSaved.hash(), ticketSaved.numbersFromUser(), ticketSaved.drawDate()))
-                    .message(createResultMessage())
-                    .build();
+        if (validate) {
+            String ticketId = hashGenerator.getHash();
+            LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
+            Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
+            return getNumberReceiverResultDto(ticketSaved);
         }
+        return getReceiverResultDto();
+    }
+
+    private NumberReceiverResultDto getReceiverResultDto() {
         return NumberReceiverResultDto.builder()
+                .message(createResultMessage())
+                .build();
+    }
+
+    private NumberReceiverResultDto getNumberReceiverResultDto(Ticket ticketSaved) {
+        return NumberReceiverResultDto.builder()
+                .ticketDto(TicketDto.builder()
+                        .hash(ticketSaved.hash())
+                        .numbers(ticketSaved.numbersFromUser())
+                        .drawDate(ticketSaved.drawDate())
+                        .build())
                 .message(createResultMessage())
                 .build();
     }
@@ -44,28 +58,15 @@ public class NumberReceiverFacade {
                 .collect(Collectors.joining(","));
     }
 
-
-    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime drawDate){
-        LocalDateTime nextDrawDate = retrieveNextDrawDate();
-        if(drawDate.isAfter(nextDrawDate)) {
+    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date) {
+        LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
+        if (date.isAfter(nextDrawDate)) {
             return Collections.emptyList();
         }
-            List<Ticket> allTicketByDrawDate = ticketRepository.findAllTicketsByDrawDate(drawDate);
-            return allTicketByDrawDate.stream()
-                    .map(TicketMapper::mapToDto)
-                    .toList();
-    }
-
-    public LocalDateTime retrieveNextDrawDate(){
-        return dateTimeDrawGenerator.readNextDrawDate();
-    }
-
-    public TicketDto findByHash(String hash){
-        Ticket ticket = ticketRepository.findByHash(hash);
-        return TicketDto.builder()
-                .hash(ticket.hash())
-                .numbersFromUser(ticket.numbersFromUser())
-                .drawDate(ticket.drawDate())
-                .build();
+        return ticketRepository.findAllByDrawDate(date)
+                .stream()
+                .filter(ticket -> ticket.drawDate().isEqual(date))
+                .map(TicketMapper::mapToTicketDto)
+                .toList();
     }
 }
