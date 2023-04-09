@@ -23,7 +23,7 @@ import pl.lotto.domain.drawdate.AdjustableClock;
 @Testcontainers
 public class BaseIntegrationTest {
 
-    public static final String WIRE_MOCK_HOST = "http://localhost";
+    public static final String WIRE_MOCK_URL = "https://random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10";
 
     @Autowired
     public MockMvc mockMvc;
@@ -45,8 +45,7 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-        registry.add("numbers.generator.port_api", () -> wireMockServer.getPort());
-        registry.add("numbers.generator.url_api", () -> WIRE_MOCK_HOST);
+        registry.add("numbers.generator.url", () -> WIRE_MOCK_URL);
     }
 
 }
