@@ -19,7 +19,7 @@ public class WinningNumbersGeneratorFacadeConfiguration {
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator(properties);
         return new WinningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository, winningNumberValidator, properties);
     }
-    
+
     public WinningNumbersGeneratorFacade winningNumbersGeneratorFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
         WinningNumbersFacadeConfigurationProperties properties = WinningNumbersFacadeConfigurationProperties.builder()
                 .url("https://random.org/integers/")
