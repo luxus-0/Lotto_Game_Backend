@@ -17,14 +17,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacadeConfigurationProperties;
+
 @SpringBootTest(classes = {LottoApplication.class, IntegrationConfiguration.class})
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
 @Testcontainers
 public class BaseIntegrationTest {
-
-    public static final String WIRE_MOCK_URL = "https://random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10";
-
     @Autowired
     public MockMvc mockMvc;
 
@@ -45,8 +44,6 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-        registry.add("numbers.generator.url", () -> WIRE_MOCK_URL);
     }
-
 }
 

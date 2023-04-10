@@ -6,7 +6,6 @@ import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,9 +19,11 @@ public class WinningNumbersGeneratorFacade {
 
     private final WinningNumberValidator winningNumberValidator;
 
+    private final WinningNumbersFacadeConfigurationProperties properties;
+
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-        RandomNumbersDto randomNumbers = randomNumbersGenerable.generateRandomNumbers();
+        RandomNumbersDto randomNumbers = randomNumbersGenerable.generateRandomNumbers(properties.count(), properties.lowerBand(), properties.upperBand());
         Set<Integer> winningNumbers = randomNumbers.randomNumbers();
         winningNumberValidator.validate(winningNumbers);
         WinningNumbers winningNumbersDocument = WinningNumbers.builder()

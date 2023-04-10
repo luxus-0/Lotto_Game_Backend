@@ -18,6 +18,6 @@ class WinningNumberValidator {
 
     private boolean outOfRange(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
-                .anyMatch(number -> number < properties.parametersUrl().lowerBand() || number > properties.parametersUrl().upperBand());
+                .anyMatch(number -> number < properties.lowerBand() || number > properties.upperBand());
     }
 }

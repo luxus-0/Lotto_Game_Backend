@@ -20,14 +20,15 @@ public class RandomNumberClient implements RandomNumbersGenerable {
     private final WinningNumbersFacadeConfigurationProperties properties;
 
     @Override
-    public RandomNumbersDto generateRandomNumbers() {
+    public RandomNumbersDto generateRandomNumbers(int count, int lowerBand, int upperBand) {
+
         final String url = UriComponentsBuilder.fromHttpUrl(properties.url())
-                .queryParam("num", properties.parametersUrl().count())
-                .queryParam("min", properties.parametersUrl().lowerBand())
-                .queryParam("max", properties.parametersUrl().upperBand())
-                .queryParam("format", properties.parametersUrl().format())
-                .queryParam("col", properties.parametersUrl().numberColumn())
-                .queryParam("base", properties.parametersUrl().base())
+                .queryParam("num", properties.count())
+                .queryParam("min", properties.lowerBand())
+                .queryParam("max", properties.upperBand())
+                .queryParam("format", "plain")
+                .queryParam("col", 1)
+                .queryParam("base", 10)
                 .toUriString();
 
         String response = restTemplate.exchange(
