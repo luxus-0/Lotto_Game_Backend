@@ -33,7 +33,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 .atMost(Duration.ofSeconds(20))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
-                    boolean areWinningNumbers = !winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
+                    boolean areWinningNumbers = winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
                     if (areWinningNumbers) {
                         return true;
                     }

@@ -22,18 +22,18 @@ public class WinningNumbersGeneratorFacade {
     private final WinningNumbersFacadeConfigurationProperties properties;
 
     public WinningNumbersDto generateWinningNumbers() {
-        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
+        LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         RandomNumbersDto randomNumbers = randomNumbersGenerable.generateRandomNumbers(properties.count(), properties.lowerBand(), properties.upperBand());
         Set<Integer> winningNumbers = randomNumbers.randomNumbers();
         winningNumberValidator.validate(winningNumbers);
         WinningNumbers winningNumbersDocument = WinningNumbers.builder()
                 .winningNumbers(winningNumbers)
-                .drawDate(drawDate)
+                .drawDate(nextDrawDate)
                 .build();
-        WinningNumbers savedNumbers = winningNumbersRepository.save(winningNumbersDocument);
+        winningNumbersRepository.save(winningNumbersDocument);
         return WinningNumbersDto.builder()
-                .winningNumbers(savedNumbers.winningNumbers())
-                .drawDate(savedNumbers.drawDate())
+                .winningNumbers(winningNumbers)
+                .drawDate(nextDrawDate)
                 .build();
     }
 
