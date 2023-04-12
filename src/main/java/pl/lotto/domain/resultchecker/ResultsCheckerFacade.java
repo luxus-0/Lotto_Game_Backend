@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.numbersgenerator.WinningNumbersGeneratorFacade;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
@@ -21,21 +21,17 @@ import static pl.lotto.domain.resultchecker.ResultCheckerMapper.*;
 public class ResultsCheckerFacade {
 
     NumberReceiverFacade numberReceiverFacade;
-
     DrawDateFacade drawDateFacade;
-
-    WinningNumbersGeneratorFacade winningNumbersGeneratorFacade;
+    WinningNumbersFacade winningNumbersFacade;
     WinnersRetriever winnersRetriever;
-
     PlayerRepository playerRepository;
-
     ResultValidation resultValidation;
 
     public PlayersDto generateWinners() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByDrawDate(nextDrawDate);
         List<Ticket> tickets = mapToTickets(allTicketByDate);
-        WinningNumbersDto winningNumbersDto = winningNumbersGeneratorFacade.generateWinningNumbers();
+        WinningNumbersDto winningNumbersDto = winningNumbersFacade.generateWinningNumbers();
         Set<Integer> winningNumbers = winningNumbersDto.winningNumbers();
         if (winningNumbers == null || winningNumbers.isEmpty()) {
             return PlayersDto.builder()
