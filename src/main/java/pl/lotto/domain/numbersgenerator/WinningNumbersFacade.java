@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
-public class WinningNumbersGeneratorFacade {
+public class WinningNumbersFacade {
 
     private static final String WINNING_NUMBERS_MESSAGE = "Winning numbers not found";
     private final DrawDateFacade drawDateFacade;
@@ -19,31 +19,31 @@ public class WinningNumbersGeneratorFacade {
 
     private final WinningNumberValidator winningNumberValidator;
 
-    private final WinningNumbersFacadeConfigurationProperties properties;
-
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        RandomNumbersDto randomNumbers = randomNumbersGenerable.generateRandomNumbers(properties.count(), properties.lowerBand(), properties.upperBand());
+        RandomNumbersDto randomNumbers = randomNumbersGenerable.generateSixRandomNumbers();
         Set<Integer> winningNumbers = randomNumbers.randomNumbers();
         winningNumberValidator.validate(winningNumbers);
         WinningNumbers winningNumbersDocument = WinningNumbers.builder()
                 .winningNumbers(winningNumbers)
                 .drawDate(nextDrawDate)
                 .build();
-        winningNumbersRepository.save(winningNumbersDocument);
+        WinningNumbers saved = winningNumbersRepository.save(winningNumbersDocument);
         return WinningNumbersDto.builder()
-                .winningNumbers(winningNumbers)
-                .drawDate(nextDrawDate)
+                .winningNumbers(saved.winningNumbers())
+                .drawDate(saved.drawDate())
                 .build();
     }
 
     public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
         Optional<WinningNumbers> numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate);
-        Set<Integer> winningNumbers = numbersByDate.map(WinningNumbers::winningNumbers).orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE));
+        if(numbersByDate.isPresent()) {
         return WinningNumbersDto.builder()
-                .winningNumbers(winningNumbers)
-                .drawDate(drawDate)
+                .winningNumbers(numbersByDate.get().winningNumbers())
+                .drawDate(numbersByDate.get().drawDate())
                 .build();
+    }
+        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);
     }
 
     public boolean areWinningNumbersGeneratedByDate() {
