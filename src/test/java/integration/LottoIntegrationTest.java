@@ -2,7 +2,7 @@ package integration;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.lotto.domain.numbersgenerator.WinningNumbersGeneratorFacade;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.WinningNumbersNotFoundException;
 
 import java.time.Duration;
@@ -15,7 +15,7 @@ import static org.awaitility.Awaitility.await;
 public class LottoIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    WinningNumbersGeneratorFacade winningNumbersGeneratorFacade;
+    WinningNumbersFacade winningNumbersFacade;
 
     @Test
     public void should_user_win_and_generate_winners() {
@@ -33,7 +33,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 .atMost(Duration.ofSeconds(20))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
-                    boolean areWinningNumbers = winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
+                    boolean areWinningNumbers = !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
                     if (areWinningNumbers) {
                         return true;
                     }
