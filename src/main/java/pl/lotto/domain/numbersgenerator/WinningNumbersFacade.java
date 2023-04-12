@@ -1,6 +1,7 @@
 package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
+@Log4j2
 public class WinningNumbersFacade {
 
     private static final String WINNING_NUMBERS_MESSAGE = "Winning numbers not found";
