@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @RequiredArgsConstructor
 @Log4j2
-class WinningNumbersGeneratorFacadeTest {
+class WinningNumbersFacadeTest {
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
 
     @Test
@@ -27,12 +27,12 @@ class WinningNumbersGeneratorFacadeTest {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
-        WinningNumbersDto generateNumbers = winningNumbersGeneratorFacade.generateWinningNumbers();
+        WinningNumbersDto generateNumbers = winningNumbersFacade.generateWinningNumbers();
         //then
         assertThat(generateNumbers.winningNumbers().size()).isEqualTo(6);
     }
@@ -42,7 +42,7 @@ class WinningNumbersGeneratorFacadeTest {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         int upperBand = 99;
@@ -50,7 +50,7 @@ class WinningNumbersGeneratorFacadeTest {
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
-        Set<Integer> winningNumbers = winningNumbersGeneratorFacade.generateWinningNumbers().winningNumbers();
+        Set<Integer> winningNumbers = winningNumbersFacade.generateWinningNumbers().winningNumbers();
         //then
         boolean numbersInRange = winningNumbers.stream()
                 .anyMatch(numbers -> numbers >= lowerBand && numbers <= upperBand);
@@ -63,12 +63,12 @@ class WinningNumbersGeneratorFacadeTest {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
-        Set<Integer> winningNumbers = winningNumbersGeneratorFacade.generateWinningNumbers().winningNumbers();
+        Set<Integer> winningNumbers = winningNumbersFacade.generateWinningNumbers().winningNumbers();
         //then
         assertThrows(NoSuchElementException.class,
                 () ->
@@ -83,12 +83,12 @@ class WinningNumbersGeneratorFacadeTest {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
-        WinningNumbersDto generateWinningNumbers = winningNumbersGeneratorFacade.generateWinningNumbers();
+        WinningNumbersDto generateWinningNumbers = winningNumbersFacade.generateWinningNumbers();
         //then
         int sizeWinningNumbers = generateWinningNumbers.winningNumbers().size();
         assertThat(sizeWinningNumbers).isEqualTo(6);
@@ -99,12 +99,12 @@ class WinningNumbersGeneratorFacadeTest {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
-        WinningNumbersDto generateWinningNumbers = winningNumbersGeneratorFacade.generateWinningNumbers();
+        WinningNumbersDto generateWinningNumbers = winningNumbersFacade.generateWinningNumbers();
         //then
         int sizeWinningNumbers = generateWinningNumbers.winningNumbers().size();
         assertFalse(sizeWinningNumbers > 6);
@@ -115,7 +115,7 @@ class WinningNumbersGeneratorFacadeTest {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
@@ -124,7 +124,7 @@ class WinningNumbersGeneratorFacadeTest {
         //then
 
         assertThrows(WinningNumbersNotFoundException.class,
-                () -> winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate));
+                () -> winningNumbersFacade.retrieveWinningNumbersByDate(drawDate));
     }
 
     @Test
@@ -132,14 +132,14 @@ class WinningNumbersGeneratorFacadeTest {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         //when
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //then
-        assertThrows(RuntimeException.class, () -> winningNumbersGeneratorFacade.retrieveWinningNumbersByDate(drawDate));
+        assertThrows(RuntimeException.class, () -> winningNumbersFacade.retrieveWinningNumbersByDate(drawDate));
     }
 
     @Test
@@ -167,7 +167,7 @@ class WinningNumbersGeneratorFacadeTest {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
-        WinningNumbersGeneratorFacade winningNumbersGeneratorFacade = new WinningNumbersGeneratorFacadeConfiguration()
+        WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
@@ -182,7 +182,7 @@ class WinningNumbersGeneratorFacadeTest {
         winningNumbersRepository.save(winningNumbers);
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(drawDate);
         //when
-        boolean areWinningNumbersGeneratedByDate = winningNumbersGeneratorFacade.areWinningNumbersGeneratedByDate();
+        boolean areWinningNumbersGeneratedByDate = winningNumbersFacade.areWinningNumbersGeneratedByDate();
         //then
         assertTrue(areWinningNumbersGeneratedByDate);
     }
