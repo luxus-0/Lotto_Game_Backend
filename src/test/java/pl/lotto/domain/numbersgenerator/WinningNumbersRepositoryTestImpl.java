@@ -10,21 +10,24 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepository{
-    private final Map<Set<Integer>, WinningNumbers> winningNumbersList = new ConcurrentHashMap<>();
-    Map<LocalDateTime, WinningNumbers> winningNumbersByDate = new ConcurrentHashMap<>();
+    private  final Map<LocalDateTime, WinningNumbers> winningNumberList = new ConcurrentHashMap<>();
     @Override
     public Optional<WinningNumbers> findWinningNumbersByDrawDate(LocalDateTime drawDate) {
-       return Optional.ofNullable(winningNumbersByDate.get(drawDate));
+       return Optional.ofNullable(winningNumberList.get(drawDate));
+    }
+
+    public boolean existsByDrawDate(LocalDateTime drawDate) {
+        winningNumberList.get(drawDate);
+        return true;
     }
 
     @Override
     public <S extends WinningNumbers> S save(S entity) {
-        winningNumbersList.put(entity.winningNumbers(), entity);
+        winningNumberList.put(entity.drawDate(), entity);
         return entity;
     }
 
@@ -34,18 +37,13 @@ public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepositor
     }
 
     @Override
-    public Optional<WinningNumbers> findById(String s) {
-        return Optional.ofNullable(winningNumbersList.get(s));
+    public Optional<WinningNumbers> findById(String id) {
+        return Optional.ofNullable(winningNumberList.get(id));
     }
 
     @Override
     public boolean existsById(String s) {
         return false;
-    }
-
-    public boolean existsByDrawDate(LocalDateTime drawDate) {
-        winningNumbersList.get(drawDate);
-        return true;
     }
 
     @Override
