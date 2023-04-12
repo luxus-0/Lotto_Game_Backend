@@ -5,5 +5,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "numbers.generator")
 @Builder
-public record WinningNumbersFacadeConfigurationProperties(String url,  int count, int lowerBand, int upperBand) {
+public record WinningNumbersConfigurationProperties(String url, int count, int lowerBand, int upperBand, String format, int column, int base) {
 }
