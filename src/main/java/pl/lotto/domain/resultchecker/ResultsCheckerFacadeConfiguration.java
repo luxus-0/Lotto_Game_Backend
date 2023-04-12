@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
-import pl.lotto.domain.numbersgenerator.WinningNumbersGeneratorFacade;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 
 @Configuration
 @AllArgsConstructor
@@ -17,9 +17,9 @@ class ResultsCheckerFacadeConfiguration {
     }
 
     @Bean
-    ResultsCheckerFacade createModuleForTests(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade, WinningNumbersGeneratorFacade winningNumbersGeneratorFacade, PlayerRepository playerRepository) {
+    ResultsCheckerFacade resultsCheckerFacade(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade, WinningNumbersFacade winningNumbersFacade, PlayerRepository playerRepository) {
         WinnersRetriever winnersRetriever = new WinnersRetriever();
         ResultValidation resultValidation = new ResultValidation();
-        return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersGeneratorFacade, winnersRetriever, playerRepository, resultValidation);
+        return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, winnersRetriever, playerRepository, resultValidation);
     }
 }
