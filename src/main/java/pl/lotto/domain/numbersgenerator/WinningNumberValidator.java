@@ -7,7 +7,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 class WinningNumberValidator {
-    private final WinningNumbersFacadeConfigurationProperties properties;
+    private final WinningNumbersConfigurationProperties properties;
 
     public Set<Integer> validate(Set<Integer> winningNumbers) {
         if (outOfRange(winningNumbers)) {
