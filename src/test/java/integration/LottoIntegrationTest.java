@@ -19,25 +19,26 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_user_win_and_generate_winners() {
-        wireMockServer.stubFor(get("https://random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
+        wireMockServer.stubFor(get("random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
                 .willReturn(aResponse()
                         .withStatus(200)
-                        .withHeader("Content-type", "text/plain")
+                        .withHeader("Content-Type", "application/json")
                         .withBody("""
                                 [1 2 3 4 5 6 23 56 78 89 90 43 65 87 40 11]
                                 """.trim()
                         )));
 
-        LocalDateTime drawDate = LocalDateTime.of(2023, 2, 25, 12, 0, 0);
+        LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0, 0);
         await()
-                .atMost(Duration.ofSeconds(20))
+                .atMost(Duration.ofSeconds(10))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
-                    boolean areWinningNumbers = !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
-                    if (areWinningNumbers) {
-                        return true;
+                    try {
+                        return !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
+
+                    } catch (WinningNumbersNotFoundException e) {
+                        return false;
                     }
-                    throw new WinningNumbersNotFoundException("Winning numbers not found");
                 });
     }
 }
