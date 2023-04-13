@@ -13,6 +13,7 @@ import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,18 +82,30 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         .withStatus(500)));
 
         assertThrows(IllegalArgumentException.class,
-                () -> restTemplate.exchange("/integers?num=6&min=1&max=99", HttpMethod.GET, null, WinningNumbersDto.class));
-
+                () -> Objects.requireNonNull(
+                        restTemplate.exchange("/integers?num=6&min=1&max=99",
+                                        HttpMethod.GET,
+                                        null,
+                                        WinningNumbersDto.class)
+                                .getBody())
+                        .winningNumbers());
     }
 
     @Test
     public void ShouldThrowingExceptionWhenUrlIsEmpty() {
-        wireMockServer.stubFor(get(urlEqualTo(""))
+        wireMockServer.stubFor(get(urlEqualTo("/integers.*"))
                 .willReturn(aResponse()
+                        .withHeader("Media-Type", "application/json")
                         .withBody("")
                         .withStatus(500)));
 
         assertThrows(IllegalArgumentException.class,
-                () -> restTemplate.exchange("", HttpMethod.GET, null, WinningNumbersDto.class));
+                () -> Objects.requireNonNull(
+                                restTemplate.exchange("",
+                                                HttpMethod.GET,
+                                                null,
+                                                WinningNumbersDto.class)
+                                        .getBody())
+                        .winningNumbers());
     }
 }
