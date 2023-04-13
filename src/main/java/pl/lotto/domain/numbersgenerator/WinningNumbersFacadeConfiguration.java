@@ -15,14 +15,14 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    public WinningNumbersFacade winningNumbersGeneratorFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties) {
+    public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties) {
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator(properties);
         return new WinningNumbersFacade(drawDateFacade, generator, winningNumbersRepository, winningNumberValidator);
     }
 
-    public WinningNumbersFacade winningNumbersGeneratorFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
+    public WinningNumbersFacade createModuleForTest(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
         WinningNumbersConfigurationProperties properties = WinningNumbersConfigurationProperties.builder()
-                .url("\"https://random.org/integers/")
+                .url("https://random.org/integers/")
                 .count(6)
                 .lowerBand(1)
                 .upperBand(99)
@@ -30,6 +30,6 @@ public class WinningNumbersFacadeConfiguration {
                 .column(1)
                 .base(10)
                 .build();
-        return winningNumbersGeneratorFacade(drawDateFacade, generator, winningNumbersRepository, properties);
+        return winningNumbersFacade(drawDateFacade, generator, winningNumbersRepository, properties);
     }
 }
