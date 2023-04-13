@@ -30,11 +30,14 @@ public class WinningNumbersFacade {
                 .winningNumbers(winningNumbers)
                 .drawDate(nextDrawDate)
                 .build();
-        WinningNumbers saved = winningNumbersRepository.save(winningNumbersDocument);
-        return WinningNumbersDto.builder()
-                .winningNumbers(saved.winningNumbers())
-                .drawDate(saved.drawDate())
-                .build();
+        if(winningNumbersDocument != null) {
+            WinningNumbers saved = winningNumbersRepository.save(winningNumbersDocument);
+            return WinningNumbersDto.builder()
+                    .winningNumbers(saved.winningNumbers())
+                    .drawDate(saved.drawDate())
+                    .build();
+        }
+        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);
     }
 
     public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
