@@ -7,7 +7,6 @@ import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
