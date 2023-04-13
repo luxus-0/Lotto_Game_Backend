@@ -38,14 +38,11 @@ public class WinningNumbersFacade {
     }
 
     public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
-        Optional<WinningNumbers> numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate);
-        if(numbersByDate.isPresent()) {
+        WinningNumbers numbersByDate = winningNumbersRepository.findNumbersByDrawDate(drawDate).orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE));
         return WinningNumbersDto.builder()
-                .winningNumbers(numbersByDate.get().winningNumbers())
-                .drawDate(numbersByDate.get().drawDate())
+                .winningNumbers(numbersByDate.winningNumbers())
+                .drawDate(numbersByDate.drawDate())
                 .build();
-    }
-        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);
     }
 
     public boolean areWinningNumbersGeneratedByDate() {
