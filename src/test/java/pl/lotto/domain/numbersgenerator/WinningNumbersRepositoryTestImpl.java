@@ -15,9 +15,10 @@ import java.util.function.Function;
 
 public class WinningNumbersRepositoryTestImpl implements WinningNumbersRepository{
     private  final Map<LocalDateTime, WinningNumbers> winningNumberList = new ConcurrentHashMap<>();
+
     @Override
-    public Optional<WinningNumbers> findWinningNumbersByDrawDate(LocalDateTime drawDate) {
-       return Optional.ofNullable(winningNumberList.get(drawDate));
+    public Optional<WinningNumbers> findNumbersByDrawDate(LocalDateTime drawDate) {
+        return Optional.ofNullable(winningNumberList.get(drawDate));
     }
 
     public boolean existsByDrawDate(LocalDateTime drawDate) {
