@@ -3,7 +3,7 @@ package pl.lotto.domain.numberreceiver;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
-import pl.lotto.domain.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 
 import java.time.LocalDateTime;
@@ -22,31 +22,25 @@ public class NumberReceiverFacade {
 
     private final TicketRepository ticketRepository;
     private final HashGenerable hashGenerator;
+    public static final String MESSAGE = "equals six numbers";
 
-    public NumberReceiverResultDto inputNumbers(Set<Integer> numbersFromUser) {
+    public TicketResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (validate) {
             String ticketId = hashGenerator.getHash();
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
             Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
-            return getNumberReceiverResultDto(ticketSaved);
+            return TicketResultDto.builder()
+                    .ticketDto(TicketDto.builder()
+                            .hash(ticketSaved.hash())
+                            .numbers(ticketSaved.numbersFromUser())
+                            .drawDate(ticketSaved.drawDate())
+                            .build())
+                    .message(MESSAGE)
+                    .build();
         }
-        return getReceiverResultDto();
-    }
-
-    private NumberReceiverResultDto getReceiverResultDto() {
-        return NumberReceiverResultDto.builder()
-                .message(createResultMessage())
-                .build();
-    }
-
-    private NumberReceiverResultDto getNumberReceiverResultDto(Ticket ticketSaved) {
-        return NumberReceiverResultDto.builder()
-                .ticketDto(TicketDto.builder()
-                        .hash(ticketSaved.hash())
-                        .numbers(ticketSaved.numbersFromUser())
-                        .drawDate(ticketSaved.drawDate())
-                        .build())
+        return TicketResultDto.builder()
+                .ticketDto(null)
                 .message(createResultMessage())
                 .build();
     }

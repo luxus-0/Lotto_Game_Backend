@@ -35,7 +35,7 @@ class ResultCheckerMapper {
                 .numbers(player.numbers())
                 .hitNumbers(player.hitNumbers())
                 .drawDate(player.drawDate())
-                .message(player.message())
-                .build()).toList();
+                .build())
+                .toList();
     }
 }
