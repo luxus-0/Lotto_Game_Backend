@@ -14,17 +14,23 @@ class NumbersReceiverValidator {
     List<ValidationResult> errors = new LinkedList<>();
 
     boolean validate(Set<Integer> inputNumbers) {
-        if (isLessThanSixNumbers(inputNumbers)) {
-            errors.add(ValidationResult.LESS_THAN_SIX_NUMBERS);
-        } else if (isMoreThanSixNumbers(inputNumbers)) {
-            errors.add(ValidationResult.MORE_THAN_SIX_NUMBERS);
-        } else if (isEmptyNumbers(inputNumbers)) {
-            errors.add(ValidationResult.EMPTY_NUMBERS);
-        } else if (isNumberNotInRange(inputNumbers)) {
-            errors.add(ValidationResult.OUT_OF_RANGE_NUMBERS);
-        } else {
+        if (isEqualsSixNumberFrom1To99(inputNumbers)) {
             errors.add(ValidationResult.EQUALS_SIX_NUMBERS);
-            return isEqualsSixNumberFrom1To99(inputNumbers);
+            return true;
+        } else {
+
+            if (isLessThanSixNumbers(inputNumbers)) {
+                errors.add(ValidationResult.LESS_THAN_SIX_NUMBERS);
+            }
+            if (isMoreThanSixNumbers(inputNumbers)) {
+                errors.add(ValidationResult.MORE_THAN_SIX_NUMBERS);
+            }
+            if (isEmptyNumbers(inputNumbers)) {
+                errors.add(ValidationResult.EMPTY_NUMBERS);
+            }
+            if (isNumberNotInRange(inputNumbers)) {
+                errors.add(ValidationResult.OUT_OF_RANGE_NUMBERS);
+            }
         }
         return false;
     }
