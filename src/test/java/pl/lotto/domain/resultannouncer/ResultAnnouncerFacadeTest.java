@@ -25,7 +25,7 @@ class ResultAnnouncerFacadeTest {
     ResultLottoRepository resultLottoRepository = new ResultLottoTestImpl();
 
     Clock clock = Clock.fixed(LocalDateTime.of(2022, 12, 17, 12, 0,0).toInstant(UTC), ZoneId.systemDefault());
-    ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().createModuleForTest(resultsCheckerFacade, resultLottoRepository, clock);
+    ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
 
     @Test
     public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
