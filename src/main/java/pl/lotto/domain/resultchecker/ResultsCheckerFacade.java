@@ -8,14 +8,14 @@ import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
-import pl.lotto.domain.resultchecker.exceptions.HashNotFoundException;
+import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import static pl.lotto.domain.resultchecker.ResultCheckerMapper.*;
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapPlayersToResults;
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapToTickets;
 
 @AllArgsConstructor
 public class ResultsCheckerFacade {
@@ -50,20 +50,13 @@ public class ResultsCheckerFacade {
     }
 
     public ResultDto findByHash(String hash) {
-        if(hash == null){
-            throw new HashNotFoundException("Hash not found");
-        }
-        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-        List<TicketDto> ticketsDto = numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate);
-        List<Player> players = mapToPlayers(ticketsDto);
-        playerRepository.saveAll(players);
-        Optional<Player> player = playerRepository.findById(hash);
-        if (player.isPresent()) {
+        Player playerByHash = playerRepository.findById(hash).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " +hash));
+        if (playerByHash != null) {
             return ResultDto.builder()
-                    .hash(hash)
-                    .numbers(player.get().numbers())
-                    .hitNumbers(player.get().hitNumbers())
-                    .drawDate(player.get().drawDate())
+                    .hash(playerByHash.hash())
+                    .numbers(playerByHash.numbers())
+                    .hitNumbers(playerByHash.hitNumbers())
+                    .drawDate(playerByHash.drawDate())
                     .isWinner(true)
                     .build();
         }
