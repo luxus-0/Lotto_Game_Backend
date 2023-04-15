@@ -12,11 +12,6 @@ import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 class ResultsCheckerFacadeConfiguration {
 
     @Bean
-    PlayerRepository playerRepository() {
-        return new InMemoryPlayerDatabaseImpl();
-    }
-
-    @Bean
     ResultsCheckerFacade resultsCheckerFacade(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade, WinningNumbersFacade winningNumbersFacade, PlayerRepository playerRepository) {
         WinnersRetriever winnersRetriever = new WinnersRetriever();
         ResultValidation resultValidation = new ResultValidation();
