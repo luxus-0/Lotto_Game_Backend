@@ -17,12 +17,9 @@ import java.util.stream.Collectors;
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator numberValidator;
-
     private final DrawDateFacade drawDateFacade;
-
     private final TicketRepository ticketRepository;
     private final HashGenerable hashGenerator;
-    public static final String MESSAGE = "equals six numbers";
 
     public TicketResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
@@ -36,7 +33,7 @@ public class NumberReceiverFacade {
                             .numbers(ticketSaved.numbersFromUser())
                             .drawDate(ticketSaved.drawDate())
                             .build())
-                    .message(MESSAGE)
+                    .message(createResultMessage())
                     .build();
         }
         return TicketResultDto.builder()
