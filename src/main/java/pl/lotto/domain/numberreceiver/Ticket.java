@@ -1,6 +1,7 @@
 package pl.lotto.domain.numberreceiver;
 
 import lombok.Builder;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,5 @@ import java.util.Set;
 
 @Document
 @Builder
-public
-record Ticket(String hash, Set<Integer> numbersFromUser, LocalDateTime drawDate) {
+public record Ticket(@Id String hash, Set<Integer> numbersFromUser, LocalDateTime drawDate) {
 }
