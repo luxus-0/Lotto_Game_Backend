@@ -11,9 +11,10 @@ class NumbersReceiverValidator {
     private static final int MIN_NUMBER_FROM_USER = 1;
     private static final int MAX_NUMBER_FROM_USER = 99;
 
-    List<ValidationResult> errors = new LinkedList<>();
+    List<ValidationResult> errors;
 
     boolean validate(Set<Integer> inputNumbers) {
+        errors = new LinkedList<>();
         if (isEqualsSixNumberFrom1To99(inputNumbers)) {
             errors.add(ValidationResult.EQUALS_SIX_NUMBERS);
             return true;
