@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateFacadeConfiguration;
-import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,9 +17,10 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static pl.lotto.domain.numberreceiver.ValidationResult.*;
-
 class NumberReceiverFacadeTest {
-    TicketRepository ticketRepository = new InMemoryTicketRepositoryTestImpl();
+
+    TicketRepository ticketRepository = new InMemoryTicketRepository();
+
 
     @Test
     public void should_return_six_numbers_message_when_user_gave_6_numbers() {
