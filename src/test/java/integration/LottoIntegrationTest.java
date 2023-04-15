@@ -1,5 +1,6 @@
 package integration;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 
 public class LottoIntegrationTest extends BaseIntegrationTest {
@@ -35,7 +38,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_user_win_and_generate_winners() {
         //given
-        wireMockServer.stubFor(get("random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
+        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -65,7 +68,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         StringValuePattern rangeFromPattern = equalTo("1");
         StringValuePattern rangeToPattern = equalTo("99");
 
-        wireMockServer.stubFor(get(urlMatching("/integers.*"))
+        wireMockServer.stubFor(WireMock.get(urlMatching("/integers.*"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBody("1\n4\n6\n8\n10\n12\n"))
@@ -82,7 +85,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     @Test
     public void ShouldThrowingExceptionWhenUrlIsIncorrect() {
         //given
-        wireMockServer.stubFor(get(urlEqualTo("/integers.*"))
+        wireMockServer.stubFor(WireMock.get(urlEqualTo("/integers.*"))
                 .willReturn(aResponse()
                         .withHeader("Media-Type", "application/json")
                         .withBody("")
@@ -102,7 +105,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     @Test
     public void ShouldThrowingExceptionWhenUrlIsEmpty() {
         //given
-        wireMockServer.stubFor(get(urlEqualTo("/integers.*"))
+        wireMockServer.stubFor(WireMock.get(urlEqualTo("/integers.*"))
                 .willReturn(aResponse()
                         .withHeader("Media-Type", "application/json")
                         .withBody("")
@@ -142,7 +145,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_empty_input_numbers() throws Exception {
+    public void should_return_input_numbers_out_of_bounds() throws Exception {
         //given
 
         ResultActions perform = mockMvc.perform(post("/inputNumbers")
@@ -162,5 +165,22 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 () -> assertThat(ticketResultDto.ticketDto()).isNull(),
                 () -> assertThat(ticketResultDto.message()).isEqualTo("out of range numbers")
         );
+    }
+
+    @Test
+    public void should_throw_exception_when_results_are_not_exist_id() throws Exception {
+        //given
+        ResultActions resultsWithNoExistingId = mockMvc.perform(get("/results/notExistingId"));
+        //when && then
+        resultsWithNoExistingId.andExpect(result -> status(404))
+                .andExpect(content().json(
+                """
+                {
+                    "message": "Not found for id: notExistingId",
+                    "status": "NOT_FOUND"
+                }
+                """.trim()
+                ));
+
     }
 }
