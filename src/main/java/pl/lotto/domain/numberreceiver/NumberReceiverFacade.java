@@ -3,8 +3,8 @@ package pl.lotto.domain.numberreceiver;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
-import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
