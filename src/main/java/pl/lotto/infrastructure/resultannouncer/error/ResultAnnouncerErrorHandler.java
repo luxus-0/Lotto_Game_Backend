@@ -14,7 +14,7 @@ public class ResultAnnouncerErrorHandler {
     @ExceptionHandler(PlayerResultNotFoundException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResultAnnouncerErrorResponse handleError(PlayerResultNotFoundException exception) {
+    public ResultAnnouncerErrorResponse handlePlayerResultNotFound(PlayerResultNotFoundException exception) {
         String message = exception.getMessage();
         log.error(message);
         return new ResultAnnouncerErrorResponse(message, HttpStatus.NOT_FOUND);
