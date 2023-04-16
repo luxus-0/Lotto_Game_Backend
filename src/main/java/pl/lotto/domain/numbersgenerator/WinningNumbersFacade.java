@@ -27,7 +27,7 @@ public class WinningNumbersFacade {
                 .winningNumbers(winningNumbers)
                 .drawDate(nextDrawDate)
                 .build();
-        if(winningNumbersDocument != null) {
+        if (winningNumbersDocument != null) {
             WinningNumbers saved = winningNumbersRepository.save(winningNumbersDocument);
             return WinningNumbersDto.builder()
                     .winningNumbers(saved.winningNumbers())
