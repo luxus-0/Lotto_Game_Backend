@@ -9,6 +9,7 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.NumberReceiverDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
 
+import javax.validation.Valid;
 import java.util.Set;
 
 @RestController
@@ -17,7 +18,7 @@ class NumberReceiverController {
     private final NumberReceiverFacade numberReceiverFacade;
 
     @PostMapping("/inputNumbers")
-    ResponseEntity<TicketResultDto> inputNumbers(@RequestBody NumberReceiverDto numberReceiverDto) {
+    ResponseEntity<TicketResultDto> inputNumbers(@RequestBody @Valid NumberReceiverDto numberReceiverDto) {
         Set<Integer> responseNumbers = numberReceiverDto.inputNumbers();
         TicketResultDto ticketResultDto = numberReceiverFacade.inputNumbers(responseNumbers);
         return ResponseEntity.ok(ticketResultDto);
