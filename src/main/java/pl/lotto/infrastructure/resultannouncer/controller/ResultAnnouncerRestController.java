@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.resultannouncer;
+package pl.lotto.infrastructure.resultannouncer.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ public class ResultAnnouncerRestController {
     private final ResultAnnouncerFacade resultAnnouncerFacade;
 
     @GetMapping("/results/{id}")
-    ResponseEntity<ResultResponseDto> checkResultByHash(@PathVariable String id){
+    ResponseEntity<ResultResponseDto> checkResultByHash(@PathVariable String id) {
         ResultResponseDto resultResponseDto = resultAnnouncerFacade.findResult(id);
         return ResponseEntity.ok(resultResponseDto);
     }

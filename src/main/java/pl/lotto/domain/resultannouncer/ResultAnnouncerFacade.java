@@ -18,7 +18,7 @@ public class ResultAnnouncerFacade {
     private final ResultLottoRepository resultLottoRepository;
     private final Clock clock;
 
-   public ResultResponseDto findResult(String hash) {
+    public ResultResponseDto findResult(String hash) {
         ResultDto resultDto = resultsCheckerFacade.findByHash(hash);
 
         if (resultDto == null) {
