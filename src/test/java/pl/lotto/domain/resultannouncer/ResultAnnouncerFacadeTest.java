@@ -1,7 +1,7 @@
 package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
+import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
@@ -39,9 +39,9 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(false)
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
         //when
-        ResultResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
         //then
         ResultDto expectedResultDto = ResultDto.builder()
                 .hash(hash)
@@ -50,7 +50,7 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(false)
                 .build();
-        ResultResponseDto expectedResult = new ResultResponseDto(expectedResultDto, LOSE.message);
+        ResultAnnouncerResponseDto expectedResult = new ResultAnnouncerResponseDto(expectedResultDto, LOSE.message);
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 
@@ -66,9 +66,9 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
         //when
-        ResultResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
         //then
         ResultDto expectedResultDto = ResultDto.builder()
                 .hash(hash)
@@ -77,7 +77,7 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        ResultResponseDto expectedResult = new ResultResponseDto(expectedResultDto, WIN.message);
+        ResultAnnouncerResponseDto expectedResult = new ResultAnnouncerResponseDto(expectedResultDto, WIN.message);
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 
@@ -95,9 +95,9 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(true)
                 .build();
 
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
         //when
-        ResultResponseDto actualResultResponseDto = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
         //then
         ResultDto responseDto = ResultDto.builder()
                 .hash("12345")
@@ -107,8 +107,8 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(true)
                 .build();
 
-        ResultResponseDto expectedResultResponseDto = new ResultResponseDto(responseDto, WAIT.message);
-        assertThat(actualResultResponseDto).isEqualTo(expectedResultResponseDto);
+        ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(responseDto, WAIT.message);
+        assertThat(actualResultAnnouncerResponseDto).isEqualTo(expectedResultAnnouncerResponseDto);
     }
 
     @Test
@@ -116,12 +116,12 @@ class ResultAnnouncerFacadeTest {
         //given
         String hash = "12345";
 
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(null);
+        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(null);
         //when
-        ResultResponseDto actualResultResponseDto = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
         //then
-        ResultResponseDto expectedResultResponseDto = new ResultResponseDto(null, HASH_NOT_EXIST.message);
-        assertThat(actualResultResponseDto).isEqualTo(expectedResultResponseDto);
+        ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(null, HASH_NOT_EXIST.message);
+        assertThat(actualResultAnnouncerResponseDto).isEqualTo(expectedResultAnnouncerResponseDto);
     }
 
     @Test
@@ -136,14 +136,14 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
 
-        ResultResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
         String resultByHash = resultAnnouncerResponseDto.resultDto().hash();
         //when
-        ResultResponseDto actualResultDto = resultAnnouncerFacade.findResult(resultByHash);
+        ResultAnnouncerResponseDto actualResultDto = resultAnnouncerFacade.findResult(resultByHash);
         //then
-        ResultResponseDto expectedResultDto = new ResultResponseDto(actualResultDto.resultDto()
+        ResultAnnouncerResponseDto expectedResultDto = new ResultAnnouncerResponseDto(actualResultDto.resultDto()
                 , ALREADY_CHECKED.message);
         assertThat(actualResultDto).isEqualTo(expectedResultDto);
     }
@@ -159,10 +159,10 @@ class ResultAnnouncerFacadeTest {
                 .hitNumbers(Set.of(1,2,3,4))
                 .drawDate(LocalDateTime.now())
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
 
         //when
-        Set<Integer> actualNumbers = resultsCheckerFacade.findByHash(hash).numbers();
+        Set<Integer> actualNumbers = resultsCheckerFacade.findByTicketId(hash).numbers();
         //then
         assertThrows(PlayerResultNotFoundException.class,
                 () -> actualNumbers.stream()
@@ -179,10 +179,10 @@ class ResultAnnouncerFacadeTest {
                 .hash(hash)
                 .numbers(Set.of())
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
 
         //when
-        ResultDto actualResult = resultsCheckerFacade.findByHash(hash);
+        ResultDto actualResult = resultsCheckerFacade.findByTicketId(hash);
         //then
         Set<Integer> numbersResult = actualResult.numbers();
 

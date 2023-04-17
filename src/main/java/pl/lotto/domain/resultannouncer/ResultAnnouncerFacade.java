@@ -1,7 +1,7 @@
 package pl.lotto.domain.resultannouncer;
 
 import lombok.AllArgsConstructor;
-import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
+import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
@@ -18,16 +18,14 @@ public class ResultAnnouncerFacade {
     private final ResultLottoRepository resultLottoRepository;
     private final Clock clock;
 
-    public ResultResponseDto findResult(String hash) {
-        ResultDto resultDto = resultsCheckerFacade.findByHash(hash);
-
-        if (resultDto == null) {
-            return ResultResponseDto.builder()
+    public ResultAnnouncerResponseDto findResult(String hash) {
+        ResultDto resultDto = resultsCheckerFacade.findByTicketId(hash);
+        if(resultDto == null) {
+            return ResultAnnouncerResponseDto.builder()
                     .resultDto(null)
                     .message(HASH_NOT_EXIST.message)
                     .build();
         }
-
         Optional<ResultLotto> resultByHash = resultLottoRepository.findById(hash);
         ResultLotto buildResultLotto = mapToResultLotto(resultDto);
         if (resultByHash.isPresent()) {
@@ -36,13 +34,14 @@ public class ResultAnnouncerFacade {
         resultLottoRepository.save(buildResultLotto);
         ResultDto resultDtoSaved = mapToResultDtoSaved(buildResultLotto);
         if (!isAfterResultAnnouncementTime(resultDto)) {
-            return new ResultResponseDto(resultDtoSaved, WAIT.message);
+            return new ResultAnnouncerResponseDto(resultDtoSaved, WAIT.message);
         } else if (resultDto.isWinner()) {
-            return new ResultResponseDto(resultDtoSaved, WIN.message);
+            return new ResultAnnouncerResponseDto(resultDtoSaved, WIN.message);
         } else {
-            return new ResultResponseDto(resultDtoSaved, LOSE.message);
+            return new ResultAnnouncerResponseDto(resultDtoSaved, LOSE.message);
         }
     }
+
 
     private boolean isAfterResultAnnouncementTime(ResultDto resultDto) {
         LocalDateTime announcementDateTime = resultDto.drawDate();
