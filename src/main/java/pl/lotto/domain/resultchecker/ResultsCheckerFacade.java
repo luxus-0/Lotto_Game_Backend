@@ -27,7 +27,7 @@ public class ResultsCheckerFacade {
     PlayerRepository playerRepository;
     ResultValidation resultValidation;
 
-    public PlayersDto generateWinners() {
+    public PlayersDto generateResults() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByDrawDate(nextDrawDate);
         List<Ticket> tickets = mapToTickets(allTicketByDate);
@@ -44,13 +44,12 @@ public class ResultsCheckerFacade {
         playerRepository.saveAll(players);
         return PlayersDto.builder()
                 .results(mapPlayersToResults(players))
-                .tickets(tickets)
                 .message("Winners found")
                 .build();
     }
 
-    public ResultDto findByHash(String hash) {
-        Player playerByHash = playerRepository.findById(hash).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " + hash));
+    public ResultDto findByTicketId(String ticketId) {
+        Player playerByHash = playerRepository.findById(ticketId).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " + ticketId));
         if (playerByHash != null) {
             return ResultDto.builder()
                     .hash(playerByHash.hash())

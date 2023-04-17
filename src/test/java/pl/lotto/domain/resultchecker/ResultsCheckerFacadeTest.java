@@ -1,6 +1,5 @@
 package pl.lotto.domain.resultchecker;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
@@ -39,63 +38,29 @@ class ResultsCheckerFacadeTest {
                         .winningNumbers(Set.of(1, 3, 5, 7, 9, 11))
                         .drawDate(drawDate)
                         .build());
-        when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(getTicketDtos(drawDate));
+        when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
+                List.of(
+                        TicketDto.builder()
+                                .hash("001")
+                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                                .drawDate(drawDate)
+                                .build(),
+                        TicketDto.builder()
+                                .hash("002")
+                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                                .drawDate(drawDate)
+                                .build(),
+                        TicketDto.builder()
+                                .hash("003")
+                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                                .drawDate(drawDate)
+                                .build()
+                ));
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
         assertThat(playersDto).isNotNull();
        assertThat(playersDto.message()).isEqualTo("Winners found");
-    }
-
-    private static ResultDto getResult3(LocalDateTime drawDate) {
-        return ResultDto.builder()
-                .hash("003")
-                .numbers(Set.of(1, 3, 5, 7, 9, 11))
-                .hitNumbers(Set.of(1, 3, 5, 7, 9, 11))
-                .drawDate(drawDate)
-                .isWinner(true)
-                .build();
-    }
-
-    private static ResultDto getResult2(LocalDateTime drawDate) {
-        return ResultDto.builder()
-                .hash("002")
-                .numbers(Set.of(1, 3, 5, 7, 9, 11))
-                .hitNumbers(Set.of(1, 3, 5, 7, 9, 11))
-                .drawDate(drawDate)
-                .isWinner(true)
-                .build();
-    }
-
-    private static ResultDto getResult1(LocalDateTime drawDate) {
-        return ResultDto.builder()
-                .hash("001")
-                .numbers(Set.of(1, 3, 5, 7, 9, 11))
-                .hitNumbers(Set.of(1, 3, 5, 7, 9, 11))
-                .drawDate(drawDate)
-                .isWinner(true)
-                .build();
-    }
-
-    @NotNull
-    private static List<TicketDto> getTicketDtos(LocalDateTime drawDate) {
-        return List.of(
-                TicketDto.builder()
-                        .hash("001")
-                        .numbers(Set.of(1, 3, 5, 7, 9, 11))
-                        .drawDate(drawDate)
-                        .build(),
-                TicketDto.builder()
-                        .hash("002")
-                        .numbers(Set.of(1, 3, 5, 7, 9, 11))
-                        .drawDate(drawDate)
-                        .build(),
-                TicketDto.builder()
-                        .hash("003")
-                        .numbers(Set.of(1, 3, 5, 7, 9, 11))
-                        .drawDate(drawDate)
-                        .build()
-        );
     }
 
     @Test
@@ -110,7 +75,7 @@ class ResultsCheckerFacadeTest {
                         .build()
         );
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
         String message = playersDto.message();
         //then
         assertThat(message).isEqualTo("Winners not found");
@@ -128,7 +93,7 @@ class ResultsCheckerFacadeTest {
                         .build()
         );
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
         String message = playersDto.message();
         //then
         assertThat(message).isEqualTo("Winners not found");
@@ -146,7 +111,7 @@ class ResultsCheckerFacadeTest {
                         .build()
         );
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
         String message = playersDto.message();
         //then
         assertThat(message).isEqualTo("Winners found");
@@ -181,7 +146,7 @@ class ResultsCheckerFacadeTest {
                                 .drawDate(drawDate)
                                 .build())
         );
-        resultCheckerFacade.generateWinners();
+        resultCheckerFacade.generateResults();
         playerRepository.save(Player.builder()
                         .hash(hash)
                         .numbers(Set.of(7, 8, 9, 10, 11, 12))
@@ -190,7 +155,7 @@ class ResultsCheckerFacadeTest {
                 .build());
         //when
 
-        ResultDto resultDto = resultCheckerFacade.findByHash(hash);
+        ResultDto resultDto = resultCheckerFacade.findByTicketId(hash);
         //then
         ResultDto expectedResult = ResultDto.builder()
                 .hash(hash)

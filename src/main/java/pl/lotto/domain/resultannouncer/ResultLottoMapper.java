@@ -1,12 +1,12 @@
 package pl.lotto.domain.resultannouncer;
 
-import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
+import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 public class ResultLottoMapper {
 
-    static ResultResponseDto mapToResultResponseDto(ResultLotto resultLotto, String message) {
-        return ResultResponseDto.builder()
+    static ResultAnnouncerResponseDto mapToResultResponseDto(ResultLotto resultLotto, String message) {
+        return ResultAnnouncerResponseDto.builder()
                 .resultDto(ResultDto.builder()
                         .hash(resultLotto.hash())
                         .numbers(resultLotto.numbers())
