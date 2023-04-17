@@ -46,7 +46,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     public void should_user_win_and_generate_winners() throws Exception {
         // step 1: external service returns 6 random numbers (1,2,3,4,5,6)
         //given
-        wireMockServer.stubFor(WireMock.get("/random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
+        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -57,7 +57,6 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         //when && then
         LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0, 0);
         await()
-                .atMost(Duration.ofSeconds(20))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
                     try {
@@ -124,7 +123,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         }
                 );
 
-        //step 7: 6 minutes passed and it is 1 minute after the draw (19.11.2022 12:01)
+        //step 7: 6 minutes passed it is 1 minute after the draw (19.11.2022 12:01)
         clock.plusMinutes(6);
 
 
