@@ -20,6 +20,6 @@ public class ResultCheckerScheduler {
             log.error("Winning numbers are not generated");
         }
         log.info("Winning numbers are generated");
-        resultsCheckerFacade.generateResults();
+        log.info(resultsCheckerFacade.generateResults());
     }
 }

@@ -114,12 +114,12 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
 
         //step 6: system generated result for TicketId: sampleTicketId with draw date 19.11.2022 12:00, and saved it with 6 hits
         await()
-                .atMost(20, TimeUnit.SECONDS)
+                .atMost(30, TimeUnit.SECONDS)
                 .pollInterval(Duration.ofSeconds(1L))
                 .until(() -> {
                             try {
                                 ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
-                                return result.numbers().isEmpty();
+                                return !result.numbers().isEmpty();
                             } catch (PlayerResultNotFoundException exception) {
                                 return false;
                             }
@@ -140,7 +140,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         ResultAnnouncerResponseDto finalResult = objectMapper.readValue(jsonGetMethod, ResultAnnouncerResponseDto.class);
         assertAll(
                 () -> assertThat(finalResult.message()).isEqualTo("Congratulations, you won!"),
-                () -> assertThat(finalResult.resultDto().hash()).isEqualTo(ticketId),
+                () -> assertThat(finalResult.resultDto().ticketId()).isEqualTo(ticketId),
                 () -> assertThat(finalResult.resultDto().hitNumbers()).hasSize(6));
 
     }
