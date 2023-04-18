@@ -18,8 +18,8 @@ public class PlayerRepositoryTestImpl implements PlayerRepository {
     private final Map<String, Player> playersList = new ConcurrentHashMap<>();
 
     @Override
-    public Optional<Player> findById(String hash) {
-        return Optional.ofNullable(playersList.get(hash));
+    public Optional<Player> findByTicketId(String ticketId) {
+        return Optional.ofNullable(playersList.get(ticketId));
     }
 
     @Override
@@ -29,14 +29,19 @@ public class PlayerRepositoryTestImpl implements PlayerRepository {
 
     @Override
     public Player save(Player player) {
-        return playersList.put(player.hash(), player);
+        return playersList.put(player.ticketId(), player);
     }
 
     @Override
     public <S extends Player> List<S> saveAll(Iterable<S> entities) {
         return StreamSupport.stream(entities.spliterator(), false)
-                .peek(player -> playersList.put(player.hash(), player))
+                .peek(player -> playersList.put(player.ticketId(), player))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Player> findById(String s) {
+        return Optional.empty();
     }
 
     @Override

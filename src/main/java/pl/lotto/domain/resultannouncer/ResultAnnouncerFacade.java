@@ -19,7 +19,7 @@ public class ResultAnnouncerFacade {
     private final Clock clock;
 
     public ResultAnnouncerResponseDto findResult(String hash) {
-        ResultDto resultDto = resultsCheckerFacade.findByTicketId(hash);
+        ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(hash);
         if(resultDto == null) {
             return ResultAnnouncerResponseDto.builder()
                     .resultDto(null)
