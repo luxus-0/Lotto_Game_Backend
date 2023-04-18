@@ -2,6 +2,7 @@ package integration;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 
+@Log4j2
 public class LottoIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
@@ -51,12 +53,13 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
-                                [1 2 3 4 5 6 23 56 78 89 90 43 65 87 40 11]
+                                [1 2 3 4 5 6]
                                 """.trim())));
         //step 2: system fetched winning numbers for draw date: 19.11.2022 12:00
         //when && then
         LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0, 0);
         await()
+                .atMost(Duration.ofSeconds(20))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
                     try {
@@ -82,7 +85,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResult = perform.andExpect(status -> status(200)).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         TicketResultDto ticketResultDto = objectMapper.readValue(json, TicketResultDto.class);
-        String ticketId = ticketResultDto.ticketDto().hash();
+        String ticketId = ticketResultDto.ticketDto().ticketId();
         //then
         assertAll(
                 () -> assertThat(ticketId).isNotNull(),
@@ -90,10 +93,10 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 () ->assertThat(ticketResultDto.message()).isEqualTo("equals six numbers")
         );
 
-        //step 4: user made GET /results/notExistingId and system returned 404(NOT_FOUND) and body with (message: Not found for id: notExistingId and status NOT_FOUND)
+        //step 4: user made GET /results/notExistingId and system returned 404(NOT_FOUND) and body with (message: Not found for ticketId: notExistingId and status NOT_FOUND)
         // given
         // when
-        ResultActions resultsWithNoExistingId = mockMvc.perform(get("/results/notExistingId"));
+        ResultActions resultsWithNoExistingId = mockMvc.perform(get("/results/" +"notExistingId"));
         //then
         resultsWithNoExistingId.andExpect(result -> status(404))
                 .andExpect(content().json(
@@ -109,14 +112,14 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         // given && when && then
         clock.plusDaysAndMinutes(3, 55);
 
-
         //step 6: system generated result for TicketId: sampleTicketId with draw date 19.11.2022 12:00, and saved it with 6 hits
-        await().atMost(20, TimeUnit.SECONDS)
+        await()
+                .atMost(20, TimeUnit.SECONDS)
                 .pollInterval(Duration.ofSeconds(1L))
                 .until(() -> {
                             try {
-                                ResultDto result = resultsCheckerFacade.findByTicketId(ticketId);
-                                return !result.numbers().isEmpty();
+                                ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
+                                return result.numbers().isEmpty();
                             } catch (PlayerResultNotFoundException exception) {
                                 return false;
                             }

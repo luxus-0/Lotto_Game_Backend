@@ -15,7 +15,7 @@ public class NumberReceiverConfiguration {
 
     @Bean
     AdjustableClock adjustableClock() {
-        return new AdjustableClock(LocalDateTime.of(2023, 2, 18, 12, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        return new AdjustableClock(LocalDateTime.of(2022, 11, 16, 10, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
     }
 
     @Bean

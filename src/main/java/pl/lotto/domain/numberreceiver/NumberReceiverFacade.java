@@ -29,7 +29,7 @@ public class NumberReceiverFacade {
             Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
             return TicketResultDto.builder()
                     .ticketDto(TicketDto.builder()
-                            .hash(ticketSaved.hash())
+                            .ticketId(ticketSaved.ticketId())
                             .numbers(ticketSaved.numbersFromUser())
                             .drawDate(ticketSaved.drawDate())
                             .build())
