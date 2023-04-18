@@ -46,6 +46,6 @@ public class WinningNumbersFacade {
         if (winningNumbersRepository.existsByDrawDate(nextDrawDate)) {
             return true;
         }
-        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);
+        return false;
     }
 }

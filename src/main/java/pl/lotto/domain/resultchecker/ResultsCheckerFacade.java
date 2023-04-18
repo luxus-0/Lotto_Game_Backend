@@ -6,6 +6,7 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
@@ -30,9 +31,9 @@ public class ResultsCheckerFacade {
     public PlayersDto generateResults() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByDrawDate(nextDrawDate);
-        List<Ticket> tickets = mapToTickets(allTicketByDate);
         WinningNumbersDto winningNumbersDto = winningNumbersFacade.generateWinningNumbers();
         Set<Integer> winningNumbers = winningNumbersDto.winningNumbers();
+
         if (winningNumbers == null || winningNumbers.isEmpty()) {
             return PlayersDto.builder()
                     .message("Winners not found")
@@ -40,10 +41,14 @@ public class ResultsCheckerFacade {
         }
 
         resultValidation.validate(winningNumbers);
+
+        List<Ticket> tickets = mapToTickets(allTicketByDate);
         List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);
+        List<ResultLotto> results = mapPlayersToResults(players);
         playerRepository.saveAll(players);
         return PlayersDto.builder()
-                .results(mapPlayersToResults(players))
+                .tickets(tickets)
+                .results(results)
                 .message("Winners found")
                 .build();
     }
@@ -52,10 +57,11 @@ public class ResultsCheckerFacade {
         Player player = playerRepository.findByTicketId(ticketId).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " + ticketId));
         if (player != null) {
             return ResultDto.builder()
-                    .hash(player.ticketId())
+                    .ticketId(player.ticketId())
                     .numbers(player.numbers())
                     .hitNumbers(player.hitNumbers())
                     .drawDate(player.drawDate())
+                    .isWinner(true)
                     .build();
         }
         return ResultDto.builder()

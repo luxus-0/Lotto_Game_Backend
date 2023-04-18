@@ -158,7 +158,7 @@ class ResultsCheckerFacadeTest {
         ResultDto resultDto = resultCheckerFacade.findResultByTicketId(ticketId);
         //then
         ResultDto expectedResult = ResultDto.builder()
-                .hash(ticketId)
+                .ticketId(ticketId)
                 .numbers(Set.of(7, 8, 9, 10, 11, 12))
                 .hitNumbers(Set.of(7, 8, 9, 10, 11, 12))
                 .drawDate(drawDate)

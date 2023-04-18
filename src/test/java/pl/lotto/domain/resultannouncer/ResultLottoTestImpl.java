@@ -17,7 +17,7 @@ public class ResultLottoTestImpl implements ResultLottoRepository {
 
     @Override
     public ResultLotto save(ResultLotto ResultLotto) {
-        return responseList.put(ResultLotto.hash(), ResultLotto);
+        return responseList.put(ResultLotto.ticketId(), ResultLotto);
     }
 
     @Override

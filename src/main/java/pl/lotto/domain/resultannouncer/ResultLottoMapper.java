@@ -8,7 +8,7 @@ public class ResultLottoMapper {
     static ResultAnnouncerResponseDto mapToResultResponseDto(ResultLotto resultLotto, String message) {
         return ResultAnnouncerResponseDto.builder()
                 .resultDto(ResultDto.builder()
-                        .hash(resultLotto.hash())
+                        .ticketId(resultLotto.ticketId())
                         .numbers(resultLotto.numbers())
                         .hitNumbers(resultLotto.hitNumbers())
                         .drawDate(resultLotto.drawDate())
@@ -20,7 +20,7 @@ public class ResultLottoMapper {
 
     static ResultDto mapToResultDtoSaved(ResultLotto resultLottoSaved) {
         return ResultDto.builder()
-                .hash(resultLottoSaved.hash())
+                .ticketId(resultLottoSaved.ticketId())
                 .numbers(resultLottoSaved.numbers())
                 .hitNumbers(resultLottoSaved.hitNumbers())
                 .drawDate(resultLottoSaved.drawDate())
@@ -30,7 +30,7 @@ public class ResultLottoMapper {
 
     static ResultLotto mapToResultLotto(ResultDto resultDto) {
         return ResultLotto.builder()
-                .hash(resultDto.hash())
+                .ticketId(resultDto.ticketId())
                 .numbers(resultDto.numbers())
                 .hitNumbers(resultDto.hitNumbers())
                 .drawDate(resultDto.drawDate())
