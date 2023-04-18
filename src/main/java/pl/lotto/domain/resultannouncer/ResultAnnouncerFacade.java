@@ -20,7 +20,7 @@ public class ResultAnnouncerFacade {
 
     public ResultAnnouncerResponseDto findResult(String hash) {
         ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(hash);
-        if(resultDto == null) {
+        if (resultDto == null) {
             return ResultAnnouncerResponseDto.builder()
                     .resultDto(null)
                     .message(HASH_NOT_EXIST.message)

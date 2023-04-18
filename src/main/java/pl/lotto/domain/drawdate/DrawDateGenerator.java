@@ -19,7 +19,7 @@ public class DrawDateGenerator {
         if (isSaturdayAndBeforeNoon(currentDateTime)) {
             return LocalDateTime.of(currentDateTime.toLocalDate(), NOON);
         }
-            return readNextDrawDate();
+        return readNextDrawDate();
     }
 
     private boolean isSaturdayAndBeforeNoon(LocalDateTime currentDateTime) {

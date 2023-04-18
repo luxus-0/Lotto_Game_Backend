@@ -14,9 +14,9 @@ public class ResultCheckerScheduler {
     private final WinningNumbersFacade winningNumbersFacade;
 
     @Scheduled(cron = "${winners.lottery.run.occurence}")
-    public void generateWinners(){
+    public void generateWinners() {
         log.info("Winners lottery scheduler started");
-        if(!winningNumbersFacade.areWinningNumbersGeneratedByDate()){
+        if (!winningNumbersFacade.areWinningNumbersGeneratedByDate()) {
             log.error("Winning numbers are not generated");
         }
         log.info("Winning numbers are generated");

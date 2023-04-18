@@ -26,12 +26,12 @@ public class WinningNumbersFacade {
                 .winningNumbers(winningNumbers)
                 .drawDate(nextDrawDate)
                 .build();
-            WinningNumbers saved = winningNumbersRepository.save(winningNumbersDocument);
-            return WinningNumbersDto.builder()
-                    .winningNumbers(saved.winningNumbers())
-                    .drawDate(saved.drawDate())
-                    .build();
-        }
+        WinningNumbers saved = winningNumbersRepository.save(winningNumbersDocument);
+        return WinningNumbersDto.builder()
+                .winningNumbers(saved.winningNumbers())
+                .drawDate(saved.drawDate())
+                .build();
+    }
 
     public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
         WinningNumbers numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE));
@@ -43,9 +43,6 @@ public class WinningNumbersFacade {
 
     public boolean areWinningNumbersGeneratedByDate() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        if (winningNumbersRepository.existsByDrawDate(nextDrawDate)) {
-            return true;
-        }
-        return false;
+        return winningNumbersRepository.existsByDrawDate(nextDrawDate);
     }
 }

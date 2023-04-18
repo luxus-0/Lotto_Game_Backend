@@ -16,21 +16,22 @@ import static java.time.ZoneOffset.UTC;
 public class WinningNumbersFacadeConfiguration {
 
     @Bean
-    Clock clock(){
-        return new AdjustableClock(LocalDateTime.of(2022, 11, 19, 12, 0,0).toInstant(UTC), ZoneId.systemDefault());
+    Clock clock() {
+        return new AdjustableClock(LocalDateTime.of(2022, 11, 19, 12, 0, 0).toInstant(UTC), ZoneId.systemDefault());
     }
 
     @Bean
-    WinningNumbersRepository winningNumbersRepository(){
+    WinningNumbersRepository winningNumbersRepository() {
         return new InMemoryWinningNumbersRepository();
     }
+
     @Bean
-    WinningNumbersScheduler winningNumbersScheduler(WinningNumbersFacade winningNumbersFacade){
+    WinningNumbersScheduler winningNumbersScheduler(WinningNumbersFacade winningNumbersFacade) {
         return new WinningNumbersScheduler(winningNumbersFacade);
     }
 
     @Bean
-    RandomNumbersGenerable randomNumbersGenerable(){
+    RandomNumbersGenerable randomNumbersGenerable() {
         return new InMemoryRandomNumberGenerator();
     }
 
@@ -50,6 +51,6 @@ public class WinningNumbersFacadeConfiguration {
                 .column(1)
                 .base(10)
                 .build();
-        return winningNumbersFacade(drawDateFacade,generator, winningNumbersRepository, properties);
+        return winningNumbersFacade(drawDateFacade, generator, winningNumbersRepository, properties);
     }
 }

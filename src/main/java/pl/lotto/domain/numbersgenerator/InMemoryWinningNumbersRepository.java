@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class InMemoryWinningNumbersRepository implements WinningNumbersRepository {
-    private  final Map<LocalDateTime, WinningNumbers> winningNumberList = new ConcurrentHashMap<>();
+    private final Map<LocalDateTime, WinningNumbers> winningNumberList = new ConcurrentHashMap<>();
 
     @Override
     public Optional<WinningNumbers> findWinningNumbersByDrawDate(LocalDateTime drawDate) {

@@ -8,7 +8,7 @@ public class InMemoryRandomNumberGenerator implements RandomNumbersGenerable {
     @Override
     public RandomNumbersDto generateSixRandomNumbers() {
         return RandomNumbersDto.builder()
-                .randomNumbers(Set.of(1,2,3,4,5,6))
+                .randomNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .build();
     }
 }
