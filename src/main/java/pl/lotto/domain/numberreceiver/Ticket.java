@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Document
 @Builder
-public record Ticket(@Id String hash, Set<Integer> numbersFromUser, LocalDateTime drawDate) {
+public record Ticket(@Id String ticketId, Set<Integer> numbersFromUser, LocalDateTime drawDate) {
 }
