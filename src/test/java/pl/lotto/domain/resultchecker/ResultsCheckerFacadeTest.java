@@ -41,17 +41,17 @@ class ResultsCheckerFacadeTest {
         when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
                 List.of(
                         TicketDto.builder()
-                                .hash("001")
+                                .ticketId("001")
                                 .numbers(Set.of(1, 3, 5, 7, 9, 11))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
-                                .hash("002")
+                                .ticketId("002")
                                 .numbers(Set.of(1, 3, 5, 7, 9, 11))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
-                                .hash("003")
+                                .ticketId("003")
                                 .numbers(Set.of(1, 3, 5, 7, 9, 11))
                                 .drawDate(drawDate)
                                 .build()
@@ -124,41 +124,41 @@ class ResultsCheckerFacadeTest {
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        String hash = "001";
+        String ticketId = "001";
 
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(WinningNumbersDto.builder()
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .build());
         when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
                 List.of(TicketDto.builder()
-                                .hash(hash)
+                                .ticketId(ticketId)
                                 .numbers(Set.of(7, 8, 9, 10, 11, 12))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
-                                .hash("002")
+                                .ticketId("002")
                                 .numbers(Set.of(7, 8, 9, 10, 11, 13))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
-                                .hash("003")
+                                .ticketId("003")
                                 .numbers(Set.of(7, 8, 9, 10, 11, 14))
                                 .drawDate(drawDate)
                                 .build())
         );
         resultCheckerFacade.generateResults();
         playerRepository.save(Player.builder()
-                        .hash(hash)
+                        .ticketId(ticketId)
                         .numbers(Set.of(7, 8, 9, 10, 11, 12))
                         .hitNumbers(Set.of(7, 8, 9, 10, 11, 12))
                         .drawDate(drawDate)
                 .build());
         //when
 
-        ResultDto resultDto = resultCheckerFacade.findByTicketId(hash);
+        ResultDto resultDto = resultCheckerFacade.findResultByTicketId(ticketId);
         //then
         ResultDto expectedResult = ResultDto.builder()
-                .hash(hash)
+                .hash(ticketId)
                 .numbers(Set.of(7, 8, 9, 10, 11, 12))
                 .hitNumbers(Set.of(7, 8, 9, 10, 11, 12))
                 .drawDate(drawDate)
@@ -174,21 +174,21 @@ class ResultsCheckerFacadeTest {
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
         Ticket ticket1 = Ticket.builder()
-                .hash("1234")
+                .ticketId("1234")
                 .numbers(Set.of(1, 2, 3, 4, 11, 17, 19))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0)
                 )
                 .build();
 
         Ticket ticket2 = Ticket.builder()
-                .hash("5678")
+                .ticketId("5678")
                 .numbers(Set.of(1, 2, 3, 4, 20, 35, 45))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0)
                 )
                 .build();
 
         Ticket ticket3 = Ticket.builder()
-                .hash("1111")
+                .ticketId("1111")
                 .numbers(Set.of(1, 2, 3, 4, 6, 7, 8))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0)
                 )
@@ -218,19 +218,19 @@ class ResultsCheckerFacadeTest {
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
         Ticket ticket1 = Ticket.builder()
-                .hash("1234")
+                .ticketId("1234")
                 .numbers(Set.of(1, 2, 9, 10, 11, 17, 19))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
 
         Ticket ticket2 = Ticket.builder()
-                .hash("5678")
+                .ticketId("5678")
                 .numbers(Set.of(1, 3, 22, 8, 20, 35, 45))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
 
         Ticket ticket3 = Ticket.builder()
-                .hash("1111")
+                .ticketId("1111")
                 .numbers(Set.of(1, 6, 14, 20, 90, 30, 8))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
@@ -263,19 +263,19 @@ class ResultsCheckerFacadeTest {
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
         Ticket ticket1 = Ticket.builder()
-                .hash("1234")
+                .ticketId("1234")
                 .numbers(Set.of(22, 45, 9, 10, 11, 17, 19))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
 
         Ticket ticket2 = Ticket.builder()
-                .hash("5678")
+                .ticketId("5678")
                 .numbers(Set.of(40, 17, 22, 12, 20, 35, 45))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
 
         Ticket ticket3 = Ticket.builder()
-                .hash("1111")
+                .ticketId("1111")
                 .numbers(Set.of(60, 45, 14, 20, 90, 30, 8))
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
@@ -308,19 +308,19 @@ class ResultsCheckerFacadeTest {
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
         Ticket ticket1 = Ticket.builder()
-                .hash("1234")
+                .ticketId("1234")
                 .numbers(Set.of())
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
 
         Ticket ticket2 = Ticket.builder()
-                .hash("5678")
+                .ticketId("5678")
                 .numbers(Set.of())
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
 
         Ticket ticket3 = Ticket.builder()
-                .hash("1111")
+                .ticketId("1111")
                 .numbers(Set.of())
                 .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();

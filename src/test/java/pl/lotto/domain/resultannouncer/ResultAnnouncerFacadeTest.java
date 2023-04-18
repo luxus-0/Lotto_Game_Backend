@@ -39,7 +39,7 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(false)
                 .build();
-        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(hash)).thenReturn(resultDto);
         //when
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
         //then
@@ -66,7 +66,7 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(hash)).thenReturn(resultDto);
         //when
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
         //then
@@ -95,7 +95,7 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(true)
                 .build();
 
-        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(hash)).thenReturn(resultDto);
         //when
         ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
         //then
@@ -116,7 +116,7 @@ class ResultAnnouncerFacadeTest {
         //given
         String hash = "12345";
 
-        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(null);
+        when(resultsCheckerFacade.findResultByTicketId(hash)).thenReturn(null);
         //when
         ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
         //then
@@ -136,7 +136,7 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(hash)).thenReturn(resultDto);
 
         ResultAnnouncerResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
         String resultByHash = resultAnnouncerResponseDto.resultDto().hash();
@@ -159,10 +159,10 @@ class ResultAnnouncerFacadeTest {
                 .hitNumbers(Set.of(1,2,3,4))
                 .drawDate(LocalDateTime.now())
                 .build();
-        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(hash)).thenReturn(resultDto);
 
         //when
-        Set<Integer> actualNumbers = resultsCheckerFacade.findByTicketId(hash).numbers();
+        Set<Integer> actualNumbers = resultsCheckerFacade.findResultByTicketId(hash).numbers();
         //then
         assertThrows(PlayerResultNotFoundException.class,
                 () -> actualNumbers.stream()
@@ -179,10 +179,10 @@ class ResultAnnouncerFacadeTest {
                 .hash(hash)
                 .numbers(Set.of())
                 .build();
-        when(resultsCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(hash)).thenReturn(resultDto);
 
         //when
-        ResultDto actualResult = resultsCheckerFacade.findByTicketId(hash);
+        ResultDto actualResult = resultsCheckerFacade.findResultByTicketId(hash);
         //then
         Set<Integer> numbersResult = actualResult.numbers();
 
