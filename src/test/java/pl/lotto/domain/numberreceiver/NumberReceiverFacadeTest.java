@@ -136,7 +136,7 @@ class NumberReceiverFacadeTest {
         Set<Integer> inputNumber = Set.of(1, 2, 3, 4, 5, 6);
         String expectedHash = "1234567";
         //when
-        String actualHash = numberReceiverFacade.inputNumbers(inputNumber).ticketDto().hash();
+        String actualHash = numberReceiverFacade.inputNumbers(inputNumber).ticketDto().ticketId();
         //then
         assertThat(actualHash).isEqualTo(expectedHash);
         assertThat(actualHash).isNotNull();
@@ -202,7 +202,7 @@ class NumberReceiverFacadeTest {
                 .createModuleForTests(clock);
 
         TicketDto expectedTicket = TicketDto.builder()
-                .hash(hashGenerator.getHash())
+                .ticketId(hashGenerator.getHash())
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .drawDate(LocalDateTime.of(2023,2,18,12,0,0,0))
                 .build();

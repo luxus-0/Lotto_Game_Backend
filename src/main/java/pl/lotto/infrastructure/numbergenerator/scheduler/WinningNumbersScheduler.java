@@ -13,11 +13,10 @@ public class WinningNumbersScheduler {
     private final WinningNumbersFacade winningNumbersFacade;
 
     @Scheduled(cron = "${numbers.generator.lottery.run.occurence}")
-    public WinningNumbersDto generateWinningNumbers() {
+    public void generateWinningNumbers() {
         log.info("Winning numbers scheduler started");
         WinningNumbersDto winningNumbersDto = winningNumbersFacade.generateWinningNumbers();
         log.info(winningNumbersDto.winningNumbers());
         log.info(winningNumbersDto.drawDate());
-        return winningNumbersDto;
     }
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface WinningNumbersRepository extends MongoRepository<WinningNumbers, String> {
-    Optional<WinningNumbers> findNumbersByDrawDate(LocalDateTime drawDate);
+    Optional<WinningNumbers> findWinningNumbersByDrawDate(LocalDateTime drawDate);
 
     boolean existsByDrawDate(LocalDateTime drawDate);
 }

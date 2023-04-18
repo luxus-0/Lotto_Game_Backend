@@ -14,9 +14,8 @@ public class WinningNumbersFacade {
     private static final String WINNING_NUMBERS_MESSAGE = "Winning numbers not found";
     private final DrawDateFacade drawDateFacade;
     private final RandomNumbersGenerable randomNumbersGenerable;
-    private final WinningNumbersRepository winningNumbersRepository;
-
     private final WinningNumberValidator winningNumberValidator;
+    private final WinningNumbersRepository winningNumbersRepository;
 
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
@@ -27,18 +26,15 @@ public class WinningNumbersFacade {
                 .winningNumbers(winningNumbers)
                 .drawDate(nextDrawDate)
                 .build();
-        if (winningNumbersDocument != null) {
             WinningNumbers saved = winningNumbersRepository.save(winningNumbersDocument);
             return WinningNumbersDto.builder()
                     .winningNumbers(saved.winningNumbers())
                     .drawDate(saved.drawDate())
                     .build();
         }
-        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);
-    }
 
     public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
-        WinningNumbers numbersByDate = winningNumbersRepository.findNumbersByDrawDate(drawDate).orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE));
+        WinningNumbers numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE));
         return WinningNumbersDto.builder()
                 .winningNumbers(numbersByDate.winningNumbers())
                 .drawDate(numbersByDate.drawDate())
