@@ -30,7 +30,7 @@ public class InMemoryTicketRepository implements TicketRepository {
 
     @Override
     public <S extends Ticket> S save(S entity) {
-        tickets.put(entity.hash(), entity);
+        tickets.put(entity.ticketId(), entity);
         return entity;
     }
 
@@ -38,7 +38,7 @@ public class InMemoryTicketRepository implements TicketRepository {
     public <S extends Ticket> List<S> saveAll(Iterable<S> entities) {
         Stream<S> stream = StreamSupport.stream(entities.spliterator(), false);
         List<S> list = stream.toList();
-        list.forEach(ticket -> tickets.put(ticket.hash(), ticket));
+        list.forEach(ticket -> tickets.put(ticket.ticketId(), ticket));
         return list;
     }
 

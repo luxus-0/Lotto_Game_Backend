@@ -2,34 +2,24 @@ package pl.lotto.domain.drawdate;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.LocalTime.NOON;
-import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.TemporalAdjusters.next;
 
-@Service
 @AllArgsConstructor
 @Log4j2
 public class DrawDateGenerator {
     private final AdjustableClock clock;
 
     LocalDateTime generateNextDrawDate() {
-        LocalDateTime currentDateTime = LocalDateTime.now(clock.withZone(UTC));
+        LocalDateTime currentDateTime = LocalDateTime.now(clock);
         if (isSaturdayAndBeforeNoon(currentDateTime)) {
-            throw new NextDrawDateNotFoundException(currentDateTime.toLocalDate() + " " + currentDateTime.toLocalTime() + "\nNext draw date: " + readNextDrawDate());
-        } else if (isSaturdayAndAfterNoon(currentDateTime)) {
-            throw new NextDrawDateNotFoundException(currentDateTime.toLocalDate() + " " + currentDateTime.toLocalTime() + "\nNext draw date: " + readNextDrawDate());
-        } else {
-            return readNextDrawDate();
+            return LocalDateTime.of(currentDateTime.toLocalDate(), NOON);
         }
-    }
-
-    private boolean isSaturdayAndAfterNoon(LocalDateTime currentDateTime) {
-        return currentDateTime.getDayOfWeek().equals(SATURDAY) && currentDateTime.toLocalTime().isAfter(NOON);
+            return readNextDrawDate();
     }
 
     private boolean isSaturdayAndBeforeNoon(LocalDateTime currentDateTime) {
