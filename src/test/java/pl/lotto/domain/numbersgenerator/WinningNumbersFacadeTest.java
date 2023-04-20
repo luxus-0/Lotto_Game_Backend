@@ -150,7 +150,7 @@ class WinningNumbersFacadeTest {
         LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
 
         WinningNumbers winningNumbers = WinningNumbers.builder()
-                .hash("123")
+                .ticketId("123")
                 .drawDate(expectedDrawDate)
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .build();
@@ -174,7 +174,7 @@ class WinningNumbersFacadeTest {
         Set<Integer> generatedWinningNumbers = Set.of(1, 2, 3, 4, 5, 6);
 
         WinningNumbers winningNumbers = WinningNumbers.builder()
-                .hash("123")
+                .ticketId("123")
                 .drawDate(drawDate)
                 .winningNumbers(generatedWinningNumbers)
                 .build();
