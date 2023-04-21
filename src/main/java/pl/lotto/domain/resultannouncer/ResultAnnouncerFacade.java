@@ -7,9 +7,8 @@ import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-import static pl.lotto.domain.resultannouncer.ResultLottoMapper.*;
+import static pl.lotto.domain.resultannouncer.ResultLottoMapper.mapToResultDtoSaved;
 import static pl.lotto.domain.resultannouncer.ResultStatus.*;
 
 @AllArgsConstructor
@@ -18,28 +17,21 @@ public class ResultAnnouncerFacade {
     private final ResultLottoRepository resultLottoRepository;
     private final Clock clock;
 
-    public ResultAnnouncerResponseDto findResult(String hash) {
-        ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(hash);
-        if (resultDto == null) {
-            return ResultAnnouncerResponseDto.builder()
-                    .resultDto(null)
-                    .message(HASH_NOT_EXIST.message)
-                    .build();
+    public ResultAnnouncerResponseDto findResult(String ticketId) {
+        ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
+        ResultLotto result = resultLottoRepository.findByTicketId(ticketId).orElseThrow(() -> new ResultAnnouncerNotFound("Result lotto not found"));
+        if(resultDto == null) {
+            return new ResultAnnouncerResponseDto(null, HASH_NOT_EXIST.message);
         }
-        Optional<ResultLotto> resultByHash = resultLottoRepository.findById(hash);
-        ResultLotto buildResultLotto = mapToResultLotto(resultDto);
-        if (resultByHash.isPresent()) {
-            return mapToResultResponseDto(buildResultLotto, ALREADY_CHECKED.message);
-        }
-        resultLottoRepository.save(buildResultLotto);
-        ResultDto resultDtoSaved = mapToResultDtoSaved(buildResultLotto);
-        if (!isAfterResultAnnouncementTime(resultDto)) {
-            return new ResultAnnouncerResponseDto(resultDtoSaved, WAIT.message);
-        } else if (resultDto.isWinner()) {
-            return new ResultAnnouncerResponseDto(resultDtoSaved, WIN.message);
-        } else {
-            return new ResultAnnouncerResponseDto(resultDtoSaved, LOSE.message);
-        }
+        ResultLotto resultLottoSaved = resultLottoRepository.save(result);
+            ResultDto resultDtoSaved = mapToResultDtoSaved(resultLottoSaved);
+                if (!isAfterResultAnnouncementTime(resultDto)) {
+                    return new ResultAnnouncerResponseDto(resultDtoSaved, WAIT.message);
+                } else if (resultDto.isWinner()) {
+                    return new ResultAnnouncerResponseDto(resultDtoSaved, WIN.message);
+                } else {
+                    return new ResultAnnouncerResponseDto(resultDtoSaved, LOSE.message);
+                }
     }
 
 
