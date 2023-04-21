@@ -13,13 +13,13 @@ public class ResultCheckerScheduler {
     private final ResultsCheckerFacade resultsCheckerFacade;
     private final WinningNumbersFacade winningNumbersFacade;
 
-    @Scheduled(cron = "${winners.lottery.run.occurence}")
+    @Scheduled(cron = "${results.checker.lottery.run.occurence}")
     public void generateWinners() {
         log.info("Winners lottery scheduler started");
         if (!winningNumbersFacade.areWinningNumbersGeneratedByDate()) {
             log.error("Winning numbers are not generated");
         }
         log.info("Winning numbers are generated");
-        log.info(resultsCheckerFacade.generateResults());
+        resultsCheckerFacade.generateResults();
     }
 }

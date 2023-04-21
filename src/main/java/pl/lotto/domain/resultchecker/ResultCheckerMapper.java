@@ -14,7 +14,8 @@ class ResultCheckerMapper {
                         .numbers(player.numbers())
                         .hitNumbers(player.hitNumbers())
                         .drawDate(player.drawDate())
-                        .isWinner(true)
+                        .isWinner(player.isWinner())
+                        .message("aaa")
                         .build())
                 .toList();
     }
@@ -27,6 +28,10 @@ class ResultCheckerMapper {
                         .drawDate(ticket.drawDate())
                         .build())
                 .toList();
+    }
+
+    public static Player mapToPlayer(ResultLotto player) {
+        return new Player(player.ticketId(), player.numbers(), player.hitNumbers(), player.drawDate(), player.isWinner(), player.message());
     }
 
 }
