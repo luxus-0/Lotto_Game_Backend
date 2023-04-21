@@ -10,8 +10,6 @@ import java.util.Set;
 @Builder
 @Document
 public record Player(@Id String ticketId,
-                     String name,
-                     String surname,
                      Set<Integer> numbers,
                      Set<Integer> hitNumbers,
                      LocalDateTime drawDate,

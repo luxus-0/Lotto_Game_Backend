@@ -25,7 +25,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_six_numbers_message_when_user_gave_6_numbers() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,7,6, 12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -42,7 +42,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_less_than_six_numbers_message_when_user_gave_less_than_6_numbers() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -59,7 +59,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_more_than_six_number_message_when_user_gave_more_than_6_numbers() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -76,7 +76,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_out_of_range_message_when_user_gave_at_least_one_number_out_of_range_from_1_to_99() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -93,7 +93,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_no_numbers_message_when_user_gave_any_numbers() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -111,7 +111,7 @@ class NumberReceiverFacadeTest {
     @DisplayName("return out of range message when user gave negative number")
     public void should_return_out_of_range_message_when_user_gave_one_negative_number() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -128,7 +128,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_correct_hash() {
         //given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022, 12, 2,12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -146,7 +146,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_correct_draw_date() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 18, 12, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -178,7 +178,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_next_Saturday_draw_date_when_date_is_Saturday_noon() {
         //given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 20, 12, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -196,13 +196,13 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_tickets_with_correct_draw_date() {
         //given
-        HashGenerator hashGenerator = new HashGenerator();
+        TicketIdGeneratorImpl ticketIdGeneratorImpl = new TicketIdGeneratorImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 11, 12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
                 .createModuleForTests(clock);
 
         TicketDto expectedTicket = TicketDto.builder()
-                .ticketId(hashGenerator.getHash())
+                .ticketId(ticketIdGeneratorImpl.generateTicketId())
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .drawDate(LocalDateTime.of(2023,2,18,12,0,0,0))
                 .build();
@@ -215,7 +215,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_empty_collection_if_there_are_no_ticket() {
         //given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022,10,8,12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
@@ -230,7 +230,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void it_should_return_empty_collections_if_given_date_is_after_next_drawDate() {
         // given
-        HashGenerable hashGenerator = new HashGeneratorTestImpl();
+        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         LocalDateTime actualDrawDate = LocalDateTime.of(2022,10,8,12,0,0);
         AdjustableClock clock = new AdjustableClock(actualDrawDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
