@@ -19,18 +19,18 @@ public class NumberReceiverFacade {
     private final NumbersReceiverValidator numberValidator;
     private final DrawDateFacade drawDateFacade;
     private final TicketRepository ticketRepository;
-    private final HashGenerable hashGenerator;
+    private final TicketIdGenerator hashGenerator;
 
     public TicketResultDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (validate) {
-            String ticketId = hashGenerator.getHash();
+            String ticketId = hashGenerator.generateTicketId();
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
             Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
             return TicketResultDto.builder()
                     .ticketDto(TicketDto.builder()
                             .ticketId(ticketSaved.ticketId())
-                            .numbers(ticketSaved.numbersFromUser())
+                            .numbers(ticketSaved.numbers())
                             .drawDate(ticketSaved.drawDate())
                             .build())
                     .message(createResultMessage())
@@ -54,7 +54,7 @@ public class NumberReceiverFacade {
         if (date.isAfter(nextDrawDate)) {
             return Collections.emptyList();
         }
-        return ticketRepository.findAllByDrawDate(date)
+        return ticketRepository.findTicketsByDrawDate(date)
                 .stream()
                 .filter(ticket -> ticket.drawDate().isEqual(date))
                 .map(TicketMapper::mapToTicketDto)

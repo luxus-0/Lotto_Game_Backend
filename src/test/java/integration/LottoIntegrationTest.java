@@ -53,7 +53,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
-                                [1 2 3 4 5 6]
+                                [1 2 3 4 5 6 82 83 57 10 81 34]
                                 """.trim())));
         //step 2: system fetched winning numbers for draw date: 19.11.2022 12:00
         //when && then
@@ -139,7 +139,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         String jsonGetMethod = mvcResultGetMethod.getResponse().getContentAsString();
         ResultAnnouncerResponseDto finalResult = objectMapper.readValue(jsonGetMethod, ResultAnnouncerResponseDto.class);
         assertAll(
-                () -> assertThat(finalResult.message()).isEqualTo("Congratulations, you won!"),
+                () -> assertThat(finalResult.message()).isEqualTo("Congratulations, You won!"),
                 () -> assertThat(finalResult.resultDto().ticketId()).isEqualTo(ticketId),
                 () -> assertThat(finalResult.resultDto().hitNumbers()).hasSize(6));
 

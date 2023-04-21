@@ -19,12 +19,12 @@ public class NumberReceiverConfiguration {
     }
 
     @Bean
-    HashGenerable hashGenerable() {
-        return new HashGenerator();
+    TicketIdGenerator hashGenerable() {
+        return new TicketIdGeneratorImpl();
     }
 
     @Bean
-    public NumberReceiverFacade numberReceiverFacade(AdjustableClock clock, HashGenerable hashGenerator, TicketRepository ticketRepository) {
+    public NumberReceiverFacade numberReceiverFacade(AdjustableClock clock, TicketIdGenerator hashGenerator, TicketRepository ticketRepository) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
         DrawDateGenerator drawDateGenerator = new DrawDateGenerator(clock);
         DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
