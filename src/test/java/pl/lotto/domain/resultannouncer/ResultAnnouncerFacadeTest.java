@@ -114,7 +114,7 @@ class ResultAnnouncerFacadeTest {
     @Test
     public void should_return_hash_does_not_exist_message_when_hash_does_not_exist() {
         //given
-        String ticketId = "12345";
+        String ticketId = "1234567";
 
         when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(null);
         //when
@@ -143,8 +143,7 @@ class ResultAnnouncerFacadeTest {
         //when
         ResultAnnouncerResponseDto actualResultDto = resultAnnouncerFacade.findResult(resultByHash);
         //then
-        ResultAnnouncerResponseDto expectedResultDto = new ResultAnnouncerResponseDto(actualResultDto.resultDto()
-                , ALREADY_CHECKED.message);
+        ResultAnnouncerResponseDto expectedResultDto = new ResultAnnouncerResponseDto(actualResultDto.resultDto(), ALREADY_CHECKED.message);
         assertThat(actualResultDto).isEqualTo(expectedResultDto);
     }
 
