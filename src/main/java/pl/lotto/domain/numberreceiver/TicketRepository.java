@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TicketRepository extends MongoRepository<Ticket, String> {
-    List<Ticket> findAllByDrawDate(LocalDateTime drawDate);
+    List<Ticket> findTicketsByDrawDate(LocalDateTime drawDate);
 }
