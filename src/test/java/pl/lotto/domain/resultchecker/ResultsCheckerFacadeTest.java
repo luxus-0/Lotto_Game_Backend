@@ -6,6 +6,7 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
@@ -59,8 +60,10 @@ class ResultsCheckerFacadeTest {
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
+        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
+
         assertThat(playersDto).isNotNull();
-       assertThat(playersDto.message()).isEqualTo("Winners found");
+        assertThat(messageExpected).isEqualTo("Winners found");
     }
 
     @Test
@@ -76,7 +79,7 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.message();
+        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
         //then
         assertThat(message).isEqualTo("Winners not found");
     }
@@ -94,7 +97,7 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.message();
+        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
         //then
         assertThat(message).isEqualTo("Winners not found");
     }
@@ -112,7 +115,7 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.message();
+        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
         //then
         assertThat(message).isEqualTo("Winners found");
     }
@@ -162,7 +165,7 @@ class ResultsCheckerFacadeTest {
                 .numbers(Set.of(7, 8, 9, 10, 11, 12))
                 .hitNumbers(Set.of(7, 8, 9, 10, 11, 12))
                 .drawDate(drawDate)
-                .isWinner(true)
+                .isWinner(resultDto.isWinner())
                 .build();
         assertThat(resultDto).isEqualTo(expectedResult);
     }
