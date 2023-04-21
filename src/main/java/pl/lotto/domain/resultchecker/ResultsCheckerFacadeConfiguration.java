@@ -20,18 +20,13 @@ import static java.time.ZoneOffset.UTC;
 class ResultsCheckerFacadeConfiguration {
 
     @Bean
-    Clock clock() {
-        return new AdjustableClock(LocalDateTime.of(2022, 11, 19, 12, 0, 0).toInstant(UTC), ZoneId.systemDefault());
+    Clock clock(){
+        return new AdjustableClock(LocalDateTime.of(2022, 11, 19, 12,0,0).toInstant(UTC), ZoneId.systemDefault());
     }
 
     @Bean
     ResultCheckerScheduler resultCheckerScheduler(ResultsCheckerFacade resultsCheckerFacade, WinningNumbersFacade winningNumbersFacade) {
         return new ResultCheckerScheduler(resultsCheckerFacade, winningNumbersFacade);
-    }
-
-    @Bean
-    PlayerRepository playerRepository() {
-        return new InMemoryPlayerRepository();
     }
 
     @Bean

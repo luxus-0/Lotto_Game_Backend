@@ -21,8 +21,13 @@ public class ResultLottoTestImpl implements ResultLottoRepository {
     }
 
     @Override
+    public Optional<ResultLotto> findByTicketId(String ticketId) {
+        return Optional.ofNullable(responseList.get(ticketId));
+    }
+
+    @Override
     public Optional<ResultLotto> findById(String hash) {
-        return Optional.ofNullable(responseList.get(hash));
+        return Optional.empty();
     }
 
     @Override

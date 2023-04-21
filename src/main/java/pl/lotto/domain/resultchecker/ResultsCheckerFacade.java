@@ -12,6 +12,7 @@ import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class ResultsCheckerFacade {
 
         if (winningNumbers == null || winningNumbers.isEmpty()) {
             return PlayersDto.builder()
-                    .message("Winners not found")
+                    .results(Collections.emptyList())
                     .build();
         }
 
@@ -47,26 +48,27 @@ public class ResultsCheckerFacade {
         List<ResultLotto> results = mapPlayersToResults(players);
         playerRepository.saveAll(players);
         return PlayersDto.builder()
-                .tickets(tickets)
                 .results(results)
-                .message("Winners found")
                 .build();
     }
 
     public ResultDto findResultByTicketId(String ticketId) {
-        Player player = playerRepository.findByTicketId(ticketId).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " + ticketId));
-        if (player != null) {
+        PlayersDto players = generateResults();
+        List<ResultLotto> results =  players.results();
+        Player player = results.stream()
+                .map(ResultCheckerMapper::mapToPlayer)
+                .findAny()
+                .orElseThrow();
+        Player searchPlayer = playerRepository.findPlayerByTicketId(player.ticketId()).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " +ticketId));
             return ResultDto.builder()
-                    .ticketId(player.ticketId())
-                    .numbers(player.numbers())
-                    .hitNumbers(player.hitNumbers())
-                    .drawDate(player.drawDate())
-                    .isWinner(true)
+                    .ticketId(searchPlayer.ticketId())
+                    .numbers(searchPlayer.numbers())
+                    .hitNumbers(searchPlayer.hitNumbers())
+                    .drawDate(searchPlayer.drawDate())
+                    .isWinner(searchPlayer.isWinner())
                     .build();
         }
-        return ResultDto.builder()
-                .isWinner(false)
-                .build();
-    }
+
+
 
 }
