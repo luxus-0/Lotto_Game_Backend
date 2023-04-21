@@ -21,7 +21,7 @@ public class InMemoryTicketRepository implements TicketRepository {
     private final Map<String, Ticket> tickets = new ConcurrentHashMap<>();
 
     @Override
-    public List<Ticket> findAllByDrawDate(LocalDateTime drawDate) {
+    public List<Ticket> findTicketsByDrawDate(LocalDateTime drawDate) {
         return tickets.values()
                 .stream()
                 .filter(ticket -> ticket.drawDate().isEqual(drawDate))
