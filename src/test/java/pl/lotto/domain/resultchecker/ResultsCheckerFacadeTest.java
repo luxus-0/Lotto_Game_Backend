@@ -60,7 +60,7 @@ class ResultsCheckerFacadeTest {
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
-        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
+        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
 
         assertThat(playersDto).isNotNull();
         assertThat(messageExpected).isEqualTo("Winners found");
@@ -79,7 +79,7 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
+        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
         //then
         assertThat(message).isEqualTo("Winners not found");
     }
@@ -115,7 +115,7 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
+        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
         //then
         assertThat(message).isEqualTo("Winners found");
     }
