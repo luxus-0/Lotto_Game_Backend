@@ -1,11 +1,9 @@
 package pl.lotto.domain.resultchecker;
 
-import java.util.List;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
 import java.util.Optional;
 
-public interface PlayerRepository {
-    List<Player> saveAll(List<Player> players);
-    Player save(Player player);
-
-    Optional<Player> findById(String hash);
+public interface PlayerRepository extends MongoRepository<Player, String> {
+    Optional<Player> findPlayerByTicketId(String ticketId);
 }

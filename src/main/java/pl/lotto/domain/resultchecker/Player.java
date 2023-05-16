@@ -9,9 +9,7 @@ import java.util.Set;
 
 @Builder
 @Document
-public record Player(@Id String hash,
-                     String name,
-                     String surname,
+public record Player(@Id String ticketId,
                      Set<Integer> numbers,
                      Set<Integer> hitNumbers,
                      LocalDateTime drawDate,

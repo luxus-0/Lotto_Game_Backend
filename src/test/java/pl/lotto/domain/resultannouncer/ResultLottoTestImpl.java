@@ -17,12 +17,17 @@ public class ResultLottoTestImpl implements ResultLottoRepository {
 
     @Override
     public ResultLotto save(ResultLotto ResultLotto) {
-        return responseList.put(ResultLotto.hash(), ResultLotto);
+        return responseList.put(ResultLotto.ticketId(), ResultLotto);
+    }
+
+    @Override
+    public Optional<ResultLotto> findByTicketId(String ticketId) {
+        return Optional.ofNullable(responseList.get(ticketId));
     }
 
     @Override
     public Optional<ResultLotto> findById(String hash) {
-        return Optional.ofNullable(responseList.get(hash));
+        return Optional.empty();
     }
 
     @Override

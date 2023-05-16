@@ -6,7 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+
 @Builder
 @Document
-public record WinningNumbers(@Id String hash, Set<Integer> winningNumbers, LocalDateTime drawDate) {
+public record WinningNumbers(@Id String ticketId, Set<Integer> winningNumbers, LocalDateTime drawDate) {
 }

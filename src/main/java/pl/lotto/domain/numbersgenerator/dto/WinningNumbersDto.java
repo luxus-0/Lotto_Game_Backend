@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record WinningNumbersDto(Set<Integer> winningNumbers, LocalDateTime drawDate, String message) {
+public record WinningNumbersDto(String ticketId, Set<Integer> winningNumbers, LocalDateTime drawDate, String message) {
 }

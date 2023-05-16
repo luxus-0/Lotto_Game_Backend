@@ -13,12 +13,15 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-public class InMemoryTicketRepositoryTestImpl implements TicketRepository {
+public class InMemoryTicketRepository implements TicketRepository {
+
     private final Map<String, Ticket> tickets = new ConcurrentHashMap<>();
 
     @Override
-    public List<Ticket> findAllByDrawDate(LocalDateTime drawDate) {
+    public List<Ticket> findTicketsByDrawDate(LocalDateTime drawDate) {
         return tickets.values()
                 .stream()
                 .filter(ticket -> ticket.drawDate().isEqual(drawDate))
@@ -26,25 +29,22 @@ public class InMemoryTicketRepositoryTestImpl implements TicketRepository {
     }
 
     @Override
-    public Ticket findByHash(String hash) {
-        return tickets.get(hash);
+    public <S extends Ticket> S save(S entity) {
+        tickets.put(entity.ticketId(), entity);
+        return entity;
     }
-
-    @Override
-    public Ticket save(Ticket ticket) {
-        tickets.put(ticket.hash(), ticket);
-        return ticket;
-    }
-
 
     @Override
     public <S extends Ticket> List<S> saveAll(Iterable<S> entities) {
-        return null;
+        Stream<S> stream = StreamSupport.stream(entities.spliterator(), false);
+        List<S> list = stream.toList();
+        list.forEach(ticket -> tickets.put(ticket.ticketId(), ticket));
+        return list;
     }
 
     @Override
-    public Optional<Ticket> findById(String s) {
-        return Optional.empty();
+    public Optional<Ticket> findById(String id) {
+        return Optional.ofNullable(tickets.get(id));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.resultannouncer.dto.ResultResponseDto;
+import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
@@ -25,32 +25,32 @@ class ResultAnnouncerFacadeTest {
     ResultLottoRepository resultLottoRepository = new ResultLottoTestImpl();
 
     Clock clock = Clock.fixed(LocalDateTime.of(2022, 12, 17, 12, 0,0).toInstant(UTC), ZoneId.systemDefault());
-    ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().createModuleForTest(resultsCheckerFacade, resultLottoRepository, clock);
+    ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
 
     @Test
     public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        String hash = "13579";
+        String ticketId = "13579";
         ResultDto resultDto = ResultDto.builder()
-                .hash(hash)
+                .ticketId(ticketId)
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of())
                 .drawDate(drawDate)
                 .isWinner(false)
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(resultDto);
         //when
-        ResultResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketId);
         //then
         ResultDto expectedResultDto = ResultDto.builder()
-                .hash(hash)
+                .ticketId(ticketId)
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of())
                 .drawDate(drawDate)
                 .isWinner(false)
                 .build();
-        ResultResponseDto expectedResult = new ResultResponseDto(expectedResultDto, LOSE.message);
+        ResultAnnouncerResponseDto expectedResult = new ResultAnnouncerResponseDto(expectedResultDto, LOSE.message);
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 
@@ -58,26 +58,26 @@ class ResultAnnouncerFacadeTest {
     public void should_return_win_message_when_ticket_is_winning_ticket() {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        String hash = "13579";
+        String ticketId = "13579";
         ResultDto resultDto = ResultDto.builder()
-                .hash(hash)
+                .ticketId(ticketId)
                 .numbers(Set.of(3, 4, 5, 6, 7, 8))
                 .hitNumbers(Set.of(3,4,5))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(resultDto);
         //when
-        ResultResponseDto actualResult = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketId);
         //then
         ResultDto expectedResultDto = ResultDto.builder()
-                .hash(hash)
+                .ticketId(ticketId)
                 .numbers(Set.of(3, 4, 5, 6, 7, 8))
                 .hitNumbers(Set.of(3,4,5))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        ResultResponseDto expectedResult = new ResultResponseDto(expectedResultDto, WIN.message);
+        ResultAnnouncerResponseDto expectedResult = new ResultAnnouncerResponseDto(expectedResultDto, WIN.message);
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 
@@ -88,81 +88,80 @@ class ResultAnnouncerFacadeTest {
         String hash = "12345";
 
         ResultDto resultDto = ResultDto.builder()
-                .hash("12345")
+                .ticketId("12345")
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
                 .hitNumbers(Set.of(11, 4, 7 ,9))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
 
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(hash)).thenReturn(resultDto);
         //when
-        ResultResponseDto actualResultResponseDto = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
         //then
         ResultDto responseDto = ResultDto.builder()
-                .hash("12345")
+                .ticketId("12345")
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
                 .hitNumbers(Set.of(11, 4, 7, 9))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
 
-        ResultResponseDto expectedResultResponseDto = new ResultResponseDto(responseDto, WAIT.message);
-        assertThat(actualResultResponseDto).isEqualTo(expectedResultResponseDto);
+        ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(responseDto, WAIT.message);
+        assertThat(actualResultAnnouncerResponseDto).isEqualTo(expectedResultAnnouncerResponseDto);
     }
 
     @Test
     public void should_return_hash_does_not_exist_message_when_hash_does_not_exist() {
         //given
-        String hash = "12345";
+        String ticketId = "12345";
 
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(null);
+        when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(null);
         //when
-        ResultResponseDto actualResultResponseDto = resultAnnouncerFacade.findResult(hash);
+        ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
         //then
-        ResultResponseDto expectedResultResponseDto = new ResultResponseDto(null, HASH_NOT_EXIST.message);
-        assertThat(actualResultResponseDto).isEqualTo(expectedResultResponseDto);
+        ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(null, HASH_NOT_EXIST.message);
+        assertThat(actualResultAnnouncerResponseDto).isEqualTo(expectedResultAnnouncerResponseDto);
     }
 
     @Test
     public void it_should_return_response_with_hash_does_not_exist_message_if_response_is_not_saved_to_db_yet() {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        String hash = "123";
+        String ticketId = "123";
         ResultDto resultDto = ResultDto.builder()
-                .hash("123")
+                .ticketId("123")
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3, 4, 9, 0))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(resultDto);
 
-        ResultResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(hash);
-        String resultByHash = resultAnnouncerResponseDto.resultDto().hash();
+        ResultAnnouncerResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
+        String resultByHash = resultAnnouncerResponseDto.resultDto().ticketId();
         //when
-        ResultResponseDto actualResultDto = resultAnnouncerFacade.findResult(resultByHash);
+        ResultAnnouncerResponseDto actualResultDto = resultAnnouncerFacade.findResult(resultByHash);
         //then
-        ResultResponseDto expectedResultDto = new ResultResponseDto(actualResultDto.resultDto()
-                , ALREADY_CHECKED.message);
+        ResultAnnouncerResponseDto expectedResultDto = new ResultAnnouncerResponseDto(actualResultDto.resultDto(), ALREADY_CHECKED.message);
         assertThat(actualResultDto).isEqualTo(expectedResultDto);
     }
 
     @Test
     public void should_throw_an_exception_when_numbers_is_empty() {
         //given
-        String hash = "1234";
+        String ticketId = "1234";
 
         ResultDto resultDto = ResultDto.builder()
-                .hash(hash)
+                .ticketId(ticketId)
                 .numbers(Collections.emptySet())
                 .hitNumbers(Set.of(1,2,3,4))
                 .drawDate(LocalDateTime.now())
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(resultDto);
 
         //when
-        Set<Integer> actualNumbers = resultsCheckerFacade.findByHash(hash).numbers();
+        Set<Integer> actualNumbers = resultsCheckerFacade.findResultByTicketId(ticketId).numbers();
         //then
         assertThrows(PlayerResultNotFoundException.class,
                 () -> actualNumbers.stream()
@@ -173,16 +172,16 @@ class ResultAnnouncerFacadeTest {
     @Test
     public void should_throw_an_exception_when_hit_numbers_is_empty() {
         //given
-        String hash = "";
+        String ticketId = "";
 
         ResultDto resultDto = ResultDto.builder()
-                .hash(hash)
+                .ticketId(ticketId)
                 .numbers(Set.of())
                 .build();
-        when(resultsCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(resultDto);
 
         //when
-        ResultDto actualResult = resultsCheckerFacade.findByHash(hash);
+        ResultDto actualResult = resultsCheckerFacade.findResultByTicketId(ticketId);
         //then
         Set<Integer> numbersResult = actualResult.numbers();
 

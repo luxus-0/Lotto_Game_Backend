@@ -15,16 +15,16 @@ public class NumberReceiverConfiguration {
 
     @Bean
     AdjustableClock adjustableClock() {
-        return new AdjustableClock(LocalDateTime.of(2023, 2, 15, 11, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        return new AdjustableClock(LocalDateTime.of(2022, 11, 16, 10, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
     }
 
     @Bean
-    HashGenerable hashGenerable() {
-        return new HashGenerator();
+    TicketIdGenerator hashGenerable() {
+        return new TicketIdGeneratorImpl();
     }
 
     @Bean
-    public NumberReceiverFacade numberReceiverFacade(AdjustableClock clock, HashGenerable hashGenerator, TicketRepository ticketRepository) {
+    public NumberReceiverFacade numberReceiverFacade(AdjustableClock clock, TicketIdGenerator hashGenerator, TicketRepository ticketRepository) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
         DrawDateGenerator drawDateGenerator = new DrawDateGenerator(clock);
         DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);

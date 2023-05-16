@@ -1,6 +1,6 @@
 package pl.lotto.domain.numberreceiver;
 
-public class HashGeneratorTestImpl implements HashGenerable {
+public class HashGeneratorTestImpl implements TicketIdGenerator {
 
     private final String hash;
 
@@ -9,7 +9,7 @@ public class HashGeneratorTestImpl implements HashGenerable {
     }
 
     @Override
-    public String getHash() {
+    public String generateTicketId() {
         return hash;
     }
 }

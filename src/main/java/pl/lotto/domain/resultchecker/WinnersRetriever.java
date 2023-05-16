@@ -11,18 +11,18 @@ public class WinnersRetriever {
         return allTicketsByDate.stream().map(ticket ->
                 {
                     Set<Integer> hitNumbers = calculateHits(winningNumbers, ticket);
-                    return createPlayer(ticket, hitNumbers);
+                    return createResults(ticket, hitNumbers);
                 })
                 .toList();
     }
 
-    private Player createPlayer(Ticket ticket, Set<Integer> hitNumbers) {
+    private Player createResults(Ticket ticket, Set<Integer> hitNumbers) {
         Player.PlayerBuilder builder = Player.builder();
         if (isWinner(hitNumbers)) {
             builder.isWinner(true);
         }
         return builder
-                .hash(ticket.hash())
+                .ticketId(ticket.ticketId())
                 .numbers(ticket.numbers())
                 .hitNumbers(hitNumbers)
                 .drawDate(ticket.drawDate())

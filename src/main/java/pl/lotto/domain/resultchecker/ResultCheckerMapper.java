@@ -1,20 +1,21 @@
 package pl.lotto.domain.resultchecker;
 
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.resultchecker.dto.ResultDto;
+import pl.lotto.domain.resultannouncer.ResultLotto;
 
 import java.util.List;
 
 class ResultCheckerMapper {
 
-    static List<ResultDto> mapPlayersToResults(List<Player> players) {
+    static List<ResultLotto> mapPlayersToResults(List<Player> players) {
         return players.stream()
-                .map(player -> ResultDto.builder()
-                        .hash(player.hash())
+                .map(player -> ResultLotto.builder()
+                        .ticketId(player.ticketId())
                         .numbers(player.numbers())
                         .hitNumbers(player.hitNumbers())
                         .drawDate(player.drawDate())
-                        .isWinner(true)
+                        .isWinner(player.isWinner())
+                        .message("aaa")
                         .build())
                 .toList();
     }
@@ -22,20 +23,15 @@ class ResultCheckerMapper {
     static List<Ticket> mapToTickets(List<TicketDto> allTicketsByDate) {
         return allTicketsByDate.stream()
                 .map(ticket -> Ticket.builder()
-                        .drawDate(ticket.drawDate())
-                        .hash(ticket.hash())
+                        .ticketId(ticket.ticketId())
                         .numbers(ticket.numbers())
+                        .drawDate(ticket.drawDate())
                         .build())
                 .toList();
     }
 
-    static List<Player> mapToPlayers(List<TicketDto> ticketsDto) {
-        return ticketsDto.stream().map(player -> Player.builder()
-                .hash(player.hash())
-                .numbers(player.numbers())
-                .hitNumbers(player.hitNumbers())
-                .drawDate(player.drawDate())
-                .message(player.message())
-                .build()).toList();
+    public static Player mapToPlayer(ResultLotto player) {
+        return new Player(player.ticketId(), player.numbers(), player.hitNumbers(), player.drawDate(), player.isWinner(), player.message());
     }
+
 }
