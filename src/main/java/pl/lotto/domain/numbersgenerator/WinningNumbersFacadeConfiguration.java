@@ -38,7 +38,7 @@ public class WinningNumbersFacadeConfiguration {
     @Bean
     public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties) {
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator(properties);
-        return new WinningNumbersFacade(drawDateFacade, generator, winningNumberValidator, winningNumbersRepository);
+        return new WinningNumbersFacade(drawDateFacade, generator, winningNumbersRepository, winningNumberValidator);
     }
 
     public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
