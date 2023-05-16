@@ -7,7 +7,6 @@ import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -38,14 +37,11 @@ public class WinningNumbersFacade {
     }
 
     public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
-        Optional<WinningNumbers> numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate);
-        if(numbersByDate.isPresent()) {
+        WinningNumbers winningNumbers = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE));
         return WinningNumbersDto.builder()
-                .winningNumbers(numbersByDate.get().winningNumbers())
-                .drawDate(numbersByDate.get().drawDate())
+                .winningNumbers(winningNumbers.winningNumbers())
+                .drawDate(winningNumbers.drawDate())
                 .build();
-    }
-        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);
     }
 
     public boolean areWinningNumbersGeneratedByDate() {
