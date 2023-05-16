@@ -2,8 +2,10 @@ package pl.lotto.domain.numbersgenerator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 import pl.lotto.infrastructure.numbergenerator.scheduler.WinningNumbersScheduler;
 
 import java.time.Clock;
@@ -31,8 +33,8 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    RandomNumbersGenerable randomNumbersGenerable() {
-        return new InMemoryRandomNumberGenerator();
+    RandomNumberClient randomNumberClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties){
+        return new RandomNumberClient(restTemplate, properties);
     }
 
     @Bean
