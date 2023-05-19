@@ -1,5 +1,6 @@
 package pl.lotto.domain.resultannouncer;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +17,8 @@ public class ResultLottoTestImpl implements ResultLottoRepository {
     private final Map<String, ResultLotto> responseList = new ConcurrentHashMap<>();
 
     @Override
-    public ResultLotto save(ResultLotto ResultLotto) {
-        return responseList.put(ResultLotto.ticketId(), ResultLotto);
+    public ResultLotto save(@NotNull ResultLotto resultLotto) {
+        return responseList.put(resultLotto.ticketId(), resultLotto);
     }
 
     @Override

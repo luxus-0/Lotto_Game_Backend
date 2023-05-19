@@ -1,6 +1,8 @@
 package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
@@ -22,6 +24,7 @@ import static pl.lotto.domain.resultannouncer.ResultStatus.*;
 class ResultAnnouncerFacadeTest {
 
     ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
+
     ResultLottoRepository resultLottoRepository = new ResultLottoTestImpl();
 
     Clock clock = Clock.fixed(LocalDateTime.of(2022, 12, 17, 12, 0,0).toInstant(UTC), ZoneId.systemDefault());
@@ -31,7 +34,7 @@ class ResultAnnouncerFacadeTest {
     public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        String ticketId = "12345";
+        String ticketId = "123456";
         ResultDto resultDto = ResultDto.builder()
                 .ticketId(ticketId)
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
@@ -114,14 +117,14 @@ class ResultAnnouncerFacadeTest {
     @Test
     public void should_return_hash_does_not_exist_message_when_hash_does_not_exist() {
         //given
-        String ticketId = "";
+        String ticketId = "12345";
 
         when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(null);
         //when
-        ResultDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId).resultDto();
+        ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
         //then
         ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(null, HASH_NOT_EXIST.message);
-        assertThat(actualResultAnnouncerResponseDto).isEqualTo(expectedResultAnnouncerResponseDto.resultDto());
+        assertThat(actualResultAnnouncerResponseDto).isEqualTo(expectedResultAnnouncerResponseDto);
     }
 
     @Test
