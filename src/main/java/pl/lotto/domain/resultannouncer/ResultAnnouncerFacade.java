@@ -19,7 +19,7 @@ public class ResultAnnouncerFacade {
 
     public ResultAnnouncerResponseDto findResult(String ticketId) {
         ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
-        ResultLotto result = resultLottoRepository.findByTicketId(ticketId).orElseThrow(() -> new ResultAnnouncerNotFound("Result lotto not found"));
+        ResultLotto result = resultLottoRepository.findByTicketId(ticketId).orElse(ResultLotto.builder().build());
         if(resultDto == null) {
             return new ResultAnnouncerResponseDto(null, HASH_NOT_EXIST.message);
         }
