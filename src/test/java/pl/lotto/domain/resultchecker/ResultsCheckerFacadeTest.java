@@ -5,6 +5,7 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
+import pl.lotto.domain.numbersgenerator.WinningNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
@@ -60,7 +61,7 @@ class ResultsCheckerFacadeTest {
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
-        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
+        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow(() -> new WinningNumbersNotFoundException("Winning numbers not found"));
 
         assertThat(playersDto).isNotNull();
         assertThat(messageExpected).isEqualTo("Winners found");
