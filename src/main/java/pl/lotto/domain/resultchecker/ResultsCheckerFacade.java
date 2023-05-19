@@ -54,18 +54,17 @@ public class ResultsCheckerFacade {
 
     public ResultDto findResultByTicketId(String ticketId) {
         PlayersDto players = generateResults();
-        List<ResultLotto> results =  players.results();
-        Player player = results.stream()
+        Player player =  players.results()
+                .stream()
                 .map(ResultCheckerMapper::mapToPlayer)
                 .findAny()
                 .orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
-        Player searchPlayer = playerRepository.findByTicketId(player.ticketId()).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " +ticketId));
             return ResultDto.builder()
-                    .ticketId(searchPlayer.ticketId())
-                    .numbers(searchPlayer.numbers())
-                    .hitNumbers(searchPlayer.hitNumbers())
-                    .drawDate(searchPlayer.drawDate())
-                    .isWinner(searchPlayer.isWinner())
+                    .ticketId(player.ticketId())
+                    .numbers(player.numbers())
+                    .hitNumbers(player.hitNumbers())
+                    .drawDate(player.drawDate())
+                    .isWinner(player.isWinner())
                     .build();
         }
 }
