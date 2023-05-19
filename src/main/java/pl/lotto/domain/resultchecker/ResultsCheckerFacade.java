@@ -60,7 +60,7 @@ public class ResultsCheckerFacade {
                 .findAny()
                 .orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
             return ResultDto.builder()
-                    .ticketId(player.ticketId())
+                    .ticketId(ticketId)
                     .numbers(player.numbers())
                     .hitNumbers(player.hitNumbers())
                     .drawDate(player.drawDate())
