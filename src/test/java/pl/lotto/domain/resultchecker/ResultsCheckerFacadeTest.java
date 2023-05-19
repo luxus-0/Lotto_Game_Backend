@@ -10,6 +10,7 @@ import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
+import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -80,7 +81,7 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
+        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
         //then
         assertThat(message).isEqualTo("Winners not found");
     }
@@ -116,7 +117,7 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
+        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
         //then
         assertThat(message).isEqualTo("Winners found");
     }

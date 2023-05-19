@@ -4,6 +4,7 @@ import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.NotCorrectSizeNumbersException;
 import pl.lotto.domain.resultchecker.exceptions.NotInRangeNumbersException;
 
+import java.util.Collections;
 import java.util.Set;
 
 class ResultCheckerValidation {
@@ -18,7 +19,9 @@ class ResultCheckerValidation {
                     .numbers(winnerNumbers)
                     .build();
         }
-        throw new IllegalArgumentException("No winning numbers");
+        return ResultDto.builder()
+                .numbers(Collections.emptySet())
+                .build();
     }
 
     private boolean isCorrectSize(Set<Integer> winnerNumbers) {

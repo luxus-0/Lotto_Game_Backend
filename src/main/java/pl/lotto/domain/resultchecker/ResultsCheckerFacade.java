@@ -59,7 +59,7 @@ public class ResultsCheckerFacade {
                 .map(ResultCheckerMapper::mapToPlayer)
                 .findAny()
                 .orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
-        Player searchPlayer = playerRepository.findPlayerByTicketId(player.ticketId()).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " +ticketId));
+        Player searchPlayer = playerRepository.findByTicketId(player.ticketId()).orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " +ticketId));
             return ResultDto.builder()
                     .ticketId(searchPlayer.ticketId())
                     .numbers(searchPlayer.numbers())
@@ -68,7 +68,4 @@ public class ResultsCheckerFacade {
                     .isWinner(searchPlayer.isWinner())
                     .build();
         }
-
-
-
 }
