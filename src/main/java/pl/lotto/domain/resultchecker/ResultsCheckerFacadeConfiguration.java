@@ -32,7 +32,7 @@ class ResultsCheckerFacadeConfiguration {
     @Bean
     ResultsCheckerFacade resultsCheckerFacade(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade, WinningNumbersFacade winningNumbersFacade, PlayerRepository playerRepository) {
         WinnersRetriever winnersRetriever = new WinnersRetriever();
-        ResultValidation resultValidation = new ResultValidation();
-        return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, winnersRetriever, playerRepository, resultValidation);
+        ResultCheckerValidation resultCheckerValidation = new ResultCheckerValidation();
+        return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, winnersRetriever, playerRepository, resultCheckerValidation);
     }
 }

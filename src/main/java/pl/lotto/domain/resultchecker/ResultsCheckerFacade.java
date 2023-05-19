@@ -27,7 +27,7 @@ public class ResultsCheckerFacade {
     WinningNumbersFacade winningNumbersFacade;
     WinnersRetriever winnersRetriever;
     PlayerRepository playerRepository;
-    ResultValidation resultValidation;
+    ResultCheckerValidation resultCheckerValidation;
 
     public PlayersDto generateResults() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
@@ -41,7 +41,7 @@ public class ResultsCheckerFacade {
                     .build();
         }
 
-        resultValidation.validate(winningNumbers);
+        resultCheckerValidation.validate(winningNumbers);
 
         List<Ticket> tickets = mapToTickets(allTicketByDate);
         List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);

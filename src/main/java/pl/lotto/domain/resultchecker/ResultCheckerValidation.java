@@ -6,7 +6,7 @@ import pl.lotto.domain.resultchecker.exceptions.NotInRangeNumbersException;
 
 import java.util.Set;
 
-class ResultValidation {
+class ResultCheckerValidation {
 
     private static final int MIN_NUMBERS = 1;
     private static final int MAX_NUMBERS = 99;
@@ -18,11 +18,11 @@ class ResultValidation {
                     .numbers(winnerNumbers)
                     .build();
         } else if (!isInRange(winnerNumbers)) {
-            throw new NotInRangeNumbersException("Winning numbers not in range");
+            throw new NotInRangeNumbersException("Winning numbers are not in range");
         } else if (!isCorrectSize(winnerNumbers)) {
             throw new NotCorrectSizeNumbersException("Winning numbers are not correct size");
         }
-        return ResultDto.builder().build();
+        throw new IllegalArgumentException("No winning numbers");
     }
 
     private boolean isCorrectSize(Set<Integer> winnerNumbers) {
