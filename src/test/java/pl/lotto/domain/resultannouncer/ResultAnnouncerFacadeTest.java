@@ -31,7 +31,7 @@ class ResultAnnouncerFacadeTest {
     public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        String ticketId = "13579";
+        String ticketId = "12345";
         ResultDto resultDto = ResultDto.builder()
                 .ticketId(ticketId)
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
