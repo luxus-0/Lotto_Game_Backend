@@ -17,10 +17,6 @@ class ResultCheckerValidation {
             return ResultDto.builder()
                     .numbers(winnerNumbers)
                     .build();
-        } else if (!isInRange(winnerNumbers)) {
-            throw new NotInRangeNumbersException("Winning numbers are not in range");
-        } else if (!isCorrectSize(winnerNumbers)) {
-            throw new NotCorrectSizeNumbersException("Winning numbers are not correct size");
         }
         throw new IllegalArgumentException("No winning numbers");
     }

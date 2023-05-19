@@ -19,15 +19,11 @@ class ResultCheckerMapper {
                         .hitNumbers(player.hitNumbers())
                         .drawDate(player.drawDate())
                         .isWinner(player.isWinner())
-                        .message("aaa")
                         .build())
                 .toList();
     }
 
     static List<Ticket> mapToTickets(List<TicketDto> allTicketsByDate) {
-        if(allTicketsByDate.size() == 0){
-            throw new IllegalArgumentException("Not tickets available");
-        }
         return allTicketsByDate.stream()
                 .map(ticket -> Ticket.builder()
                         .ticketId(ticket.ticketId())
