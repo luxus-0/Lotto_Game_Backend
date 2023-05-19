@@ -1,10 +1,14 @@
 package pl.lotto.domain.resultchecker;
 
+import lombok.AllArgsConstructor;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
+@AllArgsConstructor
 class ResultCheckerMapper {
 
     static List<ResultLotto> mapPlayersToResults(List<Player> players) {
@@ -21,10 +25,13 @@ class ResultCheckerMapper {
     }
 
     static List<Ticket> mapToTickets(List<TicketDto> allTicketsByDate) {
+        if(allTicketsByDate.size() == 0){
+            throw new IllegalArgumentException("Not tickets available");
+        }
         return allTicketsByDate.stream()
                 .map(ticket -> Ticket.builder()
                         .ticketId(ticket.ticketId())
-                        .numbers(ticket.numbers())
+                        .numbers(Collections.emptySet())
                         .drawDate(ticket.drawDate())
                         .build())
                 .toList();
