@@ -8,7 +8,6 @@ import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import static pl.lotto.domain.resultannouncer.ResultLottoMapper.mapToResultDtoSaved;
 import static pl.lotto.domain.resultannouncer.ResultStatus.*;
@@ -23,7 +22,7 @@ public class ResultAnnouncerFacade {
         ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
         ResultLotto result = resultLottoRepository.findByTicketId(ticketId).orElseThrow(() -> new ResultLottoNotFoundException("Result lotto not found"));
         ResultLotto resultLottoSaved = resultLottoRepository.save(result);
-            ResultDto resultDtoSaved = mapToResultDtoSaved(resultLottoSaved);
+        ResultDto resultDtoSaved = mapToResultDtoSaved(resultLottoSaved);
                 if (!isAfterResultAnnouncementTime(resultDto)) {
                     return new ResultAnnouncerResponseDto(resultDtoSaved, WAIT.message);
                 } else if (resultDto.isWinner()) {
