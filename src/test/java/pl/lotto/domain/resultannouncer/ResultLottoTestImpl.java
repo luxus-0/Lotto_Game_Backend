@@ -17,7 +17,7 @@ public class ResultLottoTestImpl implements ResultLottoRepository {
     private final Map<String, ResultLotto> responseList = new ConcurrentHashMap<>();
 
     @Override
-    public ResultLotto save(@NotNull ResultLotto resultLotto) {
+    public ResultLotto save(ResultLotto resultLotto) {
         return responseList.put(resultLotto.ticketId(), resultLotto);
     }
 
