@@ -20,7 +20,7 @@ public class ResultAnnouncerFacade {
 
     public ResultAnnouncerResponseDto findResult(String ticketId) {
         ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
-        ResultLotto result = resultLottoRepository.findByTicketId(ticketId).orElseThrow(() -> new ResultLottoNotFoundException("Result lotto not found"));
+        ResultLotto result = resultLottoRepository.findByTicketId(ticketId).orElse(ResultLotto.builder().build());
         ResultLotto resultLottoSaved = resultLottoRepository.save(result);
         ResultDto resultDtoSaved = mapToResultDtoSaved(resultLottoSaved);
                 if (!isAfterResultAnnouncementTime(resultDto)) {
