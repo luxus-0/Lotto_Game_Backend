@@ -25,7 +25,7 @@ class ResultAnnouncerFacadeTest {
 
     ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
 
-    ResultLottoRepository resultLottoRepository = new ResultLottoTestImpl();
+    ResultLottoRepository resultLottoRepository;
 
     Clock clock = Clock.fixed(LocalDateTime.of(2022, 12, 17, 12, 0,0).toInstant(UTC), ZoneId.systemDefault());
     ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
