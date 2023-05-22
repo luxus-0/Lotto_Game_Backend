@@ -62,7 +62,7 @@ class ResultsCheckerFacadeTest {
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
-        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow(() -> new WinningNumbersNotFoundException("Winning numbers not found"));
+        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
 
         assertThat(playersDto).isNotNull();
         assertThat(messageExpected).isEqualTo("Winners found");
