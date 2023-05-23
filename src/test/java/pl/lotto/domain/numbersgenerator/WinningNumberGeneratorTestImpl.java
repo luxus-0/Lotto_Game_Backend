@@ -3,6 +3,7 @@ package pl.lotto.domain.numbersgenerator;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class WinningNumberGeneratorTestImpl implements RandomNumbersGenerable {
 
@@ -17,5 +18,10 @@ public class WinningNumberGeneratorTestImpl implements RandomNumbersGenerable {
         return RandomNumbersDto.builder()
                 .randomNumbers(generatedNumbers)
                 .build();
+    }
+
+    @Override
+    public String generateUniqueTicketId() {
+        return UUID.randomUUID().toString();
     }
 }
