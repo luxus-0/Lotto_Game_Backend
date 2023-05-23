@@ -1,13 +1,10 @@
 package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
-import pl.lotto.domain.resultchecker.dto.PlayersDto;
-import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
+import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
