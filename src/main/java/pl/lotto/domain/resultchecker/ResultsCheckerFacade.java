@@ -58,7 +58,7 @@ public class ResultsCheckerFacade {
                 .stream()
                 .map(ResultCheckerMapper::mapToPlayer)
                 .findAny()
-                .orElse(Player.builder().build());
+                .orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
             return ResultDto.builder()
                     .ticketId(ticketId)
                     .numbers(player.numbers())
