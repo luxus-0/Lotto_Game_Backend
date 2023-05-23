@@ -48,9 +48,9 @@ public class WinningNumbersFacade {
         Optional<WinningNumbers> numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate);
         return numbersByDate.stream()
                 .map(winningNumbers -> WinningNumbersDto.builder()
-                        .ticketId("123456")
-                        .drawDate(LocalDateTime.now(Clock.systemUTC()))
-                        .winningNumbers(Set.of(1,2,3,4,5,6))
+                        .ticketId(generateWinningNumbers().ticketId())
+                        .drawDate(drawDate)
+                        .winningNumbers(generateWinningNumbers().winningNumbers())
                 .build())
                 .findAny()
                 .orElseThrow(() -> new WinningNumbersNotFoundException("Winning numbers not found"));
