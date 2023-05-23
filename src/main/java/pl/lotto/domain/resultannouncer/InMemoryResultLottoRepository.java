@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,8 +18,8 @@ public class InMemoryResultLottoRepository implements ResultLottoRepository {
     private final Map<String, ResultLotto> responseList = new ConcurrentHashMap<>();
 
     @Override
-    public ResultLotto save(ResultLotto ResultLotto) {
-        return responseList.put(ResultLotto.ticketId(), ResultLotto);
+    public ResultLotto save(ResultLotto resultLotto) {
+        return responseList.put(resultLotto.ticketId(), resultLotto);
     }
 
     @Override
