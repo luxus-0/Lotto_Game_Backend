@@ -7,6 +7,7 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateFacadeConfiguration;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
+import pl.lotto.domain.resultchecker.Ticket;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
