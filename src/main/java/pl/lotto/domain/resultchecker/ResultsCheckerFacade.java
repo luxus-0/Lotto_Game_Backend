@@ -41,7 +41,7 @@ public class ResultsCheckerFacade {
                     .build();
         }
 
-        resultCheckerValidation.validate(winningNumbers);
+       resultCheckerValidation.validate(winningNumbers);
 
         List<Ticket> tickets = mapToTickets(allTicketByDate);
         List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);
