@@ -25,15 +25,21 @@ public class WinningNumbersFacade {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         RandomNumbersDto randomNumbers = randomNumbersGenerable.generateSixRandomNumbers();
         Set<Integer> winningNumbers = randomNumbers.randomNumbers();
+        String ticketId = randomNumbersGenerable.generateUniqueTicketId();
         winningNumberValidator.validate(winningNumbers);
         WinningNumbers winningNumbersDocument = WinningNumbers.builder()
+                .ticketId(ticketId)
                 .winningNumbers(winningNumbers)
                 .drawDate(nextDrawDate)
                 .build();
+
         WinningNumbers saved = winningNumbersRepository.save(winningNumbersDocument);
+
         return WinningNumbersDto.builder()
+                .ticketId(saved.ticketId())
                 .winningNumbers(saved.winningNumbers())
                 .drawDate(saved.drawDate())
+                .message(saved.message())
                 .build();
     }
 
