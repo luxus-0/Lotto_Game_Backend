@@ -15,18 +15,6 @@ public class DrawDateGenerator {
     private final AdjustableClock clock;
 
     LocalDateTime generateNextDrawDate() {
-        LocalDateTime currentDateTime = LocalDateTime.now(clock);
-        if (isSaturdayAndBeforeNoon(currentDateTime)) {
-            return LocalDateTime.of(currentDateTime.toLocalDate(), NOON);
-        }
-        return readNextDrawDate();
-    }
-
-    private boolean isSaturdayAndBeforeNoon(LocalDateTime currentDateTime) {
-        return currentDateTime.getDayOfWeek().equals(SATURDAY) && currentDateTime.toLocalTime().isBefore(NOON);
-    }
-
-    private LocalDateTime readNextDrawDate() {
         return LocalDateTime.now(clock)
                 .with(next(SATURDAY))
                 .with(NOON);
