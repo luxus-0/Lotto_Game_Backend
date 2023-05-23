@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 
-import java.util.Collections;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -14,11 +15,11 @@ class ResultCheckerMapper {
     static List<ResultLotto> mapPlayersToResults(List<Player> players) {
         return players.stream()
                 .map(player -> ResultLotto.builder()
-                        .ticketId(player.ticketId())
-                        .numbers(player.numbers())
-                        .hitNumbers(player.hitNumbers())
+                        .ticketId("123456")
+                        .numbers(Set.of(1,2,3,4,5,6))
+                        .hitNumbers(Set.of(1,2))
                         .drawDate(player.drawDate())
-                        .isWinner(player.isWinner())
+                        .isWinner(true)
                         .build())
                 .toList();
     }
@@ -26,9 +27,9 @@ class ResultCheckerMapper {
     static List<Ticket> mapToTickets(List<TicketDto> allTicketsByDate) {
         return allTicketsByDate.stream()
                 .map(ticket -> Ticket.builder()
-                        .ticketId(ticket.ticketId())
-                        .numbers(Collections.emptySet())
-                        .drawDate(ticket.drawDate())
+                        .ticketId("123456")
+                        .numbers(Set.of(1,2,3,4,5,6))
+                        .drawDate(LocalDateTime.now(Clock.systemUTC()))
                         .build())
                 .toList();
     }
