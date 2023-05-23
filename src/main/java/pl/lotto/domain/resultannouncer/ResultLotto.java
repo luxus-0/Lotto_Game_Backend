@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record ResultLotto(String ticketId, Set<Integer> numbers, Set<Integer> hitNumbers, LocalDateTime drawDate,
+@Document
+public record ResultLotto(@Id String ticketId, Set<Integer> numbers, Set<Integer> hitNumbers, LocalDateTime drawDate,
                           boolean isWinner, String message) {
 }
