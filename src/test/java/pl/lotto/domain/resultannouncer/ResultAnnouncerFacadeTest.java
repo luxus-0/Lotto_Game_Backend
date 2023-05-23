@@ -23,7 +23,7 @@ class ResultAnnouncerFacadeTest {
 
     ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
 
-    ResultLottoRepository resultLottoRepository;
+    ResultLottoRepository resultLottoRepository = new InMemoryResultLottoRepository();
 
     Clock clock = Clock.fixed(LocalDateTime.of(2022, 12, 17, 12, 0,0).toInstant(UTC), ZoneId.systemDefault());
     ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
@@ -121,7 +121,7 @@ class ResultAnnouncerFacadeTest {
         //when
         ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
         //then
-        ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(null, HASH_NOT_EXIST.message);
+        ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(null, TICKET_ID_IS_EMPTY.message);
         assertThat(actualResultAnnouncerResponseDto).isEqualTo(expectedResultAnnouncerResponseDto);
     }
 
