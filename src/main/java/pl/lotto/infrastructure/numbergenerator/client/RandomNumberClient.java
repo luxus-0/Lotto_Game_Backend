@@ -14,6 +14,7 @@ import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -48,6 +49,11 @@ public class RandomNumberClient implements RandomNumbersGenerable {
         return RandomNumbersDto.builder()
                 .randomNumbers(randomNumbers)
                 .build();
+    }
+
+    @Override
+    public String generateUniqueTicketId() {
+        return UUID.randomUUID().toString();
     }
 
     private Set<Integer> extractNumbersFromString(String body) {
