@@ -7,7 +7,6 @@ import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,11 +51,10 @@ public class NumberReceiverFacade {
     public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         if (date.isAfter(nextDrawDate)) {
-            return Collections.emptyList();
+            throw new IllegalArgumentException("Date is after next draw date");
         }
         return ticketRepository.findTicketsByDrawDate(date)
                 .stream()
-                .filter(ticket -> ticket.drawDate().isEqual(date))
                 .map(TicketMapper::mapToTicketDto)
                 .toList();
     }
