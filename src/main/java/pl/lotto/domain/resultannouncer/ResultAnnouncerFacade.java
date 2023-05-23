@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultannouncer.exceptions.ResultLottoNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 import java.time.Clock;
@@ -20,6 +19,9 @@ public class ResultAnnouncerFacade {
     private final Clock clock;
 
     public ResultAnnouncerResponseDto findResult(String ticketId) {
+        if(ticketId == null){
+            throw new IllegalArgumentException("Id ticket is empty");
+        }
         ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
         ResultLotto result = resultLottoRepository.findByTicketId(ticketId).orElseThrow(() -> new ResultLottoNotFoundException("Result lotto not found"));
         ResultLotto resultLottoSaved = resultLottoRepository.save(result);
