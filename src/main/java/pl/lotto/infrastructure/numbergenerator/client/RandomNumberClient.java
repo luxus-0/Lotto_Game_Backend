@@ -10,6 +10,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
 import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -54,6 +56,19 @@ public class RandomNumberClient implements RandomNumbersGenerable {
     @Override
     public String generateUniqueTicketId() {
         return UUID.randomUUID().toString();
+    }
+
+    public WinningNumbersDto generateWinnerNumbers(Set<Integer> inputNumbers) {
+        Set<Integer> randomNumbers = generateSixRandomNumbers().randomNumbers();
+        Integer numberLotto = inputNumbers.stream().findAny().orElseThrow();
+
+        return randomNumbers.stream()
+                .filter(isWinnerNumbers -> randomNumbers.contains(numberLotto))
+                .map(numbers -> WinningNumbersDto.builder()
+                .winningNumbers(Set.of(numbers))
+                .build())
+                .findAny()
+                .orElseThrow(() -> new WinnerNumbersNotFoundException("Winnner numbers not found"));
     }
 
     private Set<Integer> extractNumbersFromString(String body) {

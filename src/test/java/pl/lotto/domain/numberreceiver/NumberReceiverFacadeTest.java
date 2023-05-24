@@ -7,7 +7,6 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateFacadeConfiguration;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
-import pl.lotto.domain.resultchecker.Ticket;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -167,7 +166,7 @@ class NumberReceiverFacadeTest {
         //given
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 25, 12, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
-                .createModuleForTests(clock);
+                .drawDateFacade(clock);
 
         LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 3, 4, 12, 0, 0,0);
         //when
@@ -200,7 +199,7 @@ class NumberReceiverFacadeTest {
         TicketIdGeneratorImpl ticketIdGeneratorImpl = new TicketIdGeneratorImpl();
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 11, 12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
-                .createModuleForTests(clock);
+                .drawDateFacade(clock);
 
         TicketDto expectedTicket = TicketDto.builder()
                 .ticketId(ticketIdGeneratorImpl.generateTicketId())
@@ -221,7 +220,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
-                .createModuleForTests(clock);
+                .drawDateFacade(clock);
         //when
         List<TicketDto> actualTickets = numberReceiverFacade.retrieveAllTicketByDrawDate(drawDateFacade.retrieveNextDrawDate());
         //then
@@ -250,7 +249,7 @@ class NumberReceiverFacadeTest {
         // given
         AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,4,5,12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
-                .createModuleForTests(clock);
+                .drawDateFacade(clock);
 
         LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 4, 8, 12, 0, 0, 0);
         // when
