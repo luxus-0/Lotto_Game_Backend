@@ -8,8 +8,7 @@ public class WinnersRetriever {
     private static final int NUMBERS_WHEN_PLAYERS_WON = 3;
 
     public List<Player> retrieveWinners(List<Ticket> allTicketsByDate, Set<Integer> winningNumbers) {
-        return allTicketsByDate.stream().map(ticket ->
-                {
+        return allTicketsByDate.stream().map(ticket -> {
                     Set<Integer> hitNumbers = calculateHits(winningNumbers, ticket);
                     return createResults(ticket, hitNumbers);
                 })

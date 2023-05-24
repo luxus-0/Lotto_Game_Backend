@@ -21,7 +21,6 @@ import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapToTickets;
 
 @AllArgsConstructor
 public class ResultsCheckerFacade {
-
     NumberReceiverFacade numberReceiverFacade;
     DrawDateFacade drawDateFacade;
     WinningNumbersFacade winningNumbersFacade;
