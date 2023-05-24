@@ -5,9 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DrawDateFacadeConfiguration {
-
     @Bean
-    public DrawDateFacade createModuleForTests(AdjustableClock clock) {
+    public DrawDateFacade drawDateFacade(AdjustableClock clock) {
         DrawDateGenerator drawDateGenerator = new DrawDateGenerator(clock);
         return new DrawDateFacade(drawDateGenerator);
     }
