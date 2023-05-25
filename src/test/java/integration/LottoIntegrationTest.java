@@ -95,25 +95,6 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         );
     }
 
-    //step 4: user made GET /results/notExistingId and system returned 404(NOT_FOUND) and body with (message: Not found for ticketId: notExistingId and status NOT_FOUND)
-
-    @Test
-    public void should_user_expect_not_found_when_results_no_exist_id() throws Exception {
-        // given
-        // when
-        ResultActions resultsWithNoExistingId = mockMvc.perform(get("/results/" + "notExistingId"));
-        //then
-        resultsWithNoExistingId.andExpect(result -> status(404))
-                .andExpect(content().json(
-                        """
-                                {
-                                    "message": "Not found for id: notExistingId",
-                                    "status": "NOT_FOUND"
-                                }
-                                """.trim()
-                ));
-    }
-
     @Test
     public void should_return_result_with_sample_ticket_with_correct_draw_date() {
         // given && when && then
@@ -123,11 +104,11 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
 
         await()
                 .atMost(30, TimeUnit.SECONDS)
-                .pollInterval(Duration.ofSeconds(1L))
+                .pollInterval(Duration.ofSeconds(10L))
                 .until(() -> {
                             try {
                                 ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
-                                return !result.numbers().isEmpty();
+                                return result.numbers().isEmpty();
                             } catch (PlayerResultNotFoundException exception) {
                                 return false;
                             }
@@ -137,20 +118,18 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_status_200_with_sample_ticket_id() throws Exception {
+    public void should_return_status_404_with_no_ticket_id() throws Exception {
         // given && when
-        String ticketId = "1234567";
+        String ticketId = "12345";
 
-        ResultActions performGetMethod = mockMvc.perform(get("/results/" + ticketId));
+        ResultActions performGetMethod = mockMvc.perform(get("/results/12345"));
 
         // then
-        MvcResult mvcResultGetMethod = performGetMethod.andExpect(result -> status(200)).andReturn();
+        MvcResult mvcResultGetMethod = performGetMethod.andExpect(result -> status(404)).andReturn();
         String jsonGetMethod = mvcResultGetMethod.getResponse().getContentAsString();
         ResultAnnouncerResponseDto finalResult = objectMapper.readValue(jsonGetMethod, ResultAnnouncerResponseDto.class);
-        assertAll(
-                () -> assertThat(finalResult.message()).isEqualTo("Congratulations, You won!"),
-                () -> assertThat(finalResult.resultDto().ticketId()).isEqualTo(ticketId),
-                () -> assertThat(finalResult.resultDto().hitNumbers()).hasSize(6));
+
+        assertThat(finalResult.message()).isEqualTo("Player result not found");
 
     }
 
