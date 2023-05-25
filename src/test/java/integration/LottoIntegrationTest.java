@@ -183,8 +183,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                                                 HttpMethod.GET,
                                                 null,
                                                 WinningNumbersDto.class)
-                                        .getBody())
-                        .winningNumbers());
+                                        .getBody()));
     }
 
     @Test
@@ -203,7 +202,6 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                                                 HttpMethod.GET,
                                                 null,
                                                 WinningNumbersDto.class)
-                                        .getBody())
-                        .winningNumbers());
+                                        .getBody()));
     }
 }

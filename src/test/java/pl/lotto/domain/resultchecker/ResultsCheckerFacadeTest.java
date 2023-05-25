@@ -44,25 +44,25 @@ class ResultsCheckerFacadeTest {
         when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
                 List.of(
                         TicketDto.builder()
-                                .ticketId("001")
-                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                                .ticketId("123456")
+                                .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
-                                .ticketId("002")
-                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                                .ticketId("123456")
+                                .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
                                 .build(),
                         TicketDto.builder()
-                                .ticketId("003")
-                                .numbers(Set.of(1, 3, 5, 7, 9, 11))
+                                .ticketId("123456")
+                                .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
                                 .build()
                 ));
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
-        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
+        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
 
         assertThat(playersDto).isNotNull();
         assertThat(messageExpected).isEqualTo("Winners found");
