@@ -21,12 +21,12 @@ import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapToTickets;
 
 @AllArgsConstructor
 public class ResultsCheckerFacade {
-    NumberReceiverFacade numberReceiverFacade;
-    DrawDateFacade drawDateFacade;
-    WinningNumbersFacade winningNumbersFacade;
+    private final NumberReceiverFacade numberReceiverFacade;
+    private final DrawDateFacade drawDateFacade;
+    private final WinningNumbersFacade winningNumbersFacade;
     WinnersRetriever winnersRetriever;
-    PlayerRepository playerRepository;
-    ResultCheckerValidation resultCheckerValidation;
+    private final PlayerRepository playerRepository;
+    private final ResultCheckerValidation resultCheckerValidation;
 
     public PlayersDto generateResults() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
