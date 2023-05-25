@@ -45,8 +45,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     RestTemplate restTemplate;
 
     @Test
-    public void should_user_win_and_generate_winners() throws Exception {
-        // step 1: external service returns 6 random numbers (1,2,3,4,5,6)
+    public void should_user_win_and_generate_winners() {
         //given
         wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
                 .willReturn(aResponse()
@@ -55,7 +54,6 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         .withBody("""
                                 [1 2 3 4 5 6 82 83 57 10 81 34]
                                 """.trim())));
-        //step 2: system fetched winning numbers for draw date: 19.11.2022 12:00
         //when && then
         LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0, 0);
         await()
@@ -69,9 +67,12 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         return false;
                     }
                 });
+    }
 
-        //step 3: user made POST /inputNumbers with 6 numbers (1, 2, 3, 4, 5, 6) at 16-11-2022 10:00 and system returned OK(200) with message: “equals six numbers” and Ticket (DrawDate:19.11.2022 12:00 (Saturday), TicketId: sampleTicketId)
+    @Test
+    public void should_post_input_six_numbers_with_date_draw() throws Exception {
         //given
+        LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0, 0);
         //when
         ResultActions perform = mockMvc.perform(post("/inputNumbers")
                 .content("""
@@ -90,29 +91,36 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         assertAll(
                 () -> assertThat(ticketId).isNotNull(),
                 () -> assertThat(ticketResultDto.ticketDto().drawDate()).isEqualTo(drawDate),
-                () ->assertThat(ticketResultDto.message()).isEqualTo("equals six numbers")
+                () -> assertThat(ticketResultDto.message()).isEqualTo("equals six numbers")
         );
+    }
 
-        //step 4: user made GET /results/notExistingId and system returned 404(NOT_FOUND) and body with (message: Not found for ticketId: notExistingId and status NOT_FOUND)
+    //step 4: user made GET /results/notExistingId and system returned 404(NOT_FOUND) and body with (message: Not found for ticketId: notExistingId and status NOT_FOUND)
+
+    @Test
+    public void should_user_expect_not_found_when_results_no_exist_id() throws Exception {
         // given
         // when
-        ResultActions resultsWithNoExistingId = mockMvc.perform(get("/results/" +"notExistingId"));
+        ResultActions resultsWithNoExistingId = mockMvc.perform(get("/results/" + "notExistingId"));
         //then
         resultsWithNoExistingId.andExpect(result -> status(404))
                 .andExpect(content().json(
                         """
-                        {
-                            "message": "Not found for id: notExistingId",
-                            "status": "NOT_FOUND"
-                        }
-                        """.trim()
+                                {
+                                    "message": "Not found for id: notExistingId",
+                                    "status": "NOT_FOUND"
+                                }
+                                """.trim()
                 ));
+    }
 
-        //step 5: 3 days and 55 minutes passed, and it is 5 minute before draw (19.11.2022 11:55)
+    @Test
+    public void should_return_result_with_sample_ticket_with_correct_draw_date() {
         // given && when && then
+        String ticketId = "1234567";
+
         clock.plusDaysAndMinutes(3, 55);
 
-        //step 6: system generated result for TicketId: sampleTicketId with draw date 19.11.2022 12:00, and saved it with 6 hits
         await()
                 .atMost(30, TimeUnit.SECONDS)
                 .pollInterval(Duration.ofSeconds(1L))
@@ -125,13 +133,14 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                             }
                         }
                 );
-
-        //step 7: 6 minutes passed it is 1 minute after the draw (19.11.2022 12:01)
         clock.plusMinutes(6);
+    }
 
-
-        //step 8: ser made GET /results/sampleTicketId and system returned 200 (OK)
+    @Test
+    public void should_return_status_200_with_sample_ticket_id() throws Exception {
         // given && when
+        String ticketId = "1234567";
+
         ResultActions performGetMethod = mockMvc.perform(get("/results/" + ticketId));
 
         // then
