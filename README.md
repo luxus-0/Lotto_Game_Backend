@@ -1,4 +1,5 @@
 <img src="https://img.shields.io/badge/LOTTO GAME-%20brightgreen" height="50" />
+<img src="https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/lotto.jpg"/>
 
 <b>VERSION: 1.0.0<b><br>
 <b>COPYRIGHT: ŁUKASZ NOWOGÓRSKI<b><br>
