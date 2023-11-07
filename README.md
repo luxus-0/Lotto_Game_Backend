@@ -21,7 +21,7 @@
 ## TECH STACK PROJECT
 
 Core: <br>
-![image](https://img.shields.io/badge/17-Java-orange?style=for-the-badge) &nbsp;
+![image](https://img.shields.io/badge/20-Java-orange?style=for-the-badge) &nbsp;
 ![image](https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
 ![image](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring) &nbsp;
 ![image](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white) &nbsp;
