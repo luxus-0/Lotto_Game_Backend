@@ -17,7 +17,7 @@
         <lombok.version>1.18.26</lombok.version>
         <mockito-core.version>5.2.0</mockito-core.version>
         <testcontainers.version>1.17.6</testcontainers.version>
-        <wiremock-jre8.version>2.35.0</wiremock-jre8.version>
+        <wiremock-jre8.version>2.35.1</wiremock-jre8.version>
         <awaitility.version>4.2.0</awaitility.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
     </properties>
