@@ -4,12 +4,8 @@
 <b>COPYRIGHT: ŁUKASZ NOWOGÓRSKI<b><br>
 <b>MAIL: nowogorski.lukasz0@gmail.com<b>
 
-VIDEO LOTTO
-
-[![Watch the video](https://www.galeriatwierdzazamosc.pl/_cache/shops/510-255/fill/lotto.png)](https://github.com/luxus-0/Lotto_Game/tree/master/src/main/resources/Lotto.mp4)
-
-![alt text](https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/Lotto_architecture2.jpg?raw=true)
-![alt text](https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/Lotto_architecture.jpg?raw=true)
+![alt text](https://github.com/luxus-0/Lotto_Game/src/main/resources/picture
+/Lotto architecture.png?raw=true)
 
 ## SPECIFICATION
 
