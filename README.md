@@ -5,7 +5,7 @@
 <b>MAIL: nowogorski.lukasz0@gmail.com<b>
 
 ![alt text]([https://github.com/luxus-0/Lotto_Game/src/main/resources/picture
-/Lotto architecture.png](https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/Lotto%20architecture.png)?raw=true)
+/Lotto architecture.png](https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/Lotto%20architecture.png?raw=true])
 
 ## SPECIFICATION
 
