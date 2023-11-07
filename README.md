@@ -6,18 +6,6 @@
 
 ![alt text](https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/Lotto%20architecture.png)
 
-## SPECIFICATION
-
-- Spring Boot
-- Modular monolith hexagonal architecture
-- Facade design pattern
-- MongoDb database NoSql
-- JUnit with Mock, Wiremock
-- RestApi
-- Redis cache for optimized results queries
-- Docker generate contener
-- Basic html and Javascript file
-
 ## TECH STACK PROJECT
 
 Core: <br>
