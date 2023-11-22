@@ -1,7 +1,6 @@
 package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateGenerator;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
@@ -10,7 +9,6 @@ import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -113,7 +111,6 @@ class ResultAnnouncerFacadeTest {
                 .hitNumbers(Set.of(11, 4, 7, 9))
                 .drawDate(drawDate)
                 .isWinner(true)
-                .message("WIN")
                 .build();
 
         ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(responseDto, WAIT.message);
@@ -138,21 +135,20 @@ class ResultAnnouncerFacadeTest {
         //given
         DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-        String ticketId = "123";
+        String ticketId = "";
         ResultDto resultDto = ResultDto.builder()
                 .ticketId(ticketId)
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3, 4, 9, 0))
                 .drawDate(drawDate)
                 .isWinner(true)
-                .message("WIN")
                 .build();
         when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(resultDto);
 
         ResultAnnouncerResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
-        String resultByHash = resultAnnouncerResponseDto.resultDto().ticketId();
+        String ticketHash = resultAnnouncerResponseDto.resultDto().ticketId();
         //when
-        ResultAnnouncerResponseDto actualResultDto = resultAnnouncerFacade.findResult(resultByHash);
+        ResultAnnouncerResponseDto actualResultDto = resultAnnouncerFacade.findResult(ticketHash);
         //then
         ResultAnnouncerResponseDto expectedResultDto = new ResultAnnouncerResponseDto(actualResultDto.resultDto(), ALREADY_CHECKED.message);
         assertThat(actualResultDto).isEqualTo(expectedResultDto);
