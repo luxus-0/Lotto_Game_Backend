@@ -6,8 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,7 +47,7 @@ public class InMemoryResultLottoRepository implements ResultLottoRepository {
     }
 
     @Override
-    public Iterable<ResultLotto> findAllById(Iterable<String> strings) {
+    public List<ResultLotto> findAllById(Iterable<String> strings) {
         return null;
     }
 
