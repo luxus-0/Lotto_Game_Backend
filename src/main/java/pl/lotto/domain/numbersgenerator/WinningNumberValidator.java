@@ -9,11 +9,10 @@ import java.util.Set;
 class WinningNumberValidator {
     private final WinningNumbersConfigurationProperties properties;
 
-    public Set<Integer> validate(Set<Integer> winningNumbers) {
+    public void validate(Set<Integer> winningNumbers) {
         if (outOfRange(winningNumbers)) {
-            throw new OutOfRangeNumbersException("Number out of range!");
+            throw new OutOfRangeNumbersException("Numbers out of range!");
         }
-        return winningNumbers;
     }
 
     private boolean outOfRange(Set<Integer> winningNumbers) {
