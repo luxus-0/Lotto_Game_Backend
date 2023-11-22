@@ -1,7 +1,6 @@
 package pl.lotto.domain.resultannouncer;
 
 enum ResultStatus {
-    TICKET_ID_IS_EMPTY("Ticket doesn't exist"),
     WAIT("Results are being calculated, please come back later"),
     WIN("Congratulation! You won"),
     LOSE("You lost, try again"),

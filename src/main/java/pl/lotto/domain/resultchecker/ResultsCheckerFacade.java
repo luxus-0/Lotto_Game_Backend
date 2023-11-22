@@ -1,6 +1,7 @@
 package pl.lotto.domain.resultchecker;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
@@ -19,51 +20,48 @@ import java.util.Set;
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapPlayersToResults;
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapToTickets;
 
-@AllArgsConstructor
-public class ResultsCheckerFacade {
-    private final NumberReceiverFacade numberReceiverFacade;
-    private final DrawDateFacade drawDateFacade;
-    private final WinningNumbersFacade winningNumbersFacade;
-    WinnersRetriever winnersRetriever;
-    private final PlayerRepository playerRepository;
-    private final ResultCheckerValidation resultCheckerValidation;
-
+public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
+                                   DrawDateFacade drawDateFacade,
+                                   WinningNumbersFacade winningNumbersFacade,
+                                   WinnersRetriever winnersRetriever,
+                                   PlayerRepository playerRepository,
+                                   ResultCheckerValidation resultCheckerValidation) {
     public PlayersDto generateResults() {
+        Set<Integer> winningNumbers = winningNumbersFacade.generateWinningNumbers().winningNumbers();
+        boolean validate = resultCheckerValidation.validate(winningNumbers);
+        if (validate) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByDrawDate(nextDrawDate);
-        WinningNumbersDto winningNumbersDto = winningNumbersFacade.generateWinningNumbers();
-        Set<Integer> winningNumbers = winningNumbersDto.winningNumbers();
-
-        if (winningNumbers == null || winningNumbers.isEmpty()) {
+            List<Ticket> tickets = mapToTickets(allTicketByDate);
+            List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);
+            List<ResultLotto> results = mapPlayersToResults(players);
+            playerRepository.saveAll(players);
             return PlayersDto.builder()
-                    .results(Collections.emptyList())
+                    .results(results)
                     .build();
         }
-
-       resultCheckerValidation.validate(winningNumbers);
-
-        List<Ticket> tickets = mapToTickets(allTicketByDate);
-        List<Player> players = winnersRetriever.retrieveWinners(tickets, winningNumbers);
-        List<ResultLotto> results = mapPlayersToResults(players);
-        playerRepository.saveAll(players);
         return PlayersDto.builder()
-                .results(results)
+                .results(List.of(ResultLotto.builder()
+                        .message("LOSE")
+                        .build()))
                 .build();
+
     }
 
     public ResultDto findResultByTicketId(String ticketId) {
         PlayersDto players = generateResults();
-        Player player =  players.results()
+        Player player = players.results()
                 .stream()
                 .map(ResultCheckerMapper::mapToPlayer)
                 .findAny()
                 .orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
-            return ResultDto.builder()
-                    .ticketId(ticketId)
-                    .numbers(player.numbers())
-                    .hitNumbers(player.hitNumbers())
-                    .drawDate(player.drawDate())
-                    .isWinner(player.isWinner())
-                    .build();
-        }
+        return ResultDto.builder()
+                .ticketId(ticketId)
+                .numbers(player.numbers())
+                .hitNumbers(player.hitNumbers())
+                .drawDate(player.drawDate())
+                .isWinner(player.isWinner())
+                .message(player.message())
+                .build();
+    }
 }

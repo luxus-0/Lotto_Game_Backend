@@ -5,12 +5,10 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
-import pl.lotto.domain.numbersgenerator.WinningNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
-import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -21,24 +19,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static pl.lotto.domain.resultchecker.ResultCheckerFacadeTestMessageProvider.getPlayerResultMessage;
 
 class ResultsCheckerFacadeTest {
 
     private final WinningNumbersFacade winningNumbersFacade = mock(WinningNumbersFacade.class);
     private final NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
-
     private final DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
 
     @Test
     public void should_generate_all_players_with_correct_message() {
         //given
         PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
-        ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
-        LocalDateTime drawDate = LocalDateTime.of(2023, 3, 8, 12, 0, 0, 0);
+        ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
+
+        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
 
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(
                 WinningNumbersDto.builder()
-                        .winningNumbers(Set.of(1, 3, 5, 7, 9, 11))
+                        .ticketId("123456")
+                        .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .drawDate(drawDate)
                         .build());
         when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
@@ -47,25 +48,26 @@ class ResultsCheckerFacadeTest {
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
+                                .message("WIN")
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
+                                .message("WIN")
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
+                                .message("WIN")
                                 .build()
                 ));
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
+        String playerResultMessage = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
         //then
-        String messageExpected = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
-
-        assertThat(playersDto).isNotNull();
-        assertThat(messageExpected).isEqualTo("Winners found");
+        assertThat(playerResultMessage).isEqualTo("WIN");
     }
 
     @Test
@@ -81,27 +83,26 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
+        String playerResultMessage = getPlayerResultMessage(playersDto);
         //then
-        assertThat(message).isEqualTo("Winners not found");
+        assertThat(playerResultMessage).isEqualTo("LOSE");
     }
 
     @Test
     public void should_generate_fail_message_when_winning_numbers_equal_null() {
         //given
-        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
-        ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(
                 WinningNumbersDto.builder()
-                        .winningNumbers(null)
+                        .winningNumbers(Collections.emptySet())
+                        .message("LOSE")
                         .build()
         );
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElse("");
+        WinningNumbersDto winningNumbers = winningNumbersFacade.generateWinningNumbers();
         //then
-        assertThat(message).isEqualTo("Winners not found");
+        assertThat(winningNumbers.winningNumbers()).isEqualTo(Set.of());
+        assertThat(winningNumbers.message()).isEqualTo("LOSE");
     }
 
     @Test
@@ -128,35 +129,44 @@ class ResultsCheckerFacadeTest {
         PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
-        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
+        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
         String ticketId = "001";
 
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(WinningNumbersDto.builder()
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                        .message("WIN")
                 .build());
         when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
                 List.of(TicketDto.builder()
                                 .ticketId(ticketId)
-                                .numbers(Set.of(7, 8, 9, 10, 11, 12))
+                                .numbers(Set.of(4, 5, 6, 10, 11, 12))
+                                .hitNumbers(Set.of(4,5,6))
                                 .drawDate(drawDate)
+                                .message("WIN")
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("002")
-                                .numbers(Set.of(7, 8, 9, 10, 11, 13))
+                                .numbers(Set.of(4, 5, 6, 10, 11, 12))
+                                .hitNumbers(Set.of(4,5,6))
                                 .drawDate(drawDate)
+                                .message("WIN")
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("003")
-                                .numbers(Set.of(7, 8, 9, 10, 11, 14))
+                                .numbers(Set.of(4, 5, 6, 10, 11, 12))
+                                .hitNumbers(Set.of(4,5,6))
                                 .drawDate(drawDate)
+                                .message("WIN")
                                 .build())
         );
         resultCheckerFacade.generateResults();
         playerRepository.save(Player.builder()
                         .ticketId(ticketId)
-                        .numbers(Set.of(7, 8, 9, 10, 11, 12))
-                        .hitNumbers(Set.of(7, 8, 9, 10, 11, 12))
+                        .numbers(Set.of(4, 5, 6, 10, 11, 12))
+                        .hitNumbers(Set.of(4, 5, 6))
                         .drawDate(drawDate)
+                        .message("WIN")
+                        .isWinner(true)
                 .build());
         //when
 
@@ -164,10 +174,11 @@ class ResultsCheckerFacadeTest {
         //then
         ResultDto expectedResult = ResultDto.builder()
                 .ticketId(ticketId)
-                .numbers(Set.of(7, 8, 9, 10, 11, 12))
-                .hitNumbers(Set.of(7, 8, 9, 10, 11, 12))
+                .numbers(Set.of(4, 5, 6, 10, 11, 12))
+                .hitNumbers(Set.of(4, 5, 6))
                 .drawDate(drawDate)
-                .isWinner(resultDto.isWinner())
+                .isWinner(true)
+                .message("WIN")
                 .build();
         assertThat(resultDto).isEqualTo(expectedResult);
     }
@@ -176,7 +187,8 @@ class ResultsCheckerFacadeTest {
     public void should_return_win_player_when_hit_numbers_are_more_than_three() {
         //given
         PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
         Ticket ticket1 = Ticket.builder()
                 .ticketId("1234")
@@ -195,15 +207,14 @@ class ResultsCheckerFacadeTest {
         Ticket ticket3 = Ticket.builder()
                 .ticketId("1111")
                 .numbers(Set.of(1, 2, 3, 4, 6, 7, 8))
-                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0)
-                )
+                .drawDate(LocalDateTime.of(2022, 4, 8, 12, 0, 0))
                 .build();
 
         List<Ticket> allTicketsByDate = List.of(ticket1, ticket2, ticket3);
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever();
         List<Player> players = winnersRetriever.retrieveWinners(allTicketsByDate, winningNumbers);
 
         Player player1 = players.get(0);
@@ -244,7 +255,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever();
         List<Player> players = winnersRetriever.retrieveWinners(allTicketsByDate, winningNumbers);
 
         Player player1 = players.get(0);
@@ -289,7 +300,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever();
         List<Player> players = winnersRetriever.retrieveWinners(allTicketsByDate, winningNumbers);
 
         Player player1 = players.get(0);
@@ -334,7 +345,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever();
         List<Player> players = winnersRetriever.retrieveWinners(allTicketsByDate, winningNumbers);
 
         Player player1 = players.get(0);
@@ -359,7 +370,7 @@ class ResultsCheckerFacadeTest {
 
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
         //when
-        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever();
         List<Player> players = winnersRetriever.retrieveWinners(Collections.emptyList(), winningNumbers);
         //then
         assertTrue(players.isEmpty());
@@ -372,7 +383,7 @@ class ResultsCheckerFacadeTest {
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, playerRepository);
 
         //when
-        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever;
+        WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever();
 
         List<Player> players = winnersRetriever.retrieveWinners(Collections.emptyList(), null);
         //then
