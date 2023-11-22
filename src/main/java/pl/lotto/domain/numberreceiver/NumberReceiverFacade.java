@@ -32,20 +32,21 @@ public class NumberReceiverFacade {
                             .numbers(ticketSaved.numbers())
                             .drawDate(ticketSaved.drawDate())
                             .build())
-                    .message(createResultMessage())
+                    .message(getTicketMessage())
                     .build();
         }
         return TicketResultDto.builder()
                 .ticketDto(null)
-                .message(createResultMessage())
+                .message(getTicketMessage())
                 .build();
     }
 
-    private String createResultMessage() {
+    private String getTicketMessage() {
         List<ValidationResult> messagesResult = numberValidator.errors;
         return messagesResult.stream()
                 .map(ValidationResult::getInfo)
-                .collect(Collectors.joining(","));
+                .findAny()
+                .orElse("");
     }
 
     public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date) {
