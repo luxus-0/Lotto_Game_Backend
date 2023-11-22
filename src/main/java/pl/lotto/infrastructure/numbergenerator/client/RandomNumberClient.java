@@ -1,6 +1,7 @@
 package pl.lotto.infrastructure.numbergenerator.client;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Log4j2
 public class RandomNumberClient implements RandomNumbersGenerable {
     private final RestTemplate restTemplate;
     private final WinningNumbersConfigurationProperties properties;
@@ -46,10 +48,9 @@ public class RandomNumberClient implements RandomNumbersGenerable {
                 String.class
         );
         String body = response.getBody();
-        Set<Integer> randomNumbers = extractNumbersFromString(body);
 
         return RandomNumbersDto.builder()
-                .randomNumbers(randomNumbers)
+                .randomNumbers(generateRandomNumbers(body))
                 .build();
     }
 
@@ -62,16 +63,25 @@ public class RandomNumberClient implements RandomNumbersGenerable {
         Set<Integer> randomNumbers = generateSixRandomNumbers().randomNumbers();
         Integer numberLotto = inputNumbers.stream().findAny().orElseThrow();
 
+        try {
+            return getWinningNumbersDto(randomNumbers, numberLotto);
+        } catch (WinnerNumbersNotFoundException e) {
+            log.error(e.getMessage());
+        }
+        return WinningNumbersDto.builder().build();
+    }
+
+    private static WinningNumbersDto getWinningNumbersDto(Set<Integer> randomNumbers, Integer numberLotto) throws WinnerNumbersNotFoundException {
         return randomNumbers.stream()
                 .filter(isWinnerNumbers -> randomNumbers.contains(numberLotto))
                 .map(numbers -> WinningNumbersDto.builder()
-                .winningNumbers(Set.of(numbers))
-                .build())
+                        .winningNumbers(Set.of(numbers))
+                        .build())
                 .findAny()
-                .orElseThrow(() -> new WinnerNumbersNotFoundException("Winnner numbers not found"));
+                .orElseThrow(WinnerNumbersNotFoundException::new);
     }
 
-    private Set<Integer> extractNumbersFromString(String body) {
+    private Set<Integer> generateRandomNumbers(String body) {
         return Arrays.stream(Objects.requireNonNull(body)
                         .split("\\s+"))
                 .map(String::trim)
