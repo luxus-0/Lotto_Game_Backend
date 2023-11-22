@@ -6,26 +6,24 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
+
+import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.WINNING_NUMBERS_NOT_FOUND;
 
 @AllArgsConstructor
 @Log4j2
 public class WinningNumbersFacade {
-
-    private static final String WINNING_NUMBERS_MESSAGE = "Winning numbers not found";
     private final DrawDateFacade drawDateFacade;
     private final RandomNumbersGenerable randomNumbersGenerable;
     private final WinningNumbersRepository winningNumbersRepository;
-
     private final WinningNumberValidator winningNumberValidator;
 
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        RandomNumbersDto randomNumbers = randomNumbersGenerable.generateSixRandomNumbers();
-        Set<Integer> winningNumbers = randomNumbers.randomNumbers();
+        RandomNumbersDto sixRandomNumbers = randomNumbersGenerable.generateSixRandomNumbers();
+        WinningNumbersDto winningNumbersDto = randomNumbersGenerable.generateWinnerNumbers(sixRandomNumbers.randomNumbers());
+        Set<Integer> winningNumbers = winningNumbersDto.winningNumbers();
         String ticketId = randomNumbersGenerable.generateUniqueTicketId();
         winningNumberValidator.validate(winningNumbers);
         WinningNumbers winningNumbersDocument = WinningNumbers.builder()
@@ -40,20 +38,18 @@ public class WinningNumbersFacade {
                 .ticketId(saved.ticketId())
                 .winningNumbers(saved.winningNumbers())
                 .drawDate(saved.drawDate())
-                .message(saved.message())
                 .build();
     }
 
     public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
-        Optional<WinningNumbers> numbersByDate = winningNumbersRepository.findWinningNumbersByDrawDate(drawDate);
-        return numbersByDate.stream()
+        return winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).stream()
                 .map(winningNumbers -> WinningNumbersDto.builder()
-                        .ticketId(generateWinningNumbers().ticketId())
-                        .drawDate(drawDate)
-                        .winningNumbers(generateWinningNumbers().winningNumbers())
+                        .ticketId(winningNumbers.ticketId())
+                        .drawDate(winningNumbers.drawDate())
+                        .winningNumbers(winningNumbers.winningNumbers())
                 .build())
                 .findAny()
-                .orElseThrow(() -> new WinningNumbersNotFoundException("Winning numbers not found"));
+                .orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_NOT_FOUND));
     }
 
     public boolean areWinningNumbersGeneratedByDate() {
@@ -61,6 +57,6 @@ public class WinningNumbersFacade {
         if (winningNumbersRepository.existsByDrawDate(nextDrawDate)) {
             return true;
         }
-        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_MESSAGE);
+        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_NOT_FOUND);
     }
 }
