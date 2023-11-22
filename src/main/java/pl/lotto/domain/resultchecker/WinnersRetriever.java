@@ -23,7 +23,7 @@ public class WinnersRetriever {
         return builder
                 .ticketId(ticket.ticketId())
                 .numbers(ticket.numbers())
-                .hitNumbers(ticket.hitNumbers())
+                .hitNumbers(hitNumbers)
                 .drawDate(ticket.drawDate())
                 .message(ticket.message())
                 .build();
