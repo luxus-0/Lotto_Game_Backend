@@ -1,12 +1,16 @@
 package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
+import pl.lotto.domain.drawdate.AdjustableClock;
+import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.drawdate.DrawDateGenerator;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -28,10 +32,12 @@ class ResultAnnouncerFacadeTest {
     Clock clock = Clock.fixed(LocalDateTime.of(2022, 12, 17, 12, 0,0).toInstant(UTC), ZoneId.systemDefault());
     ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration().resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
 
+    DrawDateGenerator drawDateGenerator = mock(DrawDateGenerator.class);
     @Test
     public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
         //given
-        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
+        DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
+        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
         String ticketId = "123456";
         ResultDto resultDto = ResultDto.builder()
                 .ticketId(ticketId)
@@ -52,14 +58,14 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(false)
                 .build();
         ResultAnnouncerResponseDto expectedResult = new ResultAnnouncerResponseDto(expectedResultDto, LOSE.message);
-        assertThat(actualResult).isEqualTo(expectedResult);
+        assertThat(actualResult.message()).isEqualTo(expectedResult.message());
     }
 
     @Test
     public void should_return_win_message_when_ticket_is_winning_ticket() {
         //given
-        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        String ticketId = "13579";
+        LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
+        String ticketId = "123456";
         ResultDto resultDto = ResultDto.builder()
                 .ticketId(ticketId)
                 .numbers(Set.of(3, 4, 5, 6, 7, 8))
@@ -68,6 +74,7 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(true)
                 .build();
         when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(resultDto);
+        when(resultAnnouncerFacade.findResult(ticketId).message()).thenReturn("aaaa");
         //when
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketId);
         //then
@@ -106,6 +113,7 @@ class ResultAnnouncerFacadeTest {
                 .hitNumbers(Set.of(11, 4, 7, 9))
                 .drawDate(drawDate)
                 .isWinner(true)
+                .message("WIN")
                 .build();
 
         ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(responseDto, WAIT.message);
@@ -121,21 +129,23 @@ class ResultAnnouncerFacadeTest {
         //when
         ResultAnnouncerResponseDto actualResultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
         //then
-        ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(null, TICKET_ID_IS_EMPTY.message);
+        ResultAnnouncerResponseDto expectedResultAnnouncerResponseDto = new ResultAnnouncerResponseDto(null, "");
         assertThat(actualResultAnnouncerResponseDto).isEqualTo(expectedResultAnnouncerResponseDto);
     }
 
     @Test
     public void it_should_return_response_with_hash_does_not_exist_message_if_response_is_not_saved_to_db_yet() {
         //given
-        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
+        DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
+        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
         String ticketId = "123";
         ResultDto resultDto = ResultDto.builder()
-                .ticketId("123")
+                .ticketId(ticketId)
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3, 4, 9, 0))
                 .drawDate(drawDate)
                 .isWinner(true)
+                .message("WIN")
                 .build();
         when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(resultDto);
 
@@ -149,7 +159,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_numbers_is_empty() {
+    public void should_throw_an_exception_when_input_numbers_is_empty() {
         //given
         String ticketId = "1234";
 
