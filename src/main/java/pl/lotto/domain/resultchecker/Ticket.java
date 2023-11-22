@@ -8,5 +8,5 @@ import java.util.Set;
 
 @Builder
 @Document
-public record Ticket(String ticketId, Set<Integer> numbers, LocalDateTime drawDate, String message) {
+public record Ticket(String ticketId, Set<Integer> numbers, Set<Integer> hitNumbers, LocalDateTime drawDate, String message) {
 }

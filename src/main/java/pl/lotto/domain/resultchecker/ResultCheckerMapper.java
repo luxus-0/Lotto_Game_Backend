@@ -40,7 +40,7 @@ class ResultCheckerMapper {
                         .ticketId(ticket.ticketId())
                         .numbers(ticket.numbers())
                         .drawDate(ticket.drawDate())
-                        .message("WIN")
+                        .message(ticket.message())
                         .build())
                 .toList();
     }
