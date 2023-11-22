@@ -1,10 +1,5 @@
 package pl.lotto.domain.resultchecker;
 
-import pl.lotto.domain.resultchecker.dto.ResultDto;
-import pl.lotto.domain.resultchecker.exceptions.NotCorrectSizeNumbersException;
-import pl.lotto.domain.resultchecker.exceptions.NotInRangeNumbersException;
-
-import java.util.Collections;
 import java.util.Set;
 
 class ResultCheckerValidation {
@@ -13,15 +8,8 @@ class ResultCheckerValidation {
     private static final int MAX_NUMBERS = 99;
     private static final int QUANTITY_NUMBERS = 6;
 
-    ResultDto validate(Set<Integer> winnerNumbers) {
-        if (isInRange(winnerNumbers) && isCorrectSize(winnerNumbers)) {
-            return ResultDto.builder()
-                    .numbers(winnerNumbers)
-                    .build();
-        }
-        return ResultDto.builder()
-                .numbers(Collections.emptySet())
-                .build();
+    boolean validate(Set<Integer> winnerNumbers) {
+        return isInRange(winnerNumbers) && isCorrectSize(winnerNumbers);
     }
 
     private boolean isCorrectSize(Set<Integer> winnerNumbers) {
