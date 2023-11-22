@@ -25,6 +25,7 @@ public class WinnersRetriever {
                 .numbers(ticket.numbers())
                 .hitNumbers(hitNumbers)
                 .drawDate(ticket.drawDate())
+                .message(ticket.message())
                 .build();
     }
 
