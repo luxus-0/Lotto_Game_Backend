@@ -20,10 +20,11 @@ public class ResultAnnouncerFacade {
 
     public ResultAnnouncerResponseDto findResult(String ticketId) {
         if(ticketId == null){
-            throw new IllegalArgumentException("Id ticket is empty");
+            throw new IllegalArgumentException("Ticket id is empty");
         }
         ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
-        ResultLotto result = resultLottoRepository.findByTicketId(ticketId).orElseThrow(() -> new ResultLottoNotFoundException("Result lotto not found"));
+        ResultLotto result = resultLottoRepository.findByTicketId(ticketId)
+                .orElseThrow(() -> new ResultLottoNotFoundException("Ticket ID: " +ticketId + " not found"));
         ResultLotto resultLottoSaved = resultLottoRepository.save(result);
         ResultDto resultDtoSaved = mapToResultDtoSaved(resultLottoSaved);
                 if (!isAfterResultAnnouncementTime(resultDto)) {

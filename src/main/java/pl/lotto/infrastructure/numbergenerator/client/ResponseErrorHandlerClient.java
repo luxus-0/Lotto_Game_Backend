@@ -12,7 +12,7 @@ public class ResponseErrorHandlerClient extends DefaultResponseErrorHandler {
 
     @Override
     public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-        final HttpStatus statusCode = clientHttpResponse.getStatusCode();
+        HttpStatus statusCode = (HttpStatus) clientHttpResponse.getStatusCode();
         final Series series = statusCode.series();
         if (series == Series.SERVER_ERROR) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while using http client");
