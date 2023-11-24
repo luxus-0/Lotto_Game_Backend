@@ -1,22 +1,13 @@
 package pl.lotto.domain.resultchecker;
 
 import lombok.AllArgsConstructor;
-import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.numbersgenerator.InMemoryRandomNumberGenerator;
-import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 class ResultCheckerMapper {
