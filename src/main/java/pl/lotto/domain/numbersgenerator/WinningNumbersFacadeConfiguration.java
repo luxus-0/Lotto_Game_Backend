@@ -1,10 +1,7 @@
 package pl.lotto.domain.numbersgenerator;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
@@ -31,8 +28,8 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    WinningNumbersScheduler winningNumbersScheduler(WinningNumbersFacade winningNumbersFacade) {
-        return new WinningNumbersScheduler(winningNumbersFacade);
+    WinningNumbersScheduler winningNumbersScheduler(WinningTicketFacade winningTicketFacade) {
+        return new WinningNumbersScheduler(winningTicketFacade);
     }
 
     @Bean
@@ -41,12 +38,17 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties) {
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator(properties);
-        return new WinningNumbersFacade(drawDateFacade, generator, winningNumbersRepository, winningNumberValidator);
+        return WinningTicketFacade.builder()
+                .drawDateFacade(drawDateFacade)
+                .randomNumbersGenerable(generator)
+                .winningNumbersRepository(winningNumbersRepository)
+                .winningNumberValidator(winningNumberValidator)
+                .build();
     }
 
-    public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
         WinningNumbersConfigurationProperties properties = WinningNumbersConfigurationProperties.builder()
                 .url("https://random.org/integers/?")
                 .count(6)
