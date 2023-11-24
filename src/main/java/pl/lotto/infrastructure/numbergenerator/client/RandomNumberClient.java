@@ -64,21 +64,17 @@ public class RandomNumberClient implements RandomNumbersGenerable {
         Integer numberLotto = inputNumbers.stream().findAny().orElseThrow();
 
         try {
-            return getWinningNumbersDto(randomNumbers, numberLotto);
+            return randomNumbers.stream()
+                    .filter(isWinnerNumbers -> randomNumbers.contains(numberLotto))
+                    .map(numbers -> WinningNumbersDto.builder()
+                            .winningNumbers(Set.of(numbers))
+                            .build())
+                    .findAny()
+                    .orElseThrow(WinnerNumbersNotFoundException::new);
         } catch (WinnerNumbersNotFoundException e) {
             log.error(e.getMessage());
         }
         return WinningNumbersDto.builder().build();
-    }
-
-    private static WinningNumbersDto getWinningNumbersDto(Set<Integer> randomNumbers, Integer numberLotto) throws WinnerNumbersNotFoundException {
-        return randomNumbers.stream()
-                .filter(isWinnerNumbers -> randomNumbers.contains(numberLotto))
-                .map(numbers -> WinningNumbersDto.builder()
-                        .winningNumbers(Set.of(numbers))
-                        .build())
-                .findAny()
-                .orElseThrow(WinnerNumbersNotFoundException::new);
     }
 
     private Set<Integer> generateRandomNumbers(String body) {
