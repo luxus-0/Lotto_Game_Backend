@@ -9,5 +9,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record Ticket(String ticketId, Set<Integer> numbers, LocalDateTime drawDate) {
+@Document
+public record Ticket(@Id String ticketId, Set<Integer> numbers, LocalDateTime drawDate) {
 }
