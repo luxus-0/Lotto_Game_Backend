@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
+import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -19,34 +18,20 @@ public class NumberReceiverFacade {
     private final DrawDateFacade drawDateFacade;
     private final TicketRepository ticketRepository;
     private final TicketIdGenerator hashGenerator;
+    private final TicketValidationMessageProvider validationMessage;
 
-    public TicketResultDto inputNumbers(Set<Integer> numbersFromUser) {
+    public TicketResponseDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = numberValidator.validate(numbersFromUser);
         if (validate) {
             String ticketId = hashGenerator.generateTicketId();
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
             Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
-            return TicketResultDto.builder()
-                    .ticketDto(TicketDto.builder()
-                            .ticketId(ticketSaved.ticketId())
-                            .numbers(ticketSaved.numbers())
-                            .drawDate(ticketSaved.drawDate())
-                            .build())
-                    .message(getTicketMessage())
-                    .build();
+            TicketCreator ticket = new TicketCreator(validationMessage);
+            return ticket.createTicketSaved(ticketSaved);
         }
-        return TicketResultDto.builder()
-                .ticketDto(null)
-                .message(getTicketMessage())
+        return TicketResponseDto.builder()
+                .message(validationMessage.getMessage())
                 .build();
-    }
-
-    private String getTicketMessage() {
-        List<ValidationResult> messagesResult = numberValidator.errors;
-        return messagesResult.stream()
-                .map(ValidationResult::getInfo)
-                .findAny()
-                .orElse("");
     }
 
     public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date) {
