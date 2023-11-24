@@ -11,9 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.client.RestTemplate;
-import pl.lotto.domain.numberreceiver.dto.TicketResultDto;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
-import pl.lotto.domain.numbersgenerator.WinningNumbersNotFoundException;
+import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
+import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
+import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
@@ -31,14 +31,13 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 
 @Log4j2
 public class LottoIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    WinningNumbersFacade winningNumbersFacade;
+    WinningTicketFacade winningTicketFacade;
     @Autowired
     ResultsCheckerFacade resultsCheckerFacade;
     @Autowired
@@ -61,7 +60,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
                     try {
-                        return !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
+                        return !winningTicketFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
 
                     } catch (WinningNumbersNotFoundException e) {
                         return false;
@@ -85,13 +84,13 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         //when
         MvcResult mvcResult = perform.andExpect(status -> status(200)).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
-        TicketResultDto ticketResultDto = objectMapper.readValue(json, TicketResultDto.class);
-        String ticketId = ticketResultDto.ticketDto().ticketId();
+        TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
+        String ticketId = ticketResponseDto.ticketDto().ticketId();
         //then
         assertAll(
                 () -> assertThat(ticketId).isNotNull(),
-                () -> assertThat(ticketResultDto.ticketDto().drawDate()).isEqualTo(drawDate),
-                () -> assertThat(ticketResultDto.message()).isEqualTo("equals six numbers")
+                () -> assertThat(ticketResponseDto.ticketDto().drawDate()).isEqualTo(drawDate),
+                () -> assertThat(ticketResponseDto.message()).isEqualTo("equals six numbers")
         );
     }
 
