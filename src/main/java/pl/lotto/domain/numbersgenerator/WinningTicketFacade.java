@@ -37,8 +37,8 @@ public class WinningTicketFacade {
         if (validate) {
             WinningTicket winnerTicket = winningTicket.getWinnerTicket(ticketId, winningNumbers, nextDrawDate);
             WinningTicket savedWinnerTicket = winningNumbersRepository.save(winnerTicket);
-            WinningTicketMessageDto winningTicketMessageDto = winningTicketMessage.generateWiningTicketMessage(savedWinnerTicket);
-            log.info(winningTicketMessageDto);
+            WinningTicketMessageDto ticketMessage = winningTicketMessage.generateWiningTicketMessage(savedWinnerTicket);
+            log.info(ticketMessage);
             return winningTicket.getSavedWinnerTicket(savedWinnerTicket);
         }
         return WinningTicketDto.builder()
