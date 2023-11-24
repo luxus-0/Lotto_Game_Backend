@@ -1,8 +1,7 @@
 package pl.lotto.domain.numbersgenerator;
 
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 
 import java.util.Set;
 import java.util.UUID;
@@ -27,8 +26,8 @@ public class WinningNumberGeneratorTestImpl implements RandomNumbersGenerable {
         return UUID.randomUUID().toString();
     }
 
-    public WinningNumbersDto generateWinnerNumbers(Set<Integer> inputNumbers) {
-       return WinningNumbersDto.builder()
+    public WinningTicketDto generateWinnerNumbers(Set<Integer> inputNumbers) {
+       return WinningTicketDto.builder()
                .winningNumbers(inputNumbers)
                .build();
     }
