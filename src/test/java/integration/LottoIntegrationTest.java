@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
@@ -169,7 +169,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                                 restTemplate.exchange("/integers?num=6&min=1&max=99",
                                                 HttpMethod.GET,
                                                 null,
-                                                WinningNumbersDto.class)
+                                                WinningTicketDto.class)
                                         .getBody()));
     }
 
@@ -188,7 +188,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                                 restTemplate.exchange("",
                                                 HttpMethod.GET,
                                                 null,
-                                                WinningNumbersDto.class)
+                                                WinningTicketDto.class)
                                         .getBody()));
     }
 }

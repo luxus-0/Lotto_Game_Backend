@@ -2,7 +2,7 @@ package pl.lotto.domain.numbersgenerator;
 
 import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 
 import java.util.Set;
@@ -21,7 +21,7 @@ public class InMemoryRandomNumberGenerator implements RandomNumbersGenerable {
         return "123456";
     }
 
-    public WinningNumbersDto generateWinnerNumbers(Set<Integer> inputNumbers) {
+    public WinningTicketDto generateWinnerNumbers(Set<Integer> inputNumbers) {
         Set<Integer> randomNumbers = generateSixRandomNumbers().randomNumbers();
         Integer inputUserNumber = inputNumbers.stream().findAny().orElse(0);
 
@@ -32,10 +32,10 @@ public class InMemoryRandomNumberGenerator implements RandomNumbersGenerable {
         }
     }
 
-    private static WinningNumbersDto getWinningNumbers(Set<Integer> inputNumbers, Set<Integer> randomNumbers, Integer inputUserNumber) throws WinnerNumbersNotFoundException {
+    private static WinningTicketDto getWinningNumbers(Set<Integer> inputNumbers, Set<Integer> randomNumbers, Integer inputUserNumber) throws WinnerNumbersNotFoundException {
         return randomNumbers.stream()
                 .filter(isWinnerNumbers -> randomNumbers.contains(inputUserNumber))
-                .map(numbers -> WinningNumbersDto.builder()
+                .map(numbers -> WinningTicketDto.builder()
                         .winningNumbers(inputNumbers)
                         .build())
                 .findAny()
