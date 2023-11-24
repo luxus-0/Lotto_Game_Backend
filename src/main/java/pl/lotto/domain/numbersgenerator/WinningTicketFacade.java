@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketMessageDto;
 import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
@@ -27,7 +27,7 @@ public class WinningTicketFacade {
     private final WinningTicketManager winningTicket;
     private final WinningTicketMessage winningTicketMessage;
 
-    public WinningNumbersDto generateWinningTicket() throws WinnerNumbersNotFoundException {
+    public WinningTicketDto generateWinningTicket() throws WinnerNumbersNotFoundException {
         String ticketId = randomNumbersGenerable.generateUniqueTicketId();
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         RandomNumbersDto sixRandomNumbers = randomNumbersGenerable.generateSixRandomNumbers();
@@ -37,19 +37,19 @@ public class WinningTicketFacade {
         if (validate) {
             WinningTicket winnerTicket = winningTicket.getWinnerTicket(ticketId, winningNumbers, nextDrawDate);
             WinningTicket savedWinnerTicket = winningNumbersRepository.save(winnerTicket);
-            WinningTicketMessageDto winningTicketMessage = winningTicketMessage.generateWiningTicketMessage(savedWinnerTicket);
-            log.info(winningTicketMessage);
+            WinningTicketMessageDto winningTicketMessageDto = winningTicketMessage.generateWiningTicketMessage(savedWinnerTicket);
+            log.info(winningTicketMessageDto);
             return winningTicket.getSavedWinnerTicket(savedWinnerTicket);
         }
-        return WinningNumbersDto.builder()
+        return WinningTicketDto.builder()
                 .winningNumbers(Collections.emptySet())
-                .message("Ticket not win")
+                .winningTicketMessage(new WinningTicketMessageDto("Ticket not win"))
                 .build();
     }
 
-    public WinningNumbersDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
+    public WinningTicketDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
         return winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).stream()
-                .map(winningNumbers -> WinningNumbersDto.builder()
+                .map(winningNumbers -> WinningTicketDto.builder()
                         .ticketId(winningNumbers.ticketId())
                         .drawDate(winningNumbers.drawDate())
                         .winningNumbers(winningNumbers.winningNumbers())

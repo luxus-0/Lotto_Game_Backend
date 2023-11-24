@@ -2,8 +2,7 @@ package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketMessageDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 
 import java.time.LocalDateTime;
@@ -24,8 +23,8 @@ public class WinningTicketManager {
                 .build();
     }
 
-    public WinningNumbersDto getSavedWinnerTicket(WinningTicket savedWinnerTicket) {
-        return WinningNumbersDto.builder()
+    public WinningTicketDto getSavedWinnerTicket(WinningTicket savedWinnerTicket) {
+        return WinningTicketDto.builder()
                 .ticketId(savedWinnerTicket.ticketId())
                 .winningNumbers(savedWinnerTicket.winningNumbers())
                 .drawDate(savedWinnerTicket.drawDate())
