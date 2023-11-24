@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 
 import java.time.LocalDateTime;
@@ -33,7 +33,7 @@ class WinningTicketFacadeTest {
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
-        WinningNumbersDto generateNumbers = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto generateNumbers = winningTicketFacade.generateWinningTicket();
         //then
         assertThat(generateNumbers.winningNumbers().size()).isEqualTo(6);
     }
@@ -89,7 +89,7 @@ class WinningTicketFacadeTest {
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
-        WinningNumbersDto generateWinningNumbers = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto generateWinningNumbers = winningTicketFacade.generateWinningTicket();
         //then
         int sizeWinningNumbers = generateWinningNumbers.winningNumbers().size();
         assertThat(sizeWinningNumbers).isEqualTo(6);
@@ -105,7 +105,7 @@ class WinningTicketFacadeTest {
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
-        WinningNumbersDto generateWinningNumbers = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto generateWinningNumbers = winningTicketFacade.generateWinningTicket();
         //then
         int sizeWinningNumbers = generateWinningNumbers.winningNumbers().size();
         assertFalse(sizeWinningNumbers > 6);

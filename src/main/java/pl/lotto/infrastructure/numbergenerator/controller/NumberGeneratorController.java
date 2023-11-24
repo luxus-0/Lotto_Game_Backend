@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 
 @RestController
@@ -24,7 +24,7 @@ public class NumberGeneratorController {
     }
 
     @GetMapping("winning_numbers")
-    WinningNumbersDto generateWinningNumbers() {
+    WinningTicketDto generateWinningNumbers() {
         return winningTicketFacade.generateWinningTicket();
     }
 }

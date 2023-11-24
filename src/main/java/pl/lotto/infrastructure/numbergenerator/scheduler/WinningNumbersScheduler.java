@@ -5,7 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
-import pl.lotto.domain.numbersgenerator.dto.WinningNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 
 /**
  * Generate random numbers every Saturday at 12 p.m
@@ -19,8 +19,8 @@ public class WinningNumbersScheduler {
 
     @Scheduled(cron = "${numbers.generator.lottery.run.occurence}")
     public void generateWinningNumbers() {
-        WinningNumbersDto winningNumbersDto = winningTicketFacade.generateWinningTicket();
-        log.info(winningNumbersDto.winningNumbers());
-        log.info(winningNumbersDto.drawDate());
+        WinningTicketDto winningTicketDto = winningTicketFacade.generateWinningTicket();
+        log.info(winningTicketDto.winningNumbers());
+        log.info(winningTicketDto.drawDate());
     }
 }
