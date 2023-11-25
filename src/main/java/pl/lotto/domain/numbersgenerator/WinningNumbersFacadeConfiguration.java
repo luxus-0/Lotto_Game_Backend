@@ -39,14 +39,14 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, RandomNumbersGenerable generable, NumberReceiverFacade numberReceiverFacade) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade, RandomNumbersGenerable generable) {
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator(properties);
         return WinningTicketFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)
                 .winningNumberValidator(winningNumberValidator)
-                .randomNumbersGenerable(generable)
                 .numberReceiverFacade(numberReceiverFacade)
+                .randomNumbersGenerable(generable)
                 .build();
     }
 
@@ -60,7 +60,7 @@ public class WinningNumbersFacadeConfiguration {
                 .column(1)
                 .base(10)
                 .build();
-        RandomNumbersGenerable generable = new RandomNumberClient(new RestTemplate(), properties);
-        return winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, generable, numberReceiverFacade);
+        RandomNumbersGenerable generable = new InMemoryWinningNumbers();
+        return winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, numberReceiverFacade, generable);
     }
 }

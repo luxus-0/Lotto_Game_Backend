@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 
 import java.time.LocalDateTime;
@@ -23,16 +23,14 @@ import static org.mockito.Mockito.when;
 @Log4j2
 class WinningTicketFacadeTest {
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
-    WinningNumbersConfigurationProperties properties = mock(WinningNumbersConfigurationProperties.class);
-    WinningNumbersManager manager = mock(WinningNumbersManager.class);
     WinningNumbersRepository winningNumbersRepository = mock(WinningNumbersRepository.class);
+    NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
 
     @Test
-    public void should_return_set_of_required_size() throws WinnerNumbersNotFoundException {
+    public void should_return_set_of_required_size() {
         //given
-        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
-                .winningNumbersFacade(drawDateFacade, winningNumbersRepository);
+                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -42,11 +40,10 @@ class WinningTicketFacadeTest {
     }
 
     @Test
-    public void should_return_set_of_required_size_within_required_range() throws WinnerNumbersNotFoundException {
+    public void should_return_set_of_required_size_within_required_range() {
         //given
-        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
-                .winningNumbersFacade(drawDateFacade, winningNumbersRepository);
+                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
         int upperBand = 99;
         int lowerBand = 1;
@@ -62,11 +59,10 @@ class WinningTicketFacadeTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_number_not_in_range() throws WinnerNumbersNotFoundException {
+    public void should_throw_an_exception_when_number_not_in_range() {
         //given
-        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
-                .winningNumbersFacade(drawDateFacade, winningNumbersRepository);
+                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -81,11 +77,11 @@ class WinningTicketFacadeTest {
     }
 
     @Test
-    public void should_return_collection_of_unique_values() throws WinnerNumbersNotFoundException {
+    public void should_return_collection_of_unique_values() {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
-                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, manager);
+                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -96,11 +92,11 @@ class WinningTicketFacadeTest {
     }
 
     @Test
-    public void should_return_false_when_size_numbers_is_more_than_six() throws WinnerNumbersNotFoundException {
+    public void should_return_false_when_size_numbers_is_more_than_six() {
         //given
         RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
-                .winningNumbersFacade(drawDateFacade, winningNumbersRepository);
+                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         //when
@@ -113,9 +109,8 @@ class WinningTicketFacadeTest {
     @Test
     public void should_throw_an_exception_when_failed_numbers_by_given_date() {
         //given
-        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
-                .winningNumbersFacade(drawDateFacade, winningNumbersRepository);
+                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         //when
@@ -129,9 +124,8 @@ class WinningTicketFacadeTest {
     @Test
     public void should_throw_an_exception_when_failed_date_by_given_incorrect_date() {
         //given
-        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
-                .winningNumbersFacade(drawDateFacade, winningNumbersRepository);
+                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         //when
@@ -161,9 +155,8 @@ class WinningTicketFacadeTest {
     @Test
     public void should_return_true_when_numbers_are_generated_by_given_date() {
         //given
-        RandomNumbersGenerable generator = new WinningNumberGeneratorTestImpl();
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
-                .winningNumbersFacade(drawDateFacade, winningNumbersRepository);
+                .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
         Set<Integer> generatedWinningNumbers = Set.of(1, 2, 3, 4, 5, 6);
@@ -172,7 +165,6 @@ class WinningTicketFacadeTest {
                 .ticketId("123")
                 .drawDate(drawDate)
                 .winningNumbers(generatedWinningNumbers)
-                .message("WIN")
                 .build();
 
         winningNumbersRepository.save(winningTicket);
