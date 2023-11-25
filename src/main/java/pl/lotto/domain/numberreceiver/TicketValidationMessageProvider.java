@@ -2,7 +2,7 @@ package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.lotto.domain.numberreceiver.dto.TicketValidationMessageDto;
+import pl.lotto.domain.numberreceiver.dto.TicketMessageDto;
 
 import java.util.List;
 
@@ -11,14 +11,14 @@ import java.util.List;
 public class TicketValidationMessageProvider {
     private final NumbersReceiverValidator validator;
 
-    public TicketValidationMessageDto getMessage() {
+    public TicketMessageDto getMessage() {
         List<TicketValidationResult> messagesResult = validator.errors;
         return messagesResult.stream()
                 .map(TicketValidationResult::getInfo)
-                .map(TicketValidationMessageDto::new)
+                .map(TicketMessageDto::new)
                 .findAny()
-                .orElse(TicketValidationMessageDto.builder()
-                        .message("Ticket message undefinied")
+                .orElse(TicketMessageDto.builder()
+                        .message("")
                         .build());
     }
 }

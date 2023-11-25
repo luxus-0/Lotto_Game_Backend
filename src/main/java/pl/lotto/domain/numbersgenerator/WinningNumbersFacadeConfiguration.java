@@ -38,17 +38,17 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, WinningTicketManager manager) {
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator(properties);
         return WinningTicketFacade.builder()
                 .drawDateFacade(drawDateFacade)
-                .randomNumbersGenerable(generator)
                 .winningNumbersRepository(winningNumbersRepository)
                 .winningNumberValidator(winningNumberValidator)
+                .winningTicket(manager)
                 .build();
     }
 
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, RandomNumbersGenerable generator, WinningNumbersRepository winningNumbersRepository) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository) {
         WinningNumbersConfigurationProperties properties = WinningNumbersConfigurationProperties.builder()
                 .url("https://random.org/integers/?")
                 .count(6)
@@ -58,6 +58,7 @@ public class WinningNumbersFacadeConfiguration {
                 .column(1)
                 .base(10)
                 .build();
-        return winningNumbersFacade(drawDateFacade, generator, winningNumbersRepository, properties);
+        WinningTicketManager manager = new WinningTicketManager(winningNumbersRepository);
+        return winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, manager);
     }
 }
