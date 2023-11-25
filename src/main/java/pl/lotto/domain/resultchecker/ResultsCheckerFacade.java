@@ -4,7 +4,6 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.*;
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_LOSE_MESSAGE;
 
 public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                    DrawDateFacade drawDateFacade,
@@ -31,29 +31,19 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
             List<Player> players = winnersRetriever.retrieveWinners(mapToTickets(tickets), winningNumbers);
             playerRepository.saveAll(players);
             return PlayersDto.builder()
-                    .results(mapToResults(players))
+                    .results(mapToPlayerResults(players))
                     .build();
         }
        return PlayersDto.builder()
               .results(List.of(ResultLotto.builder()
-                      .message("LOSE")
+                      .message(PLAYER_LOSE_MESSAGE)
                      .build()))
                .build();
     }
 
-    private static List<Ticket> createTickets(TicketDto ticket) {
-        return List.of(Ticket.builder()
-                .ticketId(ticket.ticketId())
-                .numbers(ticket.numbers())
-                .hitNumbers(ticket.hitNumbers())
-                .drawDate(ticket.drawDate())
-                .message(ticket.message())
-                .build());
-    }
-
-    public ResultDto findResultByTicketId(String ticketId) throws WinnerNumbersNotFoundException {
+    public ResultDto findResultByTicketId(String ticketId) {
         PlayersDto players = generateResults();
         Player player = mapToPlayer(players);
-        return mapToResult(ticketId, player);
+        return mapToPlayerResult(ticketId, player);
     }
 }

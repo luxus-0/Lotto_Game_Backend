@@ -6,8 +6,6 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketMessageDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
@@ -30,7 +28,7 @@ class ResultsCheckerFacadeTest {
     private final DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
 
     @Test
-    public void should_generate_all_players_with_correct_message() throws WinnerNumbersNotFoundException {
+    public void should_generate_all_players_with_correct_message() {
         //given
         PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
@@ -73,7 +71,7 @@ class ResultsCheckerFacadeTest {
     }
 
     @Test
-    public void should_generate_fail_message_when_winning_numbers_is_empty() throws WinnerNumbersNotFoundException {
+    public void should_generate_fail_message_when_winning_numbers_is_empty() {
         //given
         PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
@@ -91,24 +89,24 @@ class ResultsCheckerFacadeTest {
     }
 
     @Test
-    public void should_generate_fail_message_when_winning_numbers_equal_null() throws WinnerNumbersNotFoundException {
+    public void should_generate_fail_message_when_winning_numbers_equal_null() {
         //given
 
         when(winningTicketFacade.generateWinningTicket()).thenReturn(
                 WinningTicketDto.builder()
                         .winningNumbers(Collections.emptySet())
-                        .winningTicketMessage(new WinningTicketMessageDto("LOSE"))
+                        .message("LOSE")
                         .build()
         );
         //when
-        WinningTicketDto winningNumbers = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto ticket = winningTicketFacade.generateWinningTicket();
         //then
-        assertThat(winningNumbers.winningNumbers()).isEqualTo(Set.of());
-        assertThat(winningNumbers.winningTicketMessage()).isEqualTo(new WinningTicketMessageDto("LOSE"));
+        assertThat(ticket.winningNumbers()).isEqualTo(Set.of());
+        assertThat(ticket.message()).isEqualTo("LOSE");
     }
 
     @Test
-    public void should_generate_correct_message_when_winning_numbers_appear() throws WinnerNumbersNotFoundException {
+    public void should_generate_correct_message_when_winning_numbers_appear() {
         //given
         PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
@@ -120,13 +118,16 @@ class ResultsCheckerFacadeTest {
         );
         //when
         PlayersDto playersDto = resultCheckerFacade.generateResults();
-        String message = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
+        String message = playersDto.results().stream()
+                .map(ResultLotto::message)
+                .findAny()
+                .orElse("");
         //then
         assertThat(message).isEqualTo("Winners found");
     }
 
     @Test
-    public void should_return_result_with_correct_credentials() throws WinnerNumbersNotFoundException {
+    public void should_return_result_with_correct_credentials() {
         //given
         PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
@@ -134,10 +135,12 @@ class ResultsCheckerFacadeTest {
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
         String ticketId = "001";
 
-        when(winningTicketFacade.generateWinningTicket()).thenReturn(WinningTicketDto.builder()
+        when(winningTicketFacade.generateWinningTicket()).thenReturn(
+                WinningTicketDto.builder()
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
-                .winningTicketMessage(new WinningTicketMessageDto("WIN"))
+                .message("WIN")
                 .build());
+
         when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
                 List.of(TicketDto.builder()
                                 .ticketId(ticketId)
