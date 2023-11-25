@@ -7,6 +7,7 @@ import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -25,13 +26,27 @@ public class NumberReceiverFacade {
         if (validate) {
             String ticketId = hashGenerator.generateTicketId();
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-            Ticket ticketSaved = ticketRepository.save(new Ticket(ticketId, numbersFromUser, drawDate));
-            TicketCreator ticket = new TicketCreator(validationMessage);
-            return ticket.createTicketSaved(ticketSaved);
+            Ticket ticket = new Ticket(ticketId, numbersFromUser, drawDate);
+            Ticket ticketSaved = ticketRepository.save(ticket);
+            return TicketResponseDto.builder()
+                    .ticketDto(TicketDto.builder()
+                            .ticketId(ticketSaved.ticketId())
+                            .numbers(ticketSaved.numbers())
+                            .drawDate(ticketSaved.drawDate())
+                            .build())
+                    .message(validationMessage.getMessage())
+                    .build();
         }
         return TicketResponseDto.builder()
                 .message(validationMessage.getMessage())
                 .build();
+    }
+
+    public Set<Integer> retrieveUserNumbersByDrawDate(LocalDateTime nextDrawDate) {
+        return retrieveAllTicketByDrawDate(nextDrawDate).stream()
+                .map(TicketDto::numbers)
+                .findAny()
+                .orElse(Collections.emptySet());
     }
 
     public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date) {
