@@ -14,19 +14,11 @@ class WinningNumberValidator {
         if (outOfRange(winningNumbers)) {
             throw new OutOfRangeNumbersException("Numbers out of range!");
         }
-        else if(notCorrectSize(winningNumbers)){
-            throw new IncorrectSizeNumbersException("Quantity numbers more than 6");
-        }
         return true;
     }
 
     private boolean outOfRange(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
                 .anyMatch(number -> number < properties.lowerBand() || number > properties.upperBand());
-    }
-
-    private boolean notCorrectSize(Set<Integer> winningNumbers) {
-        return winningNumbers.stream()
-                .anyMatch(number -> number > properties.count());
     }
 }
