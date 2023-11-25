@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 import pl.lotto.infrastructure.numbergenerator.scheduler.WinningNumbersScheduler;
 
@@ -38,17 +39,18 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, WinningTicketManager manager) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, RandomNumbersGenerable generable, NumberReceiverFacade numberReceiverFacade) {
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator(properties);
         return WinningTicketFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)
                 .winningNumberValidator(winningNumberValidator)
-                .winningTicket(manager)
+                .randomNumbersGenerable(generable)
+                .numberReceiverFacade(numberReceiverFacade)
                 .build();
     }
 
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, NumberReceiverFacade numberReceiverFacade) {
         WinningNumbersConfigurationProperties properties = WinningNumbersConfigurationProperties.builder()
                 .url("https://random.org/integers/?")
                 .count(6)
@@ -58,7 +60,7 @@ public class WinningNumbersFacadeConfiguration {
                 .column(1)
                 .base(10)
                 .build();
-        WinningTicketManager manager = new WinningTicketManager(winningNumbersRepository);
-        return winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, manager);
+        RandomNumbersGenerable generable = new RandomNumberClient(new RestTemplate(), properties);
+        return winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, generable, numberReceiverFacade);
     }
 }
