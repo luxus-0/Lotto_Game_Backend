@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
+import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 
 @RestController
@@ -24,7 +25,7 @@ public class NumberGeneratorController {
     }
 
     @GetMapping("winning_numbers")
-    WinningTicketDto generateWinningNumbers() {
+    WinningTicketDto generateWinningNumbers() throws WinnerNumbersNotFoundException {
         return winningTicketFacade.generateWinningTicket();
     }
 }

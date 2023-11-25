@@ -6,6 +6,7 @@ import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateFacadeConfiguration;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numberreceiver.dto.TicketMessageDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;
@@ -35,7 +36,7 @@ class NumberReceiverFacadeTest {
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(inputNumbers);
         // then
         TicketDto actualTicket = actualNumberReceiver.ticketDto();
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(actualTicket, EQUALS_SIX_NUMBERS.getInfo());
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(actualTicket, new TicketMessageDto(EQUALS_SIX_NUMBERS.getInfo()));
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
 
@@ -51,7 +52,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, LESS_THAN_SIX_NUMBERS.getInfo());
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(LESS_THAN_SIX_NUMBERS.getInfo()));
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
@@ -68,7 +69,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, MORE_THAN_SIX_NUMBERS.getInfo());
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(MORE_THAN_SIX_NUMBERS.getInfo()));
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
@@ -85,7 +86,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, OUT_OF_RANGE_NUMBERS.getInfo());
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(OUT_OF_RANGE_NUMBERS.getInfo()));
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
@@ -102,7 +103,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, EMPTY_NUMBERS.getInfo());
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(EMPTY_NUMBERS.getInfo()));
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
@@ -120,7 +121,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, OUT_OF_RANGE_NUMBERS.getInfo());
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(OUT_OF_RANGE_NUMBERS.getInfo()));
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }

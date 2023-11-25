@@ -59,23 +59,6 @@ public class RandomNumberClient implements RandomNumbersGenerable {
         return UUID.randomUUID().toString();
     }
 
-    public WinningTicketDto generateWinnerNumbers(Set<Integer> inputNumbers) {
-        Set<Integer> randomNumbers = generateSixRandomNumbers().randomNumbers();
-        Integer numberLotto = inputNumbers.stream().findAny().orElseThrow();
-
-        try {
-            return randomNumbers.stream()
-                    .filter(isWinnerNumbers -> randomNumbers.contains(numberLotto))
-                    .map(numbers -> WinningTicketDto.builder()
-                            .winningNumbers(Set.of(numbers))
-                            .build())
-                    .findAny()
-                    .orElseThrow(WinnerNumbersNotFoundException::new);
-        } catch (WinnerNumbersNotFoundException e) {
-            log.error(e.getMessage());
-        }
-        return WinningTicketDto.builder().build();
-    }
 
     private Set<Integer> generateRandomNumbers(String body) {
         return Arrays.stream(Objects.requireNonNull(body)
