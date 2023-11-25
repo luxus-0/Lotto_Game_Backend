@@ -9,6 +9,7 @@ import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketMessageDto;
 import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
+import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -21,11 +22,10 @@ import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.WIN
 @Builder
 public class WinningTicketFacade {
     private final DrawDateFacade drawDateFacade;
-    private final RandomNumbersGenerable randomNumbersGenerable;
     private final WinningNumbersRepository winningNumbersRepository;
     private final WinningNumberValidator winningNumberValidator;
     private final WinningTicketManager winningTicket;
-    private final WinningTicketMessage winningTicketMessage;
+    private final RandomNumbersGenerable randomNumbersGenerable;
 
     public WinningTicketDto generateWinningTicket() throws WinnerNumbersNotFoundException {
         String ticketId = randomNumbersGenerable.generateUniqueTicketId();
@@ -37,8 +37,7 @@ public class WinningTicketFacade {
         if (validate) {
             WinningTicket winnerTicket = winningTicket.getWinnerTicket(ticketId, winningNumbers, nextDrawDate);
             WinningTicket savedWinnerTicket = winningNumbersRepository.save(winnerTicket);
-            WinningTicketMessageDto ticketMessage = winningTicketMessage.generateWiningTicketMessage(savedWinnerTicket);
-            log.info(ticketMessage);
+            log.info(savedWinnerTicket);
             return winningTicket.getSavedWinnerTicket(savedWinnerTicket);
         }
         return WinningTicketDto.builder()
