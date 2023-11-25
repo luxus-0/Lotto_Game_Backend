@@ -9,6 +9,8 @@ import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.util.List;
 
+import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.WINNER_NUMBERS_MESSAGE;
+
 @AllArgsConstructor
 class ResultCheckerMapper {
 
@@ -20,18 +22,7 @@ class ResultCheckerMapper {
                         .hitNumbers(player.hitNumbers())
                         .drawDate(player.drawDate())
                         .isWinner(player.isWinner())
-                        .message(player.message())
-                        .build())
-                .toList();
-    }
-
-    static List<Ticket> mapToTickets(List<TicketDto> allTicketsByDate) {
-        return allTicketsByDate.stream()
-                .map(ticket -> Ticket.builder()
-                        .ticketId(ticket.ticketId())
-                        .numbers(ticket.numbers())
-                        .drawDate(ticket.drawDate())
-                        .message(ticket.message())
+                        .message(WINNER_NUMBERS_MESSAGE)
                         .build())
                 .toList();
     }
@@ -57,6 +48,18 @@ class ResultCheckerMapper {
                 .isWinner(player.isWinner())
                 .message(player.message())
                 .build();
+    }
+
+    public static List<Ticket> mapToTickets(List<TicketDto> tickets) {
+        return tickets.stream()
+                .map(ticket -> Ticket.builder()
+                        .ticketId(ticket.ticketId())
+                        .numbers(ticket.numbers())
+                        .hitNumbers(ticket.hitNumbers())
+                        .drawDate(ticket.drawDate())
+                        .message(ticket.message())
+                        .build())
+                .toList();
     }
 
 }

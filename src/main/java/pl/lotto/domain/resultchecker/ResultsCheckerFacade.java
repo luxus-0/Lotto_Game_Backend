@@ -22,13 +22,13 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                    PlayerRepository playerRepository,
                                    ResultCheckerValidation resultCheckerValidation) {
 
-    public PlayersDto generateResults() throws WinnerNumbersNotFoundException {
+    public PlayersDto generateResults() {
         Set<Integer> winningNumbers = winningTicketFacade.generateWinningTicket().winningNumbers();
         boolean validate = resultCheckerValidation.validate(winningNumbers);
         if (validate) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        List<TicketDto> allTicketByDate = numberReceiverFacade.retrieveAllTicketByDrawDate(nextDrawDate);
-            List<Player> players = winnersRetriever.retrieveWinners(mapToTickets(allTicketByDate), winningNumbers);
+        List<TicketDto> tickets = numberReceiverFacade.retrieveAllTicketByDrawDate(nextDrawDate);
+            List<Player> players = winnersRetriever.retrieveWinners(mapToTickets(tickets), winningNumbers);
             playerRepository.saveAll(players);
             return PlayersDto.builder()
                     .results(mapToResults(players))
@@ -39,6 +39,16 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                       .message("LOSE")
                      .build()))
                .build();
+    }
+
+    private static List<Ticket> createTickets(TicketDto ticket) {
+        return List.of(Ticket.builder()
+                .ticketId(ticket.ticketId())
+                .numbers(ticket.numbers())
+                .hitNumbers(ticket.hitNumbers())
+                .drawDate(ticket.drawDate())
+                .message(ticket.message())
+                .build());
     }
 
     public ResultDto findResultByTicketId(String ticketId) throws WinnerNumbersNotFoundException {
