@@ -14,7 +14,7 @@ import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.WIN
 @AllArgsConstructor
 class ResultCheckerMapper {
 
-    static List<ResultLotto> mapToResults(List<Player> players) {
+    static List<ResultLotto> mapToPlayerResults(List<Player> players) {
         return players.stream()
                 .map(player -> ResultLotto.builder()
                         .ticketId(player.ticketId())
@@ -39,7 +39,7 @@ class ResultCheckerMapper {
         return new Player(player.ticketId(), player.numbers(), player.hitNumbers(), player.drawDate(), player.isWinner(), player.message());
     }
 
-    static ResultDto mapToResult(String ticketId, Player player) {
+    static ResultDto mapToPlayerResult(String ticketId, Player player) {
         return ResultDto.builder()
                 .ticketId(ticketId)
                 .numbers(player.numbers())
