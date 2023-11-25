@@ -4,17 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.drawdate.DrawDateFacade;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
+import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketMessageDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
-import pl.lotto.infrastructure.numbergenerator.client.RandomNumberClient;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 
+import static pl.lotto.domain.numbersgenerator.WinningNumbersManager.retrieveWinningNumbers;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.WINNING_NUMBERS_NOT_FOUND;
 
 @AllArgsConstructor
@@ -24,25 +22,29 @@ public class WinningTicketFacade {
     private final DrawDateFacade drawDateFacade;
     private final WinningNumbersRepository winningNumbersRepository;
     private final WinningNumberValidator winningNumberValidator;
-    private final WinningTicketManager winningTicket;
+    private final NumberReceiverFacade numberReceiverFacade;
     private final RandomNumbersGenerable randomNumbersGenerable;
 
-    public WinningTicketDto generateWinningTicket() throws WinnerNumbersNotFoundException {
+    public WinningTicketDto generateWinningTicket() {
         String ticketId = randomNumbersGenerable.generateUniqueTicketId();
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        RandomNumbersDto sixRandomNumbers = randomNumbersGenerable.generateSixRandomNumbers();
-        log.info("Six random numbers: " + sixRandomNumbers);
-        Set<Integer> winningNumbers = winningTicket.getWinningNumbers(nextDrawDate);
+        Set<Integer> randomNumbers = randomNumbersGenerable.generateSixRandomNumbers().randomNumbers();
+        Set<Integer> userNumbers = numberReceiverFacade.retrieveUserNumbersByDrawDate(nextDrawDate);
+        Set<Integer> winningNumbers = retrieveWinningNumbers(randomNumbers, userNumbers);
         boolean validate = winningNumberValidator.validate(winningNumbers);
         if (validate) {
-            WinningTicket winnerTicket = winningTicket.getWinnerTicket(ticketId, winningNumbers, nextDrawDate);
-            WinningTicket savedWinnerTicket = winningNumbersRepository.save(winnerTicket);
-            log.info(savedWinnerTicket);
-            return winningTicket.getSavedWinnerTicket(savedWinnerTicket);
+            WinningTicket winningTicket = new WinningTicket(ticketId, winningNumbers, nextDrawDate);
+            WinningTicket savedWinningTicket = winningNumbersRepository.save(winningTicket);
+            log.info(savedWinningTicket);
+
+            return WinningTicketDto.builder()
+                    .ticketId(savedWinningTicket.ticketId())
+                    .winningNumbers(savedWinningTicket.winningNumbers())
+                    .drawDate(savedWinningTicket.drawDate())
+                    .build();
         }
         return WinningTicketDto.builder()
                 .winningNumbers(Collections.emptySet())
-                .winningTicketMessage(new WinningTicketMessageDto("Ticket not win"))
                 .build();
     }
 

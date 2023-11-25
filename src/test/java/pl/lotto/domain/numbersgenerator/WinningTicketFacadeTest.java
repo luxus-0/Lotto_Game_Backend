@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 class WinningTicketFacadeTest {
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
     WinningNumbersConfigurationProperties properties = mock(WinningNumbersConfigurationProperties.class);
-    WinningTicketManager manager = mock(WinningTicketManager.class);
+    WinningNumbersManager manager = mock(WinningNumbersManager.class);
     WinningNumbersRepository winningNumbersRepository = mock(WinningNumbersRepository.class);
 
     @Test
