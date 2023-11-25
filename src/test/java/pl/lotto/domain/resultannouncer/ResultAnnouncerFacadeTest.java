@@ -3,6 +3,7 @@ package pl.lotto.domain.resultannouncer;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateGenerator;
+import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
@@ -32,7 +33,7 @@ class ResultAnnouncerFacadeTest {
 
     DrawDateGenerator drawDateGenerator = mock(DrawDateGenerator.class);
     @Test
-    public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
+    public void should_return_lose_message_when_ticket_is_not_winning_ticket() throws WinnerNumbersNotFoundException {
         //given
         DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
@@ -60,7 +61,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_return_win_message_when_ticket_is_winning_ticket() {
+    public void should_return_win_message_when_ticket_is_winning_ticket() throws WinnerNumbersNotFoundException {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
         String ticketId = "123456";
@@ -88,7 +89,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_return_wait_message_when_date_is_before_announcement_time(){
+    public void should_return_wait_message_when_date_is_before_announcement_time() throws WinnerNumbersNotFoundException {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 31, 12, 0,0 );
         String hash = "12345";
@@ -118,7 +119,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_return_hash_does_not_exist_message_when_hash_does_not_exist() {
+    public void should_return_hash_does_not_exist_message_when_hash_does_not_exist() throws WinnerNumbersNotFoundException {
         //given
         String ticketId = "";
 
@@ -131,7 +132,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void it_should_return_response_with_hash_does_not_exist_message_if_response_is_not_saved_to_db_yet() {
+    public void it_should_return_response_with_hash_does_not_exist_message_if_response_is_not_saved_to_db_yet() throws WinnerNumbersNotFoundException {
         //given
         DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
@@ -155,7 +156,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_input_numbers_is_empty() {
+    public void should_throw_an_exception_when_input_numbers_is_empty() throws WinnerNumbersNotFoundException {
         //given
         String ticketId = "1234";
 
@@ -177,7 +178,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_hit_numbers_is_empty() {
+    public void should_throw_an_exception_when_hit_numbers_is_empty() throws WinnerNumbersNotFoundException {
         //given
         String ticketId = "";
 

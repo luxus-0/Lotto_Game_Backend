@@ -1,6 +1,7 @@
 package pl.lotto.domain.resultannouncer;
 
 import lombok.AllArgsConstructor;
+import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultannouncer.exceptions.ResultLottoNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
@@ -18,7 +19,7 @@ public class ResultAnnouncerFacade {
     private final ResultLottoRepository resultLottoRepository;
     private final Clock clock;
 
-    public ResultAnnouncerResponseDto findResult(String ticketId) {
+    public ResultAnnouncerResponseDto findResult(String ticketId) throws WinnerNumbersNotFoundException {
         if(ticketId == null){
             throw new IllegalArgumentException("Ticket id is empty");
         }

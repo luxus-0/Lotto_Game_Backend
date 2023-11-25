@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 
@@ -15,7 +16,7 @@ public class ResultAnnouncerRestController {
     private final ResultAnnouncerFacade resultAnnouncerFacade;
 
     @GetMapping("/results/{ticketId}")
-    ResponseEntity<ResultAnnouncerResponseDto> checkResultByTicketId(@PathVariable String ticketId) {
+    ResponseEntity<ResultAnnouncerResponseDto> checkResultByTicketId(@PathVariable String ticketId) throws WinnerNumbersNotFoundException {
         ResultAnnouncerResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
         return ResponseEntity.ok(resultAnnouncerResponseDto);
     }
