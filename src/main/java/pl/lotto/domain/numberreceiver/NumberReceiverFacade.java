@@ -26,10 +26,10 @@ public class NumberReceiverFacade {
         if (validate) {
             String ticketId = hashGenerator.generateTicketId();
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-            Ticket ticket = new Ticket(ticketId, numbersFromUser, drawDate);
+            Ticket ticket = new Ticket(ticketId, numbersFromUser, drawDate, validationMessage.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
             return TicketResponseDto.builder()
-                    .ticketDto(TicketDto.builder()
+                    .ticket(TicketDto.builder()
                             .ticketId(ticketSaved.ticketId())
                             .numbers(ticketSaved.numbers())
                             .drawDate(ticketSaved.drawDate())

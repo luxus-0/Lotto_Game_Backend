@@ -57,7 +57,6 @@ class ResultCheckerMapper {
                         .numbers(ticket.numbers())
                         .hitNumbers(ticket.hitNumbers())
                         .drawDate(ticket.drawDate())
-                        .message(ticket.message())
                         .build())
                 .toList();
     }

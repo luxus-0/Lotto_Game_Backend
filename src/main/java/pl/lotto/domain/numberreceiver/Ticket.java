@@ -10,5 +10,5 @@ import java.util.Set;
 
 @Builder
 @Document
-public record Ticket(@Id String ticketId, Set<Integer> numbers, LocalDateTime drawDate) {
+public record Ticket(@Id String ticketId, Set<Integer> numbers, LocalDateTime drawDate, String message) {
 }
