@@ -11,14 +11,10 @@ import java.util.List;
 public class TicketValidationMessageProvider {
     private final NumbersReceiverValidator validator;
 
-    public TicketMessageDto getMessage() {
-        List<TicketValidationResult> messagesResult = validator.errors;
-        return messagesResult.stream()
+    public String getMessage() {
+        return validator.errors.stream()
                 .map(TicketValidationResult::getInfo)
-                .map(TicketMessageDto::new)
                 .findAny()
-                .orElse(TicketMessageDto.builder()
-                        .message("")
-                        .build());
+                .orElseThrow(() -> new RuntimeException("Undefinied validation message"));
     }
 }
