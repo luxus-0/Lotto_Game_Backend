@@ -85,11 +85,11 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResult = perform.andExpect(status -> status(200)).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
-        String ticketId = ticketResponseDto.ticketDto().ticketId();
+        String ticketId = ticketResponseDto.ticket().ticketId();
         //then
         assertAll(
                 () -> assertThat(ticketId).isNotNull(),
-                () -> assertThat(ticketResponseDto.ticketDto().drawDate()).isEqualTo(drawDate),
+                () -> assertThat(ticketResponseDto.ticket().drawDate()).isEqualTo(drawDate),
                 () -> assertThat(ticketResponseDto.message()).isEqualTo("equals six numbers")
         );
     }

@@ -6,7 +6,6 @@ import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateFacadeConfiguration;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.numberreceiver.dto.TicketMessageDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;
@@ -15,36 +14,38 @@ import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static pl.lotto.domain.numberreceiver.TicketValidationResult.*;
 class NumberReceiverFacadeTest {
 
-    TicketRepository ticketRepository = new InMemoryTicketRepository();
-
+    TicketRepository ticketRepository = mock(TicketRepository.class);
+    TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
+    AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,7,6, 12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
 
     @Test
     public void should_return_six_numbers_message_when_user_gave_6_numbers() {
         // given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,7,6, 12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> inputNumbers = Set.of(1,2,3,4,5,6);
         // when
+        when(ticketRepository.save(any(Ticket.class)))
+                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1,2,3,4,5,6), LocalDateTime.now(), ""));
+
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(inputNumbers);
         // then
-        TicketDto actualTicket = actualNumberReceiver.ticketDto();
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(actualTicket, new TicketMessageDto(EQUALS_SIX_NUMBERS.getInfo()));
-        assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
+        assertThat(actualNumberReceiver.message()).isEqualTo(EQUALS_SIX_NUMBERS.getInfo());
     }
 
     @Test
     public void should_return_less_than_six_numbers_message_when_user_gave_less_than_6_numbers() {
         // given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
@@ -52,9 +53,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(LESS_THAN_SIX_NUMBERS.getInfo()));
-
-        assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
+        assertThat(actualNumberReceiver.message()).isEqualTo(LESS_THAN_SIX_NUMBERS.getInfo());
     }
 
     @Test
@@ -69,7 +68,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(MORE_THAN_SIX_NUMBERS.getInfo()));
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, MORE_THAN_SIX_NUMBERS.getInfo());
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
@@ -77,8 +76,6 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_out_of_range_message_when_user_gave_at_least_one_number_out_of_range_from_1_to_99() {
         // given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
@@ -86,7 +83,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(OUT_OF_RANGE_NUMBERS.getInfo()));
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, OUT_OF_RANGE_NUMBERS.getInfo());
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
@@ -94,8 +91,6 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_no_numbers_message_when_user_gave_any_numbers() {
         // given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
@@ -103,7 +98,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(EMPTY_NUMBERS.getInfo()));
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, EMPTY_NUMBERS.getInfo());
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
@@ -112,8 +107,6 @@ class NumberReceiverFacadeTest {
     @DisplayName("return out of range message when user gave negative number")
     public void should_return_out_of_range_message_when_user_gave_one_negative_number() {
         // given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
@@ -121,7 +114,7 @@ class NumberReceiverFacadeTest {
         // when
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, new TicketMessageDto(OUT_OF_RANGE_NUMBERS.getInfo()));
+        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, OUT_OF_RANGE_NUMBERS.getInfo());
 
         assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
     }
@@ -129,35 +122,38 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_correct_hash() {
         //given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022, 12, 2,12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
-        Set<Integer> inputNumber = Set.of(1, 2, 3, 4, 5, 6);
-        String expectedHash = "1234567";
+        Set<Integer> inputNumbers = Set.of(1,2,3,4,5,6);
         //when
-        String actualHash = numberReceiverFacade.inputNumbers(inputNumber).ticketDto().ticketId();
+
+        when(ticketRepository.save(any(Ticket.class)))
+                .thenReturn(new Ticket("123456", Set.of(1,2,3,4,5,6), LocalDateTime.now(), ""));
+
+        TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(inputNumbers);
+        String actualTicketId = actualTicket.ticket().ticketId();
         //then
-        assertThat(actualHash).isEqualTo(expectedHash);
-        assertThat(actualHash).isNotNull();
-        assertThat(actualHash).hasSize(7);
+        assertThat(actualTicket).isNotNull();
+        assertThat(actualTicketId).isEqualTo("123456");
+        assertThat(actualTicket.ticket().numbers()).hasSize(6);
     }
 
     @Test
     public void should_return_correct_draw_date() {
         // given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 18, 12, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of(1, 2, 3, 4, 5, 6);
-        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 2, 25, 12, 0, 0);
+        LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 11, 17, 12, 0, 0);
 
         // when
-        TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        LocalDateTime actualDrawDate = actualNumberReceiver.ticketDto().drawDate();
+        when(ticketRepository.save(any(Ticket.class)))
+                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1,2,3,4,5,6), LocalDateTime.of(2022, 11, 17, 12, 0, 0), ""));
+
+        TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(numbersFromUser);
+        LocalDateTime actualDrawDate = actualTicket.ticket().drawDate();
         // then
         assertThat(actualDrawDate).isEqualTo(expectedDrawDate);
     }
@@ -165,11 +161,10 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_next_Saturday_draw_date_when_date_is_Saturday_afternoon() {
         //given
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 25, 12, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
                 .drawDateFacade(clock);
 
-        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 3, 4, 12, 0, 0,0);
+        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 7, 8, 12, 0, 0,0);
         //when
         LocalDateTime actualDrawDate = drawDateFacade.retrieveNextDrawDate();
         //then
@@ -179,17 +174,18 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_next_Saturday_draw_date_when_date_is_Saturday_noon() {
         //given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 20, 12, 0, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
         //when
-        TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(inputNumbers);
-        LocalDateTime actualDrawDate = actualNumberReceiver.ticketDto().drawDate();
+        when(ticketRepository.save(any(Ticket.class)))
+                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1,2,3,4,5,6), LocalDateTime.of(2023, 11, 17, 12, 0, 0, 0), ""));
+
+        TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(inputNumbers);
+        LocalDateTime actualDrawDate = actualTicket.ticket().drawDate();
         //then
-        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 2, 25, 12, 0, 0, 0);
+        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 11, 17, 12, 0, 0, 0);
 
         assertThat(actualDrawDate).isEqualTo(expectedDrawDate);
     }
@@ -197,15 +193,13 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_tickets_with_correct_draw_date() {
         //given
-        TicketIdGeneratorImpl ticketIdGeneratorImpl = new TicketIdGeneratorImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 2, 11, 12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
                 .drawDateFacade(clock);
 
         TicketDto expectedTicket = TicketDto.builder()
-                .ticketId(ticketIdGeneratorImpl.generateTicketId())
+                .ticketId(hashGenerator.generateTicketId())
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
-                .drawDate(LocalDateTime.of(2023,2,18,12,0,0,0))
+                .drawDate(LocalDateTime.of(2023,7,8,12,0,0,0))
                 .build();
         // when
         LocalDateTime actualDrawDate = drawDateFacade.retrieveNextDrawDate();
@@ -216,8 +210,6 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_empty_collection_if_there_are_no_ticket() {
         //given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2022,10,8,12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
@@ -231,7 +223,6 @@ class NumberReceiverFacadeTest {
     @Test
     public void it_should_return_empty_collections_if_given_date_is_after_next_drawDate() {
         // given
-        TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
         LocalDateTime actualDrawDate = LocalDateTime.of(2022,10,8,12,0,0);
         AdjustableClock clock = new AdjustableClock(actualDrawDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
@@ -248,11 +239,10 @@ class NumberReceiverFacadeTest {
     @Test
     public void should_return_next_draw_date() {
         // given
-        AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,4,5,12,0,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
                 .drawDateFacade(clock);
 
-        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 4, 8, 12, 0, 0, 0);
+        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 7, 8, 12, 0, 0, 0);
         // when
         LocalDateTime actualDrawDate = drawDateFacade.retrieveNextDrawDate();
         // then

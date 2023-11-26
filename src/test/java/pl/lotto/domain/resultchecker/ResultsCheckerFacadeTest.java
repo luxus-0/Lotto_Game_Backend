@@ -48,19 +48,16 @@ class ResultsCheckerFacadeTest {
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
-                                .message("WIN")
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
-                                .message("WIN")
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .drawDate(drawDate)
-                                .message("WIN")
                                 .build()
                 ));
         //when
@@ -147,21 +144,18 @@ class ResultsCheckerFacadeTest {
                                 .numbers(Set.of(4, 5, 6, 10, 11, 12))
                                 .hitNumbers(Set.of(4,5,6))
                                 .drawDate(drawDate)
-                                .message("WIN")
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("002")
                                 .numbers(Set.of(4, 5, 6, 10, 11, 12))
                                 .hitNumbers(Set.of(4,5,6))
                                 .drawDate(drawDate)
-                                .message("WIN")
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("003")
                                 .numbers(Set.of(4, 5, 6, 10, 11, 12))
                                 .hitNumbers(Set.of(4,5,6))
                                 .drawDate(drawDate)
-                                .message("WIN")
                                 .build())
         );
         resultCheckerFacade.generateResults();
