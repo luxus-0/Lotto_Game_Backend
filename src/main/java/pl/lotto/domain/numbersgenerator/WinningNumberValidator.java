@@ -1,18 +1,23 @@
 package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
-import pl.lotto.domain.numbersgenerator.exceptions.IncorrectSizeNumbersException;
+import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 
 import java.util.Set;
 
 @AllArgsConstructor
+@Log4j2
 class WinningNumberValidator {
     private final WinningNumbersConfigurationProperties properties;
 
     public boolean validate(Set<Integer> winningNumbers) {
         if (outOfRange(winningNumbers)) {
-            throw new OutOfRangeNumbersException("Numbers out of range!");
+            try {
+                throw new OutOfRangeNumbersException("Numbers out of range!");
+            } catch (OutOfRangeNumbersException e) {
+                log.error(e.getMessage());
+            }
         }
         return true;
     }
