@@ -19,7 +19,7 @@ public class ResultAnnouncerFacade {
     private final ResultLottoRepository resultLottoRepository;
     private final Clock clock;
 
-    public ResultAnnouncerResponseDto findResult(String ticketId) throws WinnerNumbersNotFoundException {
+    public ResultAnnouncerResponseDto findResult(String ticketId) {
         if(ticketId == null){
             throw new IllegalArgumentException("Ticket id is empty");
         }

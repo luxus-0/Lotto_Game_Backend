@@ -12,6 +12,7 @@ public class ResultLottoMapper {
                 .hitNumbers(resultLottoSaved.hitNumbers())
                 .drawDate(resultLottoSaved.drawDate())
                 .isWinner(resultLottoSaved.isWinner())
+                .message(resultLottoSaved.message())
                 .build();
     }
 
