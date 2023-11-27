@@ -19,18 +19,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static pl.lotto.domain.resultchecker.ResultCheckerFacadeTestConstant.LOSE;
+import static pl.lotto.domain.resultchecker.ResultCheckerFacadeTestConstant.WIN;
 import static pl.lotto.domain.resultchecker.ResultCheckerFacadeTestMessageProvider.getPlayerResultMessage;
 
 class ResultsCheckerFacadeTest {
 
-    private final WinningTicketFacade winningTicketFacade = mock(WinningTicketFacade.class);
-    private final NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
-    private final DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
+    WinningTicketFacade winningTicketFacade = mock(WinningTicketFacade.class);
+    NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
+    DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
+    PlayerRepository playerRepository = mock(PlayerRepository.class);
+
 
     @Test
     public void should_generate_all_players_with_correct_message() {
         //given
-        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
@@ -64,7 +67,7 @@ class ResultsCheckerFacadeTest {
         PlayersDto playersDto = resultCheckerFacade.generateResults();
         String playerResultMessage = playersDto.results().stream().map(ResultLotto::message).findAny().orElseThrow();
         //then
-        assertThat(playerResultMessage).isEqualTo("WIN");
+        assertThat(playerResultMessage).isEqualTo(WIN);
     }
 
     @Test
@@ -82,7 +85,7 @@ class ResultsCheckerFacadeTest {
         PlayersDto playersDto = resultCheckerFacade.generateResults();
         String playerResultMessage = getPlayerResultMessage(playersDto);
         //then
-        assertThat(playerResultMessage).isEqualTo("LOSE");
+        assertThat(playerResultMessage).isEqualTo(LOSE);
     }
 
     @Test
@@ -135,7 +138,7 @@ class ResultsCheckerFacadeTest {
         when(winningTicketFacade.generateWinningTicket()).thenReturn(
                 WinningTicketDto.builder()
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
-                .message("WIN")
+                .message(WIN)
                 .build());
 
         when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
@@ -164,7 +167,7 @@ class ResultsCheckerFacadeTest {
                         .numbers(Set.of(4, 5, 6, 10, 11, 12))
                         .hitNumbers(Set.of(4, 5, 6))
                         .drawDate(drawDate)
-                        .message("WIN")
+                        .message(WIN)
                         .isWinner(true)
                 .build());
         //when
@@ -177,7 +180,7 @@ class ResultsCheckerFacadeTest {
                 .hitNumbers(Set.of(4, 5, 6))
                 .drawDate(drawDate)
                 .isWinner(true)
-                .message("WIN")
+                .message(WIN)
                 .build();
         assertThat(resultDto).isEqualTo(expectedResult);
     }
