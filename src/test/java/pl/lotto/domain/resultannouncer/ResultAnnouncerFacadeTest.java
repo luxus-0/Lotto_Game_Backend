@@ -31,12 +31,12 @@ class ResultAnnouncerFacadeTest {
     ResultLottoRepository resultLottoRepository = mock(ResultLottoRepository.class);
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
 
-    Clock clock = Clock.fixed(LocalDateTime.of(2021,11,12,12,0,0,0).toInstant(UTC), ZoneId.systemDefault());
+    Clock clock = Clock.fixed(LocalDateTime.of(2023,11,12,12,0,0,0).toInstant(UTC), ZoneId.systemDefault());
 
     @Test
     public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
         //given
-        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
+        LocalDateTime drawDate = LocalDateTime.of(2022,12,12,12,0,0);
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
                 .resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
 
@@ -59,13 +59,10 @@ class ResultAnnouncerFacadeTest {
                 .message(LOSE.message)
                 .build();
 
+        when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.of(2022,12,11,12, 12, 0, 0));
         when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(expectedResult);
-
-        when(resultLottoRepository.findByTicketId(ticketId))
-                .thenReturn(Optional.of(expectedResultLotto));
-
-        when(resultLottoRepository.save(any(ResultLotto.class)))
-                .thenReturn(expectedResultLotto);
+        when(resultLottoRepository.findByTicketId(ticketId)).thenReturn(Optional.of(expectedResultLotto));
+        when(resultLottoRepository.save(any(ResultLotto.class))).thenReturn(expectedResultLotto);
         //when && then
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketId);
 
@@ -125,6 +122,7 @@ class ResultAnnouncerFacadeTest {
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
                 .hitNumbers(Set.of(4, 11, 15))
                 .drawDate(drawDate)
+                .isWinner(true)
                 .build();
 
         ResultDto result = ResultDto.builder()
@@ -132,6 +130,7 @@ class ResultAnnouncerFacadeTest {
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
                 .hitNumbers(Set.of(4, 11, 15))
                 .drawDate(drawDate)
+                .isWinner(true)
                 .build();
 
         when(resultsCheckerFacade.findResultByTicketId("12345"))
@@ -149,6 +148,7 @@ class ResultAnnouncerFacadeTest {
                 .ticketId("12345")
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
                 .hitNumbers(Set.of(4, 11, 15))
+                .isWinner(true)
                 .drawDate(drawDate)
                 .build();
 

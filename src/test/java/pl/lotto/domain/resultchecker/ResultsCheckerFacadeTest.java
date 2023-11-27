@@ -129,11 +129,13 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_return_result_with_correct_credentials() {
         //given
-        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
-        LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
+        LocalDateTime drawDate = LocalDateTime.of(2023, 11, 11, 12, 0, 0);
         String ticketId = "001";
+
+        when(drawDateFacade.retrieveNextDrawDate())
+                .thenReturn(LocalDateTime.of(2022, 10, 12, 12, 0, 0));
 
         when(winningTicketFacade.generateWinningTicket()).thenReturn(
                 WinningTicketDto.builder()
