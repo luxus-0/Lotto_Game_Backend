@@ -6,10 +6,13 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import static pl.lotto.domain.drawdate.DrawDateMessageProvider.INCORRECT_NEXT_DRAW_DATE;
 
 @AllArgsConstructor
 @Service
@@ -28,6 +31,7 @@ public class NumberReceiverFacade {
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
             Ticket ticket = new Ticket(ticketId, numbersFromUser, drawDate, validationMessage.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
+
             return TicketResponseDto.builder()
                     .ticket(TicketDto.builder()
                             .ticketId(ticketSaved.ticketId())
@@ -52,7 +56,7 @@ public class NumberReceiverFacade {
     public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         if (date.isAfter(nextDrawDate)) {
-            throw new IllegalArgumentException("Date is after next draw date");
+            throw new DateTimeException(INCORRECT_NEXT_DRAW_DATE);
         }
         return ticketRepository.findTicketsByDrawDate(date)
                 .stream()
