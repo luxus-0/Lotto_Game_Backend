@@ -9,7 +9,8 @@ import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.util.List;
 
-import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.WINNER_NUMBERS_MESSAGE;
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_NOT_FOUND;
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_WIN;
 
 @AllArgsConstructor
 class ResultCheckerMapper {
@@ -22,7 +23,7 @@ class ResultCheckerMapper {
                         .hitNumbers(player.hitNumbers())
                         .drawDate(player.drawDate())
                         .isWinner(player.isWinner())
-                        .message(player.message())
+                        .message(PLAYER_WIN)
                         .build())
                 .toList();
     }
@@ -32,7 +33,7 @@ class ResultCheckerMapper {
                 .stream()
                 .map(ResultCheckerMapper::mapToPlayer)
                 .findAny()
-                .orElseThrow(() -> new PlayerResultNotFoundException("Player result not found"));
+                .orElseThrow(() -> new PlayerResultNotFoundException(PLAYER_NOT_FOUND));
     }
 
     static Player mapToPlayer(ResultLotto player) {

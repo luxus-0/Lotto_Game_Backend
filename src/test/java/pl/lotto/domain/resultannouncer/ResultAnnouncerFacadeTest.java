@@ -115,22 +115,18 @@ class ResultAnnouncerFacadeTest {
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
                 .resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
 
-        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 31, 12, 0,0 );
+        LocalDateTime drawDate = LocalDateTime.now().plusDays(2);
 
         ResultLotto resultLotto = ResultLotto.builder()
                 .ticketId("12345")
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
-                .hitNumbers(Set.of(4, 11, 15))
                 .drawDate(drawDate)
-                .isWinner(true)
                 .build();
 
         ResultDto result = ResultDto.builder()
                 .ticketId("12345")
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
-                .hitNumbers(Set.of(4, 11, 15))
                 .drawDate(drawDate)
-                .isWinner(true)
                 .build();
 
         when(resultsCheckerFacade.findResultByTicketId("12345"))
@@ -147,8 +143,6 @@ class ResultAnnouncerFacadeTest {
         ResultDto responseDto = ResultDto.builder()
                 .ticketId("12345")
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
-                .hitNumbers(Set.of(4, 11, 15))
-                .isWinner(true)
                 .drawDate(drawDate)
                 .build();
 
