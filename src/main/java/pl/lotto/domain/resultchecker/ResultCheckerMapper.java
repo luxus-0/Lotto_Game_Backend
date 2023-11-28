@@ -23,7 +23,7 @@ class ResultCheckerMapper {
                         .hitNumbers(player.hitNumbers())
                         .drawDate(player.drawDate())
                         .isWinner(player.isWinner())
-                        .message(PLAYER_WIN)
+                        .message(player.message())
                         .build())
                 .toList();
     }
@@ -58,6 +58,7 @@ class ResultCheckerMapper {
                         .numbers(ticket.numbers())
                         .hitNumbers(ticket.hitNumbers())
                         .drawDate(ticket.drawDate())
+                        .message(ticket.message())
                         .build())
                 .toList();
     }

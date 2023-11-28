@@ -13,7 +13,7 @@ class ResultCheckerValidation {
     }
 
     private boolean isCorrectSize(Set<Integer> winnerNumbers) {
-        return winnerNumbers.size() == QUANTITY_NUMBERS;
+        return winnerNumbers.size() < QUANTITY_NUMBERS;
     }
 
     private boolean isInRange(Set<Integer> winnerNumbers) {
