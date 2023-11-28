@@ -6,6 +6,8 @@ import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 
 import java.util.Set;
 
+import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.OUT_OF_RANGE;
+
 @AllArgsConstructor
 @Log4j2
 class WinningNumberValidator {
@@ -14,7 +16,7 @@ class WinningNumberValidator {
     public boolean validate(Set<Integer> winningNumbers) {
         if (outOfRange(winningNumbers)) {
             try {
-                throw new OutOfRangeNumbersException("Numbers out of range!");
+                throw new OutOfRangeNumbersException(OUT_OF_RANGE);
             } catch (OutOfRangeNumbersException e) {
                 log.error(e.getMessage());
             }

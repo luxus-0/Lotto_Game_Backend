@@ -6,7 +6,6 @@ import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
-import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 
 import java.time.LocalDateTime;
@@ -30,8 +29,8 @@ public class WinningTicketFacade {
         String ticketId = randomNumbersGenerable.generateUniqueTicketId();
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         Set<Integer> randomNumbers = randomNumbersGenerable.generateSixRandomNumbers().randomNumbers();
-        Set<Integer> userNumbers = numberReceiverFacade.retrieveUserNumbersByDrawDate(nextDrawDate);
-        Set<Integer> winningNumbers = retrieveWinningNumbers(randomNumbers, userNumbers);
+        Set<Integer> userInputNumbers = numberReceiverFacade.retrieveUserNumbersByDrawDate(nextDrawDate);
+        Set<Integer> winningNumbers = retrieveWinningNumbers(randomNumbers, userInputNumbers);
         boolean validate = winningNumberValidator.validate(winningNumbers);
         if (validate) {
             WinningTicket winningTicket = new WinningTicket(ticketId, winningNumbers, nextDrawDate);
