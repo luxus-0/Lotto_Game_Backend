@@ -22,7 +22,6 @@ import static pl.lotto.domain.resultchecker.ResultCheckerFacadeTestConstant.LOSE
 import static pl.lotto.domain.resultchecker.ResultCheckerFacadeTestConstant.WIN;
 import static pl.lotto.domain.resultchecker.ResultCheckerFacadeTestMessageProvider.getPlayerResultMessage;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_LOSE;
-import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_WIN;
 
 class ResultsCheckerFacadeTest {
 
@@ -74,7 +73,8 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_generate_fail_message_when_winning_numbers_is_empty() {
         //given
-        ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
+        ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
         when(winningTicketFacade.generateWinningTicket()).thenReturn(
                 WinningTicketDto.builder()
@@ -91,7 +91,6 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_generate_lose_message_when_no_winning_numbers() {
         //given
-
         when(winningTicketFacade.generateWinningTicket()).thenReturn(
                 WinningTicketDto.builder()
                         .ticketId("123456")
@@ -109,7 +108,8 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_return_result_with_correct_credentials() {
         //given
-        ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
+        ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2023, 11, 11, 12, 0, 0);
         String ticketId = "001";
@@ -169,7 +169,6 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_return_win_player_when_hit_numbers_are_more_than_three() {
         //given
-        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
@@ -213,8 +212,8 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_return_not_win_player_when_hit_numbers_are_less_than_three() {
         //given
-        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
         Ticket ticket1 = Ticket.builder()
                 .ticketId("1234")
@@ -258,8 +257,8 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_return_not_win_player_when_hit_numbers_are_empty() {
         //given
-        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
         Ticket ticket1 = Ticket.builder()
                 .ticketId("1234")
@@ -303,8 +302,8 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_return_not_win_player_when_input_numbers_are_empty() {
         //given
-        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
         Ticket ticket1 = Ticket.builder()
                 .ticketId("1234")
@@ -348,8 +347,8 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_return_empty_players_when_tickets_is_empty() {
         //given
-        PlayerRepository playerRepository = new PlayerRepositoryTestImpl();
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
         //when
@@ -362,7 +361,8 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_return_no_winners_when_tickets_is_empty_and_winning_numbers_is_null() {
         //given
-        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration().resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
+        ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
+                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
         //when
         WinnersRetriever winnersRetriever = resultsCheckerFacade.winnersRetriever();
