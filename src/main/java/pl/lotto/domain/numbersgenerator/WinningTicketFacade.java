@@ -14,6 +14,7 @@ import java.util.Set;
 
 import static pl.lotto.domain.numbersgenerator.WinningNumbersManager.retrieveWinningNumbers;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.WINNING_NUMBERS_NOT_FOUND;
+import static pl.lotto.domain.numbersgenerator.WinningTicketMessageProvider.NO_WINNING_TICKET;
 
 @AllArgsConstructor
 @Log4j2
@@ -45,6 +46,7 @@ public class WinningTicketFacade {
         }
         return WinningTicketDto.builder()
                 .winningNumbers(Collections.emptySet())
+                .message(NO_WINNING_TICKET)
                 .build();
     }
 
