@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.*;
-import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_LOSE_MESSAGE;
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_LOSE;
 
 public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                    DrawDateFacade drawDateFacade,
@@ -36,7 +36,7 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
         }
        return PlayersDto.builder()
               .results(List.of(ResultLotto.builder()
-                      .message(PLAYER_LOSE_MESSAGE)
+                      .message(PLAYER_LOSE)
                      .build()))
                .build();
     }
