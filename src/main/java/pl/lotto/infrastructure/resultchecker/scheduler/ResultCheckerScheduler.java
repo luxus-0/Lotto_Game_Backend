@@ -15,7 +15,7 @@ public class ResultCheckerScheduler {
     private final WinningTicketFacade winningTicketFacade;
 
     @Scheduled(cron = "${results.checker.lottery.run.occurence}")
-    public void generateWinners() throws WinnerNumbersNotFoundException {
+    public void generateWinners() {
         log.info("Winners lottery scheduler started");
         if (!winningTicketFacade.areWinningNumbersGeneratedByDate()) {
             log.error("Winning numbers are not generated");

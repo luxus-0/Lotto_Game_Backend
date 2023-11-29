@@ -16,7 +16,7 @@ public class ResultAnnouncerRestController {
     private final ResultAnnouncerFacade resultAnnouncerFacade;
 
     @GetMapping("/results/{ticketId}")
-    ResponseEntity<ResultAnnouncerResponseDto> checkResultByTicketId(@PathVariable String ticketId) throws WinnerNumbersNotFoundException {
+    ResponseEntity<ResultAnnouncerResponseDto> checkResultByTicketId(@PathVariable String ticketId) {
         ResultAnnouncerResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
         return ResponseEntity.ok(resultAnnouncerResponseDto);
     }
