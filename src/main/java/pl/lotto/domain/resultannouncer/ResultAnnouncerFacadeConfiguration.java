@@ -20,11 +20,6 @@ public class ResultAnnouncerFacadeConfiguration {
     }
 
     @Bean
-    public ResultLottoRepository resultLottoRepository(){
-        return new InMemoryResultLottoRepository();
-    }
-
-    @Bean
     public ResultAnnouncerFacade resultAnnouncerFacade(ResultsCheckerFacade resultsCheckerFacade, ResultLottoRepository resultLottoRepository, Clock clock) {
         return new ResultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
     }
