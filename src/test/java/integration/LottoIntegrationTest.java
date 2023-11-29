@@ -2,6 +2,7 @@ package integration;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +17,21 @@ import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
+import pl.lotto.domain.resultannouncer.exceptions.ResultLottoNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
+import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,17 +41,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @Log4j2
 public class LottoIntegrationTest extends BaseIntegrationTest {
 
+
     @Autowired
-    WinningTicketFacade winningTicketFacade;
+    private WinningTicketFacade winningTicketFacade;
     @Autowired
-    ResultsCheckerFacade resultsCheckerFacade;
+    private ResultsCheckerFacade resultsCheckerFacade;
     @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     @Test
     public void should_user_win_and_generate_winners() {
         //given
-        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
+        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=12&min=1&max=99&format=plain&col=1&base=10")
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -63,7 +69,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         return !winningTicketFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
 
                     } catch (WinningNumbersNotFoundException e) {
-                        return false;
+                        return true;
                     }
                 });
     }
@@ -119,16 +125,17 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_return_status_404_with_no_ticket_id() throws Exception {
         // given && when
-        String ticketId = "12345";
+        String nonExistingTicketId = "12345";
 
-        ResultActions performGetMethod = mockMvc.perform(get("/results/12345"));
+        MvcResult mvcResult = mockMvc.perform(get("/results/"+ nonExistingTicketId))
+                .andExpect(result -> status(404))
+                .andReturn();
 
-        // then
-        MvcResult mvcResultGetMethod = performGetMethod.andExpect(result -> status(404)).andReturn();
-        String jsonGetMethod = mvcResultGetMethod.getResponse().getContentAsString();
-        ResultAnnouncerResponseDto finalResult = objectMapper.readValue(jsonGetMethod, ResultAnnouncerResponseDto.class);
+        //then
+        String jsonGetMethod = mvcResult.getResponse().getContentAsString();
+        assertThatThrownBy(() -> objectMapper.readValue(jsonGetMethod, ResultAnnouncerResponseDto.class))
+                .hasMessageContaining("Ticket ID: " + nonExistingTicketId + " not found");
 
-        assertThat(finalResult.message()).isEqualTo("Player result not found");
 
     }
 
@@ -151,11 +158,11 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         ResponseEntity<String> response = restTemplate.getForEntity("https://random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10", String.class);
         //then
         assertThat(response.getBody()).isNotEmpty();
-        assertEquals(200, response.getStatusCodeValue());
+        assertTrue(response.getStatusCode().is2xxSuccessful());
     }
 
     @Test
-    public void ShouldThrowingExceptionWhenUrlIsIncorrect() {
+    public void shouldThrowingExceptionWhenUrlIsIncorrect() {
         //given
         wireMockServer.stubFor(WireMock.get(urlEqualTo("/integers.*"))
                 .willReturn(aResponse()
@@ -164,12 +171,9 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         .withStatus(500)));
         //when
         //then
-        assertThrows(IllegalArgumentException.class,
+        assertThrowsExactly(IllegalArgumentException.class,
                 () -> Objects.requireNonNull(
-                                restTemplate.exchange("/integers?num=6&min=1&max=99",
-                                                HttpMethod.GET,
-                                                null,
-                                                WinningTicketDto.class)
+                                restTemplate.exchange("/integers?num=6&min=1&max=99", HttpMethod.GET, null, WinningTicketDto.class)
                                         .getBody()));
     }
 
@@ -184,11 +188,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         //when
         //then
         assertThrows(IllegalArgumentException.class,
-                () -> Objects.requireNonNull(
-                                restTemplate.exchange("",
-                                                HttpMethod.GET,
-                                                null,
-                                                WinningTicketDto.class)
+                () -> Objects.requireNonNull(restTemplate.exchange("", HttpMethod.GET, null, WinningTicketDto.class)
                                         .getBody()));
     }
 }

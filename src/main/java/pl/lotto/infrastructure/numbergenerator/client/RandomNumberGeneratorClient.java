@@ -1,7 +1,6 @@
 package pl.lotto.infrastructure.numbergenerator.client;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -11,8 +10,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
 import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -21,10 +18,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Log4j2
-public class RandomNumberClient implements RandomNumbersGenerable {
+public class RandomNumberGeneratorClient implements RandomNumbersGenerable {
     private final RestTemplate restTemplate;
     private final WinningNumbersConfigurationProperties properties;
+
+    @Override
+    public String generateUniqueTicketId() {
+        return UUID.randomUUID().toString();
+    }
 
     @Override
     public RandomNumbersDto generateSixRandomNumbers() {
@@ -52,11 +53,6 @@ public class RandomNumberClient implements RandomNumbersGenerable {
         return RandomNumbersDto.builder()
                 .randomNumbers(generateRandomNumbers(body))
                 .build();
-    }
-
-    @Override
-    public String generateUniqueTicketId() {
-        return UUID.randomUUID().toString();
     }
 
 
