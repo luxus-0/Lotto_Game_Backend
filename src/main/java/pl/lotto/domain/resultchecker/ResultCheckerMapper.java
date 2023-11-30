@@ -10,7 +10,6 @@ import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 import java.util.List;
 
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_NOT_FOUND;
-import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_WIN;
 
 @AllArgsConstructor
 class ResultCheckerMapper {

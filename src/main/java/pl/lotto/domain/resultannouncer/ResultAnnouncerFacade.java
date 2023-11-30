@@ -25,7 +25,7 @@ public class ResultAnnouncerFacade {
         }
         ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
         ResultLotto result = resultLottoRepository.findByTicketId(ticketId)
-                .orElseThrow(() -> new ResultLottoNotFoundException("Ticket ID: " +ticketId + " not found"));
+                .orElseThrow(() -> new ResultLottoNotFoundException("Not found for ticket id: " +ticketId));
         ResultLotto resultLottoSaved = resultLottoRepository.save(result);
         ResultDto resultDtoSaved = mapToResultDtoSaved(resultLottoSaved);
                 if (!isAfterResultAnnouncementTime(resultDto)) {
