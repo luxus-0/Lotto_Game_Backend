@@ -6,7 +6,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 
 /**
  * Generate random numbers every Saturday at 12 p.m
@@ -20,7 +19,7 @@ public class WinningNumbersScheduler {
 
     @Scheduled(cron = "${numbers.generator.lottery.run.occurence}")
     public void generateWinningNumbers() {
-        WinningTicketDto winningTicketDto = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto winningTicketDto = winningTicketFacade.generateWinningNumbers();
         log.info(winningTicketDto.winningNumbers());
         log.info(winningTicketDto.drawDate());
     }

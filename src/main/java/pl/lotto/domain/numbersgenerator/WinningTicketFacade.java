@@ -26,7 +26,7 @@ public class WinningTicketFacade {
     private final NumberReceiverFacade numberReceiverFacade;
     private final RandomNumbersGenerable randomNumbersGenerable;
 
-    public WinningTicketDto generateWinningTicket() {
+    public WinningTicketDto generateWinningNumbers() {
         String ticketId = randomNumbersGenerable.generateUniqueTicketId();
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         Set<Integer> randomNumbers = randomNumbersGenerable.generateSixRandomNumbers().randomNumbers();
@@ -36,10 +36,9 @@ public class WinningTicketFacade {
         if (validate) {
             WinningTicket winningTicket = new WinningTicket(ticketId, winningNumbers, nextDrawDate);
             WinningTicket savedWinningTicket = winningNumbersRepository.save(winningTicket);
-            log.info(savedWinningTicket);
+            log.info("Winning ticket: " + savedWinningTicket);
 
             return WinningTicketDto.builder()
-                    .ticketId(savedWinningTicket.ticketId())
                     .winningNumbers(savedWinningTicket.winningNumbers())
                     .drawDate(savedWinningTicket.drawDate())
                     .build();
@@ -53,7 +52,6 @@ public class WinningTicketFacade {
     public WinningTicketDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
         return winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).stream()
                 .map(winningNumbers -> WinningTicketDto.builder()
-                        .ticketId(winningNumbers.ticketId())
                         .drawDate(winningNumbers.drawDate())
                         .winningNumbers(winningNumbers.winningNumbers())
                 .build())

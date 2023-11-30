@@ -11,7 +11,6 @@ import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +42,7 @@ class WinningTicketFacadeTest {
                         .winningNumbers(Set.of(1,2,3,4,5,6))
                         .build());
         //when
-        WinningTicketDto actualWinningTicket = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto actualWinningTicket = winningTicketFacade.generateWinningNumbers();
         //then
         assertThat(actualWinningTicket.winningNumbers().size()).isEqualTo(6);
     }
@@ -67,7 +66,7 @@ class WinningTicketFacadeTest {
                         .build());
         //when
         //then
-        boolean numbersInRange = winningTicketFacade.generateWinningTicket().winningNumbers().stream()
+        boolean numbersInRange = winningTicketFacade.generateWinningNumbers().winningNumbers().stream()
                 .anyMatch(numbers -> numbers >= 1 && numbers <= 99);
 
         assertThat(numbersInRange).isTrue();
@@ -86,7 +85,7 @@ class WinningTicketFacadeTest {
                         .winningNumbers(Set.of(1,2,3,4,5,6))
                         .build());
         //when
-        Set<Integer> winningNumbers = winningTicketFacade.generateWinningTicket().winningNumbers();
+        Set<Integer> winningNumbers = winningTicketFacade.generateWinningNumbers().winningNumbers();
         //then
         assertThrows(OutOfRangeNumbersException.class,
                 () ->
@@ -109,7 +108,7 @@ class WinningTicketFacadeTest {
                         .winningNumbers(Set.of(1,2,3,4,5,6))
                         .build());
         //when
-        WinningTicketDto generateWinningNumbers = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto generateWinningNumbers = winningTicketFacade.generateWinningNumbers();
         //then
         int sizeWinningNumbers = generateWinningNumbers.winningNumbers().size();
         assertThat(sizeWinningNumbers).isEqualTo(6);
@@ -129,7 +128,7 @@ class WinningTicketFacadeTest {
                         .winningNumbers(Set.of(1,2,3,4,5,6,7))
                         .build());
 
-        WinningTicketDto actualWinningTicket = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto actualWinningTicket = winningTicketFacade.generateWinningNumbers();
         //then
         int actualWinningNumbersSize = actualWinningTicket.winningNumbers().size();
         assertTrue(actualWinningNumbersSize > 6);
