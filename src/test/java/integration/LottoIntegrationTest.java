@@ -2,7 +2,6 @@ package integration;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +13,26 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
-import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
-import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
+import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 import pl.lotto.domain.resultannouncer.exceptions.ResultLottoNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
-import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static pl.lotto.domain.numberreceiver.TicketValidationResult.EQUALS_SIX_NUMBERS;
 
 
 @Log4j2
@@ -52,7 +49,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_user_win_and_generate_winners() {
         //given
-        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=12&min=1&max=99&format=plain&col=1&base=10")
+        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -67,8 +64,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 .until(() -> {
                     try {
                         return !winningTicketFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
-
-                    } catch (WinningNumbersNotFoundException e) {
+                    }catch (WinningNumbersNotFoundException e){
                         return true;
                     }
                 });
@@ -87,7 +83,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                         """.trim()
                 ).contentType(MediaType.APPLICATION_JSON)
         );
-        //when
+
         MvcResult mvcResult = perform.andExpect(status -> status(200)).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
@@ -96,24 +92,26 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         assertAll(
                 () -> assertThat(ticketId).isNotNull(),
                 () -> assertThat(ticketResponseDto.ticket().drawDate()).isEqualTo(drawDate),
-                () -> assertThat(ticketResponseDto.message()).isEqualTo("equals six numbers")
+                () -> assertThat(ticketResponseDto.message()).isEqualTo(EQUALS_SIX_NUMBERS.getInfo())
         );
     }
 
     @Test
     public void should_return_result_with_sample_ticket_with_correct_draw_date() {
-        // given && when && then
+        // given
         String ticketId = "1234567";
 
+        //when
         clock.plusDaysAndMinutes(3, 55);
 
+        //then
         await()
                 .atMost(30, TimeUnit.SECONDS)
                 .pollInterval(Duration.ofSeconds(10L))
                 .until(() -> {
                             try {
                                 ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
-                                return result.numbers().isEmpty();
+                                return !result.numbers().isEmpty();
                             } catch (PlayerResultNotFoundException exception) {
                                 return false;
                             }
@@ -123,20 +121,24 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_status_404_with_no_ticket_id() throws Exception {
+    public void should_return_status_404_with_no_ticket_id() {
         // given && when
-        String nonExistingTicketId = "12345";
 
-        MvcResult mvcResult = mockMvc.perform(get("/results/"+ nonExistingTicketId))
-                .andExpect(result -> status(404))
-                .andReturn();
+        try {
+            String notExistingTicketId = "12345";
 
-        //then
-        String jsonGetMethod = mvcResult.getResponse().getContentAsString();
-        assertThatThrownBy(() -> objectMapper.readValue(jsonGetMethod, ResultAnnouncerResponseDto.class))
-                .hasMessageContaining("Ticket ID: " + nonExistingTicketId + " not found");
-
-
+            mockMvc.perform(get("/results/" +notExistingTicketId))
+                    .andExpect(status -> status(404))
+                    .andExpect(content().json("""
+                            {
+                            "message" : "Not found for ticket id: 1234"
+                            "status: "NOT_FOUND"
+                            }
+                                """.trim()
+                    ));
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
 

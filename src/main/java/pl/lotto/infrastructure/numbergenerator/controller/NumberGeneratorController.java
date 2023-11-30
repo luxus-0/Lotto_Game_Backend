@@ -25,6 +25,6 @@ public class NumberGeneratorController {
 
     @GetMapping("/winning_numbers")
     WinningTicketDto generateWinningNumbers() {
-        return winningTicketFacade.generateWinningTicket();
+        return winningTicketFacade.generateWinningNumbers();
     }
 }
