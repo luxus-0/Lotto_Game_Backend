@@ -39,7 +39,7 @@ class ResultsCheckerFacadeTest {
 
         LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
 
-        when(winningTicketFacade.generateWinningTicket()).thenReturn(
+        when(winningTicketFacade.generateWinningNumbers()).thenReturn(
                 WinningTicketDto.builder()
                         .ticketId("123456")
                         .winningNumbers(Set.of(3, 4, 5))
@@ -76,7 +76,7 @@ class ResultsCheckerFacadeTest {
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
                 .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, playerRepository);
 
-        when(winningTicketFacade.generateWinningTicket()).thenReturn(
+        when(winningTicketFacade.generateWinningNumbers()).thenReturn(
                 WinningTicketDto.builder()
                         .winningNumbers(Set.of())
                         .build()
@@ -91,7 +91,7 @@ class ResultsCheckerFacadeTest {
     @Test
     public void should_generate_lose_message_when_no_winning_numbers() {
         //given
-        when(winningTicketFacade.generateWinningTicket()).thenReturn(
+        when(winningTicketFacade.generateWinningNumbers()).thenReturn(
                 WinningTicketDto.builder()
                         .ticketId("123456")
                         .drawDate(LocalDateTime.of(2021, 12, 11, 12, 0,0,0))
@@ -100,7 +100,7 @@ class ResultsCheckerFacadeTest {
                         .build()
         );
         //when
-        WinningTicketDto ticket = winningTicketFacade.generateWinningTicket();
+        WinningTicketDto ticket = winningTicketFacade.generateWinningNumbers();
         //then
         assertThat(ticket.message()).isEqualTo(LOSE);
     }
@@ -116,7 +116,7 @@ class ResultsCheckerFacadeTest {
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(drawDate);
 
-        when(winningTicketFacade.generateWinningTicket()).thenReturn(
+        when(winningTicketFacade.generateWinningNumbers()).thenReturn(
                 WinningTicketDto.builder()
                         .ticketId(ticketId)
                         .winningNumbers(Set.of(4,5,6))

@@ -23,7 +23,7 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                    ResultCheckerValidation resultCheckerValidation) {
 
     public PlayersDto generateResults() {
-        Set<Integer> winningNumbers = winningTicketFacade.generateWinningTicket().winningNumbers();
+        Set<Integer> winningNumbers = winningTicketFacade.generateWinningNumbers().winningNumbers();
         boolean validate = resultCheckerValidation.validate(winningNumbers);
         if (validate) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();

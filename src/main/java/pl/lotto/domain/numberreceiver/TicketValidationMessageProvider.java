@@ -15,6 +15,6 @@ public class TicketValidationMessageProvider {
         return validator.errors.stream()
                 .map(TicketValidationResult::getInfo)
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("Undefinied validation message"));
+                .orElseThrow(() -> new RuntimeException("No ticket message"));
     }
 }
