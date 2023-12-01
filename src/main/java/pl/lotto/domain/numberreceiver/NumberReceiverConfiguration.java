@@ -32,7 +32,6 @@ public class NumberReceiverConfiguration {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
         DrawDateGenerator drawDateGenerator = new DrawDateGenerator(clock);
         DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
-        TicketValidationMessageProvider validationMessage = new TicketValidationMessageProvider(numbersReceiverValidator);
-        return new NumberReceiverFacade(numbersReceiverValidator, drawDateFacade, ticketRepository, hashGenerator, validationMessage);
+        return new NumberReceiverFacade(numbersReceiverValidator, drawDateFacade, ticketRepository, hashGenerator);
     }
 }
