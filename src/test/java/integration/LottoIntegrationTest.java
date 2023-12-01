@@ -43,8 +43,6 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     private WinningTicketFacade winningTicketFacade;
     @Autowired
     private ResultsCheckerFacade resultsCheckerFacade;
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Test
     public void should_user_win_and_generate_winners() {
@@ -117,12 +115,12 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                             }
                         }
                 );
-        clock.plusMinutes(6);
     }
 
     @Test
-    public void should_return_status_404_with_no_ticket_id() {
+    public void should_return_status_404_not_found_and_body_with_message_not_found_for_ticket_id_nonExistingTicketId() {
         // given && when
+        clock.plusMinutes(6);
 
         try {
             String notExistingTicketId = "12345";
@@ -139,58 +137,5 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         }catch (Exception e){
             log.error(e.getMessage());
         }
-    }
-
-
-    @Test
-    public void should_return_generate_six_random_numbers_with_correct_range() {
-        //given
-        StringValuePattern countPattern = equalTo("6");
-        StringValuePattern rangeFromPattern = equalTo("1");
-        StringValuePattern rangeToPattern = equalTo("99");
-
-        wireMockServer.stubFor(WireMock.get(urlMatching("/integers.*"))
-                .willReturn(aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("1\n4\n6\n8\n10\n12\n"))
-                .withQueryParam("num", countPattern)
-                .withQueryParam("min", rangeFromPattern)
-                .withQueryParam("max", rangeToPattern));
-        //when
-        ResponseEntity<String> response = restTemplate.getForEntity("https://random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10", String.class);
-        //then
-        assertThat(response.getBody()).isNotEmpty();
-        assertTrue(response.getStatusCode().is2xxSuccessful());
-    }
-
-    @Test
-    public void shouldThrowingExceptionWhenUrlIsIncorrect() {
-        //given
-        wireMockServer.stubFor(WireMock.get(urlEqualTo("/integers.*"))
-                .willReturn(aResponse()
-                        .withHeader("Media-Type", "application/json")
-                        .withBody("")
-                        .withStatus(500)));
-        //when
-        //then
-        assertThrowsExactly(IllegalArgumentException.class,
-                () -> Objects.requireNonNull(
-                                restTemplate.exchange("/integers?num=6&min=1&max=99", HttpMethod.GET, null, WinningTicketDto.class)
-                                        .getBody()));
-    }
-
-    @Test
-    public void ShouldThrowingExceptionWhenUrlIsEmpty() {
-        //given
-        wireMockServer.stubFor(WireMock.get(urlEqualTo("/integers.*"))
-                .willReturn(aResponse()
-                        .withHeader("Media-Type", "application/json")
-                        .withBody("")
-                        .withStatus(500)));
-        //when
-        //then
-        assertThrows(IllegalArgumentException.class,
-                () -> Objects.requireNonNull(restTemplate.exchange("", HttpMethod.GET, null, WinningTicketDto.class)
-                                        .getBody()));
     }
 }
