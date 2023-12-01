@@ -1,5 +1,7 @@
 package pl.lotto.domain.numberreceiver;
 
+import org.springframework.web.client.HttpClientErrorException;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -18,15 +20,14 @@ class NumbersReceiverValidator {
             errors.add(TicketValidationResult.EQUALS_SIX_NUMBERS);
             return true;
         } else {
-
+            if(inputNumbers.isEmpty()){
+                throw new IllegalArgumentException("InputNumbers must not be empty");
+            }
             if (isLessThanSixNumbers(inputNumbers)) {
                 errors.add(TicketValidationResult.LESS_THAN_SIX_NUMBERS);
             }
             if (isMoreThanSixNumbers(inputNumbers)) {
                 errors.add(TicketValidationResult.MORE_THAN_SIX_NUMBERS);
-            }
-            if (isEmptyNumbers(inputNumbers)) {
-                errors.add(TicketValidationResult.EMPTY_NUMBERS);
             }
             if (isOutOfRange(inputNumbers)) {
                 errors.add(TicketValidationResult.OUT_OF_RANGE_NUMBERS);
