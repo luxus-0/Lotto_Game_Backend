@@ -92,14 +92,14 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_no_numbers_message_when_user_gave_any_numbers() {
+    public void should_throw_runtime_exception_when_user_gave_any_numbers() {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of();
         // when && then
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        RuntimeException exception = assertThrows(RuntimeException.class,
                 () -> numberReceiverFacade.inputNumbers(numbersFromUser));
 
         assertThat(exception.getMessage()).isEqualTo("InputNumbers must not be empty");
