@@ -1,5 +1,6 @@
 package pl.lotto.domain.numberreceiver;
 
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.AdjustableClock;
@@ -16,11 +17,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static pl.lotto.domain.numberreceiver.TicketValidationResult.*;
+@Log4j2
 class NumberReceiverFacadeTest {
 
     TicketRepository ticketRepository = mock(TicketRepository.class);
@@ -95,12 +98,12 @@ class NumberReceiverFacadeTest {
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
         Set<Integer> numbersFromUser = Set.of();
-        // when
-        TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(numbersFromUser);
-        // then
-        TicketResponseDto expectedNumberReceiver = new TicketResponseDto(null, EMPTY_NUMBERS.getInfo());
+        // when && then
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> numberReceiverFacade.inputNumbers(numbersFromUser));
 
-        assertThat(actualNumberReceiver).isEqualTo(expectedNumberReceiver);
+        assertThat(exception.getMessage()).isEqualTo("InputNumbers must not be empty");
+
     }
 
     @Test

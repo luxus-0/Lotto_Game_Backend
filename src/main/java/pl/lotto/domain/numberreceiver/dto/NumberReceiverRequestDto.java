@@ -1,9 +1,11 @@
 package pl.lotto.domain.numberreceiver.dto;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 public record NumberReceiverRequestDto(
-        @NotNull(message = "{input.numbers.not.null}")
+        @NotNull(message = "{inputNumbers.not.null}")
+        @NotEmpty(message = "{inputNumbers.not.empty}")
         Set<Integer> inputNumbers) {
 }
