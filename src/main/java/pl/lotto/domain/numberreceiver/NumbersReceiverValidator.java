@@ -16,13 +16,17 @@ class NumbersReceiverValidator {
 
     boolean validate(Set<Integer> inputNumbers) {
         errors = new LinkedList<>();
-        if (isEqualsSixNumberFrom1To99(inputNumbers)) {
+        if (inputNumbers == null) {
+            throw new RuntimeException("InputNumbers must not be null");
+        }
+
+        else if (inputNumbers.isEmpty()) {
+            throw new RuntimeException("InputNumbers must not be empty");
+        }
+        else if (isEqualsSixNumberFrom1To99(inputNumbers)) {
             errors.add(TicketValidationResult.EQUALS_SIX_NUMBERS);
             return true;
         } else {
-            if(inputNumbers.isEmpty()){
-                throw new IllegalArgumentException("InputNumbers must not be empty");
-            }
             if (isLessThanSixNumbers(inputNumbers)) {
                 errors.add(TicketValidationResult.LESS_THAN_SIX_NUMBERS);
             }
@@ -34,11 +38,6 @@ class NumbersReceiverValidator {
             }
         }
         return false;
-    }
-
-
-    boolean isEmptyNumbers(Set<Integer> inputNumbers) {
-        return inputNumbers.isEmpty();
     }
 
     boolean isLessThanSixNumbers(Set<Integer> inputNumbers) {
@@ -59,6 +58,12 @@ class NumbersReceiverValidator {
     boolean isOutOfRange(Set<Integer> inputNumbers) {
         return inputNumbers.stream()
                 .anyMatch(number -> number < MIN_NUMBER_FROM_USER || number > MAX_NUMBER_FROM_USER);
+    }
 
+    public String getMessage() {
+        return errors.stream()
+                .map(TicketValidationResult::getInfo)
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("InputNumbers must not be empty"));
     }
 }
