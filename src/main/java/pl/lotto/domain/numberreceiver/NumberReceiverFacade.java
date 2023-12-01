@@ -18,18 +18,17 @@ import static pl.lotto.domain.drawdate.DrawDateMessageProvider.INCORRECT_NEXT_DR
 @Service
 public class NumberReceiverFacade {
 
-    private final NumbersReceiverValidator numberValidator;
+    private final NumbersReceiverValidator validator;
     private final DrawDateFacade drawDateFacade;
     private final TicketRepository ticketRepository;
     private final TicketIdGenerator hashGenerator;
-    private final TicketValidationMessageProvider validationMessage;
 
     public TicketResponseDto inputNumbers(Set<Integer> numbersFromUser) {
-        boolean validate = numberValidator.validate(numbersFromUser);
+        boolean validate = validator.validate(numbersFromUser);
         if (validate) {
             String ticketId = hashGenerator.generateTicketId();
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-            Ticket ticket = new Ticket(ticketId, numbersFromUser, drawDate, validationMessage.getMessage());
+            Ticket ticket = new Ticket(ticketId, numbersFromUser, drawDate, validator.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
 
             return TicketResponseDto.builder()
@@ -38,11 +37,11 @@ public class NumberReceiverFacade {
                             .numbers(ticketSaved.numbers())
                             .drawDate(ticketSaved.drawDate())
                             .build())
-                    .message(validationMessage.getMessage())
+                    .message(validator.getMessage())
                     .build();
         }
         return TicketResponseDto.builder()
-                .message(validationMessage.getMessage())
+                .message(validator.getMessage())
                 .build();
     }
 
