@@ -1,8 +1,8 @@
 package pl.lotto.domain.numbersgenerator;
 
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
+import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
 
 public interface RandomNumbersGenerable {
     String generateUniqueTicketId();
-    RandomNumbersDto generateSixRandomNumbers();
+    RandomNumbersResponseDto generateRandomNumbers(int count, int lowerBand, int upperBand);
 }
