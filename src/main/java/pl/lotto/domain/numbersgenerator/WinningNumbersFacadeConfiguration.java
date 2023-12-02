@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import static java.time.ZoneOffset.UTC;
+import static pl.lotto.domain.numbersgenerator.RandomNumbersUrlMessage.*;
 
 @Configuration
 public class WinningNumbersFacadeConfiguration {
@@ -24,8 +25,8 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    WinningNumbersScheduler winningNumbersScheduler(WinningTicketFacade winningTicketFacade) {
-        return new WinningNumbersScheduler(winningTicketFacade);
+    WinningNumbersScheduler winningNumbersScheduler(WinningNumbersFacade winningNumbersFacade) {
+        return new WinningNumbersScheduler(winningNumbersFacade);
     }
 
     @Bean
@@ -34,28 +35,32 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
-        WinningNumberValidator winningNumberValidator = new WinningNumberValidator(properties);
+    public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
+        WinningNumbersValidator winningNumbersValidator = new WinningNumbersValidator(properties);
         RandomNumbersGenerable randomNumbersGenerable = new RandomNumberGeneratorClient(new RestTemplate(), properties);
-        return WinningTicketFacade.builder()
+        return WinningNumbersFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)
-                .winningNumberValidator(winningNumberValidator)
+                .winningNumbersValidator(winningNumbersValidator)
                 .numberReceiverFacade(numberReceiverFacade)
                 .randomNumbersGenerable(randomNumbersGenerable)
                 .build();
     }
 
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, NumberReceiverFacade numberReceiverFacade) {
-        WinningNumbersConfigurationProperties properties = WinningNumbersConfigurationProperties.builder()
-                .url("https://random.org/integers/?")
-                .count(6)
-                .lowerBand(1)
-                .upperBand(99)
-                .format("plain")
-                .column(1)
-                .base(10)
-                .build();
+    public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, NumberReceiverFacade numberReceiverFacade) {
+        WinningNumbersConfigurationProperties properties = getWinningNumbersConfigurationProperties();
         return winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, numberReceiverFacade);
+    }
+
+    public WinningNumbersConfigurationProperties getWinningNumbersConfigurationProperties() {
+        return WinningNumbersConfigurationProperties.builder()
+                .url(BASE_RANDOM_NUMBERS_URL)
+                .count(COUNT_RANDOM_NUMBERS)
+                .lowerBand(LOWER_BAND_RANDOM_NUMBERS)
+                .upperBand(UPPER_BAND_RANDOM_NUMBERS)
+                .format(FORMAT_RANDOM_NUMBERS)
+                .column(COLUMN_RANDOM_NUMBERS)
+                .base(BASE_RANDOM_NUMBERS)
+                .build();
     }
 }
