@@ -32,7 +32,7 @@ public class ApiValidationFailIntegrationTest extends BaseIntegrationTest {
             ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
             assertThat(result.messages()).containsExactlyInAnyOrder(
                     "inputNumbers must not be empty");
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
@@ -43,10 +43,10 @@ public class ApiValidationFailIntegrationTest extends BaseIntegrationTest {
         try {
             MvcResult perform = mockMvc.perform(post("/inputNumbers")
                             .content("""
-                                   {
-                                   
-                                    }
-                                    """.trim()
+                                    {
+                                                                       
+                                     }
+                                     """.trim()
                             ).contentType(MediaType.APPLICATION_JSON)
                     ).andExpect(status().isBadRequest())
                     .andReturn();
@@ -57,7 +57,7 @@ public class ApiValidationFailIntegrationTest extends BaseIntegrationTest {
             assertThat(result.messages()).containsExactlyInAnyOrder(
                     "inputNumbers must not be empty",
                     "inputNumbers must not be null");
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
