@@ -6,11 +6,11 @@ import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 
 import java.util.Set;
 
-import static pl.lotto.domain.numbersgenerator.WinningNumbersMessageProvider.OUT_OF_RANGE;
+import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.OUT_OF_RANGE;
 
 @AllArgsConstructor
 @Log4j2
-class WinningNumberValidator {
+class WinningNumbersValidator {
     private final WinningNumbersConfigurationProperties properties;
 
     public boolean validate(Set<Integer> winningNumbers) {
