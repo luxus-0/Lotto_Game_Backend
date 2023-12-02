@@ -51,14 +51,14 @@ class ResultsCheckerFacadeTest {
                         TicketDto.builder()
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
-                                .hitNumbers(Set.of(3,4,5))
+                                .hitNumbers(Set.of(3, 4, 5))
                                 .drawDate(drawDate)
                                 .message(WIN)
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
-                                .hitNumbers(Set.of(11,12,14))
+                                .hitNumbers(Set.of(11, 12, 14))
                                 .drawDate(drawDate)
                                 .message(LOSE)
                                 .build()
@@ -94,7 +94,7 @@ class ResultsCheckerFacadeTest {
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(
                 WinningTicketResponseDto.builder()
                         .ticketId("123456")
-                        .drawDate(LocalDateTime.of(2021, 12, 11, 12, 0,0,0))
+                        .drawDate(LocalDateTime.of(2021, 12, 11, 12, 0, 0, 0))
                         .winningNumbers(Collections.emptySet())
                         .message(LOSE)
                         .build()
@@ -119,16 +119,16 @@ class ResultsCheckerFacadeTest {
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(
                 WinningTicketResponseDto.builder()
                         .ticketId(ticketId)
-                        .winningNumbers(Set.of(4,5,6))
+                        .winningNumbers(Set.of(4, 5, 6))
                         .drawDate(drawDate)
                         .message(WIN)
-                .build());
+                        .build());
 
         when(numberReceiverFacade.retrieveAllTicketByDrawDate(drawDate)).thenReturn(
                 List.of(TicketDto.builder()
                                 .ticketId(ticketId)
                                 .numbers(Set.of(4, 5, 6, 10, 11, 12))
-                                .hitNumbers(Set.of(4,5,6))
+                                .hitNumbers(Set.of(4, 5, 6))
                                 .drawDate(drawDate)
                                 .isWinner(true)
                                 .message(WIN)
@@ -136,20 +136,20 @@ class ResultsCheckerFacadeTest {
                         TicketDto.builder()
                                 .ticketId("002")
                                 .numbers(Set.of(4, 5, 6, 10, 11, 12))
-                                .hitNumbers(Set.of(4,5,6))
+                                .hitNumbers(Set.of(4, 5, 6))
                                 .drawDate(drawDate)
                                 .isWinner(true)
                                 .message(WIN)
                                 .build())
         );
 
-    playerRepository.saveAll(List.of(Player.builder()
-                        .ticketId(ticketId)
-                        .numbers(Set.of(4, 5, 6, 10, 11, 12))
-                        .hitNumbers(Set.of(4, 5, 6))
-                        .drawDate(drawDate)
-                        .isWinner(true)
-                        .message(WIN)
+        playerRepository.saveAll(List.of(Player.builder()
+                .ticketId(ticketId)
+                .numbers(Set.of(4, 5, 6, 10, 11, 12))
+                .hitNumbers(Set.of(4, 5, 6))
+                .drawDate(drawDate)
+                .isWinner(true)
+                .message(WIN)
                 .build()));
         //when
 
