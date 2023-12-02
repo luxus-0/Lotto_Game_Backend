@@ -4,7 +4,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
 import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
 
 import java.time.Duration;
@@ -17,7 +16,7 @@ public class RandomNumberGeneratorClientConfig {
     }
 
     @Bean
-    RestTemplate restTemplate(TimeConnectionClientDto connection, ResponseErrorHandlerClient responseErrorHandlerClient) {
+    public RestTemplate restTemplate(TimeConnectionClient connection, ResponseErrorHandlerClient responseErrorHandlerClient) {
         return new RestTemplateBuilder()
                 .setConnectTimeout(Duration.ofMillis(connection.connectionTimeOut()))
                 .setReadTimeout(Duration.ofMillis(connection.readTimeOut()))
@@ -26,7 +25,7 @@ public class RandomNumberGeneratorClientConfig {
     }
 
     @Bean
-    RandomNumberGeneratorClient randomNumbersGeneratorClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties){
+    public RandomNumberGeneratorClient randomNumbersGeneratorClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties){
         return new RandomNumberGeneratorClient(restTemplate, properties);
     }
 }
