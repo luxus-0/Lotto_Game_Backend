@@ -7,6 +7,7 @@ import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClient;
+import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClientValidator;
 import pl.lotto.infrastructure.numbergenerator.scheduler.WinningNumbersScheduler;
 
 import java.time.Clock;
@@ -30,14 +31,15 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    RandomNumbersGenerable randomNumberClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties) {
-        return new RandomNumberGeneratorClient(restTemplate, properties);
+    RandomNumbersGenerable randomNumberClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties, RandomNumberGeneratorClientValidator validator) {
+        return new RandomNumberGeneratorClient(restTemplate, properties, validator);
     }
 
     @Bean
     public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
         WinningNumbersValidator winningNumbersValidator = new WinningNumbersValidator(properties);
-        RandomNumbersGenerable randomNumbersGenerable = new RandomNumberGeneratorClient(new RestTemplate(), properties);
+        RandomNumberGeneratorClientValidator clientValidator = new RandomNumberGeneratorClientValidator(properties);
+        RandomNumbersGenerable randomNumbersGenerable = new RandomNumberGeneratorClient(new RestTemplate(), properties, clientValidator);
         return WinningNumbersFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)

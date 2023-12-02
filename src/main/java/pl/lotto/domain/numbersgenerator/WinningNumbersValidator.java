@@ -2,10 +2,15 @@ package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import pl.lotto.domain.numbersgenerator.exceptions.IncorrectSizeNumbersException;
 import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 
 import java.util.Set;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.INCORRECT_SIZE;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.OUT_OF_RANGE;
 
 @AllArgsConstructor
@@ -21,11 +26,19 @@ class WinningNumbersValidator {
                 log.error(e.getMessage());
             }
         }
+        if(isIncorrectSize(winningNumbers)){
+            throw new IncorrectSizeNumbersException(INCORRECT_SIZE);
+        }
         return true;
     }
 
     private boolean outOfRange(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
                 .anyMatch(number -> number < properties.lowerBand() || number > properties.upperBand());
+    }
+
+    private boolean isIncorrectSize(Set<Integer> winningNumbers){
+        return winningNumbers.size() > properties.count();
+
     }
 }
