@@ -69,7 +69,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     @Test
     public void should_return_null_numbers_when_status_is_204_no_content(){
         //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=1&max=99&format=plain&col=2&base=10")
+        wireMockServer.stubFor(get("https://random.org/integers/?num=6&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.NO_CONTENT.value())
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
