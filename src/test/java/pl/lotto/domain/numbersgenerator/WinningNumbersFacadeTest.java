@@ -15,7 +15,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -40,7 +39,7 @@ class WinningNumbersFacadeTest {
                 .thenReturn(WinningNumbers.builder()
                         .ticketId("123456")
                         .drawDate(LocalDateTime.now())
-                        .winningNumbers(Set.of(1,2,3,4,5,6))
+                        .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
         //when
         WinningTicketResponseDto actualWinningTicket = winningNumbersFacade.generateWinningNumbers();
@@ -56,13 +55,13 @@ class WinningNumbersFacadeTest {
 
         when(randomNumbersGenerable.generateRandomNumbers(6, 1, 99))
                 .thenReturn(RandomNumbersResponseDto.builder()
-                        .randomNumbers(Set.of(1,2,3,4,5,6))
+                        .randomNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
 
         when(winningNumbersRepository.save(any(WinningNumbers.class)))
                 .thenReturn(WinningNumbers.builder()
                         .ticketId("12345")
-                        .winningNumbers(Set.of(2,3,4,11,14,90))
+                        .winningNumbers(Set.of(2, 3, 4, 11, 14, 90))
                         .drawDate(LocalDateTime.now())
                         .build());
         //when
@@ -83,7 +82,7 @@ class WinningNumbersFacadeTest {
                 .thenReturn(WinningNumbers.builder()
                         .ticketId("123456")
                         .drawDate(LocalDateTime.now())
-                        .winningNumbers(Set.of(1,2,3,4,5,6))
+                        .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
         //when
         Set<Integer> winningNumbers = winningNumbersFacade.generateWinningNumbers().winningNumbers();
@@ -106,7 +105,7 @@ class WinningNumbersFacadeTest {
                 .thenReturn(WinningNumbers.builder()
                         .ticketId("123456")
                         .drawDate(LocalDateTime.now())
-                        .winningNumbers(Set.of(1,2,3,4,5,6))
+                        .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
         //when
         WinningTicketResponseDto generateWinningNumbers = winningNumbersFacade.generateWinningNumbers();
@@ -126,7 +125,7 @@ class WinningNumbersFacadeTest {
                 .thenReturn(WinningNumbers.builder()
                         .ticketId("123456")
                         .drawDate(LocalDateTime.now())
-                        .winningNumbers(Set.of(1,2,3,4,5,6,7))
+                        .winningNumbers(Set.of(1, 2, 3, 4, 5, 6, 7))
                         .build());
 
         WinningTicketResponseDto actualWinningTicket = winningNumbersFacade.generateWinningNumbers();
@@ -162,7 +161,7 @@ class WinningNumbersFacadeTest {
                 .thenReturn(WinningNumbers.builder()
                         .ticketId("123456")
                         .drawDate(LocalDateTime.now())
-                        .winningNumbers(Set.of(1,2,3,4,5,6))
+                        .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
         //then
         assertThrows(RuntimeException.class, () -> winningNumbersFacade.retrieveWinningNumbersByDate(drawDate));
