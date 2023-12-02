@@ -5,6 +5,7 @@ import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
 import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacadeConfiguration;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClientConfig;
+import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClientValidator;
 import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
 
 public class RandomNumberGeneratorRestTemplateIntegrationTestConfig extends RandomNumberGeneratorClientConfig {
@@ -17,6 +18,7 @@ public class RandomNumberGeneratorRestTemplateIntegrationTestConfig extends Rand
     RandomNumbersGenerable randomNumbersGeneratorClient(TimeConnectionClient timeConnectionClient) {
         RestTemplate restTemplate = restTemplate(timeConnectionClient, responseErrorHandlerClient());
         WinningNumbersConfigurationProperties properties = randomNumbersConfigurationProperties();
-        return randomNumbersGeneratorClient(restTemplate, properties);
+        RandomNumberGeneratorClientValidator clientValidator = new RandomNumberGeneratorClientValidator(properties);
+        return randomNumbersGeneratorClient(restTemplate, properties, clientValidator);
     }
 }
