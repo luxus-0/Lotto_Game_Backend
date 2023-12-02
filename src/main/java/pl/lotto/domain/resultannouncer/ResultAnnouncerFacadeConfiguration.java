@@ -15,8 +15,8 @@ import static java.time.ZoneOffset.UTC;
 public class ResultAnnouncerFacadeConfiguration {
 
     @Bean
-    AdjustableClock adjustableClock(){
-        return new AdjustableClock(LocalDateTime.of(2022, 11, 19,12,0,0).toInstant(UTC), ZoneId.systemDefault());
+    AdjustableClock adjustableClock() {
+        return new AdjustableClock(LocalDateTime.of(2022, 11, 19, 12, 0, 0).toInstant(UTC), ZoneId.systemDefault());
     }
 
     @Bean

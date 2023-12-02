@@ -1,7 +1,6 @@
 package pl.lotto.domain.resultannouncer;
 
 import lombok.AllArgsConstructor;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultannouncer.exceptions.ResultLottoNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
@@ -20,21 +19,21 @@ public class ResultAnnouncerFacade {
     private final Clock clock;
 
     public ResultAnnouncerResponseDto findResult(String ticketId) {
-        if(ticketId == null){
+        if (ticketId == null) {
             throw new IllegalArgumentException("Ticket id is empty");
         }
         ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
         ResultLotto result = resultLottoRepository.findByTicketId(ticketId)
-                .orElseThrow(() -> new ResultLottoNotFoundException("Not found for ticket id: " +ticketId));
+                .orElseThrow(() -> new ResultLottoNotFoundException("Not found for ticket id: " + ticketId));
         ResultLotto resultLottoSaved = resultLottoRepository.save(result);
         ResultDto resultDtoSaved = mapToResultDtoSaved(resultLottoSaved);
-                if (!isAfterResultAnnouncementTime(resultDto)) {
-                    return new ResultAnnouncerResponseDto(resultDtoSaved, WAIT.message);
-                } else if (resultDto.isWinner()) {
-                    return new ResultAnnouncerResponseDto(resultDtoSaved, WIN.message);
-                } else {
-                    return new ResultAnnouncerResponseDto(resultDtoSaved, LOSE.message);
-                }
+        if (!isAfterResultAnnouncementTime(resultDto)) {
+            return new ResultAnnouncerResponseDto(resultDtoSaved, WAIT.message);
+        } else if (resultDto.isWinner()) {
+            return new ResultAnnouncerResponseDto(resultDtoSaved, WIN.message);
+        } else {
+            return new ResultAnnouncerResponseDto(resultDtoSaved, LOSE.message);
+        }
     }
 
     private boolean isAfterResultAnnouncementTime(ResultDto resultDto) {
