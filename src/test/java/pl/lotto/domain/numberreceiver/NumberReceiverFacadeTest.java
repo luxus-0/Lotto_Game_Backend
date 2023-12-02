@@ -17,18 +17,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static pl.lotto.domain.numberreceiver.TicketValidationResult.*;
+
 @Log4j2
 class NumberReceiverFacadeTest {
 
     TicketRepository ticketRepository = mock(TicketRepository.class);
     TicketIdGenerator hashGenerator = new HashGeneratorTestImpl();
-    AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,7,6, 12,0,0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+    AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 7, 6, 12, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
 
     @Test
     public void should_return_six_numbers_message_when_user_gave_6_numbers() {
@@ -36,10 +37,10 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
-        Set<Integer> inputNumbers = Set.of(1,2,3,4,5,6);
+        Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
         // when
         when(ticketRepository.save(any(Ticket.class)))
-                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1,2,3,4,5,6), LocalDateTime.now(), ""));
+                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1, 2, 3, 4, 5, 6), LocalDateTime.now(), ""));
 
         TicketResponseDto actualNumberReceiver = numberReceiverFacade.inputNumbers(inputNumbers);
         // then
@@ -128,11 +129,11 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);
 
-        Set<Integer> inputNumbers = Set.of(1,2,3,4,5,6);
+        Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
         //when
 
         when(ticketRepository.save(any(Ticket.class)))
-                .thenReturn(new Ticket("123456", Set.of(1,2,3,4,5,6), LocalDateTime.now(), ""));
+                .thenReturn(new Ticket("123456", Set.of(1, 2, 3, 4, 5, 6), LocalDateTime.now(), ""));
 
         TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(inputNumbers);
         String actualTicketId = actualTicket.ticket().ticketId();
@@ -153,7 +154,7 @@ class NumberReceiverFacadeTest {
 
         // when
         when(ticketRepository.save(any(Ticket.class)))
-                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1,2,3,4,5,6), LocalDateTime.of(2022, 11, 17, 12, 0, 0), ""));
+                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1, 2, 3, 4, 5, 6), LocalDateTime.of(2022, 11, 17, 12, 0, 0), ""));
 
         TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(numbersFromUser);
         LocalDateTime actualDrawDate = actualTicket.ticket().drawDate();
@@ -167,7 +168,7 @@ class NumberReceiverFacadeTest {
         DrawDateFacade drawDateFacade = new DrawDateFacadeConfiguration()
                 .drawDateFacade(clock);
 
-        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 7, 8, 12, 0, 0,0);
+        LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 7, 8, 12, 0, 0, 0);
         //when
         LocalDateTime actualDrawDate = drawDateFacade.retrieveNextDrawDate();
         //then
@@ -183,7 +184,7 @@ class NumberReceiverFacadeTest {
         Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
         //when
         when(ticketRepository.save(any(Ticket.class)))
-                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1,2,3,4,5,6), LocalDateTime.of(2023, 11, 17, 12, 0, 0, 0), ""));
+                .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1, 2, 3, 4, 5, 6), LocalDateTime.of(2023, 11, 17, 12, 0, 0, 0), ""));
 
         TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(inputNumbers);
         LocalDateTime actualDrawDate = actualTicket.ticket().drawDate();
@@ -202,7 +203,7 @@ class NumberReceiverFacadeTest {
         TicketDto expectedTicket = TicketDto.builder()
                 .ticketId(hashGenerator.generateTicketId())
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
-                .drawDate(LocalDateTime.of(2023,7,8,12,0,0,0))
+                .drawDate(LocalDateTime.of(2023, 7, 8, 12, 0, 0, 0))
                 .build();
         // when
         LocalDateTime actualDrawDate = drawDateFacade.retrieveNextDrawDate();
@@ -226,7 +227,7 @@ class NumberReceiverFacadeTest {
     @Test
     public void it_should_return_empty_collections_if_given_date_is_after_next_drawDate() {
         // given
-        LocalDateTime actualDrawDate = LocalDateTime.of(2022,10,8,12,0,0);
+        LocalDateTime actualDrawDate = LocalDateTime.of(2022, 10, 8, 12, 0, 0);
         AdjustableClock clock = new AdjustableClock(actualDrawDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, hashGenerator, ticketRepository);

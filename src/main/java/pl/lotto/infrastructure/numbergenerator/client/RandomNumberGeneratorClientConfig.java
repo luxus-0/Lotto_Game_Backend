@@ -25,7 +25,7 @@ public class RandomNumberGeneratorClientConfig {
     }
 
     @Bean
-    public RandomNumberGeneratorClient randomNumbersGeneratorClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties){
+    public RandomNumberGeneratorClient randomNumbersGeneratorClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties) {
         return new RandomNumberGeneratorClient(restTemplate, properties);
     }
 }
