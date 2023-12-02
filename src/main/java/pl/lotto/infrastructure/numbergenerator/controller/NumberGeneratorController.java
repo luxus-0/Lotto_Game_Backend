@@ -3,12 +3,16 @@ package pl.lotto.infrastructure.numbergenerator.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketDto;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
+import pl.lotto.domain.numbersgenerator.dto.RandomNumbersRequestDto;
+import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClient;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,15 +20,18 @@ import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClien
 @Log4j2
 public class NumberGeneratorController {
     private final RandomNumberGeneratorClient randomNumberClient;
-    private final WinningTicketFacade winningTicketFacade;
+    private final WinningNumbersFacade winningNumbersFacade;
 
     @GetMapping("/random_numbers")
-    RandomNumbersDto generateRandomNumbers() {
-        return randomNumberClient.generateSixRandomNumbers();
+    RandomNumbersResponseDto generateRandomNumbers(@RequestBody @Valid RandomNumbersRequestDto randomNumbers) {
+        return randomNumberClient.generateRandomNumbers(
+                randomNumbers.count(),
+                randomNumbers.lowerBand(),
+                randomNumbers.lowerBand());
     }
 
     @GetMapping("/winning_numbers")
-    WinningTicketDto generateWinningNumbers() {
-        return winningTicketFacade.generateWinningNumbers();
+    WinningTicketResponseDto generateWinningNumbers() {
+        return winningNumbersFacade.generateWinningNumbers();
     }
 }
