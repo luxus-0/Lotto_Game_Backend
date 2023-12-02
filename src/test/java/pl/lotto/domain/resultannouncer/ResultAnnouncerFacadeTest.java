@@ -2,7 +2,6 @@ package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
-import pl.lotto.domain.drawdate.DrawDateGenerator;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultannouncer.exceptions.ResultLottoNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
@@ -23,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static pl.lotto.domain.resultannouncer.ResultStatus.*;
+import static pl.lotto.domain.resultannouncer.ResultStatus.LOSE;
+import static pl.lotto.domain.resultannouncer.ResultStatus.WAIT;
 
 class ResultAnnouncerFacadeTest {
 
@@ -31,12 +31,12 @@ class ResultAnnouncerFacadeTest {
     ResultLottoRepository resultLottoRepository = mock(ResultLottoRepository.class);
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
 
-    Clock clock = Clock.fixed(LocalDateTime.of(2023,11,12,12,0,0,0).toInstant(UTC), ZoneId.systemDefault());
+    Clock clock = Clock.fixed(LocalDateTime.of(2023, 11, 12, 12, 0, 0, 0).toInstant(UTC), ZoneId.systemDefault());
 
     @Test
     public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
         //given
-        LocalDateTime drawDate = LocalDateTime.of(2022,12,12,12,0,0);
+        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 12, 12, 0, 0);
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
                 .resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
 
@@ -59,7 +59,7 @@ class ResultAnnouncerFacadeTest {
                 .message(LOSE.message)
                 .build();
 
-        when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.of(2022,12,11,12, 12, 0, 0));
+        when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.of(2022, 12, 11, 12, 12, 0, 0));
         when(resultsCheckerFacade.findResultByTicketId(ticketId)).thenReturn(expectedResult);
         when(resultLottoRepository.findByTicketId(ticketId)).thenReturn(Optional.of(expectedResultLotto));
         when(resultLottoRepository.save(any(ResultLotto.class))).thenReturn(expectedResultLotto);
@@ -80,7 +80,7 @@ class ResultAnnouncerFacadeTest {
         ResultDto expectedResult = ResultDto.builder()
                 .ticketId(ticketId)
                 .numbers(Set.of(3, 4, 5, 6, 7, 8))
-                .hitNumbers(Set.of(3,4,5))
+                .hitNumbers(Set.of(3, 4, 5))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
@@ -88,7 +88,7 @@ class ResultAnnouncerFacadeTest {
         ResultLotto expectedResultLotto = ResultLotto.builder()
                 .ticketId(ticketId)
                 .numbers(Set.of(3, 4, 5, 6, 7, 8))
-                .hitNumbers(Set.of(3,4,5))
+                .hitNumbers(Set.of(3, 4, 5))
                 .isWinner(true)
                 .drawDate(drawDate)
                 .build();
@@ -169,7 +169,7 @@ class ResultAnnouncerFacadeTest {
 
         ResultLotto expectedResult = ResultLotto.builder()
                 .ticketId("12345")
-                .numbers(Set.of(1,45,67,76,23, 48))
+                .numbers(Set.of(1, 45, 67, 76, 23, 48))
                 .hitNumbers(Set.of(1, 76, 45))
                 .message("WIN")
                 .isWinner(true)
@@ -194,7 +194,7 @@ class ResultAnnouncerFacadeTest {
         ResultDto expectedResult = ResultDto.builder()
                 .ticketId(ticketId)
                 .numbers(Collections.emptySet())
-                .hitNumbers(Set.of(1,2,3,4))
+                .hitNumbers(Set.of(1, 2, 3, 4))
                 .drawDate(LocalDateTime.now())
                 .build();
 

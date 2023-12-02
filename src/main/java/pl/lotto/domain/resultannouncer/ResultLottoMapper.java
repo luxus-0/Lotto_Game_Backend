@@ -1,6 +1,5 @@
 package pl.lotto.domain.resultannouncer;
 
-import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 
 public class ResultLottoMapper {
