@@ -1,6 +1,5 @@
 package pl.lotto.domain.numbersgenerator;
 
-import ch.qos.logback.core.joran.action.AppenderRefAction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.log4j.Log4j2;
@@ -59,7 +58,7 @@ public class WinningNumbersFacade {
                 .map(winningNumbers -> WinningTicketResponseDto.builder()
                         .drawDate(winningNumbers.drawDate())
                         .winningNumbers(winningNumbers.winningNumbers())
-                .build())
+                        .build())
                 .findAny()
                 .orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_NOT_FOUND));
     }

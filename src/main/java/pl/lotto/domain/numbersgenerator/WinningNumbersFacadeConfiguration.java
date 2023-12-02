@@ -30,7 +30,7 @@ public class WinningNumbersFacadeConfiguration {
     }
 
     @Bean
-    RandomNumbersGenerable randomNumberClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties){
+    RandomNumbersGenerable randomNumberClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties) {
         return new RandomNumberGeneratorClient(restTemplate, properties);
     }
 
