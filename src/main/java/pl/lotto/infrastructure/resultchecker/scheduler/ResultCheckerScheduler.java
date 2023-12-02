@@ -3,8 +3,7 @@ package pl.lotto.infrastructure.resultchecker.scheduler;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
-import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
-import pl.lotto.domain.numbersgenerator.exceptions.WinnerNumbersNotFoundException;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 
 @AllArgsConstructor
@@ -12,12 +11,12 @@ import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 public class ResultCheckerScheduler {
 
     private final ResultsCheckerFacade resultsCheckerFacade;
-    private final WinningTicketFacade winningTicketFacade;
+    private final WinningNumbersFacade winningNumbersFacade;
 
     @Scheduled(cron = "${results.checker.lottery.run.occurence}")
     public void generateWinners() {
         log.info("Winners lottery scheduler started");
-        if (!winningTicketFacade.areWinningNumbersGeneratedByDate()) {
+        if (!winningNumbersFacade.areWinningNumbersGeneratedByDate()) {
             log.error("Winning numbers are not generated");
         }
         log.info("Winning numbers are generated");

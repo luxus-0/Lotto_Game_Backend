@@ -3,7 +3,9 @@ package pl.lotto.domain.resultchecker;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
+import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
+import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
@@ -17,13 +19,14 @@ import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_
 
 public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                    DrawDateFacade drawDateFacade,
-                                   WinningTicketFacade winningTicketFacade,
+                                   WinningNumbersFacade winningNumbersFacade,
                                    WinnersRetriever winnersRetriever,
                                    PlayerRepository playerRepository,
                                    ResultCheckerValidation resultCheckerValidation) {
 
     public PlayersDto generateResults() {
-        Set<Integer> winningNumbers = winningTicketFacade.generateWinningNumbers().winningNumbers();
+        WinningTicketResponseDto winningTicketResponse = winningNumbersFacade.generateWinningNumbers();
+        Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
         boolean validate = resultCheckerValidation.validate(winningNumbers);
         if (validate) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
