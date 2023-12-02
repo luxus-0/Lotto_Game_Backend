@@ -24,9 +24,10 @@ public class NumberReceiverConfiguration {
     }
 
     @Bean
-    NumbersReceiverValidator numbersReceiverValidator(){
+    NumbersReceiverValidator numbersReceiverValidator() {
         return new NumbersReceiverValidator();
     }
+
     @Bean
     public NumberReceiverFacade numberReceiverFacade(AdjustableClock clock, TicketIdGenerator hashGenerator, TicketRepository ticketRepository) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();

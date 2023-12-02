@@ -1,11 +1,8 @@
 package pl.lotto.domain.drawdate;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.LocalTime.NOON;

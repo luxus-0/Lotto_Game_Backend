@@ -25,22 +25,18 @@ import pl.lotto.domain.drawdate.AdjustableClock;
 public class BaseIntegrationTest {
 
     public static final String WIRE_MOCK_HOST = "http://localhost";
-    @Autowired
-    public MockMvc mockMvc;
-
     @Container
     public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
-
-    @Autowired
-    public ObjectMapper objectMapper;
-
-    @Autowired
-    public AdjustableClock clock;
-
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
             .options(WireMockConfiguration.wireMockConfig().dynamicPort())
             .build();
+    @Autowired
+    public MockMvc mockMvc;
+    @Autowired
+    public ObjectMapper objectMapper;
+    @Autowired
+    public AdjustableClock clock;
 
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {

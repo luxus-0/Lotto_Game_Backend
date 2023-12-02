@@ -18,10 +18,11 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -55,7 +56,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 .until(() -> {
                     try {
                         return !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
-                    }catch (WinningNumbersNotFoundException e){
+                    } catch (WinningNumbersNotFoundException e) {
                         return true;
                     }
                 });
@@ -118,7 +119,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
         try {
             String notExistingTicketId = "12345";
 
-            mockMvc.perform(get("/results/" +notExistingTicketId))
+            mockMvc.perform(get("/results/" + notExistingTicketId))
                     .andExpect(status -> status(404))
                     .andExpect(content().json("""
                             {
@@ -127,7 +128,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                             }
                                 """.trim()
                     ));
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
