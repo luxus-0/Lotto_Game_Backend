@@ -21,11 +21,15 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+
 @AllArgsConstructor
 @Log4j2
 public class RandomNumberGeneratorClient implements RandomNumbersGenerable {
     private final RestTemplate restTemplate;
     private final WinningNumbersConfigurationProperties properties;
+    private final RandomNumberGeneratorClientValidator validator;
 
     @Override
     public String generateUniqueTicketId() {
@@ -38,15 +42,23 @@ public class RandomNumberGeneratorClient implements RandomNumbersGenerable {
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
         try {
             ResponseEntity<String> response = makeGetRequest(count, lowerBand, upperBand, requestEntity);
+            Set<Integer> randomNumbers = generateRandomNumbers(response.getBody());
+            if(validator.outOfRange(randomNumbers) && validator.isIncorrectSize(randomNumbers)){
+                throw new ResponseStatusException(NOT_FOUND);
+            }
             return RandomNumbersResponseDto.builder()
-                    .randomNumbers(generateRandomNumbers(response.getBody()))
+                    .randomNumbers(randomNumbers)
                     .build();
         } catch (ResourceAccessException e) {
+            log.error("Error while using http client");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     private ResponseEntity<String> makeGetRequest(int count, int lowerBand, int upperBand, HttpEntity<String> requestEntity) {
+        if(count == 0){
+            throw new ResponseStatusException(NO_CONTENT);
+        }
         final String url = UriComponentsBuilder.fromHttpUrl(properties.url())
                 .queryParam("num", count)
                 .queryParam("min", lowerBand)
