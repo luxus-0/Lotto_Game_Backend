@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApiValidationFailIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void should_return_400_bad_request_and_validation_message_when_request_has_empty_input_numbers() throws Exception {
+    public void should_return_400_bad_request_and_validation_message_when_request_has_empty_input_numbers() {
         //given && when
         try {
             MvcResult perform = mockMvc.perform(post("/inputNumbers")
@@ -38,7 +38,7 @@ public class ApiValidationFailIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_400_bad_request_and_validation_message_when_does_not_have_input_numbers() throws Exception {
+    public void should_return_400_bad_request_and_validation_message_when_does_not_have_input_numbers() {
         //given && when
         try {
             MvcResult perform = mockMvc.perform(post("/inputNumbers")
