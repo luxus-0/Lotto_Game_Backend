@@ -5,5 +5,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Builder
 @ConfigurationProperties(value = "connection")
-public record TimeConnectionClientDto(int connectionTimeOut, int readTimeOut) {
+public record TimeConnectionClient(int connectionTimeOut, int readTimeOut) {
 }
