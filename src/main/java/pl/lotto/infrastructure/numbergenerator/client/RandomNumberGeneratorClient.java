@@ -5,9 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,8 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.*;
 
 @AllArgsConstructor
 @Log4j2
@@ -40,25 +37,18 @@ public class RandomNumberGeneratorClient implements RandomNumbersGenerable {
     public RandomNumbersResponseDto generateRandomNumbers(int count, int lowerBand, int upperBand) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        try {
+            validator.validateRandomNumbers(count, lowerBand, upperBand);
             ResponseEntity<String> response = makeGetRequest(count, lowerBand, upperBand, requestEntity);
-            Set<Integer> randomNumbers = generateRandomNumbers(response.getBody());
-            if(validator.outOfRange(randomNumbers) && validator.isIncorrectSize(randomNumbers)){
-                throw new ResponseStatusException(NOT_FOUND);
+            if(response.getStatusCode().is2xxSuccessful()) {
+                Set<Integer> randomNumbers = generateRandomNumbers(response.getBody());
+                return RandomNumbersResponseDto.builder()
+                        .randomNumbers(randomNumbers)
+                        .build();
             }
-            return RandomNumbersResponseDto.builder()
-                    .randomNumbers(randomNumbers)
-                    .build();
-        } catch (ResourceAccessException e) {
-            log.error("Error while using http client");
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR);
     }
 
     private ResponseEntity<String> makeGetRequest(int count, int lowerBand, int upperBand, HttpEntity<String> requestEntity) {
-        if(count == 0){
-            throw new ResponseStatusException(NO_CONTENT);
-        }
         final String url = UriComponentsBuilder.fromHttpUrl(properties.url())
                 .queryParam("num", count)
                 .queryParam("min", lowerBand)

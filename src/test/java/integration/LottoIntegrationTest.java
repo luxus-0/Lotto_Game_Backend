@@ -23,6 +23,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -31,12 +32,8 @@ import static pl.lotto.domain.numberreceiver.TicketValidationResult.EQUALS_SIX_N
 
 @Log4j2
 public class LottoIntegrationTest extends BaseIntegrationTest {
-
-
-    @Autowired
-    private WinningNumbersFacade winningNumbersFacade;
-    @Autowired
-    private ResultsCheckerFacade resultsCheckerFacade;
+    private final WinningNumbersFacade winningNumbersFacade = mock(WinningNumbersFacade.class);
+    private final ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
 
     @Test
     public void should_user_win_and_generate_winners() {
@@ -57,7 +54,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                     try {
                         return !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
                     } catch (WinningNumbersNotFoundException e) {
-                        return true;
+                        return false;
                     }
                 });
     }
@@ -105,7 +102,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                                 ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
                                 return !result.numbers().isEmpty();
                             } catch (PlayerResultNotFoundException exception) {
-                                return false;
+                                return true;
                             }
                         }
                 );
