@@ -8,8 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-
 public class ResponseErrorHandlerClient extends DefaultResponseErrorHandler {
 
     @Override
@@ -23,6 +21,8 @@ public class ResponseErrorHandlerClient extends DefaultResponseErrorHandler {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR)
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            else if (statusCode == HttpStatus.UNAUTHORIZED)
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 }
