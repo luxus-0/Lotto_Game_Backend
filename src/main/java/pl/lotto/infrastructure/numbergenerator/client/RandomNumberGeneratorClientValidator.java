@@ -12,14 +12,13 @@ public class RandomNumberGeneratorClientValidator {
     private final WinningNumbersConfigurationProperties properties;
 
     public void validateRandomNumbers(int count, int lowerBand, int upperBand) {
-        if (count == 0) {
+        if (count == 0 && lowerBand < upperBand) {
             throw new ResponseStatusException(NO_CONTENT);
         }
         else if (lowerBand > upperBand && count > properties.count()) {
             throw new ResponseStatusException(NOT_FOUND);
-        }
-        else if(lowerBand < upperBand && count < properties.count()){
-            throw new ResponseStatusException(OK);
+        } else if (lowerBand == 0 && upperBand == 0 && count == 0) {
+            throw new ResponseStatusException(UNAUTHORIZED);
         }
     }
 }
