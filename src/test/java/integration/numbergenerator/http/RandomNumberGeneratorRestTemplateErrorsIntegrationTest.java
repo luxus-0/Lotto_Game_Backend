@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
 import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
