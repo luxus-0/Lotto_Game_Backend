@@ -15,6 +15,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 import static org.apache.catalina.util.XMLWriter.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.springframework.http.HttpStatus.*;
 
 public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
 
@@ -37,7 +38,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         //given
         wireMockServer.stubFor(get("https://random.org/integers/?num=12&min=99&max=1&format=plain&col=2&base=10")
                 .willReturn(aResponse()
-                        .withStatus(HttpStatus.NOT_FOUND.value())
+                        .withStatus(NOT_FOUND.value())
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.CONNECTION_RESET_BY_PEER)));
 
@@ -52,9 +53,9 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     @Test
     public void should_return_null_numbers_when_fault_empty_response(){
         //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=8&min=99&max=1&format=plain&col=2&base=10")
+        wireMockServer.stubFor(get("https://random.org/integers/?num=1&min=99&max=30&format=plain&col=2&base=10")
                 .willReturn(aResponse()
-                        .withStatus(HttpStatus.OK.value())
+                        .withStatus(INTERNAL_SERVER_ERROR.value())
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.EMPTY_RESPONSE)));
 
@@ -69,7 +70,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     @Test
     public void should_return_null_numbers_when_status_is_204_no_content(){
         //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=10&min=1&max=99&format=plain&col=2&base=10")
+        wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(NO_CONTENT)
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
@@ -83,5 +84,42 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
         assertThat(throwable.getMessage()).isEqualTo("204 NO_CONTENT");
+    }
+
+    @Test
+    public void should_return_null_numbers_when_response_delay_is_1500ms_and_read_time_out_is_1000ms(){
+       //given
+        wireMockServer.stubFor(get("https://random.org/integers/?num=10&min=99&max=30&format=plain&col=2&base=10")
+                .willReturn(aResponse()
+                        .withStatus(INTERNAL_SERVER_ERROR.value())
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withBody("""
+                                [1 2 3 4 5 6 23 56 43 11]
+                                """.trim()
+                        )
+                        .withFixedDelay(1500)));
+
+        //when
+        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(5, 99, 30));
+
+        //then
+        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
+        assertThat(throwable.getMessage()).isEqualTo("500 INTERNAL_SERVER_ERROR");
+    }
+
+    @Test
+    public void should_return_response_unauthorized_status_exception_when_client_return_unauthorized_status(){
+    //given
+        wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=0&max=0&format=plain&col=2&base=10")
+                .willReturn(aResponse()
+                        .withStatus(UNAUTHORIZED.value())
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)));
+
+        //when
+        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(0, 0, 0));
+
+        //then
+        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
+        assertThat(throwable.getMessage()).isEqualTo("401 UNAUTHORIZED");
     }
 }
