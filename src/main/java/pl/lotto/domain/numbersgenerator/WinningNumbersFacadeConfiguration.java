@@ -21,25 +21,10 @@ import static pl.lotto.domain.numbersgenerator.RandomNumbersUrlMessage.*;
 public class WinningNumbersFacadeConfiguration {
 
     @Bean
-    Clock clock() {
-        return new AdjustableClock(LocalDateTime.of(2022, 11, 19, 12, 0, 0).toInstant(UTC), ZoneId.systemDefault());
-    }
-
-    @Bean
-    WinningNumbersScheduler winningNumbersScheduler(WinningNumbersFacade winningNumbersFacade) {
-        return new WinningNumbersScheduler(winningNumbersFacade);
-    }
-
-    @Bean
-    RandomNumbersGenerable randomNumberClient(RestTemplate restTemplate, WinningNumbersConfigurationProperties properties, RandomNumberGeneratorClientValidator validator) {
-        return new RandomNumberGeneratorClient(restTemplate, properties, validator);
-    }
-
-    @Bean
     public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
         WinningNumbersValidator winningNumbersValidator = new WinningNumbersValidator(properties);
-        RandomNumberGeneratorClientValidator clientValidator = new RandomNumberGeneratorClientValidator(properties);
-        RandomNumbersGenerable randomNumbersGenerable = new RandomNumberGeneratorClient(new RestTemplate(), properties, clientValidator);
+        RandomNumberGeneratorClientValidator randomNumberClientValidator = new RandomNumberGeneratorClientValidator(properties);
+        RandomNumbersGenerable randomNumbersGenerable = new RandomNumberGeneratorClient(new RestTemplate(), properties, randomNumberClientValidator);
         return WinningNumbersFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)

@@ -12,6 +12,7 @@ import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static org.apache.catalina.util.XMLWriter.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
@@ -34,31 +35,14 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     @Test
     public void should_return_null_numbers_when_fault_connection_reset_by_peer() {
         //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=6&min=1&max=99&format=plain&col=2&base=10")
+        wireMockServer.stubFor(get("https://random.org/integers/?num=12&min=99&max=1&format=plain&col=2&base=10")
                 .willReturn(aResponse()
-                        .withStatus(HttpStatus.OK.value())
+                        .withStatus(HttpStatus.NOT_FOUND.value())
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.CONNECTION_RESET_BY_PEER)));
 
         //when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(0, 1, 99));
-
-        //then
-        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
-        assertThat(throwable.getMessage()).isEqualTo("500 INTERNAL_SERVER_ERROR");
-    }
-
-    @Test
-    public void should_return_null_numbers_when_fault_empty_response(){
-        //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=6&min=1&max=99&format=plain&col=2&base=10")
-                .willReturn(aResponse()
-                        .withStatus(HttpStatus.NOT_FOUND.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
-                        .withFault(Fault.EMPTY_RESPONSE)));
-
-        //when
-        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(9, 1, 101));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(12, 99, 1));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -66,18 +50,35 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
+    public void should_return_null_numbers_when_fault_empty_response(){
+        //given
+        wireMockServer.stubFor(get("https://random.org/integers/?num=8&min=99&max=1&format=plain&col=2&base=10")
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withFault(Fault.EMPTY_RESPONSE)));
+
+        //when
+        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(1, 99, 30));
+
+        //then
+        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
+        assertThat(throwable.getMessage()).isEqualTo("500 INTERNAL_SERVER_ERROR");
+    }
+
+    @Test
     public void should_return_null_numbers_when_status_is_204_no_content(){
         //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=6&min=1&max=99&format=plain&col=2&base=10")
+        wireMockServer.stubFor(get("https://random.org/integers/?num=10&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
-                        .withStatus(HttpStatus.NO_CONTENT.value())
+                        .withStatus(NO_CONTENT)
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withBody("""
-                                [1 2 3 4 5 6 7]
+                                [1 2 3 4 5 6 7 8 9 10]
                                 """)));
 
         //when
-        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(0, 0, 0));
+        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(0, 1, 99));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
