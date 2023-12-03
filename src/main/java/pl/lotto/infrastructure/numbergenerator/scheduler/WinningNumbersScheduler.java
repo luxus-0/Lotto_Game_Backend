@@ -10,7 +10,6 @@ import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 /**
  * Generate random numbers every Saturday at 12 p.m
  */
-@Component
 @AllArgsConstructor
 @Log4j2
 public class WinningNumbersScheduler {

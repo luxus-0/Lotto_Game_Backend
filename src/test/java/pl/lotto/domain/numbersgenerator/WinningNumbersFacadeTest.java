@@ -27,7 +27,6 @@ class WinningNumbersFacadeTest {
     WinningNumbersRepository winningNumbersRepository = mock(WinningNumbersRepository.class);
     RandomNumbersGenerable randomNumbersGenerable = mock(RandomNumbersGenerable.class);
     NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
-    WinningNumbersConfigurationProperties properties = mock(WinningNumbersConfigurationProperties.class);
 
     @Test
     public void should_return_set_of_required_size() {

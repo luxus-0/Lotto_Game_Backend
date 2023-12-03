@@ -9,6 +9,7 @@ import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
 
 import java.util.Set;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.INCORRECT_SIZE;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.OUT_OF_RANGE;
@@ -30,6 +31,15 @@ class WinningNumbersValidator {
             throw new IncorrectSizeNumbersException(INCORRECT_SIZE);
         }
         return true;
+    }
+
+    public void validate(int count, int lowerBand, int upperBand) {
+        if (count == 0) {
+            throw new ResponseStatusException(NO_CONTENT);
+        }
+        else if (lowerBand > upperBand && count > properties.count()) {
+            throw new ResponseStatusException(NOT_FOUND);
+        }
     }
 
     private boolean outOfRange(Set<Integer> winningNumbers) {
