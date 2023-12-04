@@ -56,6 +56,7 @@ public class WinningNumbersFacade {
     public WinningTicketResponseDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
         return winningNumbersRepository.findWinningNumbersByDrawDate(drawDate).stream()
                 .map(winningNumbers -> WinningTicketResponseDto.builder()
+                        .ticketId(winningNumbers.ticketId())
                         .drawDate(winningNumbers.drawDate())
                         .winningNumbers(winningNumbers.winningNumbers())
                         .build())
