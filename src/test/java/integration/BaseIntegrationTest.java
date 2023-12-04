@@ -18,6 +18,8 @@ import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+
 @SpringBootTest(classes = {LottoApplication.class, IntegrationConfiguration.class})
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
@@ -27,16 +29,18 @@ public class BaseIntegrationTest {
     public static final String WIRE_MOCK_HOST = "http://localhost";
     @Container
     public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
-    @RegisterExtension
-    public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
-            .options(WireMockConfiguration.wireMockConfig().dynamicPort())
-            .build();
+
     @Autowired
     public MockMvc mockMvc;
     @Autowired
     public ObjectMapper objectMapper;
     @Autowired
     public AdjustableClock clock;
+
+    @RegisterExtension
+    public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
+            .options(wireMockConfig().dynamicPort())
+            .build();
 
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
@@ -45,4 +49,3 @@ public class BaseIntegrationTest {
         registry.add("numbers.generator.client.uri", () -> WIRE_MOCK_HOST);
     }
 }
-

@@ -36,13 +36,10 @@ public class RandomNumberGeneratorClient implements RandomNumbersGenerable {
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
             validator.validateRandomNumbers(count, lowerBand, upperBand);
             ResponseEntity<String> response = makeGetRequest(count, lowerBand, upperBand, requestEntity);
-            if(response.getStatusCode().is2xxSuccessful()) {
                 Set<Integer> randomNumbers = generateRandomNumbers(response.getBody());
                 return RandomNumbersResponseDto.builder()
                         .randomNumbers(randomNumbers)
                         .build();
-            }
-            throw new ResponseStatusException(INTERNAL_SERVER_ERROR);
     }
 
     private ResponseEntity<String> makeGetRequest(int count, int lowerBand, int upperBand, HttpEntity<String> requestEntity) {

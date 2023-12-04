@@ -15,10 +15,13 @@ public class RandomNumberGeneratorClientValidator {
         if (count == 0 && lowerBand < upperBand) {
             throw new ResponseStatusException(NO_CONTENT);
         }
-        else if (lowerBand > upperBand && count > properties.count()) {
+        else if (lowerBand > upperBand || lowerBand > properties.lowerBand() ||
+                upperBand > properties.upperBand()) {
             throw new ResponseStatusException(NOT_FOUND);
         } else if (lowerBand == 0 && upperBand == 0 && count == 0) {
             throw new ResponseStatusException(UNAUTHORIZED);
+        } else if(count > properties.count()){
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR);
         }
     }
 }
