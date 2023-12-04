@@ -2,9 +2,9 @@ package integration.numbergenerator.http;
 
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
 import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
@@ -34,7 +34,45 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                     .build());
 
     @Test
-    public void should_return_null_numbers_when_fault_connection_reset_by_peer() {
+    @DisplayName("should throw exception 204 NO CONTENT when client has no numbers")
+    public void should_throw_exception_204_when_client_has_no_numbers() {
+        //given
+        wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=1&max=99&format=plain&col=2&base=10")
+                .willReturn(aResponse()
+                        .withStatus(NO_CONTENT)
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withBody("""
+                                [1 2 3 4 5 6 7 8 9 10]
+                                """)));
+
+        //when
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(0, 1, 99));
+
+        //then
+        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
+        assertThat(throwable.getMessage()).isEqualTo("204 NO_CONTENT");
+    }
+
+    @Test
+    @DisplayName("should throw exception 401 UNAUTHORIZED when client is unauthorized response")
+    public void should_throw_exception_401_when_client_is_unauthorized_response() {
+        //given
+        wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=0&max=0&format=plain&col=2&base=10")
+                .willReturn(aResponse()
+                        .withStatus(UNAUTHORIZED.value())
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)));
+
+        //when
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(0, 0, 0));
+
+        //then
+        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
+        assertThat(throwable.getMessage()).isEqualTo("401 UNAUTHORIZED");
+    }
+
+    @Test
+    @DisplayName("should throw exception 404 NOT FOUND when client fault connection reset by peer")
+    public void should_throw_exception_404_when_fault_connection_reset_by_peer() {
         //given
         wireMockServer.stubFor(get("https://random.org/integers/?num=12&min=99&max=1&format=plain&col=2&base=10")
                 .willReturn(aResponse()
@@ -51,16 +89,35 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    public void should_return_null_numbers_when_fault_empty_response(){
+    @DisplayName("should throw exception 404 NOT FOUND when client has out of bound numbers")
+    void should_throw_exception_404_when_client_has_out_of_bound_numbers() {
+        // given
+        wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=102&format=plain&col=2&base=10")
+                .willReturn(aResponse()
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withStatus(NOT_FOUND.value()))
+        );
+
+        // when
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(6, 1, 102));
+
+        // then
+        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
+        assertThat(throwable.getMessage()).isEqualTo("404 NOT_FOUND");
+    }
+
+    @Test
+    @DisplayName("should throw exception 500 INTERNAL SERVER ERROR when fault empty response")
+    public void should_throw_exception_500_when_fault_empty_response() {
         //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=1&min=99&max=30&format=plain&col=2&base=10")
+        wireMockServer.stubFor(get("https://random.org/integers/?num=15&min=99&max=30&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(INTERNAL_SERVER_ERROR.value())
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.EMPTY_RESPONSE)));
 
         //when
-        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(1, 99, 30));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(15, 1, 99));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -68,28 +125,10 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    public void should_return_null_numbers_when_status_is_204_no_content(){
+    @DisplayName("should throw exception 500 INTERNAL SERVER ERROR when response delay is 1500ms and read time out is 1000ms")
+    public void should_throw_exception_500_when_response_delay_is_1500ms_and_read_time_out_is_1000ms() {
         //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=1&max=99&format=plain&col=2&base=10")
-                .willReturn(aResponse()
-                        .withStatus(NO_CONTENT)
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
-                        .withBody("""
-                                [1 2 3 4 5 6 7 8 9 10]
-                                """)));
-
-        //when
-        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(0, 1, 99));
-
-        //then
-        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
-        assertThat(throwable.getMessage()).isEqualTo("204 NO_CONTENT");
-    }
-
-    @Test
-    public void should_return_null_numbers_when_response_delay_is_1500ms_and_read_time_out_is_1000ms(){
-       //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=10&min=99&max=30&format=plain&col=2&base=10")
+        wireMockServer.stubFor(get("https://random.org/integers/?num=12&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(INTERNAL_SERVER_ERROR.value())
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
@@ -100,7 +139,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                         .withFixedDelay(1500)));
 
         //when
-        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(5, 99, 30));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(12, 1, 99));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -108,18 +147,37 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    public void should_return_response_unauthorized_status_exception_when_client_return_unauthorized_status(){
-    //given
-        wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=0&max=0&format=plain&col=2&base=10")
+    @DisplayName("should throw exception 500 INTERVAL SERVER ERROR when client has malformed response chunk")
+    void should_throw_exception_500_when_fault_malformed_response_chunk() {
+        // given
+        wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
-                        .withStatus(UNAUTHORIZED.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)));
+                        .withStatus(OK.value())
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+        // when
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(25, 1, 99));
 
-        //when
-        Throwable throwable = catchThrowable(() ->  randomNumbersGenerable.generateRandomNumbers(0, 0, 0));
-
-        //then
+        // then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
-        assertThat(throwable.getMessage()).isEqualTo("401 UNAUTHORIZED");
+        assertThat(throwable.getMessage()).isEqualTo("500 INTERNAL_SERVER_ERROR");
+    }
+
+    @Test
+    @DisplayName("should throw exception 500 INTERVAL SERVER ERROR when client has fault random data then close")
+    void should_throw_exception_500_when_fault_random_data_then_close() {
+        // given
+        wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=99&format=plain&col=2&base=10")
+                .willReturn(aResponse()
+                        .withStatus(OK.value())
+                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withFault(Fault.RANDOM_DATA_THEN_CLOSE)));
+
+        // when
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(25, 1, 99));
+
+        // then
+        assertThat(throwable).isInstanceOf(ResponseStatusException.class);
+        assertThat(throwable.getMessage()).isEqualTo("500 INTERNAL_SERVER_ERROR");
     }
 }
