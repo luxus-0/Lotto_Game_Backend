@@ -3,7 +3,6 @@ package integration;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -35,28 +35,33 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     private final WinningNumbersFacade winningNumbersFacade = mock(WinningNumbersFacade.class);
     private final ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
 
+
     @Test
     public void should_user_win_and_generate_winners() {
         //given
-        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=1&max=99&format=plain&col=1&base=10")
+        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
-                        .withStatus(200)
+                        .withStatus(OK.value())
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
-                                [1 2 3 4 5 6 82 83 57 10 81 34]
+                                [1, 2, 3, 4, 5, 6, 82, 82, 83, 83, 86, 57, 10, 81, 53, 93, 50, 54, 31, 88, 15, 43, 79, 32, 43]
                                 """.trim())));
-        //when && then
+
+        // given
         LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0, 0);
+
+        // when && then
         await()
                 .atMost(Duration.ofSeconds(20))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
-                    try {
-                        return !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
-                    } catch (WinningNumbersNotFoundException e) {
-                        return false;
-                    }
-                });
+                            try {
+                                return !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
+                            } catch (WinningNumbersNotFoundException e) {
+                                return false;
+                            }
+                        }
+                );
     }
 
     @Test
@@ -102,7 +107,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                                 ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
                                 return !result.numbers().isEmpty();
                             } catch (PlayerResultNotFoundException exception) {
-                                return true;
+                                return false;
                             }
                         }
                 );
