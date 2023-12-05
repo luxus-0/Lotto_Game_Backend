@@ -1,11 +1,11 @@
 package pl.lotto.infrastructure.security.token.controller.error;
 
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import pl.lotto.infrastructure.security.token.controller.dto.TokenErrorResponseDto;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
