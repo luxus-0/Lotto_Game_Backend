@@ -12,6 +12,7 @@ import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
  */
 @AllArgsConstructor
 @Log4j2
+@Component
 public class WinningNumbersScheduler {
 
     private final WinningNumbersFacade winningNumbersFacade;
