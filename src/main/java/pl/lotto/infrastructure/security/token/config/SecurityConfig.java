@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.security.token;
+package pl.lotto.infrastructure.security.token.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +16,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import pl.lotto.domain.login.LoginAndRegisterFacade;
+import pl.lotto.infrastructure.security.token.JwtAuthTokenFilter;
+import pl.lotto.infrastructure.security.token.LoginUserDetailsService;
 
 @Configuration
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private final AuthTokenFilter authTokenFilter;
+    private final JwtAuthTokenFilter jwtAuthTokenFilter;
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -53,7 +55,7 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling((handling) -> handling.configure((httpSecurity)))
-                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }
