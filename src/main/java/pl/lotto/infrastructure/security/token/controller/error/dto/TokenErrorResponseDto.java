@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.security.token.controller.dto;
+package pl.lotto.infrastructure.security.token.controller.error.dto;
 
 import org.springframework.http.HttpStatus;
 
