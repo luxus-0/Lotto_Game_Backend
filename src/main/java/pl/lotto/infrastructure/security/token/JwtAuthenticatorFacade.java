@@ -20,11 +20,11 @@ import static java.time.ZoneOffset.UTC;
 
 @Component
 @AllArgsConstructor
-public class TokenAuthenticatorFacade {
+public class JwtAuthenticatorFacade {
 
     private final AuthenticationManager authenticationManager;
     private final Clock clock;
-    private final TokenConfigurationProperties properties;
+    private final JwtConfigurationProperties properties;
     public TokenResponseDto authenticateAndGenerateToken(TokenRequestDto tokenRequest) {
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(tokenRequest.username(), tokenRequest.password()));

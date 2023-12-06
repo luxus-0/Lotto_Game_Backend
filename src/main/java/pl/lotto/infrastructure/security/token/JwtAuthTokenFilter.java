@@ -19,9 +19,9 @@ import java.util.Collections;
 
 @Component
 @AllArgsConstructor
-public class AuthTokenFilter extends OncePerRequestFilter {
+public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
-    private final TokenConfigurationProperties properties;
+    private final JwtConfigurationProperties properties;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
