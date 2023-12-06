@@ -2,9 +2,14 @@ package pl.lotto.domain.login.dto;
 
 import org.hibernate.validator.constraints.UUID;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public record UserDto(@UUID String id,
-                      @NotBlank String username,
-                      @NotBlank String password) {
+                      @NotNull(message = "username not null")
+                      @NotEmpty(message = "username not empty")
+                      String username,
+                      @NotNull(message = "password not null")
+                      @NotEmpty(message = "password not empty")
+                      String password) {
 }
