@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/register/**").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated())
                 .headers(HeadersConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
