@@ -7,10 +7,10 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.scheduling.annotation.EnableScheduling;
 import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
 import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
-import pl.lotto.infrastructure.security.token.TokenConfigurationProperties;
+import pl.lotto.infrastructure.security.token.JwtConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties({WinningNumbersConfigurationProperties.class, TimeConnectionClient.class, TokenConfigurationProperties.class})
+@EnableConfigurationProperties({WinningNumbersConfigurationProperties.class, TimeConnectionClient.class, JwtConfigurationProperties.class})
 @EnableScheduling
 @EnableMongoRepositories
 public class LottoApplication {
