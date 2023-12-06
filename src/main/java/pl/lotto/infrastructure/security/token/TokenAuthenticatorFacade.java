@@ -12,6 +12,7 @@ import pl.lotto.infrastructure.security.token.dto.TokenRequestDto;
 import pl.lotto.infrastructure.security.token.dto.TokenResponseDto;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
@@ -42,7 +43,7 @@ public class TokenAuthenticatorFacade {
         String secretKey = properties.secret();
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         Instant now = LocalDateTime.now(clock).toInstant(UTC);
-        Instant expiresAt = now.plusMillis(properties.expirationMs());
+        Instant expiresAt = now.plus(Duration.ofDays(properties.expirationDays()));
         String issuer = properties.issuer();
         return JWT.create()
                 .withSubject(user.username())
