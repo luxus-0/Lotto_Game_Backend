@@ -10,7 +10,7 @@ class NumbersReceiverValidator {
     private static final int MIN_NUMBER_FROM_USER = 1;
     private static final int MAX_NUMBER_FROM_USER = 99;
 
-    List<TicketValidationResult> errors;
+    private static List<TicketValidationResult> errors;
 
     boolean validate(Set<Integer> inputNumbers) {
         errors = new LinkedList<>();
@@ -55,7 +55,7 @@ class NumbersReceiverValidator {
                 .anyMatch(number -> number < MIN_NUMBER_FROM_USER || number > MAX_NUMBER_FROM_USER);
     }
 
-    public String getMessage() {
+    public static String getMessage() {
         return errors.stream()
                 .map(TicketValidationResult::getInfo)
                 .findAny()

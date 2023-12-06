@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
-import pl.lotto.domain.numberreceiver.dto.NumberReceiverRequestDto;
+import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import javax.validation.Valid;
@@ -18,9 +18,9 @@ class NumberReceiverController {
     private final NumberReceiverFacade numberReceiverFacade;
 
     @PostMapping("/inputNumbers")
-    ResponseEntity<TicketResponseDto> inputNumbers(@RequestBody @Valid NumberReceiverRequestDto numberReceiverRequestDto) {
-        Set<Integer> responseNumbers = numberReceiverRequestDto.inputNumbers();
-        TicketResponseDto ticketResponseDto = numberReceiverFacade.inputNumbers(responseNumbers);
-        return ResponseEntity.ok(ticketResponseDto);
+    ResponseEntity<TicketResponseDto> inputNumbers(@RequestBody @Valid InputNumbersRequestDto request) {
+        Set<Integer> inputNumbers = request.inputNumbers();
+        TicketResponseDto ticketResponse = numberReceiverFacade.inputNumbers(inputNumbers);
+        return ResponseEntity.ok(ticketResponse);
     }
 }
