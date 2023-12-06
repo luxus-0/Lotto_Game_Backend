@@ -1,4 +1,6 @@
 package pl.lotto.domain.login.dto;
 
-public record RegisterUserDto(String username, String password) {
+import javax.validation.constraints.NotBlank;
+
+public record RegisterUserDto(@NotBlank String username, @NotBlank String password) {
 }

@@ -10,6 +10,8 @@ import pl.lotto.domain.login.LoginAndRegisterFacade;
 import pl.lotto.domain.login.dto.RegisterUserDto;
 import pl.lotto.domain.login.dto.RegistrationResultDto;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -20,7 +22,7 @@ public class RegisterController {
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<RegistrationResultDto> register(@RequestBody RegisterUserDto registerUser){
+    public ResponseEntity<RegistrationResultDto> register(@RequestBody @Valid RegisterUserDto registerUser){
         String encodedPassword = bCryptPasswordEncoder.encode(registerUser.password());
         RegistrationResultDto registerResult = loginAndRegisterFacade.register(
                 new RegisterUserDto(registerUser.username(), encodedPassword));

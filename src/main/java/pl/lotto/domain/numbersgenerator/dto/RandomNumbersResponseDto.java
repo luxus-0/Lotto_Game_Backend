@@ -2,8 +2,12 @@ package pl.lotto.domain.numbersgenerator.dto;
 
 import lombok.Builder;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Builder
-public record RandomNumbersResponseDto(Set<Integer> randomNumbers) {
+public record RandomNumbersResponseDto(@NotNull(message = "random numbers not null")
+                                       @NotEmpty(message = "random numbers not empty")
+                                       Set<Integer> randomNumbers) {
 }
