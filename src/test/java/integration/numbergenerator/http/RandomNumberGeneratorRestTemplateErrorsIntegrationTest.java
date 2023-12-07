@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
+import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
 import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -27,7 +27,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
             .options(wireMockConfig().dynamicPort())
             .build();
 
-    RandomNumbersGenerable randomNumbersGenerable = new RandomNumberGeneratorRestTemplateIntegrationTestConfig()
+    RandomNumbersGenerator randomNumbersGenerator = new RandomNumberGeneratorRestTemplateIntegrationTestConfig()
             .randomNumbersGeneratorClient(TimeConnectionClient.builder()
                     .readTimeOut(1000)
                     .connectionTimeOut(1000)
@@ -46,7 +46,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                                 """)));
 
         //when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(0, 1, 99));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(0, 1, 99));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -63,7 +63,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)));
 
         //when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(0, 0, 0));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(0, 0, 0));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -81,7 +81,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                         .withFault(Fault.CONNECTION_RESET_BY_PEER)));
 
         //when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(12, 99, 1));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(12, 99, 1));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -99,7 +99,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         );
 
         // when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(6, 1, 102));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(6, 1, 102));
 
         // then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -117,7 +117,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                         .withFault(Fault.EMPTY_RESPONSE)));
 
         //when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(15, 1, 99));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(15, 1, 99));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -139,7 +139,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                         .withFixedDelay(1500)));
 
         //when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(12, 1, 99));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(12, 1, 99));
 
         //then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -156,7 +156,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
         // when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(25, 1, 99));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(25, 1, 99));
 
         // then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
@@ -174,7 +174,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                         .withFault(Fault.RANDOM_DATA_THEN_CLOSE)));
 
         // when
-        Throwable throwable = catchThrowable(() -> randomNumbersGenerable.generateRandomNumbers(25, 1, 99));
+        Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(25, 1, 99));
 
         // then
         assertThat(throwable).isInstanceOf(ResponseStatusException.class);
