@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
-import static pl.lotto.domain.numberreceiver.NumbersReceiverValidator.getMessage;
+import static pl.lotto.domain.numberreceiver.NumbersReceiverValidator.retrieveInputNumbersValidationMessage;
 
 @AllArgsConstructor
 class TicketMapper {
@@ -23,7 +23,7 @@ class TicketMapper {
                         .numbers(ticketSaved.numbers())
                         .drawDate(ticketSaved.drawDate())
                         .build())
-                .message(getMessage())
+                .message(retrieveInputNumbersValidationMessage().getInfo())
                 .build();
     }
 }
