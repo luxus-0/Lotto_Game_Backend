@@ -1,6 +1,6 @@
 package pl.lotto.domain.numbersgenerator;
 
-public class RandomNumbersUrlMessage {
+public class RandomNumbersURL {
     public static final String BASE_RANDOM_NUMBERS_URL = "https://random.org/integers/?";
     public static final int COUNT_RANDOM_NUMBERS = 6;
     public static final int LOWER_BAND_RANDOM_NUMBERS = 1;
