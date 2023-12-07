@@ -1,6 +1,7 @@
 package pl.lotto.domain.resultchecker;
 
 import lombok.AllArgsConstructor;
+import pl.lotto.domain.numberreceiver.TicketResultMessage;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
@@ -9,6 +10,7 @@ import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.util.List;
 
+import static pl.lotto.domain.numberreceiver.TicketResultMessage.WIN;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_NOT_FOUND;
 
 @AllArgsConstructor
@@ -57,7 +59,7 @@ class ResultCheckerMapper {
                         .numbers(ticket.numbers())
                         .hitNumbers(ticket.hitNumbers())
                         .drawDate(ticket.drawDate())
-                        .message(ticket.message())
+                        .message(WIN.getMessage())
                         .build())
                 .toList();
     }

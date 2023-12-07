@@ -3,6 +3,7 @@ package pl.lotto.domain.resultchecker;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.TicketResultMessage;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
@@ -53,14 +54,14 @@ class ResultsCheckerFacadeTest {
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .hitNumbers(Set.of(3, 4, 5))
                                 .drawDate(drawDate)
-                                .message(WIN)
+                                .ticketResultMessage(TicketResultMessage.WIN)
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("123456")
                                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                                 .hitNumbers(Set.of(11, 12, 14))
                                 .drawDate(drawDate)
-                                .message(LOSE)
+                                .ticketResultMessage(TicketResultMessage.LOSE)
                                 .build()
                 ));
         //when
@@ -131,7 +132,7 @@ class ResultsCheckerFacadeTest {
                                 .hitNumbers(Set.of(4, 5, 6))
                                 .drawDate(drawDate)
                                 .isWinner(true)
-                                .message(WIN)
+                                .ticketResultMessage(TicketResultMessage.WIN)
                                 .build(),
                         TicketDto.builder()
                                 .ticketId("002")
@@ -139,7 +140,7 @@ class ResultsCheckerFacadeTest {
                                 .hitNumbers(Set.of(4, 5, 6))
                                 .drawDate(drawDate)
                                 .isWinner(true)
-                                .message(WIN)
+                                .ticketResultMessage(TicketResultMessage.WIN)
                                 .build())
         );
 
