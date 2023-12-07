@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import static pl.lotto.domain.drawdate.DrawDateMessageProvider.INCORRECT_NEXT_DRAW_DATE;
-import static pl.lotto.domain.numberreceiver.NumbersReceiverValidator.getMessage;
+import static pl.lotto.domain.numberreceiver.NumbersReceiverValidator.getInputNumbersValidationMessage;
 import static pl.lotto.domain.numberreceiver.TicketMapper.mapToTicketResponseDto;
 
 @AllArgsConstructor
@@ -23,20 +23,20 @@ public class NumberReceiverFacade {
     private final NumbersReceiverValidator validator;
     private final DrawDateFacade drawDateFacade;
     private final TicketRepository ticketRepository;
-    private final TicketIdGenerator hashGenerator;
+    private final TicketUUIDGenerator ticketUUIDGenerator;
 
     public TicketResponseDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean validate = validator.validate(numbersFromUser);
         if (validate) {
-            String ticketId = hashGenerator.generateTicketId();
+            String ticketUUID = ticketUUIDGenerator.generateTicketUUID();
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-            Ticket ticket = new Ticket(ticketId, numbersFromUser, drawDate, getMessage());
+            Ticket ticket = new Ticket(ticketUUID, numbersFromUser, drawDate, getInputNumbersValidationMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
 
             return mapToTicketResponseDto(ticketSaved);
         }
         return TicketResponseDto.builder()
-                .message(getMessage())
+                .message(getInputNumbersValidationMessage().getInfo())
                 .build();
     }
 
