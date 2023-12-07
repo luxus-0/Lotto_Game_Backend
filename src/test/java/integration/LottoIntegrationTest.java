@@ -27,7 +27,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static pl.lotto.domain.numberreceiver.TicketValidationResult.EQUALS_SIX_NUMBERS;
+import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.EQUALS_SIX_NUMBERS;
 
 
 @Log4j2
