@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 
-import static pl.lotto.domain.numbersgenerator.RandomNumbersUrlMessage.*;
+import static pl.lotto.domain.numbersgenerator.RandomNumbersURL.*;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersManager.retrieveWinningNumbers;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.NO_WINNING_TICKET;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.WINNING_NUMBERS_NOT_FOUND;
+import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.NO_WINNING_TICKET;
+import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.WINNING_NUMBERS_NOT_FOUND;
 
 @AllArgsConstructor
 @Log4j2
@@ -26,13 +26,13 @@ public class WinningNumbersFacade {
     private final WinningNumbersRepository winningNumbersRepository;
     private final WinningNumbersValidator winningNumbersValidator;
     private final NumberReceiverFacade numberReceiverFacade;
-    private final RandomNumbersGenerable randomNumbersGenerable;
+    private final RandomNumbersGenerator randomNumbersGenerator;
     private final WinningNumbersConfigurationProperties properties;
 
     public WinningTicketResponseDto generateWinningNumbers() {
-        String ticketId = randomNumbersGenerable.generateUniqueTicketId();
+        String ticketId = randomNumbersGenerator.generateTicketUUID();
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        RandomNumbersResponseDto randomNumbersResponse = randomNumbersGenerable.generateRandomNumbers(COUNT_RANDOM_NUMBERS, LOWER_BAND_RANDOM_NUMBERS, UPPER_BAND_RANDOM_NUMBERS);
+        RandomNumbersResponseDto randomNumbersResponse = randomNumbersGenerator.generateRandomNumbers(COUNT_RANDOM_NUMBERS, LOWER_BAND_RANDOM_NUMBERS, UPPER_BAND_RANDOM_NUMBERS);
         Set<Integer> randomNumbers = randomNumbersResponse.randomNumbers();
         Set<Integer> userInputNumbers = numberReceiverFacade.retrieveUserNumbersByDrawDate(nextDrawDate);
         Set<Integer> winningNumbers = retrieveWinningNumbers(randomNumbers, userInputNumbers);
@@ -49,7 +49,7 @@ public class WinningNumbersFacade {
         }
         return WinningTicketResponseDto.builder()
                 .winningNumbers(Collections.emptySet())
-                .message(NO_WINNING_TICKET)
+                .message(NO_WINNING_TICKET.getMessage())
                 .build();
     }
 
@@ -61,7 +61,7 @@ public class WinningNumbersFacade {
                         .winningNumbers(winningNumbers.winningNumbers())
                         .build())
                 .findAny()
-                .orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_NOT_FOUND));
+                .orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_NOT_FOUND.getMessage()));
     }
 
     public boolean areWinningNumbersGeneratedByDate() {
