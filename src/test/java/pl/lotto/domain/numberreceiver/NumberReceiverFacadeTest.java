@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.*;
+import static pl.lotto.domain.numberreceiver.InputNumbersValidationResult.*;
 
 @Log4j2
 class NumberReceiverFacadeTest {

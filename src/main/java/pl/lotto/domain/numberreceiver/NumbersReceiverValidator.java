@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.*;
+import static pl.lotto.domain.numberreceiver.InputNumbersValidationResult.*;
 
 class NumbersReceiverValidator {
 
@@ -14,7 +14,7 @@ class NumbersReceiverValidator {
     private static final int MIN_NUMBER_FROM_USER = 1;
     private static final int MAX_NUMBER_FROM_USER = 99;
 
-    private static List<NumberReceiverValidationResult> errors;
+    private static List<InputNumbersValidationResult> errors;
 
     boolean validate(Set<Integer> inputNumbers) {
         errors = new LinkedList<>();
@@ -59,7 +59,7 @@ class NumbersReceiverValidator {
                 .anyMatch(number -> number < MIN_NUMBER_FROM_USER || number > MAX_NUMBER_FROM_USER);
     }
 
-    public static NumberReceiverValidationResult getInputNumbersValidationMessage() {
+    public static InputNumbersValidationResult retrieveInputNumbersValidationMessage() {
         return errors.stream()
                 .findAny()
                 .orElseThrow(InputNumbersNotFoundException::new);
