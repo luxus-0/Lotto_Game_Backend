@@ -2,7 +2,6 @@ package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.exceptions.IncorrectSizeNumbersException;
 import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
@@ -11,8 +10,8 @@ import java.util.Set;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.INCORRECT_SIZE;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationMessageProvider.OUT_OF_RANGE;
+import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.INCORRECT_SIZE;
+import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.OUT_OF_RANGE;
 
 @AllArgsConstructor
 @Log4j2
@@ -22,24 +21,15 @@ class WinningNumbersValidator {
     public boolean validate(Set<Integer> winningNumbers) {
         if (outOfRange(winningNumbers)) {
             try {
-                throw new OutOfRangeNumbersException(OUT_OF_RANGE);
+                throw new OutOfRangeNumbersException(OUT_OF_RANGE.getMessage());
             } catch (OutOfRangeNumbersException e) {
                 log.error(e.getMessage());
             }
         }
         if(isIncorrectSize(winningNumbers)){
-            throw new IncorrectSizeNumbersException(INCORRECT_SIZE);
+            throw new IncorrectSizeNumbersException(INCORRECT_SIZE.getMessage());
         }
         return true;
-    }
-
-    public void validate(int count, int lowerBand, int upperBand) {
-        if (count == 0) {
-            throw new ResponseStatusException(NO_CONTENT);
-        }
-        else if (lowerBand > upperBand && count > properties.count()) {
-            throw new ResponseStatusException(NOT_FOUND);
-        }
     }
 
     private boolean outOfRange(Set<Integer> winningNumbers) {

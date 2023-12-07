@@ -3,19 +3,12 @@ package pl.lotto.domain.numbersgenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClient;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClientValidator;
-import pl.lotto.infrastructure.numbergenerator.scheduler.WinningNumbersScheduler;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-import static java.time.ZoneOffset.UTC;
-import static pl.lotto.domain.numbersgenerator.RandomNumbersUrlMessage.*;
+import static pl.lotto.domain.numbersgenerator.RandomNumbersURL.*;
 
 @Configuration
 public class WinningNumbersFacadeConfiguration {
@@ -24,13 +17,13 @@ public class WinningNumbersFacadeConfiguration {
     public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
         WinningNumbersValidator winningNumbersValidator = new WinningNumbersValidator(properties);
         RandomNumberGeneratorClientValidator randomNumberClientValidator = new RandomNumberGeneratorClientValidator(properties);
-        RandomNumbersGenerable randomNumbersGenerable = new RandomNumberGeneratorClient(new RestTemplate(), properties, randomNumberClientValidator);
+        RandomNumbersGenerator randomNumbersGenerator = new RandomNumberGeneratorClient(new RestTemplate(), properties, randomNumberClientValidator);
         return WinningNumbersFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)
                 .winningNumbersValidator(winningNumbersValidator)
                 .numberReceiverFacade(numberReceiverFacade)
-                .randomNumbersGenerable(randomNumbersGenerable)
+                .randomNumbersGenerator(randomNumbersGenerator)
                 .build();
     }
 

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class WinningNumbersFacadeTest {
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
     WinningNumbersRepository winningNumbersRepository = mock(WinningNumbersRepository.class);
-    RandomNumbersGenerable randomNumbersGenerable = mock(RandomNumbersGenerable.class);
+    RandomNumbersGenerator randomNumbersGenerator = mock(RandomNumbersGenerator.class);
     NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
 
     @Test
@@ -52,7 +52,7 @@ class WinningNumbersFacadeTest {
         WinningNumbersFacade winningNumbersFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
 
-        when(randomNumbersGenerable.generateRandomNumbers(6, 1, 99))
+        when(randomNumbersGenerator.generateRandomNumbers(6, 1, 99))
                 .thenReturn(RandomNumbersResponseDto.builder()
                         .randomNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
