@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
-import pl.lotto.domain.numbersgenerator.RandomNumbersGenerable;
+import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
 import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
 
@@ -16,17 +15,15 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.*;
-
 @AllArgsConstructor
 @Log4j2
-public class RandomNumberGeneratorClient implements RandomNumbersGenerable {
+public class RandomNumberGeneratorClient implements RandomNumbersGenerator {
     private final RestTemplate restTemplate;
     private final WinningNumbersConfigurationProperties properties;
     private final RandomNumberGeneratorClientValidator validator;
 
     @Override
-    public String generateUniqueTicketId() {
+    public String generateTicketUUID() {
         return UUID.randomUUID().toString();
     }
 
