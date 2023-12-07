@@ -19,8 +19,8 @@ public class NumberReceiverConfiguration {
     }
 
     @Bean
-    TicketIdGenerator hashGenerable() {
-        return new TicketIdGeneratorImpl();
+    TicketUUIDGenerator ticketIdGenerator() {
+        return new TicketUUIDGeneratorImpl();
     }
 
     @Bean
@@ -29,7 +29,7 @@ public class NumberReceiverConfiguration {
     }
 
     @Bean
-    public NumberReceiverFacade numberReceiverFacade(AdjustableClock clock, TicketIdGenerator hashGenerator, TicketRepository ticketRepository) {
+    public NumberReceiverFacade numberReceiverFacade(AdjustableClock clock, TicketUUIDGenerator hashGenerator, TicketRepository ticketRepository) {
         NumbersReceiverValidator numbersReceiverValidator = new NumbersReceiverValidator();
         DrawDateGenerator drawDateGenerator = new DrawDateGenerator(clock);
         DrawDateFacade drawDateFacade = new DrawDateFacade(drawDateGenerator);
