@@ -22,5 +22,5 @@ public record Ticket(@UUID
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      LocalDateTime drawDate,
                      @Enumerated(EnumType.STRING)
-                     NumberReceiverValidationResult numberReceiverValidation) {
+                     InputNumbersValidationResult inputNumbersValidation) {
 }
