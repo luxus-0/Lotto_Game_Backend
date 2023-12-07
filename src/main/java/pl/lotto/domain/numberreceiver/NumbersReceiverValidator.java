@@ -1,8 +1,12 @@
 package pl.lotto.domain.numberreceiver;
 
+import pl.lotto.domain.numberreceiver.exceptions.InputNumbersNotFoundException;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.*;
 
 class NumbersReceiverValidator {
 
@@ -10,7 +14,7 @@ class NumbersReceiverValidator {
     private static final int MIN_NUMBER_FROM_USER = 1;
     private static final int MAX_NUMBER_FROM_USER = 99;
 
-    private static List<TicketValidationResult> errors;
+    private static List<NumberReceiverValidationResult> errors;
 
     boolean validate(Set<Integer> inputNumbers) {
         errors = new LinkedList<>();
@@ -19,17 +23,17 @@ class NumbersReceiverValidator {
         } else if (inputNumbers.isEmpty()) {
             throw new RuntimeException("InputNumbers must not be empty");
         } else if (isEqualsSixNumberFrom1To99(inputNumbers)) {
-            errors.add(TicketValidationResult.EQUALS_SIX_NUMBERS);
+            errors.add(EQUALS_SIX_NUMBERS);
             return true;
         } else {
             if (isLessThanSixNumbers(inputNumbers)) {
-                errors.add(TicketValidationResult.LESS_THAN_SIX_NUMBERS);
+                errors.add(LESS_THAN_SIX_NUMBERS);
             }
             if (isMoreThanSixNumbers(inputNumbers)) {
-                errors.add(TicketValidationResult.MORE_THAN_SIX_NUMBERS);
+                errors.add(MORE_THAN_SIX_NUMBERS);
             }
             if (isOutOfRange(inputNumbers)) {
-                errors.add(TicketValidationResult.OUT_OF_RANGE_NUMBERS);
+                errors.add(OUT_OF_RANGE_NUMBERS);
             }
         }
         return false;
@@ -55,10 +59,9 @@ class NumbersReceiverValidator {
                 .anyMatch(number -> number < MIN_NUMBER_FROM_USER || number > MAX_NUMBER_FROM_USER);
     }
 
-    public static String getMessage() {
+    public static NumberReceiverValidationResult getInputNumbersValidationMessage() {
         return errors.stream()
-                .map(TicketValidationResult::getInfo)
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("InputNumbers must not be empty"));
+                .orElseThrow(InputNumbersNotFoundException::new);
     }
 }
