@@ -1,7 +1,6 @@
 package pl.lotto.domain.resultchecker;
 
 import lombok.AllArgsConstructor;
-import pl.lotto.domain.numberreceiver.TicketResultMessage;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
