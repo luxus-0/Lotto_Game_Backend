@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import pl.lotto.domain.login.User;
 import pl.lotto.infrastructure.security.token.dto.TokenRequestDto;
 import pl.lotto.infrastructure.security.token.dto.TokenResponseDto;
 
@@ -46,7 +46,7 @@ public class JwtAuthenticatorFacade {
         Instant expiresAt = now.plus(Duration.ofDays(properties.expirationDays()));
         String issuer = properties.issuer();
         return JWT.create()
-                .withSubject(user.username())
+                .withSubject(user.getUsername())
                 .withIssuedAt(now)
                 .withExpiresAt(expiresAt)
                 .withIssuer(issuer)
