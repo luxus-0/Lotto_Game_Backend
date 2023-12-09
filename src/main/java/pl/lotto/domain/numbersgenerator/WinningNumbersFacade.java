@@ -10,12 +10,10 @@ import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Set;
 
 import static pl.lotto.domain.numbersgenerator.RandomNumbersURL.*;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersManager.retrieveWinningNumbers;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.NO_WINNING_TICKET;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.WINNING_NUMBERS_NOT_FOUND;
 
 @AllArgsConstructor
@@ -34,8 +32,8 @@ public class WinningNumbersFacade {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         RandomNumbersResponseDto randomNumbersResponse = randomNumbersGenerator.generateRandomNumbers(COUNT_RANDOM_NUMBERS, LOWER_BAND_RANDOM_NUMBERS, UPPER_BAND_RANDOM_NUMBERS);
         Set<Integer> randomNumbers = randomNumbersResponse.randomNumbers();
-        Set<Integer> userInputNumbers = numberReceiverFacade.retrieveUserNumbersByDrawDate(nextDrawDate);
-        Set<Integer> winningNumbers = retrieveWinningNumbers(randomNumbers, userInputNumbers);
+        Set<Integer> inputNumbers = numberReceiverFacade.retrieveInputNumbersByDrawDate(nextDrawDate);
+        Set<Integer> winningNumbers = retrieveWinningNumbers(randomNumbers, inputNumbers);
         boolean validate = winningNumbersValidator.validate(winningNumbers);
         if (validate) {
             WinningNumbers winningTicket = new WinningNumbers(ticketId, winningNumbers, nextDrawDate);
@@ -47,10 +45,7 @@ public class WinningNumbersFacade {
                     .drawDate(savedWinningNumbers.drawDate())
                     .build();
         }
-        return WinningTicketResponseDto.builder()
-                .winningNumbers(Collections.emptySet())
-                .message(NO_WINNING_TICKET.getMessage())
-                .build();
+        throw new WinningNumbersNotFoundException(WINNING_NUMBERS_NOT_FOUND.getMessage());
     }
 
     public WinningTicketResponseDto retrieveWinningNumbersByDate(LocalDateTime drawDate) {
