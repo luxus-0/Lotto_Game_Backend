@@ -19,9 +19,9 @@ class NumbersReceiverValidator {
     boolean validate(Set<Integer> inputNumbers) {
         errors = new LinkedList<>();
         if (inputNumbers == null) {
-            throw new RuntimeException("InputNumbers must not be null");
+            throw new InputNumbersNotFoundException("InputNumbers must not be null");
         } else if (inputNumbers.isEmpty()) {
-            throw new RuntimeException("InputNumbers must not be empty");
+            throw new InputNumbersNotFoundException("InputNumbers must not be empty");
         } else if (isEqualsSixNumberFrom1To99(inputNumbers)) {
             errors.add(EQUALS_SIX_NUMBERS);
             return true;

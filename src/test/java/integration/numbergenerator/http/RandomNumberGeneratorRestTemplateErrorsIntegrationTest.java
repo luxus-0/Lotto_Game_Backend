@@ -15,12 +15,11 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 import static org.apache.catalina.util.XMLWriter.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
-
-    public static final String CONTENT_TYPE_HEADER_KEY = "Content-Type";
-    public static final String APPLICATION_JSON_CONTENT_TYPE_VALUE = "application/json";
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
@@ -40,7 +39,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(NO_CONTENT)
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withBody("""
                                 [1 2 3 4 5 6 7 8 9 10]
                                 """)));
@@ -60,7 +59,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=0&max=0&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(UNAUTHORIZED.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)));
+                                .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 
         //when
         Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(0, 0, 0));
@@ -77,7 +76,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         wireMockServer.stubFor(get("https://random.org/integers/?num=12&min=99&max=1&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(NOT_FOUND.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withFault(Fault.CONNECTION_RESET_BY_PEER)));
 
         //when
@@ -94,7 +93,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         // given
         wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=102&format=plain&col=2&base=10")
                 .willReturn(aResponse()
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withStatus(NOT_FOUND.value()))
         );
 
@@ -113,7 +112,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         wireMockServer.stubFor(get("https://random.org/integers/?num=15&min=99&max=30&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(INTERNAL_SERVER_ERROR.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withFault(Fault.EMPTY_RESPONSE)));
 
         //when
@@ -131,7 +130,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         wireMockServer.stubFor(get("https://random.org/integers/?num=12&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(INTERNAL_SERVER_ERROR.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withBody("""
                                 [1 2 3 4 5 6 23 56 43 11]
                                 """.trim()
@@ -153,7 +152,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(OK.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
         // when
         Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(25, 1, 99));
@@ -170,7 +169,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
         wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(OK.value())
-                        .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withFault(Fault.RANDOM_DATA_THEN_CLOSE)));
 
         // when
