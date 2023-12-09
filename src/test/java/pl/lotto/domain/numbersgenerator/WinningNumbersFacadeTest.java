@@ -163,7 +163,7 @@ class WinningNumbersFacadeTest {
                         .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
         //then
-        assertThrows(RuntimeException.class, () -> winningNumbersFacade.retrieveWinningNumbersByDate(drawDate));
+        assertThrows(WinningNumbersNotFoundException.class, () -> winningNumbersFacade.retrieveWinningNumbersByDate(drawDate));
     }
 
     @Test
