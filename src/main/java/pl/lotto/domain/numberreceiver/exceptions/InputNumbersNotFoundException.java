@@ -10,4 +10,8 @@ public class InputNumbersNotFoundException extends RuntimeException {
     public InputNumbersNotFoundException() {
         super(INPUT_NUMBERS_NOT_FOUND.getInfo());
     }
+
+    public InputNumbersNotFoundException(String message){
+        super(message);
+    }
 }
