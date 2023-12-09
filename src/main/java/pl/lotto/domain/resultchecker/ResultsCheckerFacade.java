@@ -8,6 +8,7 @@ import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
+import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,6 +47,10 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
     public ResultDto findResultByTicketId(String ticketId) {
         PlayersDto players = generateResults();
         Player player = mapToPlayer(players);
-        return mapToPlayerResult(ticketId, player);
+        ResultDto resultDto = mapToPlayerResult(ticketId, player);
+        if(resultDto == null){
+            throw new PlayerResultNotFoundException("Player result not found");
+        }
+        return resultDto;
     }
 }
