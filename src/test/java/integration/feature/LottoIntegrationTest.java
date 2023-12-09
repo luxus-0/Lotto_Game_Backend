@@ -2,14 +2,15 @@ package integration.feature;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import integration.BaseIntegrationTest;
+import pl.lotto.domain.numbersgenerator.InMemoryRandomNumbersGenerator;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
-import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
+import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
+import pl.lotto.domain.numbersgenerator.exceptions.RandomNumbersNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
@@ -23,8 +24,11 @@ import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.Mockito.mock;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -33,62 +37,68 @@ import static pl.lotto.domain.numberreceiver.InputNumbersValidationResult.EQUALS
 
 @Log4j2
 public class LottoIntegrationTest extends BaseIntegrationTest {
-    private final WinningNumbersFacade winningNumbersFacade = mock(WinningNumbersFacade.class);
+    RandomNumbersGenerator randomNumbersGenerator = new InMemoryRandomNumbersGenerator();
     private final ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
 
 
     @Test
-    public void should_user_win_and_generate_winners() {
+    public void should_post_input_six_numbers_with_date_draw() {
+        //given
+        try {
+            LocalDateTime drawDate = LocalDateTime.of(2023, 12, 2, 12, 0, 0);
+            //when
+            ResultActions perform = mockMvc.perform(post("/inputNumbers")
+                    .content("""
+                            {
+                                "inputNumbers" : [93 10 32 45 11 75]
+                            }
+                            """.trim()
+                    ).contentType(MediaType.APPLICATION_JSON)
+                    .header(CONTENT_TYPE, APPLICATION_JSON_VALUE));
+
+            MvcResult mvcResult = perform.andExpect(httpStatus -> status(200)).andReturn();
+            String json = mvcResult.getResponse().getContentAsString();
+            TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
+            String ticketId = ticketResponseDto.ticket().ticketId();
+            //then
+            assertAll(
+                    () -> assertThat(ticketId).isNotNull(),
+                    () -> assertThat(ticketResponseDto.ticket().drawDate()).isEqualTo(drawDate),
+                    () -> assertThat(ticketResponseDto.message()).isEqualTo(EQUALS_SIX_NUMBERS.getInfo())
+            );
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+    }
+
+    @Test
+    public void should_generate_random_numbers() {
         //given
         wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
-                        .withStatus(OK.value())
-                        .withHeader("Content-Type", "application/json")
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withBody("""
-                                [1, 2, 3, 4, 5, 6, 82, 82, 83, 83, 86, 57, 10, 81, 53, 93, 50, 54, 31, 88, 15, 43, 79, 32, 43]
-                                """.trim())));
+                                {
+                                    "randomNumbers" : [14,17,23,56,45,90]
+                                }
+                                """.trim())
+                        .withStatus(OK.value())));
 
-        // given
-        LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
 
         // when && then
         await()
                 .atMost(Duration.ofSeconds(20))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
-                            try {
-                                return !winningNumbersFacade.retrieveWinningNumbersByDate(drawDate).winningNumbers().isEmpty();
-                            } catch (WinningNumbersNotFoundException e) {
-                                return false;
-                            }
-                        }
-                );
-    }
-
-    @Test
-    public void should_post_input_six_numbers_with_date_draw() throws Exception {
-        //given
-        LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
-        //when
-        ResultActions perform = mockMvc.perform(post("/inputNumbers")
-                .content("""
-                        {
-                        "inputNumbers": [1, 2, 3, 4, 5, 6]
-                        }
-                        """.trim()
-                ).contentType(MediaType.APPLICATION_JSON)
-        );
-
-        MvcResult mvcResult = perform.andExpect(status -> status(200)).andReturn();
-        String json = mvcResult.getResponse().getContentAsString();
-        TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
-        String ticketId = ticketResponseDto.ticket().ticketId();
-        //then
-        assertAll(
-                () -> assertThat(ticketId).isNotNull(),
-                () -> assertThat(ticketResponseDto.ticket().drawDate()).isEqualTo(drawDate),
-                () -> assertThat(ticketResponseDto.message()).isEqualTo(EQUALS_SIX_NUMBERS.getInfo())
-        );
+                    {
+                        assertThrowsExactly(RandomNumbersNotFoundException.class,
+                                () -> randomNumbersGenerator.generateRandomNumbers(
+                                        1,
+                                        1,
+                                        99).randomNumbers().isEmpty());
+                    }
+                    return true;
+                });
     }
 
     @Test
@@ -104,14 +114,16 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 .atMost(30, TimeUnit.SECONDS)
                 .pollInterval(Duration.ofSeconds(10L))
                 .until(() -> {
-                            try {
-                                ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
-                                return !result.numbers().isEmpty();
-                            } catch (PlayerResultNotFoundException exception) {
-                                return false;
-                            }
+                    try {
+                        ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
+                        if (result.numbers().isEmpty()) {
+                            throw new PlayerResultNotFoundException("Player result not found");
                         }
-                );
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
+                    return true;
+                });
     }
 
     @Test

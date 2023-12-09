@@ -41,7 +41,7 @@ public class NumberReceiverFacade {
                 .build();
     }
 
-    public Set<Integer> retrieveUserNumbersByDrawDate(LocalDateTime nextDrawDate) {
+    public Set<Integer> retrieveInputNumbersByDrawDate(LocalDateTime nextDrawDate) {
         return retrieveAllTicketByDrawDate(nextDrawDate).stream()
                 .map(TicketDto::numbers)
                 .findAny()
