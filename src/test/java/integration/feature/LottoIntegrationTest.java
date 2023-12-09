@@ -49,7 +49,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                                 """.trim())));
 
         // given
-        LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0, 0);
+        LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
 
         // when && then
         await()
@@ -68,7 +68,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_post_input_six_numbers_with_date_draw() throws Exception {
         //given
-        LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0, 0);
+        LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
         //when
         ResultActions perform = mockMvc.perform(post("/inputNumbers")
                 .content("""
