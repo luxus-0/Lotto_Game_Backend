@@ -3,13 +3,12 @@ package pl.lotto.domain.resultchecker;
 import lombok.AllArgsConstructor;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultannouncer.ResultLotto;
-import pl.lotto.domain.resultchecker.dto.PlayersDto;
+import pl.lotto.domain.resultchecker.dto.PlayerResultsDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.util.List;
 
-import static pl.lotto.domain.numberreceiver.TicketResultMessage.WIN;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.PLAYER_NOT_FOUND;
 
 @AllArgsConstructor
@@ -18,7 +17,7 @@ class ResultCheckerMapper {
     static List<ResultLotto> mapToPlayerResults(List<Player> players) {
         return players.stream()
                 .map(player -> ResultLotto.builder()
-                        .ticketId(player.ticketId())
+                        .ticketUUID(player.ticketUUID())
                         .numbers(player.numbers())
                         .hitNumbers(player.hitNumbers())
                         .drawDate(player.drawDate())
@@ -28,7 +27,7 @@ class ResultCheckerMapper {
                 .toList();
     }
 
-    static Player mapToPlayer(PlayersDto players) {
+    static Player mapToPlayer(PlayerResultsDto players) {
         return players.results()
                 .stream()
                 .map(ResultCheckerMapper::mapToPlayer)
@@ -37,12 +36,18 @@ class ResultCheckerMapper {
     }
 
     static Player mapToPlayer(ResultLotto player) {
-        return new Player(player.ticketId(), player.numbers(), player.hitNumbers(), player.drawDate(), player.isWinner(), player.message());
+        return new Player(
+                player.ticketUUID(),
+                player.numbers(),
+                player.hitNumbers(),
+                player.drawDate(),
+                player.isWinner(),
+                player.message());
     }
 
-    static ResultDto mapToPlayerResult(String ticketId, Player player) {
+    static ResultDto mapToPlayerResult(String ticketUUID, Player player) {
         return ResultDto.builder()
-                .ticketId(ticketId)
+                .ticketUUID(ticketUUID)
                 .numbers(player.numbers())
                 .hitNumbers(player.hitNumbers())
                 .drawDate(player.drawDate())
@@ -54,11 +59,12 @@ class ResultCheckerMapper {
     public static List<Ticket> mapToTickets(List<TicketDto> tickets) {
         return tickets.stream()
                 .map(ticket -> Ticket.builder()
-                        .ticketId(ticket.ticketId())
+                        .ticketUUID(ticket.ticketUUID())
                         .numbers(ticket.numbers())
                         .hitNumbers(ticket.hitNumbers())
                         .drawDate(ticket.drawDate())
-                        .message(WIN.getMessage())
+                        .isWinner(ticket.isWinner())
+                        .message(ticket.ticketResultMessage().getMessage())
                         .build())
                 .toList();
     }

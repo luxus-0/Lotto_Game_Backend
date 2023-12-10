@@ -1,6 +1,7 @@
 package pl.lotto.domain.resultchecker.dto;
 
 import lombok.Builder;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record ResultDto(String ticketId,
+public record ResultDto(@UUID String ticketUUID,
                         @NotNull(message = "ticket numbers not null")
                         @NotEmpty(message = "ticket numbers not empty")
                         Set<Integer> numbers,
@@ -20,5 +21,6 @@ public record ResultDto(String ticketId,
                         LocalDateTime drawDate,
                         @NotBlank
                         boolean isWinner,
+                        @NotBlank
                         String message) {
 }
