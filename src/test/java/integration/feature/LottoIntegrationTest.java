@@ -2,13 +2,13 @@ package integration.feature;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import integration.BaseIntegrationTest;
-import pl.lotto.domain.numbersgenerator.InMemoryRandomNumbersGenerator;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
+import pl.lotto.domain.numbersgenerator.InMemoryRandomNumbersGenerator;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
 import pl.lotto.domain.numbersgenerator.exceptions.RandomNumbersNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
@@ -59,7 +59,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
             MvcResult mvcResult = perform.andExpect(httpStatus -> status(200)).andReturn();
             String json = mvcResult.getResponse().getContentAsString();
             TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
-            String ticketId = ticketResponseDto.ticket().ticketId();
+            String ticketId = ticketResponseDto.ticket().ticketUUID();
             //then
             assertAll(
                     () -> assertThat(ticketId).isNotNull(),
@@ -115,7 +115,7 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
                 .pollInterval(Duration.ofSeconds(10L))
                 .until(() -> {
                     try {
-                        ResultDto result = resultsCheckerFacade.findResultByTicketId(ticketId);
+                        ResultDto result = resultsCheckerFacade.findResultByTicketUUID(ticketId);
                         if (result.numbers().isEmpty()) {
                             throw new PlayerResultNotFoundException("Player result not found");
                         }

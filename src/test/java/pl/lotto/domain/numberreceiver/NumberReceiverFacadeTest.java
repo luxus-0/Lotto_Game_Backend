@@ -136,7 +136,7 @@ class NumberReceiverFacadeTest {
                 .thenReturn(new Ticket("123456", Set.of(1, 2, 3, 4, 5, 6), LocalDateTime.now(), EQUALS_SIX_NUMBERS));
 
         TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(inputNumbers);
-        String actualTicketId = actualTicket.ticket().ticketId();
+        String actualTicketId = actualTicket.ticket().ticketUUID();
         //then
         assertThat(actualTicket).isNotNull();
         assertThat(actualTicketId).isEqualTo("123456");
@@ -201,7 +201,7 @@ class NumberReceiverFacadeTest {
                 .drawDateFacade(clock);
 
         TicketDto expectedTicket = TicketDto.builder()
-                .ticketId(ticketUUIDGenerator.generateTicketUUID())
+                .ticketUUID(ticketUUIDGenerator.generateTicketUUID())
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .drawDate(LocalDateTime.of(2023, 7, 8, 12, 0, 0, 0))
                 .build();
