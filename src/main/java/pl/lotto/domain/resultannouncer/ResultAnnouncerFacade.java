@@ -22,8 +22,8 @@ public class ResultAnnouncerFacade {
         if (ticketId == null) {
             throw new IllegalArgumentException("Ticket id is empty");
         }
-        ResultDto resultDto = resultsCheckerFacade.findResultByTicketId(ticketId);
-        ResultLotto result = resultLottoRepository.findByTicketId(ticketId)
+        ResultDto resultDto = resultsCheckerFacade.findResultByTicketUUID(ticketId);
+        ResultLotto result = resultLottoRepository.findByTicketUUID(ticketId)
                 .orElseThrow(() -> new ResultLottoNotFoundException("Not found for ticket id: " + ticketId));
         ResultLotto resultLottoSaved = resultLottoRepository.save(result);
         ResultDto resultDtoSaved = mapToResultDtoSaved(resultLottoSaved);
