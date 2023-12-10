@@ -36,7 +36,7 @@ class WinningNumbersFacadeTest {
 
         when(winningNumbersRepository.save(any(WinningNumbers.class)))
                 .thenReturn(WinningNumbers.builder()
-                        .ticketId("123456")
+                        .ticketUUID("550e8400-e29b-41d4-a716-446655440000")
                         .drawDate(LocalDateTime.now())
                         .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
@@ -59,7 +59,7 @@ class WinningNumbersFacadeTest {
 
         when(winningNumbersRepository.save(any(WinningNumbers.class)))
                 .thenReturn(WinningNumbers.builder()
-                        .ticketId("12345")
+                        .ticketUUID("456e8400-e29b-41d4-a716-446655440000")
                         .winningNumbers(Set.of(2, 3, 4, 11, 14, 90))
                         .drawDate(LocalDateTime.now())
                         .build());
@@ -79,7 +79,7 @@ class WinningNumbersFacadeTest {
 
         when(winningNumbersRepository.save(any(WinningNumbers.class)))
                 .thenReturn(WinningNumbers.builder()
-                        .ticketId("123456")
+                        .ticketUUID("678e8400-e29b-41d4-a716-446655440000")
                         .drawDate(LocalDateTime.now())
                         .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
@@ -102,7 +102,7 @@ class WinningNumbersFacadeTest {
 
         when(winningNumbersRepository.save(any(WinningNumbers.class)))
                 .thenReturn(WinningNumbers.builder()
-                        .ticketId("123456")
+                        .ticketUUID("550e8400-e29b-41d4-a716-246655440000")
                         .drawDate(LocalDateTime.now())
                         .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
@@ -122,7 +122,7 @@ class WinningNumbersFacadeTest {
         //when
         when(winningNumbersRepository.save(any(WinningNumbers.class)))
                 .thenReturn(WinningNumbers.builder()
-                        .ticketId("123456")
+                        .ticketUUID("123e8400-e29b-41d4-a716-446655440000")
                         .drawDate(LocalDateTime.now())
                         .winningNumbers(Set.of(1, 2, 3, 4, 5, 6, 7))
                         .build());
@@ -158,7 +158,7 @@ class WinningNumbersFacadeTest {
         //when
         when(winningNumbersRepository.save(any(WinningNumbers.class)))
                 .thenReturn(WinningNumbers.builder()
-                        .ticketId("123456")
+                        .ticketUUID("550e5670-e29b-41d4-a716-446655440000")
                         .drawDate(LocalDateTime.now())
                         .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());
@@ -172,7 +172,7 @@ class WinningNumbersFacadeTest {
         LocalDateTime expectedDrawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
 
         WinningNumbers winningNumbers = WinningNumbers.builder()
-                .ticketId("123")
+                .ticketUUID("636e8400-e29b-41d4-a716-446655440000")
                 .drawDate(expectedDrawDate)
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .build();
@@ -194,7 +194,7 @@ class WinningNumbersFacadeTest {
 
         when(winningNumbersRepository.save(any(WinningNumbers.class)))
                 .thenReturn(WinningNumbers.builder()
-                        .ticketId("123")
+                        .ticketUUID("475e8400-e29b-41d4-a716-446655440000")
                         .drawDate(drawDate)
                         .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                         .build());

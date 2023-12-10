@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Builder
 @Document
-public record WinningNumbers(@UUID String ticketId,
+public record WinningNumbers(@UUID String ticketUUID,
                              @NotNull(message = "winning numbers not null")
                              @NotEmpty(message = "winning numbers not empty")
                              Set<Integer> winningNumbers,
