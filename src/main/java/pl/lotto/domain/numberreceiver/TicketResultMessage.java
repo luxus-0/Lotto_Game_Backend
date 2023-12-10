@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum TicketResultMessage {
-    WIN("WIN"),
-    LOSE("LOSE");
+    TICKET_WIN("WIN"),
+    TICKET_LOSE("LOSE");
 
     private final String message;
     TicketResultMessage(String message) {

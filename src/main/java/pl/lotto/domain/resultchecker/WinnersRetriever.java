@@ -21,16 +21,17 @@ public class WinnersRetriever {
             builder.isWinner(true);
         }
         return builder
-                .ticketId(ticket.ticketId())
+                .ticketUUID(ticket.ticketUUID())
                 .numbers(ticket.numbers())
                 .hitNumbers(hitNumbers)
                 .drawDate(ticket.drawDate())
                 .message(ticket.message())
+                .isWinner(ticket.isWinner())
                 .build();
     }
 
     private boolean isWinner(Set<Integer> hitNumbers) {
-        return hitNumbers.size() >= NUMBERS_WHEN_PLAYERS_WON;
+        return hitNumbers.size() > NUMBERS_WHEN_PLAYERS_WON;
     }
 
     private Set<Integer> calculateHits(Set<Integer> winningNumbers, Ticket ticket) {

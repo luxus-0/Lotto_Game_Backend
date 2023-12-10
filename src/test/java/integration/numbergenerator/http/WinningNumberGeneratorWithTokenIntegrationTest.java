@@ -166,6 +166,11 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
         WinningTicketResponseDto ticketResponse = objectMapper.readValue(jsonWithWinningNumbers, new TypeReference<>() {
         });
 
-        assertThat(ticketResponse).isEqualTo(new WinningTicketResponseDto(null, Collections.emptySet(), LocalDateTime.of(2023, 12,2, 12, 0,0), null));
+        assertThat(ticketResponse).isEqualTo(new WinningTicketResponseDto(
+                null,
+                Collections.emptySet(),
+                LocalDateTime.of(2023, 12, 2, 12, 0, 0),
+                false,
+                null));
     }
 }

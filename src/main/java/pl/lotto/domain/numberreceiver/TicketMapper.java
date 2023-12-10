@@ -10,7 +10,7 @@ import static pl.lotto.domain.numberreceiver.NumbersReceiverValidator.retrieveIn
 class TicketMapper {
     public static TicketDto mapToTicketDto(Ticket ticket) {
         return TicketDto.builder()
-                .ticketId(ticket.ticketId())
+                .ticketUUID(ticket.ticketUUID())
                 .numbers(ticket.numbers())
                 .drawDate(ticket.drawDate())
                 .build();
@@ -19,7 +19,7 @@ class TicketMapper {
     public static TicketResponseDto mapToTicketResponseDto(Ticket ticketSaved) {
         return TicketResponseDto.builder()
                 .ticket(TicketDto.builder()
-                        .ticketId(ticketSaved.ticketId())
+                        .ticketUUID(ticketSaved.ticketUUID())
                         .numbers(ticketSaved.numbers())
                         .drawDate(ticketSaved.drawDate())
                         .build())
