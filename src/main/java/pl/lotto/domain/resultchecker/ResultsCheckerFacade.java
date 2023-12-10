@@ -5,8 +5,7 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
-import pl.lotto.domain.resultannouncer.ResultLotto;
-import pl.lotto.domain.resultchecker.dto.PlayersDto;
+import pl.lotto.domain.resultchecker.dto.PlayerResultsDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
@@ -24,7 +23,7 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                    PlayerRepository playerRepository,
                                    ResultCheckerValidation resultCheckerValidation) {
 
-    public PlayersDto generateResults() {
+    public PlayerResultsDto generateResults() {
         WinningTicketResponseDto winningTicketResponse = winningNumbersFacade.generateWinningNumbers();
         Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
         boolean validate = resultCheckerValidation.validate(winningNumbers);
@@ -32,24 +31,20 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
             LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
             List<TicketDto> tickets = numberReceiverFacade.retrieveAllTicketByDrawDate(nextDrawDate);
             List<Player> players = winnersRetriever.retrieveWinners(mapToTickets(tickets), winningNumbers);
-            playerRepository.saveAll(players);
-            return PlayersDto.builder()
-                    .results(mapToPlayerResults(players))
+            List<Player> playerSaved = playerRepository.saveAll(players);
+            return PlayerResultsDto.builder()
+                    .results(mapToPlayerResults(playerSaved))
                     .build();
         }
-        return PlayersDto.builder()
-                .results(List.of(ResultLotto.builder()
-                        .message(PLAYER_LOSE)
-                        .build()))
-                .build();
+        throw new PlayerResultNotFoundException(PLAYER_LOSE);
     }
 
-    public ResultDto findResultByTicketId(String ticketId) {
-        PlayersDto players = generateResults();
+    public ResultDto findResultByTicketUUID(String ticketUUID) {
+        PlayerResultsDto players = generateResults();
         Player player = mapToPlayer(players);
-        ResultDto resultDto = mapToPlayerResult(ticketId, player);
+        ResultDto resultDto = mapToPlayerResult(ticketUUID, player);
         if(resultDto == null){
-            throw new PlayerResultNotFoundException("Player result not found");
+            throw new PlayerResultNotFoundException(PLAYER_LOSE);
         }
         return resultDto;
     }

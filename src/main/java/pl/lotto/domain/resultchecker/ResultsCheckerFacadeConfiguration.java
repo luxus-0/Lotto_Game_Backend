@@ -21,7 +21,7 @@ class ResultsCheckerFacadeConfiguration {
 
     @Bean
     Clock clock() {
-        return new AdjustableClock(LocalDateTime.of(2022, 11, 19, 12, 0, 0).toInstant(UTC), ZoneId.systemDefault());
+        return new AdjustableClock(LocalDateTime.of(2023, 11, 19, 12, 0, 0).toInstant(UTC), ZoneId.systemDefault());
     }
 
     @Bean

@@ -6,7 +6,7 @@ public class ResultLottoMapper {
 
     static ResultDto mapToResultDtoSaved(ResultLotto resultLottoSaved) {
         return ResultDto.builder()
-                .ticketId(resultLottoSaved.ticketId())
+                .ticketUUID(resultLottoSaved.ticketUUID())
                 .numbers(resultLottoSaved.numbers())
                 .hitNumbers(resultLottoSaved.hitNumbers())
                 .drawDate(resultLottoSaved.drawDate())
