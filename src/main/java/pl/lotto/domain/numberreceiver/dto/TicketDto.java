@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Builder
 public record TicketDto(@UUID
-                        String ticketId,
+                        String ticketUUID,
                         @NotNull(message = "input numbers not null")
                         @NotEmpty(message = "input numbers not empty")
                         Set<Integer> numbers,
