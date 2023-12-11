@@ -5,7 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
+import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersRequestDto;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @Log4j2
 public class NumbersGeneratorController {
     private final RandomNumberGeneratorClient randomNumberClient;
-    private final WinningNumbersFacade winningNumbersFacade;
+    private final WinningTicketFacade winningTicketFacade;
 
     @GetMapping("/random_numbers")
     RandomNumbersResponseDto generateRandomNumbers(@RequestBody @Valid RandomNumbersRequestDto randomNumbers) {
@@ -30,6 +30,6 @@ public class NumbersGeneratorController {
 
     @GetMapping("/winning_numbers")
     WinningTicketResponseDto generateWinningNumbers() {
-        return winningNumbersFacade.generateWinningNumbers();
+        return winningTicketFacade.generateWinningTicket();
     }
 }

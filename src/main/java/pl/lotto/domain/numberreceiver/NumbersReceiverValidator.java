@@ -1,5 +1,6 @@
 package pl.lotto.domain.numberreceiver;
 
+import lombok.Getter;
 import pl.lotto.domain.numberreceiver.exceptions.InputNumbersNotFoundException;
 
 import java.util.LinkedList;
@@ -8,32 +9,29 @@ import java.util.Set;
 
 import static pl.lotto.domain.numberreceiver.InputNumbersValidationResult.*;
 
+@Getter
 class NumbersReceiverValidator {
 
     private static final int QUANTITY_NUMBERS_FROM_USER = 6;
     private static final int MIN_NUMBER_FROM_USER = 1;
     private static final int MAX_NUMBER_FROM_USER = 99;
 
-    private static List<InputNumbersValidationResult> errors;
+    private static List<String> errors;
 
     boolean validate(Set<Integer> inputNumbers) {
         errors = new LinkedList<>();
-        if (inputNumbers == null) {
-            throw new InputNumbersNotFoundException("InputNumbers must not be null");
-        } else if (inputNumbers.isEmpty()) {
-            throw new InputNumbersNotFoundException("InputNumbers must not be empty");
-        } else if (isEqualsSixNumberFrom1To99(inputNumbers)) {
-            errors.add(EQUALS_SIX_NUMBERS);
+        if (isEqualsSixNumberFrom1To99(inputNumbers)) {
+            errors.add(EQUALS_SIX_NUMBERS.getInfo());
             return true;
         } else {
             if (isLessThanSixNumbers(inputNumbers)) {
-                errors.add(LESS_THAN_SIX_NUMBERS);
+                errors.add(LESS_THAN_SIX_NUMBERS.getInfo());
             }
             if (isMoreThanSixNumbers(inputNumbers)) {
-                errors.add(MORE_THAN_SIX_NUMBERS);
+                errors.add(MORE_THAN_SIX_NUMBERS.getInfo());
             }
             if (isOutOfRange(inputNumbers)) {
-                errors.add(OUT_OF_RANGE_NUMBERS);
+                errors.add(OUT_OF_RANGE_NUMBERS.getInfo());
             }
         }
         return false;
@@ -59,9 +57,10 @@ class NumbersReceiverValidator {
                 .anyMatch(number -> number < MIN_NUMBER_FROM_USER || number > MAX_NUMBER_FROM_USER);
     }
 
-    public static InputNumbersValidationResult retrieveInputNumbersValidationMessage() {
+    String getMessage(){
         return errors.stream()
+                .map(String::valueOf)
                 .findAny()
-                .orElseThrow(InputNumbersNotFoundException::new);
+                .orElse("Input number");
     }
 }
