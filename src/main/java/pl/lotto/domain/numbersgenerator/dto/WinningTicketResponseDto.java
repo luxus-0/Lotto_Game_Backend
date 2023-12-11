@@ -12,8 +12,8 @@ import java.util.Set;
 
 @Builder
 public record WinningTicketResponseDto(@UUID String ticketUUID,
-                                       @NotNull(message = "Winning numbers not null")
-                                       @NotEmpty(message = "Winning numbers not empty")
+                                       @NotNull(message = "Winning inputNumbers not null")
+                                       @NotEmpty(message = "Winning inputNumbers not empty")
                                        Set<Integer> winningNumbers,
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                        LocalDateTime drawDate,
