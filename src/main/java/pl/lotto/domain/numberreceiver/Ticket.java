@@ -16,11 +16,12 @@ import java.util.Set;
 @Document
 public record Ticket(@UUID
                      String ticketUUID,
-                     @NotNull(message = "ticket numbers not null")
-                     @NotEmpty(message = "ticket numbers not empty")
-                     Set<Integer> numbers,
+                     @NotNull(message = "inputNumbers not null")
+                     @NotEmpty(message = "inputNumbers not empty")
+                     Set<Integer> inputNumbers,
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      LocalDateTime drawDate,
-                     @Enumerated(EnumType.STRING)
-                     InputNumbersValidationResult inputNumbersValidation) {
+                     @NotNull
+                     @NotEmpty
+                     String message) {
 }

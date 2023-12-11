@@ -2,7 +2,7 @@ package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
+import pl.lotto.domain.numberreceiver.dto.InputNumbersResponseDto;
 
 import static pl.lotto.domain.numberreceiver.NumbersReceiverValidator.retrieveInputNumbersValidationMessage;
 
@@ -11,19 +11,8 @@ class TicketMapper {
     public static TicketDto mapToTicketDto(Ticket ticket) {
         return TicketDto.builder()
                 .ticketUUID(ticket.ticketUUID())
-                .numbers(ticket.numbers())
+                .inputNumbers(ticket.inputNumbers())
                 .drawDate(ticket.drawDate())
-                .build();
-    }
-
-    public static TicketResponseDto mapToTicketResponseDto(Ticket ticketSaved) {
-        return TicketResponseDto.builder()
-                .ticket(TicketDto.builder()
-                        .ticketUUID(ticketSaved.ticketUUID())
-                        .numbers(ticketSaved.numbers())
-                        .drawDate(ticketSaved.drawDate())
-                        .build())
-                .message(retrieveInputNumbersValidationMessage().getInfo())
                 .build();
     }
 }
