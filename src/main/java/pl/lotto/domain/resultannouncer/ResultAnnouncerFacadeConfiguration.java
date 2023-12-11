@@ -20,8 +20,8 @@ public class ResultAnnouncerFacadeConfiguration {
     }
 
     @Bean
-    public ResultAnnouncerFacade resultAnnouncerFacade(ResultsCheckerFacade resultsCheckerFacade, ResultLottoRepository resultLottoRepository, Clock clock) {
-        return new ResultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
+    public ResultAnnouncerFacade resultAnnouncerFacade(ResultsCheckerFacade resultsCheckerFacade, ResultAnnouncerRepository resultAnnouncerRepository, Clock clock) {
+        return new ResultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
     }
 
 }
