@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
+import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.infrastructure.resultchecker.scheduler.ResultCheckerScheduler;
 
 import java.time.Clock;
@@ -25,14 +25,14 @@ class ResultsCheckerFacadeConfiguration {
     }
 
     @Bean
-    ResultCheckerScheduler resultCheckerScheduler(ResultsCheckerFacade resultsCheckerFacade, WinningNumbersFacade winningNumbersFacade) {
-        return new ResultCheckerScheduler(resultsCheckerFacade, winningNumbersFacade);
+    ResultCheckerScheduler resultCheckerScheduler(ResultsCheckerFacade resultsCheckerFacade, WinningTicketFacade winningTicketFacade) {
+        return new ResultCheckerScheduler(resultsCheckerFacade, winningTicketFacade);
     }
 
     @Bean
-    ResultsCheckerFacade resultsCheckerFacade(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade, WinningNumbersFacade winningNumbersFacade, PlayerRepository playerRepository) {
+    ResultsCheckerFacade resultsCheckerFacade(NumberReceiverFacade numberReceiverFacade, DrawDateFacade drawDateFacade, WinningTicketFacade winningTicketFacade, ResultCheckerRepository resultCheckerRepository) {
         WinnersRetriever winnersRetriever = new WinnersRetriever();
         ResultCheckerValidation resultCheckerValidation = new ResultCheckerValidation();
-        return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, winnersRetriever, playerRepository, resultCheckerValidation);
+        return new ResultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningTicketFacade, winnersRetriever, resultCheckerRepository, resultCheckerValidation);
     }
 }
