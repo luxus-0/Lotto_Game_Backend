@@ -3,18 +3,17 @@ package pl.lotto.domain.numberreceiver;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
+import pl.lotto.domain.numberreceiver.dto.InputNumbersResponseDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
+import pl.lotto.domain.numberreceiver.exceptions.InputNumbersNotFoundException;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import static pl.lotto.domain.drawdate.DrawDateMessageProvider.INCORRECT_NEXT_DRAW_DATE;
-import static pl.lotto.domain.numberreceiver.NumbersReceiverValidator.retrieveInputNumbersValidationMessage;
-import static pl.lotto.domain.numberreceiver.TicketMapper.mapToTicketResponseDto;
 
 @AllArgsConstructor
 @Service
@@ -25,30 +24,33 @@ public class NumberReceiverFacade {
     private final TicketRepository ticketRepository;
     private final TicketUUIDGenerator ticketUUIDGenerator;
 
-    public TicketResponseDto inputNumbers(Set<Integer> numbersFromUser) {
-        boolean validate = validator.validate(numbersFromUser);
+    public InputNumbersResponseDto inputNumbers(InputNumbersRequestDto inputNumbersRequest) {
+        Set<Integer> inputNumbers = inputNumbersRequest.inputNumbers();
+        boolean validate = validator.validate(inputNumbers);
         if (validate) {
             String ticketUUID = ticketUUIDGenerator.generateTicketUUID();
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
-            InputNumbersValidationResult inputNumbersValidationMessage = retrieveInputNumbersValidationMessage();
-            Ticket ticket = new Ticket(ticketUUID, numbersFromUser, drawDate, inputNumbersValidationMessage);
+            Ticket ticket = new Ticket(ticketUUID, inputNumbers, drawDate, validator.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
 
-            return mapToTicketResponseDto(ticketSaved);
+            return InputNumbersResponseDto.builder()
+                    .ticketUUID(ticketSaved.ticketUUID())
+                    .drawDate(ticketSaved.drawDate())
+                    .inputNumbers(ticketSaved.inputNumbers())
+                    .message(ticketSaved.message())
+                    .build();
         }
-        return TicketResponseDto.builder()
-                .message(retrieveInputNumbersValidationMessage().getInfo())
-                .build();
+        throw new InputNumbersNotFoundException("InputNumbers not found");
     }
 
     public Set<Integer> retrieveInputNumbersByDrawDate(LocalDateTime nextDrawDate) {
-        return retrieveAllTicketByDrawDate(nextDrawDate).stream()
-                .map(TicketDto::numbers)
+        return retrieveTicketsByDrawDate(nextDrawDate).stream()
+                .map(TicketDto::inputNumbers)
                 .findAny()
-                .orElse(Collections.emptySet());
+                .orElseThrow(InputNumbersNotFoundException::new);
     }
 
-    public List<TicketDto> retrieveAllTicketByDrawDate(LocalDateTime date) {
+    public List<TicketDto> retrieveTicketsByDrawDate(LocalDateTime date) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         if (date.isAfter(nextDrawDate)) {
             throw new DateTimeException(INCORRECT_NEXT_DRAW_DATE);
