@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Builder
-public record RandomNumbersResponseDto(@NotNull(message = "random numbers not null")
-                                       @NotEmpty(message = "random numbers not empty")
+public record RandomNumbersResponseDto(@NotNull(message = "random inputNumbers not null")
+                                       @NotEmpty(message = "random inputNumbers not empty")
                                        Set<Integer> randomNumbers) {
 }

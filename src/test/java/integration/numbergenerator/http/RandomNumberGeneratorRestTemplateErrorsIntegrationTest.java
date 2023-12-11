@@ -1,5 +1,6 @@
 package integration.numbergenerator.http;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.DisplayName;
@@ -7,7 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
+import pl.lotto.domain.numbersgenerator.exceptions.RandomNumbersNotFoundException;
 import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
+
+import java.time.Duration;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -15,6 +19,9 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 import static org.apache.catalina.util.XMLWriter.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -33,7 +40,36 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                     .build());
 
     @Test
-    @DisplayName("should throw exception 204 NO CONTENT when client has no numbers")
+    public void should_throw_exception_404_when_client_has_incorrect_out_of_band_and_wait_20_seconds() {
+        //given
+        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=99&max=1&format=plain&col=2&base=10")
+                .willReturn(aResponse()
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                        .withBody("""
+                                {
+                                    "randomNumbers" : []
+                                }
+                                """.trim())
+                        .withStatus(NOT_FOUND.value())));
+
+
+        // when && then
+        await()
+                .atMost(Duration.ofSeconds(20))
+                .pollInterval(Duration.ofSeconds(1))
+                .until(() -> {
+                    {
+                        assertThatThrownBy(() ->
+                                randomNumbersGenerator.generateRandomNumbers(1, 1, 100))
+                                .isInstanceOf(ResponseStatusException.class)
+                                .hasMessage(NOT_FOUND.toString());
+                    }
+                    return true;
+                });
+    }
+
+    @Test
+    @DisplayName("should throw exception 204 NO CONTENT when client has no inputNumbers")
     public void should_throw_exception_204_when_client_has_no_numbers() {
         //given
         wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=1&max=99&format=plain&col=2&base=10")
@@ -88,7 +124,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 404 NOT FOUND when client has out of bound numbers")
+    @DisplayName("should throw exception 404 NOT FOUND when client has out of bound inputNumbers")
     void should_throw_exception_404_when_client_has_out_of_bound_numbers() {
         // given
         wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=102&format=plain&col=2&base=10")
