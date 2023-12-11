@@ -13,8 +13,8 @@ import java.util.Set;
 @Builder
 @Document
 public record WinningNumbers(@UUID String ticketUUID,
-                             @NotNull(message = "winning numbers not null")
-                             @NotEmpty(message = "winning numbers not empty")
+                             @NotNull(message = "winning inputNumbers not null")
+                             @NotEmpty(message = "winning inputNumbers not empty")
                              Set<Integer> winningNumbers,
                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                              LocalDateTime drawDate) {

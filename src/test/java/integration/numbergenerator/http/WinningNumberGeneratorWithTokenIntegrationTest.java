@@ -33,14 +33,14 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
 
     @Test
     public void should_return_no_winning_numbers_but_have_to_be_logged_in_and_external_server_should_have_some_winning_numbers() throws Exception {
-        // step 1: there are no winning numbers in external HTTP server
+        // step 1: there are no winning inputNumbers in external HTTP server
         // given && when && then
         wireMockServer.stubFor(WireMock.get("/winning_numbers")
                 .willReturn(aResponse()
                         .withStatus(OK.value())
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withBody(bodyWithNoWinningNumbersJson())));
-        // step 2: scheduler ran 1st time and made GET to external server and system added 0 winning numbers to database
+        // step 2: scheduler ran 1st time and made GET to external server and system added 0 winning inputNumbers to database
         // given && when
         // then
 
@@ -133,7 +133,7 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                 () -> assertThat(token).matches(Pattern.compile(REGEX_TOKEN))
         );
 
-        //step 7: user made GET /winning_numbers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with no winning numbers
+        //step 7: user made GET /winning_numbers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with no winning inputNumbers
         //given
         ResultActions getWinningNumbersToken = mockMvc.perform(get("/winning_numbers")
                 .header("Authorization", "Bearer " + token)
@@ -146,7 +146,7 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
         });
         assertThat(winningTicketResponseDto.winningNumbers()).isEmpty();
 
-        //step 8: there are no winning numbers in external HTTP server
+        //step 8: there are no winning inputNumbers in external HTTP server
         //given && when && then
         wireMockServer.stubFor(WireMock.get("/winning_numbers")
                 .willReturn(aResponse()
@@ -154,7 +154,7 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                         .withBody(noWinningNumbersJson())
                         .withStatus(OK.value())));
 
-        //step 9: user made GET /winning_numbers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with no winning numbers with ids
+        //step 9: user made GET /winning_numbers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with no winning inputNumbers with ids
         // given && when
         ResultActions getForTwoWinningNumbers = mockMvc.perform(get("/winning_numbers")
                 .header("Authorization", "Bearer " + token)

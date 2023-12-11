@@ -1,42 +1,47 @@
 package pl.lotto.domain.resultchecker;
 
+import pl.lotto.domain.numberreceiver.dto.TicketDto;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapPlayerLose;
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapPlayerWin;
+
 public class WinnersRetriever {
     private static final int NUMBERS_WHEN_PLAYERS_WON = 3;
 
-    public List<Player> retrieveWinners(List<Ticket> allTicketsByDate, Set<Integer> winningNumbers) {
-        return allTicketsByDate.stream().map(ticket -> {
-                    Set<Integer> hitNumbers = calculateHits(winningNumbers, ticket);
-                    return createResults(ticket, hitNumbers);
+    public Set<ResultCheckerResponse> retrieveWinners(List<TicketDto> tickets, Set<Integer> winningNumbers) {
+        return tickets.stream().map(ticketDto -> {
+                    Set<Integer> hitNumbers = calculateHits(winningNumbers, tickets);
+                    return createResults(hitNumbers, ticketDto);
                 })
-                .toList();
+                .collect(Collectors.toSet());
     }
 
-    private Player createResults(Ticket ticket, Set<Integer> hitNumbers) {
-        Player.PlayerBuilder builder = Player.builder();
-        if (isWinner(hitNumbers)) {
-            builder.isWinner(true);
+    private ResultCheckerResponse createResults(Set<Integer> hitNumbers, TicketDto ticket) {
+        if(isWinner(hitNumbers)) {
+            return mapPlayerWin(hitNumbers, ticket);
         }
-        return builder
-                .ticketUUID(ticket.ticketUUID())
-                .numbers(ticket.numbers())
-                .hitNumbers(hitNumbers)
-                .drawDate(ticket.drawDate())
-                .message(ticket.message())
-                .isWinner(ticket.isWinner())
-                .build();
+        return mapPlayerLose(hitNumbers, ticket);
     }
 
     private boolean isWinner(Set<Integer> hitNumbers) {
         return hitNumbers.size() > NUMBERS_WHEN_PLAYERS_WON;
     }
 
-    private Set<Integer> calculateHits(Set<Integer> winningNumbers, Ticket ticket) {
-        return ticket.numbers().stream()
-                .filter(winningNumbers::contains)
-                .collect(Collectors.toSet());
+    private Set<Integer> calculateHits(Set<Integer> winningNumbers, List<TicketDto> tickets) {
+        return tickets.stream().map(TicketDto::inputNumbers)
+                .filter(inputNumbers -> inputNumbers.contains(winningNumber(winningNumbers)))
+                .findAny()
+                .orElse(Collections.emptySet());
+    }
+
+    private static Integer winningNumber(Set<Integer> winningNumbers) {
+        return winningNumbers.stream()
+                .findAny()
+                .orElseThrow();
     }
 }
