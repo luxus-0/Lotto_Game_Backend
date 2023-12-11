@@ -2,10 +2,8 @@ package pl.lotto.domain.resultannouncer;
 
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
-import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
-import pl.lotto.domain.resultannouncer.exceptions.ResultLottoNotFoundException;
+import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.dto.ResultDto;
 import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
 
 import java.time.Clock;
@@ -25,20 +23,20 @@ import static org.mockito.Mockito.when;
 import static pl.lotto.domain.resultannouncer.ResultStatus.LOSE;
 import static pl.lotto.domain.resultannouncer.ResultStatus.WAIT;
 
-class ResultAnnouncerFacadeTest {
+class ResultCheckerResponseAnnouncerFacadeTest {
 
     ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
-    ResultLottoRepository resultLottoRepository = mock(ResultLottoRepository.class);
+    ResultAnnouncerRepository resultAnnouncerRepository = mock(ResultAnnouncerRepository.class);
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
 
     Clock clock = Clock.fixed(LocalDateTime.of(2023, 11, 12, 12, 0, 0, 0).toInstant(UTC), ZoneId.systemDefault());
 
     @Test
-    public void should_return_lose_message_when_ticket_is_not_winning_ticket() {
+    public void should_return_lose_message_when_ticket_is_not_winning_ticket() throws Exception {
         //given
         LocalDateTime drawDate = LocalDateTime.of(2022, 12, 12, 12, 0, 0);
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
-                .resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
+                .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
 
         String ticketUUID = "123456";
         ResultDto expectedResult = ResultDto.builder()
@@ -50,7 +48,7 @@ class ResultAnnouncerFacadeTest {
                 .message(LOSE.message)
                 .build();
 
-        ResultLotto expectedResultLotto = ResultLotto.builder()
+        ResultAnnouncerResponse expectedResultAnnouncerResponse = ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
                 .numbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of())
@@ -61,8 +59,8 @@ class ResultAnnouncerFacadeTest {
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.of(2022, 12, 11, 12, 12, 0, 0));
         when(resultsCheckerFacade.findResultByTicketUUID(ticketUUID)).thenReturn(expectedResult);
-        when(resultLottoRepository.findByTicketUUID(ticketUUID)).thenReturn(Optional.of(expectedResultLotto));
-        when(resultLottoRepository.save(any(ResultLotto.class))).thenReturn(expectedResultLotto);
+        when(resultAnnouncerRepository.findByTicketUUID(ticketUUID)).thenReturn(Optional.of(expectedResultAnnouncerResponse));
+        when(resultAnnouncerRepository.save(any(ResultAnnouncerResponse.class))).thenReturn(expectedResultAnnouncerResponse);
         //when && then
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketUUID);
 
@@ -70,10 +68,10 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_return_win_message_when_ticket_is_winning_ticket() {
+    public void should_return_win_message_when_ticket_is_winning_ticket() throws Exception {
         //given
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
-                .resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
+                .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
         LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
         String ticketUUID = "123456";
 
@@ -85,7 +83,7 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(true)
                 .build();
 
-        ResultLotto expectedResultLotto = ResultLotto.builder()
+        ResultAnnouncerResponse expectedResultAnnouncerResponse = ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
                 .numbers(Set.of(3, 4, 5, 6, 7, 8))
                 .hitNumbers(Set.of(3, 4, 5))
@@ -96,11 +94,11 @@ class ResultAnnouncerFacadeTest {
         when(resultsCheckerFacade.findResultByTicketUUID(ticketUUID))
                 .thenReturn(expectedResult);
 
-        when(resultLottoRepository.findByTicketUUID(ticketUUID))
-                .thenReturn(Optional.of(expectedResultLotto));
+        when(resultAnnouncerRepository.findByTicketUUID(ticketUUID))
+                .thenReturn(Optional.of(expectedResultAnnouncerResponse));
 
-        when(resultLottoRepository.save(any(ResultLotto.class)))
-                .thenReturn(expectedResultLotto);
+        when(resultAnnouncerRepository.save(any(ResultAnnouncerResponse.class)))
+                .thenReturn(expectedResultAnnouncerResponse);
         //when
         ResultDto actualResult = resultAnnouncerFacade.findResult(ticketUUID).resultDto();
         //then
@@ -110,14 +108,14 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_return_wait_message_when_date_is_before_announcement_time() {
+    public void should_return_wait_message_when_date_is_before_announcement_time() throws Exception {
         //given
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
-                .resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
+                .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
 
         LocalDateTime drawDate = LocalDateTime.now().plusDays(2);
 
-        ResultLotto resultLotto = ResultLotto.builder()
+        ResultAnnouncerResponse resultAnnouncerResponse = ResultAnnouncerResponse.builder()
                 .ticketUUID("12345")
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
                 .drawDate(drawDate)
@@ -132,11 +130,11 @@ class ResultAnnouncerFacadeTest {
         when(resultsCheckerFacade.findResultByTicketUUID("12345"))
                 .thenReturn(result);
 
-        when(resultLottoRepository.findByTicketUUID("12345"))
-                .thenReturn(Optional.of(resultLotto));
+        when(resultAnnouncerRepository.findByTicketUUID("12345"))
+                .thenReturn(Optional.of(resultAnnouncerResponse));
 
-        when(resultLottoRepository.save(any(ResultLotto.class)))
-                .thenReturn(resultLotto);
+        when(resultAnnouncerRepository.save(any(ResultAnnouncerResponse.class)))
+                .thenReturn(resultAnnouncerResponse);
         //when
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult("12345");
         //then
@@ -154,7 +152,7 @@ class ResultAnnouncerFacadeTest {
     public void should_thrown_exception_when_ticket_id_is_null() {
         //given
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
-                .resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
+                .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
 
         //when && then
         assertThrowsExactly(IllegalArgumentException.class, () -> resultAnnouncerFacade.findResult(null));
@@ -164,10 +162,10 @@ class ResultAnnouncerFacadeTest {
     public void should_thrown_checked_exception_when_ticket_id_is_empty() {
         //given
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
-                .resultAnnouncerFacade(resultsCheckerFacade, resultLottoRepository, clock);
+                .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
         String ticketId = "";
 
-        ResultLotto expectedResult = ResultLotto.builder()
+        ResultAnnouncerResponse expectedResult = ResultAnnouncerResponse.builder()
                 .ticketUUID("12345")
                 .numbers(Set.of(1, 45, 67, 76, 23, 48))
                 .hitNumbers(Set.of(1, 76, 45))
@@ -175,19 +173,19 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(true)
                 .build();
 
-        when(resultLottoRepository.findByTicketUUID(""))
-                .thenThrow(ResultLottoNotFoundException.class);
+        when(resultAnnouncerRepository.findByTicketUUID(""))
+                .thenThrow(ResultAnnouncerNotFoundException.class);
 
-        when(resultLottoRepository.save(any(ResultLotto.class)))
+        when(resultAnnouncerRepository.save(any(ResultAnnouncerResponse.class)))
                 .thenReturn(expectedResult);
 
         //when && then
-        assertThrowsExactly(ResultLottoNotFoundException.class,
+        assertThrowsExactly(ResultAnnouncerNotFoundException.class,
                 () -> resultAnnouncerFacade.findResult(ticketId));
     }
 
     @Test
-    public void should_throw_an_exception_when_input_numbers_is_empty() {
+    public void should_throw_an_exception_when_input_numbers_is_empty() throws Exception {
         //given
         String ticketUUID = "1234";
 
@@ -210,7 +208,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_hit_numbers_is_empty() {
+    public void should_throw_an_exception_when_hit_numbers_is_empty() throws Exception {
         //given
         String ticketUUID = "";
 
