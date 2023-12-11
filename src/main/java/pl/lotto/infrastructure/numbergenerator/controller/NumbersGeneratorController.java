@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
 import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersRequestDto;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
@@ -29,7 +30,7 @@ public class NumbersGeneratorController {
     }
 
     @GetMapping("/winning_numbers")
-    WinningTicketResponseDto generateWinningNumbers() {
+    WinningTicketResponseDto generateWinningNumbers() throws WinningTicketNotFoundException {
         return winningTicketFacade.generateWinningTicket();
     }
 }
