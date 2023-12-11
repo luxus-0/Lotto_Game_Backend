@@ -14,11 +14,11 @@ import static pl.lotto.domain.numbersgenerator.RandomNumbersURL.*;
 public class WinningNumbersFacadeConfiguration {
 
     @Bean
-    public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
         WinningNumbersValidator winningNumbersValidator = new WinningNumbersValidator(properties);
         RandomNumberGeneratorClientValidator randomNumberClientValidator = new RandomNumberGeneratorClientValidator(properties);
         RandomNumbersGenerator randomNumbersGenerator = new RandomNumberGeneratorClient(new RestTemplate(), properties, randomNumberClientValidator);
-        return WinningNumbersFacade.builder()
+        return WinningTicketFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)
                 .winningNumbersValidator(winningNumbersValidator)
@@ -27,7 +27,7 @@ public class WinningNumbersFacadeConfiguration {
                 .build();
     }
 
-    public WinningNumbersFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, NumberReceiverFacade numberReceiverFacade) {
+    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, NumberReceiverFacade numberReceiverFacade) {
         WinningNumbersConfigurationProperties properties = getWinningNumbersConfigurationProperties();
         return winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, numberReceiverFacade);
     }
