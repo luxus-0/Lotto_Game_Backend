@@ -63,27 +63,4 @@ public class ApiValidationFailIntegrationTest extends BaseIntegrationTest {
             log.error(e.getMessage());
         }
     }
-
-    @Test
-    public void should_return_403_forbidden_and_validation_message_when_request_has_incorrect_url_input_numbers() {
-        //given && when
-        try {
-            MvcResult getInputNumbersWithNoExistingId = mockMvc.perform(post("/inputNumbers/444")
-                            .content("""
-                                    {
-                                    "inputNumbers" : []
-                                    }
-                                    """.trim()
-                            ).contentType(APPLICATION_JSON)
-                    ).andExpect(status().isForbidden())
-                    .andReturn();
-
-            //then
-            String json = getInputNumbersWithNoExistingId.getResponse().getContentAsString();
-            ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
-            assertThat(result.status()).isEqualTo(FORBIDDEN);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
 }

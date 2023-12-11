@@ -45,7 +45,7 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-        registry.add("numbers.generator.client.port", () -> wireMockServer.getPort());
-        registry.add("numbers.generator.client.uri", () -> WIRE_MOCK_HOST);
+        registry.add("inputNumbers.generator.client.port", () -> wireMockServer.getPort());
+        registry.add("inputNumbers.generator.client.uri", () -> WIRE_MOCK_HOST);
     }
 }
