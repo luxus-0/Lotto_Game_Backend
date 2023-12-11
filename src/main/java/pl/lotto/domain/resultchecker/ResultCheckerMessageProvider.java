@@ -1,7 +1,7 @@
 package pl.lotto.domain.resultchecker;
 
-class ResultCheckerMessageProvider {
-    public static final String PLAYER_LOSE = "PLAYER LOSE";
-    public static final String PLAYER_WIN = "PLAYER WIN";
-    public static final String PLAYER_NOT_FOUND = "PLAYER NOT FOUND";
+public class ResultCheckerMessageProvider {
+    public static final String LOSE = "LOSE";
+    public static final String WIN = "WIN";
+    public static final String TICKET_NOT_FOUND = "TICKET NOT FOUND";
 }
