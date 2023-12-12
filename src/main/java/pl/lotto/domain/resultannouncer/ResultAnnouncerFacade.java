@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
 import pl.lotto.domain.resultannouncer.exceptions.TicketUUIDNotFoundException;
-import pl.lotto.domain.resultchecker.ResultCheckerResponse;
+import pl.lotto.domain.resultchecker.TicketResults;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
+import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -24,15 +24,12 @@ public class ResultAnnouncerFacade {
         if (ticketUUID == null) {
             throw new TicketUUIDNotFoundException();
         }
-        ResultCheckerResponseDto resultCheckerResponseDto = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
+        ResultResponseDto resultResponseDto = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
         ResultAnnouncerResponse resultAnnouncerResponse = resultAnnouncerRepository.findAllByTicketUUID(ticketUUID)
                 .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket id: " + ticketUUID));
         ResultAnnouncerResponse resultAnnouncerResponseSaved = resultAnnouncerRepository.save(resultAnnouncerResponse);
-        ResultCheckerResponse resultCheckerResponse = resultCheckerResponseDto.ticketsWinningNumbersSaved().stream()
-                .findAny()
-                .orElseThrow(() -> new RuntimeException(TICKET_NOT_FOUND));
         ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto = mapToResultAnnouncerResponseDto(resultAnnouncerResponseSaved);
-        if (!isAfterResultAnnouncementTime(resultCheckerResponse)) {
+        if (!isAfterResultAnnouncementTime(resultResponseDto)) {
             return toWaitMessageResult(toResultAnnouncerResponseSavedDto);
         } else if (toResultAnnouncerResponseSavedDto.isWinner()) {
             toWinResult(toResultAnnouncerResponseSavedDto);
@@ -42,8 +39,8 @@ public class ResultAnnouncerFacade {
         throw new ResultAnnouncerNotFoundException(TICKET_NOT_FOUND);
     }
 
-    private boolean isAfterResultAnnouncementTime(ResultCheckerResponse resultCheckerResponse) {
-        LocalDateTime announcementDateTime = resultCheckerResponse.drawDate();
+    private boolean isAfterResultAnnouncementTime(ResultResponseDto resultResponse) {
+        LocalDateTime announcementDateTime = resultResponse.drawDate();
         return LocalDateTime.now(clock).isAfter(announcementDateTime);
     }
 }
