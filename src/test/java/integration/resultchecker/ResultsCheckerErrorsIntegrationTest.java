@@ -28,11 +28,11 @@ public class ResultsCheckerErrorsIntegrationTest extends BaseIntegrationTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status -> status(404))
                 .andExpect(content().json("""
-                            {
-                            "message" : "PLAYER LOSE",
-                            "status" : "NOT_FOUND"
-                            }
-                                """.trim()
+                        {
+                        "message" : "PLAYER LOSE",
+                        "status" : "NOT_FOUND"
+                        }
+                            """.trim()
                 ));
 
         //when
@@ -41,13 +41,10 @@ public class ResultsCheckerErrorsIntegrationTest extends BaseIntegrationTest {
                 .atMost(Duration.ofSeconds(20))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() ->
-                    {
-                         assertThatThrownBy(() -> {
-                             ResultDto resultByTicketUUID = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
-                             if(resultByTicketUUID)
-                    });
-                        return true;
-                    });
+                {
+                    assertThatThrownBy(() -> resultsCheckerFacade.findResultByTicketUUID(ticketUUID));
+                    return true;
+                });
     }
 
     @Test
