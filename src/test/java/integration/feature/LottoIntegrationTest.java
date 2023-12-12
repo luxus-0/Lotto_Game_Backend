@@ -49,11 +49,11 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
             MvcResult mvcResult = perform.andExpect(httpStatus -> status(200)).andReturn();
             String json = mvcResult.getResponse().getContentAsString();
             InputNumbersResponseDto inputNumbersResponseDto = objectMapper.readValue(json, InputNumbersResponseDto.class);
-            String ticketId = inputNumbersResponseDto.ticket().ticketUUID();
+            String ticketId = inputNumbersResponseDto.ticketUUID();
             //then
             assertAll(
                     () -> assertThat(ticketId).isNotNull(),
-                    () -> assertThat(inputNumbersResponseDto.ticket().drawDate()).isEqualTo(drawDate),
+                    () -> assertThat(inputNumbersResponseDto.drawDate()).isEqualTo(drawDate),
                     () -> assertThat(inputNumbersResponseDto.message()).isEqualTo(EQUALS_SIX_NUMBERS.getInfo())
             );
         }catch (Exception e){
