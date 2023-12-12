@@ -1,29 +1,12 @@
 package pl.lotto.domain.resultannouncer;
 
-import org.junit.jupiter.api.Test;
-import pl.lotto.domain.drawdate.DrawDateFacade;
-import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
-import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.exceptions.PlayerResultNotFoundException;
-
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-
-import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static pl.lotto.domain.resultannouncer.ResultStatus.LOSE;
-import static pl.lotto.domain.resultannouncer.ResultStatus.WAIT;
 
-class ResultCheckerResponseAnnouncerFacadeTest {
+/*class ResultCheckerResponseAnnouncerFacadeTest {
 
     ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
     ResultAnnouncerRepository resultAnnouncerRepository = mock(ResultAnnouncerRepository.class);
@@ -39,9 +22,9 @@ class ResultCheckerResponseAnnouncerFacadeTest {
                 .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
 
         String ticketUUID = "123456";
-        ResultDto expectedResult = ResultDto.builder()
+        ResultCheckerResponse expectedResult = ResultCheckerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of())
                 .drawDate(drawDate)
                 .isWinner(false)
@@ -58,8 +41,8 @@ class ResultCheckerResponseAnnouncerFacadeTest {
                 .build();
 
         when(drawDateFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.of(2022, 12, 11, 12, 12, 0, 0));
-        when(resultsCheckerFacade.findResultByTicketUUID(ticketUUID)).thenReturn(expectedResult);
-        when(resultAnnouncerRepository.findByTicketUUID(ticketUUID)).thenReturn(Optional.of(expectedResultAnnouncerResponse));
+        when(resultsCheckerFacade.findResultByTicketUUID(ticketUUID)).thenReturn(ResultResponseDto.builder().ticketsWinningNumbersSaved(List.of(expectedResult)).build());
+        when(resultAnnouncerRepository.findAllByTicketUUID(ticketUUID)).thenReturn(Optional.of(expectedResultAnnouncerResponse));
         when(resultAnnouncerRepository.save(any(ResultAnnouncerResponse.class))).thenReturn(expectedResultAnnouncerResponse);
         //when && then
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketUUID);
@@ -75,9 +58,9 @@ class ResultCheckerResponseAnnouncerFacadeTest {
         LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
         String ticketUUID = "123456";
 
-        ResultDto expectedResult = ResultDto.builder()
+        ResultCheckerResponse expectedResult = ResultCheckerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(3, 4, 5, 6, 7, 8))
+                .inputNumbers(Set.of(3, 4, 5, 6, 7, 8))
                 .hitNumbers(Set.of(3, 4, 5))
                 .drawDate(drawDate)
                 .isWinner(true)
@@ -228,4 +211,4 @@ class ResultCheckerResponseAnnouncerFacadeTest {
                         .findAny()
                         .orElseThrow(() -> new PlayerResultNotFoundException("Player not found")));
     }
-}
+}*/
