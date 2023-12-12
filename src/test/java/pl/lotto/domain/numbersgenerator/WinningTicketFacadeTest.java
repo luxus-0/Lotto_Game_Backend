@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
@@ -29,7 +30,7 @@ class WinningTicketFacadeTest {
     NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
 
     @Test
-    public void should_return_set_of_required_size() {
+    public void should_return_set_of_required_size() throws WinningTicketNotFoundException {
         //given
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
@@ -47,7 +48,7 @@ class WinningTicketFacadeTest {
     }
 
     @Test
-    public void should_return_set_of_required_size_within_required_range() {
+    public void should_return_set_of_required_size_within_required_range() throws WinningTicketNotFoundException {
         //given
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
@@ -72,7 +73,7 @@ class WinningTicketFacadeTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_number_not_in_range() {
+    public void should_throw_an_exception_when_number_not_in_range() throws WinningTicketNotFoundException {
         //given
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
@@ -95,7 +96,7 @@ class WinningTicketFacadeTest {
     }
 
     @Test
-    public void should_return_collection_of_unique_values() {
+    public void should_return_collection_of_unique_values() throws WinningTicketNotFoundException {
         //given
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
@@ -114,7 +115,7 @@ class WinningTicketFacadeTest {
     }
 
     @Test
-    public void should_return_false_when_size_numbers_is_more_than_six() {
+    public void should_return_false_when_size_numbers_is_more_than_six() throws WinningTicketNotFoundException {
         //given
         WinningTicketFacade winningTicketFacade = new WinningNumbersFacadeConfiguration()
                 .winningNumbersFacade(drawDateFacade, winningNumbersRepository, numberReceiverFacade);
