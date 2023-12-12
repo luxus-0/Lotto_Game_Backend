@@ -1,5 +1,7 @@
 package pl.lotto.domain.resultchecker;
 
+import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
+
 import java.util.Set;
 
 class ResultCheckerValidation {
@@ -9,7 +11,13 @@ class ResultCheckerValidation {
     private static final int QUANTITY_NUMBERS = 6;
 
     boolean validate(Set<Integer> winnerNumbers) {
-        return isInRange(winnerNumbers) && isCorrectSize(winnerNumbers);
+        if(isInRange(winnerNumbers) && isCorrectSize(winnerNumbers)){
+            return true;
+        }
+        if(winnerNumbers.isEmpty()){
+            throw new WinningNumbersNotFoundException("Winning numbers not found");
+        }
+        return false;
     }
 
     private boolean isCorrectSize(Set<Integer> winnerNumbers) {
