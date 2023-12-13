@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record InputNumbersResponseDto(@UUID String ticketUUID,
-                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+public record TicketResponseDto(@UUID String ticketUUID,
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                       LocalDateTime drawDate,
-                                      @NotNull(message = "input numbers not null")
+                                @NotNull(message = "input numbers not null")
                                       @NotEmpty(message = "input numbers not empty")
                                       Set<Integer> inputNumbers,
-                                      String message) {
+                                String message) {
 }

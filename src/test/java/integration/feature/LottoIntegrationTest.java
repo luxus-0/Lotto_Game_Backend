@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import pl.lotto.domain.numberreceiver.dto.InputNumbersResponseDto;
+import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;
 
@@ -48,13 +48,13 @@ public class LottoIntegrationTest extends BaseIntegrationTest {
 
             MvcResult mvcResult = perform.andExpect(httpStatus -> status(200)).andReturn();
             String json = mvcResult.getResponse().getContentAsString();
-            InputNumbersResponseDto inputNumbersResponseDto = objectMapper.readValue(json, InputNumbersResponseDto.class);
-            String ticketId = inputNumbersResponseDto.ticketUUID();
+            TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
+            String ticketId = ticketResponseDto.ticketUUID();
             //then
             assertAll(
                     () -> assertThat(ticketId).isNotNull(),
-                    () -> assertThat(inputNumbersResponseDto.drawDate()).isEqualTo(drawDate),
-                    () -> assertThat(inputNumbersResponseDto.message()).isEqualTo(EQUALS_SIX_NUMBERS.getInfo())
+                    () -> assertThat(ticketResponseDto.drawDate()).isEqualTo(drawDate),
+                    () -> assertThat(ticketResponseDto.message()).isEqualTo(EQUALS_SIX_NUMBERS.getInfo())
             );
         }catch (Exception e){
             log.error(e.getMessage());
