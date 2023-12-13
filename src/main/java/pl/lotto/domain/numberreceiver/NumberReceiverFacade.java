@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
-import pl.lotto.domain.numberreceiver.dto.InputNumbersResponseDto;
+import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.exceptions.InputNumbersNotFoundException;
+import pl.lotto.domain.numberreceiver.exceptions.TicketNotFoundException;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class NumberReceiverFacade {
     private final TicketRepository ticketRepository;
     private final TicketUUIDGenerator ticketUUIDGenerator;
 
-    public InputNumbersResponseDto inputNumbers(InputNumbersRequestDto inputNumbersRequest) {
+    public TicketResponseDto inputNumbers(InputNumbersRequestDto inputNumbersRequest) {
         Set<Integer> inputNumbers = inputNumbersRequest.inputNumbers();
         boolean validate = validator.validate(inputNumbers);
         if (validate) {
@@ -33,14 +34,14 @@ public class NumberReceiverFacade {
             Ticket ticket = new Ticket(ticketUUID, inputNumbers, drawDate, validator.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
 
-            return InputNumbersResponseDto.builder()
+            return TicketResponseDto.builder()
                     .ticketUUID(ticketSaved.ticketUUID())
                     .drawDate(ticketSaved.drawDate())
                     .inputNumbers(ticketSaved.inputNumbers())
                     .message(ticketSaved.message())
                     .build();
         }
-        throw new InputNumbersNotFoundException("InputNumbers not found");
+        throw new TicketNotFoundException("Ticket not found");
     }
 
     public Set<Integer> retrieveInputNumbersByDrawDate(LocalDateTime nextDrawDate) {

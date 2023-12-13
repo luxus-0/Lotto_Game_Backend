@@ -20,21 +20,23 @@ class NumbersReceiverValidator {
 
     boolean validate(Set<Integer> inputNumbers) {
         errors = new LinkedList<>();
+        if(inputNumbers == null || inputNumbers.isEmpty()){
+            throw new InputNumbersNotFoundException("InputNumbers not found");
+        }
         if (isEqualsSixNumberFrom1To99(inputNumbers)) {
             errors.add(EQUALS_SIX_NUMBERS.getInfo());
             return true;
-        } else {
-            if (isLessThanSixNumbers(inputNumbers)) {
-                errors.add(LESS_THAN_SIX_NUMBERS.getInfo());
-            }
-            if (isMoreThanSixNumbers(inputNumbers)) {
+        } else if (isLessThanSixNumbers(inputNumbers)) {
+            errors.add(LESS_THAN_SIX_NUMBERS.getInfo());
+            return true;
+        } else if (isMoreThanSixNumbers(inputNumbers)) {
                 errors.add(MORE_THAN_SIX_NUMBERS.getInfo());
-            }
-            if (isOutOfRange(inputNumbers)) {
+                return true;
+        } else if (isOutOfRange(inputNumbers)) {
                 errors.add(OUT_OF_RANGE_NUMBERS.getInfo());
-            }
+                return true;
         }
-        return false;
+       return false;
     }
 
     boolean isLessThanSixNumbers(Set<Integer> inputNumbers) {
@@ -46,10 +48,7 @@ class NumbersReceiverValidator {
     }
 
     boolean isEqualsSixNumberFrom1To99(Set<Integer> inputNumbers) {
-        return inputNumbers.stream()
-                .filter(number -> number >= MIN_NUMBER_FROM_USER)
-                .filter(number -> number <= MAX_NUMBER_FROM_USER)
-                .count() == QUANTITY_NUMBERS_FROM_USER;
+        return inputNumbers.size() == QUANTITY_NUMBERS_FROM_USER;
     }
 
     boolean isOutOfRange(Set<Integer> inputNumbers) {
@@ -61,6 +60,6 @@ class NumbersReceiverValidator {
         return errors.stream()
                 .map(String::valueOf)
                 .findAny()
-                .orElse("Input number");
+                .orElse("Validation error");
     }
 }
