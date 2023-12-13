@@ -17,36 +17,25 @@ public class ResultAnnouncerMapper {
                 .build();
     }
 
-    public static ResultAnnouncerResponseDto toLoseResult(ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto) {
-        return ResultAnnouncerResponseDto.builder()
-                .ticketUUID(toResultAnnouncerResponseSavedDto.ticketUUID())
-                .inputNumbers(toResultAnnouncerResponseSavedDto.inputNumbers())
-                .hitNumbers(toResultAnnouncerResponseSavedDto.hitNumbers())
-                .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
-                .isWinner(false)
-                .message(LOSE.message)
-                .build();
-    }
-
-    public static void toWinResult(ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto) {
-        ResultAnnouncerResponseDto.builder()
-                .ticketUUID(toResultAnnouncerResponseSavedDto.ticketUUID())
-                .inputNumbers(toResultAnnouncerResponseSavedDto.inputNumbers())
-                .hitNumbers(toResultAnnouncerResponseSavedDto.hitNumbers())
-                .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
-                .isWinner(true)
-                .message(WIN.message)
-                .build();
-    }
-
-    public static ResultAnnouncerResponseDto toWaitMessageResult(ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto) {
+    public static ResultAnnouncerResponseDto getLoseTicket(ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto) {
         return ResultAnnouncerResponseDto.builder()
                 .ticketUUID(toResultAnnouncerResponseSavedDto.ticketUUID())
                 .inputNumbers(toResultAnnouncerResponseSavedDto.inputNumbers())
                 .hitNumbers(toResultAnnouncerResponseSavedDto.hitNumbers())
                 .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
                 .isWinner(toResultAnnouncerResponseSavedDto.isWinner())
-                .message(WAIT.message)
+                .message(LOSE.message)
+                .build();
+    }
+
+    public static void getWinTicket(ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto) {
+        ResultAnnouncerResponseDto.builder()
+                .ticketUUID(toResultAnnouncerResponseSavedDto.ticketUUID())
+                .inputNumbers(toResultAnnouncerResponseSavedDto.inputNumbers())
+                .hitNumbers(toResultAnnouncerResponseSavedDto.hitNumbers())
+                .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
+                .isWinner(toResultAnnouncerResponseSavedDto.isWinner())
+                .message(WIN.message)
                 .build();
     }
 
