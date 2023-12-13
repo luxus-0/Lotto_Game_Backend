@@ -11,7 +11,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 
 import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.*;
-import static pl.lotto.domain.resultannouncer.ResultStatus.WAIT;
+import static pl.lotto.domain.resultannouncer.ResultStatus.*;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.TICKET_NOT_FOUND;
 
 @AllArgsConstructor
@@ -30,16 +30,12 @@ public class ResultAnnouncerFacade {
         ResultAnnouncerResponse resultAnnouncerResponseSaved = resultAnnouncerRepository.save(resultAnnouncerResponse);
         ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto = mapToResultAnnouncerResponseDto(resultAnnouncerResponseSaved);
         if (!isAfterResultAnnouncementTime(resultResponseDto)) {
-            return ResultAnnouncerResponseDto.builder()
-                    .message(WAIT.message)
-                    .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
-                    .build();
-        } else if (toResultAnnouncerResponseSavedDto.isWinner()) {
-            getWinTicket(toResultAnnouncerResponseSavedDto);
-        } else {
-            return getLoseTicket(toResultAnnouncerResponseSavedDto);
+            return getResultTicket(toResultAnnouncerResponseSavedDto, WAIT.message);
         }
-        throw new ResultAnnouncerNotFoundException(TICKET_NOT_FOUND);
+        else if (toResultAnnouncerResponseSavedDto.isWinner()) {
+            getResultTicket(toResultAnnouncerResponseSavedDto,true, WIN.message);
+        }
+            return getResultTicket(toResultAnnouncerResponseSavedDto,false ,LOSE.message);
     }
 
     private boolean isAfterResultAnnouncementTime(ResultResponseDto resultResponse) {
