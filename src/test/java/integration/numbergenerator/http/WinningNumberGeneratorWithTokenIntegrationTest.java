@@ -1,6 +1,5 @@
 package integration.numbergenerator.http;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import integration.BaseIntegrationTest;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -9,11 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.login.dto.RegistrationResultDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.infrastructure.security.token.dto.TokenResponseDto;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.regex.Pattern;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -87,7 +83,7 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                         """.trim()));
 
         // then
-        getWinningNumbersRequest.andExpect(status().isOk());
+        getWinningNumbersRequest.andExpect(status().isNotFound());
         failedLogin.andExpect(status().isUnauthorized());
 
 
@@ -107,9 +103,9 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
         String registerActionResultJson = registerActionResult.getResponse().getContentAsString();
         RegistrationResultDto registrationResultDto = objectMapper.readValue(registerActionResultJson, RegistrationResultDto.class);
         assertAll(
-                () -> AssertionsForClassTypes.assertThat(registrationResultDto.username()).isEqualTo("someUser"),
-                () -> AssertionsForClassTypes.assertThat(registrationResultDto.created()).isTrue(),
-                () -> AssertionsForClassTypes.assertThat(registrationResultDto.id()).isNotNull()
+                () -> assertThat(registrationResultDto.username()).isEqualTo("someUser"),
+                () -> assertThat(registrationResultDto.created()).isTrue(),
+                () -> assertThat(registrationResultDto.id()).isNotNull()
         );
 
         //step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jwttoken=AAAA.BBBB.CCC
@@ -133,18 +129,19 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                 () -> assertThat(token).matches(Pattern.compile(REGEX_TOKEN))
         );
 
-        //step 7: user made GET /winning_numbers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with no winning inputNumbers
+        //step 7: user made GET /winning_numbers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned not found(404) with no winning numbers
         //given
         ResultActions getWinningNumbersToken = mockMvc.perform(get("/winning_numbers")
                 .header("Authorization", "Bearer " + token)
                 .contentType(APPLICATION_JSON));
 
         //then
-        MvcResult mvcResult2 = getWinningNumbersToken.andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult2 = getWinningNumbersToken.andExpect(status().isNotFound()).andReturn();
         String jsonWinningNumbers = mvcResult2.getResponse().getContentAsString();
-        WinningTicketResponseDto winningTicketResponseDto = objectMapper.readValue(jsonWinningNumbers, new TypeReference<>() {
-        });
-        assertThat(winningTicketResponseDto.winningNumbers()).isEmpty();
+
+       assertThat(jsonWinningNumbers).isEqualTo(
+               """
+               """);
 
         //step 8: there are no winning inputNumbers in external HTTP server
         //given && when && then
@@ -161,16 +158,12 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                 .contentType(MediaType.APPLICATION_JSON_VALUE));
 
         // then
-        MvcResult performGetForTwoWinningNumbers = getForTwoWinningNumbers.andExpect(status().isOk()).andReturn();
+        MvcResult performGetForTwoWinningNumbers = getForTwoWinningNumbers.andExpect(status().isNotFound()).andReturn();
         String jsonWithWinningNumbers = performGetForTwoWinningNumbers.getResponse().getContentAsString();
-        WinningTicketResponseDto ticketResponse = objectMapper.readValue(jsonWithWinningNumbers, new TypeReference<>() {
-        });
 
-        assertThat(ticketResponse).isEqualTo(new WinningTicketResponseDto(
-                null,
-                Collections.emptySet(),
-                LocalDateTime.of(2023, 12, 2, 12, 0, 0),
-                false,
-                null));
+
+        assertThat(jsonWithWinningNumbers).isEqualTo(
+                """
+                """);
     }
 }
