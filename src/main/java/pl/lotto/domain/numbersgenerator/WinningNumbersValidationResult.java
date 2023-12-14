@@ -4,10 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum WinningNumbersValidationResult {
-    WINNING_NUMBERS_NOT_FOUND("Winning inputNumbers not found"),
-    NO_WINNING_TICKET("No winning ticket"),
-    OUT_OF_RANGE("Out of range inputNumbers"),
-    INCORRECT_SIZE("Incorrect size inputNumbers");
+    WINNING_NUMBERS_NOT_FOUND("Winning numbers not found"),
+    OUT_OF_RANGE("Out of range numbers"),
+    INCORRECT_SIZE("Incorrect size numbers");
 
     private final String message;
 
