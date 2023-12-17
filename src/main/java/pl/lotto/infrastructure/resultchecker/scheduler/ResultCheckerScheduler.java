@@ -17,9 +17,9 @@ public class ResultCheckerScheduler {
     public void generateWinners() throws Exception {
         log.info("Winners lottery scheduler started");
         if (!winningTicketFacade.areWinningNumbersGeneratedByDate()) {
-            log.error("Winning inputNumbers are not generated");
+            log.error("Winning numbers are not generated");
         }
-        log.info("Winning inputNumbers are generated");
+        log.info("Winning numbers are generated");
         resultsCheckerFacade.generateResults();
     }
 }

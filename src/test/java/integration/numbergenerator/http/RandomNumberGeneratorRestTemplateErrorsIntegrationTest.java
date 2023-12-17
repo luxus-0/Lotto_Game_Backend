@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
-import pl.lotto.domain.numbersgenerator.exceptions.RandomNumbersNotFoundException;
 import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
 
 import java.time.Duration;
@@ -21,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
