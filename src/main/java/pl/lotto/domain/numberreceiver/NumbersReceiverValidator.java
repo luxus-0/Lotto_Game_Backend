@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static pl.lotto.domain.numberreceiver.InputNumbersValidationResult.*;
+import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.*;
 
 @Getter
 class NumbersReceiverValidator {
