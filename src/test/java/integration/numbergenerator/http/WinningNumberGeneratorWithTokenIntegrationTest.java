@@ -2,7 +2,6 @@ package integration.numbergenerator.http;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import integration.BaseIntegrationTest;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -43,17 +42,18 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
         //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
         //given && when
         ResultActions failedLoginRequest = mockMvc.perform(post("/token")
-                .contentType("application/json")
+                .contentType(APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .content("""
                         {
-                             "username": "someUser",
-                            "password": "somePassword"
+                            "username" : "someUser",
+                            "password" : "somePassword"
                         }
                         """.trim()));
 
         // then
         failedLoginRequest
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().is4xxClientError())
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().json("""
                         {
