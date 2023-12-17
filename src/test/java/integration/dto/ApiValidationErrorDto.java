@@ -1,4 +1,4 @@
-package integration.apivalidationerror;
+package integration.dto;
 
 import org.springframework.http.HttpStatus;
 
