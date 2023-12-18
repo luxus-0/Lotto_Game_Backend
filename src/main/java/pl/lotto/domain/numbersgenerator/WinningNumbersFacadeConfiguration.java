@@ -18,12 +18,14 @@ public class WinningNumbersFacadeConfiguration {
         WinningNumbersValidator winningNumbersValidator = new WinningNumbersValidator(properties);
         RandomNumberGeneratorClientValidator randomNumberClientValidator = new RandomNumberGeneratorClientValidator(properties);
         RandomNumbersGenerator randomNumbersGenerator = new RandomNumberGeneratorClient(new RestTemplate(), properties, randomNumberClientValidator);
+        WinningNumbersManager manager = new WinningNumbersManager();
         return WinningTicketFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)
                 .winningNumbersValidator(winningNumbersValidator)
                 .numberReceiverFacade(numberReceiverFacade)
                 .randomNumbersGenerator(randomNumbersGenerator)
+                .winningNumbersManager(manager)
                 .build();
     }
 

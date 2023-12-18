@@ -41,6 +41,14 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
 
         //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
         //given     && when
+        ResultActions postInputNumbers = mockMvc.perform(post("/inputNumbers")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content("""
+                        {
+                            "inputNumbers" : [1 2 3 4 5 6]
+                        }
+                        """.trim()));
+
         ResultActions failedLoginRequest = mockMvc.perform(post("/token")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content("""
@@ -50,19 +58,15 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                         }
                         """.trim()));
 
-        mockMvc.perform(post("/inputNumbers")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content("""
-                        {
-                            "inputNumbers" : [1,2,3,4,5,6]
-                        }
-                        """.trim()))
-                .andReturn();
-
         // then
         failedLoginRequest
                 .andExpect(status().isForbidden())
                 .andReturn();
+
+
+        postInputNumbers.andExpect(status().isBadRequest())
+                .andReturn();
+
 
 
         //step 4: user made GET /winning_numbers with no jwt token and system returned Forbidden(401)
