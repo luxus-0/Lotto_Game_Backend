@@ -26,7 +26,7 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                    ResultCheckerRepository resultCheckerRepository,
                                    ResultCheckerValidation resultCheckerValidation) {
 
-    public ResultResponseDto generateResults() throws WinningTicketNotFoundException {
+    public ResultResponseDto generateResults() {
         WinningTicketResponseDto winningTicketResponse = winningTicketFacade.generateWinningTicket();
         Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
         boolean validate = resultCheckerValidation.validate(winningNumbers);
@@ -36,7 +36,6 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
             log.info("Winners: " + winners);
             List<TicketResults> tickets = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID()).stream().toList();
             List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(tickets);
-            log.info(ticketsSaved);
             return mapToResultResponseDto(ticketsSaved);
         }
         return ResultResponseDto.builder()
