@@ -58,7 +58,7 @@ public class NumberReceiverFacade {
         }
         return ticketRepository.findTicketsByDrawDate(date)
                 .stream()
-                .map(TicketMapper::mapToTicketDto)
+                .map(TicketMapper::toTicketDto)
                 .toList();
     }
 }

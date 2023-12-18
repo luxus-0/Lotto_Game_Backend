@@ -7,6 +7,7 @@ import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import java.util.List;
 import java.util.Set;
 
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.LOSE;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.WIN;
 
 @AllArgsConstructor
@@ -18,8 +19,8 @@ class ResultCheckerMapper {
                         .drawDate(ticket.drawDate())
                         .hitNumbers(hitNumbers)
                         .inputNumbers(ticket.inputNumbers())
-                        .isWinner(ticket.isWinner())
-                        .message(ticket.message())
+                        .isWinner(true)
+                        .message(WIN)
                 .build();
     }
 
@@ -30,11 +31,13 @@ class ResultCheckerMapper {
                         .inputNumbers(ticketResultSaved.inputNumbers())
                         .drawDate(ticketResultSaved.drawDate())
                         .hitNumbers(ticketResultSaved.hitNumbers())
-                        .isWinner(true)
-                        .message(WIN)
+                        .isWinner(ticketResultSaved.isWinner())
+                        .message(ticketResultSaved.message())
                         .build())
                 .findAny()
-                .orElseThrow();
+                .orElse(ResultResponseDto.builder()
+                        .message(LOSE)
+                        .build());
     }
 
     public static ResultResponseDto mapToResultResponse(TicketResults ticketResults) {
