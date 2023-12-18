@@ -19,7 +19,7 @@ public class WinningNumbersScheduler {
     private final WinningTicketFacade winningTicketFacade;
 
     @Scheduled(cron = "${numbers.generator.lottery.run.occurence}")
-    public void generateWinningNumbers() throws WinningTicketNotFoundException {
+    public void generateWinningNumbers() {
         WinningTicketResponseDto winningTicketResponseDto = winningTicketFacade.generateWinningTicket();
         log.info(winningTicketResponseDto.winningNumbers());
         log.info(winningTicketResponseDto.drawDate());
