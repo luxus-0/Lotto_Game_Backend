@@ -5,7 +5,4 @@ public class WinningTicketNotFoundException extends Exception {
         super(message);
     }
 
-    public WinningTicketNotFoundException(){
-        super("Winning ticket not found");
-    }
 }
