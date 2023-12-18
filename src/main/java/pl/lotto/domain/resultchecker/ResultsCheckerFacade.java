@@ -34,8 +34,8 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
             List<TicketDto> ticketDtos = numberReceiverFacade.retrieveTicketsByDrawDate(winningTicketResponse.drawDate());
             List<ResultResponseDto> winners = winnersRetriever.retrieveWinners(ticketDtos, winningNumbers);
             log.info("Winners: " + winners);
-            List<TicketResults> tickets = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID()).stream().toList();
-            List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(tickets);
+            List<TicketResults> ticketsByUUID = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID()).stream().toList();
+            List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(ticketsByUUID);
             return mapToResultResponseDto(ticketsSaved);
         }
         return ResultResponseDto.builder()

@@ -36,7 +36,6 @@ class ResultCheckerMapper {
                         .build())
                 .findAny()
                 .orElse(ResultResponseDto.builder()
-                        .message(LOSE)
                         .build());
     }
 
