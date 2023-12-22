@@ -1,11 +1,10 @@
 package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
-import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import pl.lotto.domain.numberreceiver.exceptions.InputNumbersNotFoundException;
 import pl.lotto.domain.numberreceiver.exceptions.TicketNotFoundException;
 
@@ -17,7 +16,6 @@ import java.util.Set;
 import static pl.lotto.domain.drawdate.DrawDateMessageProvider.INCORRECT_NEXT_DRAW_DATE;
 
 @AllArgsConstructor
-@Service
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator validator;
