@@ -2,11 +2,13 @@ package pl.lotto.domain.numbersgenerator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
+import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
+import pl.lotto.domain.drawdate.DrawDateGenerator;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
-import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClient;
-import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClientValidator;
+
+import java.time.Instant;
+import java.time.ZoneId;
 
 import static pl.lotto.domain.numbersgenerator.RandomNumbersURL.*;
 
@@ -14,24 +16,23 @@ import static pl.lotto.domain.numbersgenerator.RandomNumbersURL.*;
 public class WinningNumbersFacadeConfiguration {
 
     @Bean
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
+    public WinningNumbersFacade winningNumbersFacade(RandomNumbersGenerator randomNumbersGenerator, WinningNumbersRepository winningNumbersRepository, WinningNumbersConfigurationProperties properties, NumberReceiverFacade numberReceiverFacade) {
         WinningNumbersValidator winningNumbersValidator = new WinningNumbersValidator(properties);
-        RandomNumberGeneratorClientValidator randomNumberClientValidator = new RandomNumberGeneratorClientValidator(properties);
-        RandomNumbersGenerator randomNumbersGenerator = new RandomNumberGeneratorClient(new RestTemplate(), properties, randomNumberClientValidator);
         WinningNumbersManager manager = new WinningNumbersManager();
-        return WinningTicketFacade.builder()
+        DrawDateFacade drawDateFacade = new DrawDateFacade(new DrawDateGenerator(new AdjustableClock(Instant.now(), ZoneId.systemDefault())));
+        return WinningNumbersFacade.builder()
                 .drawDateFacade(drawDateFacade)
                 .winningNumbersRepository(winningNumbersRepository)
-                .winningNumbersValidator(winningNumbersValidator)
+                .validator(winningNumbersValidator)
                 .numberReceiverFacade(numberReceiverFacade)
                 .randomNumbersGenerator(randomNumbersGenerator)
                 .winningNumbersManager(manager)
                 .build();
     }
 
-    public WinningTicketFacade winningNumbersFacade(DrawDateFacade drawDateFacade, WinningNumbersRepository winningNumbersRepository, NumberReceiverFacade numberReceiverFacade) {
+    public WinningNumbersFacade winningNumbersFacade(RandomNumbersGenerator randomNumbersGenerator, WinningNumbersRepository winningNumbersRepository, NumberReceiverFacade numberReceiverFacade) {
         WinningNumbersConfigurationProperties properties = getWinningNumbersConfigurationProperties();
-        return winningNumbersFacade(drawDateFacade, winningNumbersRepository, properties, numberReceiverFacade);
+        return winningNumbersFacade(randomNumbersGenerator, winningNumbersRepository, properties, numberReceiverFacade);
     }
 
     public WinningNumbersConfigurationProperties getWinningNumbersConfigurationProperties() {

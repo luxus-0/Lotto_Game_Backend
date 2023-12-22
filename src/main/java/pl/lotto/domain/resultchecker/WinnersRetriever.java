@@ -1,6 +1,7 @@
 package pl.lotto.domain.resultchecker;
 
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
 
 import java.util.Collections;
@@ -25,7 +26,7 @@ public class WinnersRetriever {
             return mapTicketResult(hitNumbers, ticket);
         }
         return ResultResponseDto.builder()
-                .isWinner(false)
+                .isWinner(ticket.isWinner())
                 .build();
     }
 
@@ -43,6 +44,6 @@ public class WinnersRetriever {
     private static Integer winningNumber(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
                 .findAny()
-                .orElseThrow();
+                .orElseThrow(() -> new WinningNumbersNotFoundException("Winning numbers not found"));
     }
 }
