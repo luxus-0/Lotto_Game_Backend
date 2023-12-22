@@ -3,14 +3,12 @@ package pl.lotto.domain.resultchecker;
 import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
-import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
-import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultchecker.exceptions.ResultNotFoundException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -21,13 +19,13 @@ import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.TICKET_
 @Log4j2
 public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                    DrawDateFacade drawDateFacade,
-                                   WinningTicketFacade winningTicketFacade,
+                                   WinningNumbersFacade winningNumbersFacade,
                                    WinnersRetriever winnersRetriever,
                                    ResultCheckerRepository resultCheckerRepository,
                                    ResultCheckerValidation resultCheckerValidation) {
 
     public ResultResponseDto generateResults() {
-        WinningTicketResponseDto winningTicketResponse = winningTicketFacade.generateWinningTicket();
+        WinningTicketResponseDto winningTicketResponse = winningNumbersFacade.generateWinningNumbers();
         Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
         boolean validate = resultCheckerValidation.validate(winningNumbers);
         if (validate) {

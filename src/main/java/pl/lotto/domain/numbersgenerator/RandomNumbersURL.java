@@ -6,7 +6,7 @@ public class RandomNumbersURL {
     public static final int LOWER_BAND_RANDOM_NUMBERS = 1;
     public static final int UPPER_BAND_RANDOM_NUMBERS = 99;
     public static final String FORMAT_RANDOM_NUMBERS = "plain";
-    public static final int COLUMN_RANDOM_NUMBERS = 2;
+    public static final int COLUMN_RANDOM_NUMBERS = 1;
     public static final int BASE_RANDOM_NUMBERS = 10;
     public static final String RANDOM_NUMBERS_URL =
             BASE_RANDOM_NUMBERS_URL +
