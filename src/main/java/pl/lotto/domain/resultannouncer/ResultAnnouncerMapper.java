@@ -17,17 +17,6 @@ public class ResultAnnouncerMapper {
                 .build();
     }
 
-    public static ResultAnnouncerResponseDto getResultTicket(ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto, boolean isWinner, String message) {
-        return ResultAnnouncerResponseDto.builder()
-                .ticketUUID(toResultAnnouncerResponseSavedDto.ticketUUID())
-                .inputNumbers(toResultAnnouncerResponseSavedDto.inputNumbers())
-                .hitNumbers(toResultAnnouncerResponseSavedDto.hitNumbers())
-                .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
-                .isWinner(isWinner)
-                .message(message)
-                .build();
-    }
-
     public static ResultAnnouncerResponseDto getResultTicket(ResultAnnouncerResponseDto toResultAnnouncerResponseSavedDto, String message) {
         return ResultAnnouncerResponseDto.builder()
                 .ticketUUID(toResultAnnouncerResponseSavedDto.ticketUUID())
@@ -35,6 +24,7 @@ public class ResultAnnouncerMapper {
                 .hitNumbers(toResultAnnouncerResponseSavedDto.hitNumbers())
                 .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
                 .message(message)
+                .isWinner(toResultAnnouncerResponseSavedDto.isWinner())
                 .build();
     }
 

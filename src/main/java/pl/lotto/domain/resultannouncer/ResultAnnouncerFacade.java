@@ -33,9 +33,9 @@ public class ResultAnnouncerFacade {
             return getResultTicket(toResultAnnouncerResponseSavedDto, WAIT.message);
         }
         else if (toResultAnnouncerResponseSavedDto.isWinner()) {
-            getResultTicket(toResultAnnouncerResponseSavedDto,true, WIN.message);
+            getResultTicket(toResultAnnouncerResponseSavedDto, WIN.message);
         }
-            return getResultTicket(toResultAnnouncerResponseSavedDto,false ,LOSE.message);
+            return getResultTicket(toResultAnnouncerResponseSavedDto, LOSE.message);
     }
 
     private boolean isAfterResultAnnouncementTime(ResultResponseDto resultResponse) {
