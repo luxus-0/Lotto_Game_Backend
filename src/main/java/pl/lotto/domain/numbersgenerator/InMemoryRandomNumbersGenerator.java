@@ -18,7 +18,7 @@ public class InMemoryRandomNumbersGenerator implements RandomNumbersGenerator {
             throw new RandomNumbersNotFoundException();
         }
         return RandomNumbersResponseDto.builder()
-                .randomNumbers(Set.of(14,17,23,56,45,90))
+                .randomNumbers(Set.of(1,2,3,4,5,6))
                 .build();
     }
 }
