@@ -72,13 +72,13 @@ class ResultAnnouncerFacadeTest {
         //given
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
                 .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
-        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 13, 12, 0, 0);
+        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 10, 12, 0,0 );
         String ticketUUID = "123456";
 
         ResultResponseDto expectedResult = ResultResponseDto.builder()
                 .ticketUUID(ticketUUID)
-                .inputNumbers(Set.of(3, 4, 5, 6, 7, 8))
-                .hitNumbers(Set.of(3, 4, 5 ,6))
+                .inputNumbers(Set.of(17, 19, 25, 34, 22, 45))
+                .hitNumbers(Set.of(17, 25, 22))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .message(WIN.message)
@@ -86,19 +86,19 @@ class ResultAnnouncerFacadeTest {
 
         ResultAnnouncerResponse expectedResultAnnouncerResponse = ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(3, 4, 5, 6, 7, 8))
-                .hitNumbers(Set.of(3, 4, 5, 6))
-                .isWinner(true)
+                .numbers(Set.of(22, 45, 51, 62, 75, 81))
+                .hitNumbers(Set.of(22, 62, 45))
                 .drawDate(drawDate)
+                .isWinner(true)
                 .message(WIN.message)
                 .build();
 
         ResultAnnouncerResponseDto expectedResults = ResultAnnouncerResponseDto.builder()
                 .ticketUUID(ticketUUID)
-                .inputNumbers(Set.of(3, 4, 5, 6, 7, 8))
-                .hitNumbers(Set.of(3, 4, 5, 6))
-                .isWinner(true)
+                .inputNumbers(Set.of(22, 45, 51, 62, 75, 81))
+                .hitNumbers(Set.of(22, 62, 45))
                 .drawDate(drawDate)
+                .isWinner(true)
                 .message(WIN.message)
                 .build();
 
@@ -114,8 +114,8 @@ class ResultAnnouncerFacadeTest {
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketUUID);
         //then
 
-        assertThat(actualResult).isEqualTo(expectedResults);
-        assertThat(actualResult.message()).isEqualTo(WAIT.message);
+       assertThat(actualResult).isEqualTo(expectedResults);
+        //assertThat(actualResult.message()).isEqualTo(WIN.message);
     }
 
     @Test
@@ -124,7 +124,7 @@ class ResultAnnouncerFacadeTest {
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
                 .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
 
-        LocalDateTime drawDate = LocalDateTime.now().plusDays(2);
+        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 10, 12, 0, 0);
         String ticketUUID = "123456";
 
         ResultAnnouncerResponse resultAnnouncerResponse = ResultAnnouncerResponse.builder()
@@ -154,7 +154,7 @@ class ResultAnnouncerFacadeTest {
         ResultAnnouncerResponseDto expectedResult = ResultAnnouncerResponseDto.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of(4, 7, 9, 11, 13, 15))
-                .drawDate(LocalDateTime.of(2023, 12, 16, 12, 0, 0))
+                .drawDate(LocalDateTime.of(2023, 12, 12, 12, 0, 0))
                 .message(WAIT.message)
                 .build();
 

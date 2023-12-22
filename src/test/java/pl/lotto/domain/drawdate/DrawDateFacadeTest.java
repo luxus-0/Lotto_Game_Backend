@@ -1,6 +1,7 @@
 package pl.lotto.domain.drawdate;
 
 import org.junit.jupiter.api.Test;
+import pl.lotto.domain.drawdate.exceptions.IncorrectDrawDateException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -57,9 +58,9 @@ class DrawDateFacadeTest {
         //when
         LocalDateTime actualNextDrawDate = drawDateFacade.retrieveNextDrawDate();
         //then
-        assertThrows(NextDrawDateNotFoundException.class, () -> {
+        assertThrows(IncorrectDrawDateException.class, () -> {
             if (expectedNextDrawDate.isBefore(actualNextDrawDate)) {
-                throw new NextDrawDateNotFoundException("Draw date time: " + actualNextDrawDate.toLocalDate() + actualNextDrawDate.toLocalTime());
+                throw new IncorrectDrawDateException("Draw date: " + expectedNextDrawDate + "is before " + actualNextDrawDate);
             }
         });
     }
@@ -73,10 +74,10 @@ class DrawDateFacadeTest {
         //when
         LocalDateTime actualNextDrawDate = drawDateFacade.retrieveNextDrawDate();
         //then
-        assertThrows(NextDrawDateNotFoundException.class, () -> {
+        assertThrows(IncorrectDrawDateException.class, () -> {
             if (expectedNextDrawDate.isAfter(actualNextDrawDate)) {
-                throw new NextDrawDateNotFoundException(
-                        "Draw date time: " + actualNextDrawDate.toLocalDate() + actualNextDrawDate.toLocalTime());
+                throw new IncorrectDrawDateException(
+                        "Draw date: " + expectedNextDrawDate + "is after " + actualNextDrawDate);
             }
         });
     }
