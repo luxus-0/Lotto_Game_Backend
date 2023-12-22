@@ -29,11 +29,12 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
         Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
         boolean validate = resultCheckerValidation.validate(winningNumbers);
         if (validate) {
-            List<TicketDto> ticketDtos = numberReceiverFacade.retrieveTicketsByDrawDate(winningTicketResponse.drawDate());
-            List<ResultResponseDto> winners = winnersRetriever.retrieveWinners(ticketDtos, winningNumbers);
+            List<TicketDto> tickets = numberReceiverFacade.retrieveTicketsByDrawDate(winningTicketResponse.drawDate());
+            List<ResultResponseDto> winners = winnersRetriever.retrieveWinners(tickets, winningNumbers);
             log.info("Winners: " + winners);
             List<TicketResults> ticketsByUUID = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID()).stream().toList();
             List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(ticketsByUUID);
+            log.info("Ticket saved to database: " +ticketsSaved);
             return mapToResultResponseDto(ticketsSaved);
         }
         return ResultResponseDto.builder()
