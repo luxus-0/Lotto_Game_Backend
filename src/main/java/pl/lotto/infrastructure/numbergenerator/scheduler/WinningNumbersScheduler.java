@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
-import pl.lotto.domain.numbersgenerator.WinningTicketFacade;
+import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 
 /**
@@ -16,11 +15,11 @@ import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 @Component
 public class WinningNumbersScheduler {
 
-    private final WinningTicketFacade winningTicketFacade;
+    private final WinningNumbersFacade winningNumbersFacade;
 
     @Scheduled(cron = "${numbers.generator.lottery.run.occurence}")
     public void generateWinningNumbers() {
-        WinningTicketResponseDto winningTicketResponseDto = winningTicketFacade.generateWinningTicket();
+        WinningTicketResponseDto winningTicketResponseDto = winningNumbersFacade.generateWinningNumbers();
         log.info(winningTicketResponseDto.winningNumbers());
         log.info(winningTicketResponseDto.drawDate());
     }
