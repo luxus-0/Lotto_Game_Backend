@@ -21,8 +21,9 @@ import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.EQUA
 public class NumberReceiverIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_post_input_six_numbers_with_draw_date() throws Exception {
-        //given
+            //given
             LocalDateTime drawDate = LocalDateTime.now(ZoneId.systemDefault()).withHour(12).withMinute(0).withSecond(0).withNano(0);
+
             //when
             ResultActions perform = mockMvc.perform(post("/inputNumbers")
                     .content("""
@@ -37,6 +38,7 @@ public class NumberReceiverIntegrationTest extends BaseIntegrationTest {
             String json = mvcResult.getResponse().getContentAsString();
             TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
             String ticketId = ticketResponseDto.ticketUUID();
+
             //then
             assertAll(
                     () -> assertThat(ticketId).isNotNull(),
