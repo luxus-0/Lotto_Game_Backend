@@ -1,6 +1,7 @@
 package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
@@ -8,14 +9,12 @@ import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import pl.lotto.domain.numberreceiver.exceptions.InputNumbersNotFoundException;
 import pl.lotto.domain.numberreceiver.exceptions.TicketNotFoundException;
 
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static pl.lotto.domain.drawdate.DrawDateMessageProvider.INCORRECT_NEXT_DRAW_DATE;
-
 @AllArgsConstructor
+@Log4j2
 public class NumberReceiverFacade {
 
     private final NumbersReceiverValidator validator;
@@ -52,7 +51,10 @@ public class NumberReceiverFacade {
     public List<TicketDto> retrieveTicketsByDrawDate(LocalDateTime date) {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
         if (date.isAfter(nextDrawDate)) {
-            throw new DateTimeException(INCORRECT_NEXT_DRAW_DATE);
+            log.error(date + " is after then " +nextDrawDate);
+        }
+        if(date.isBefore(nextDrawDate)){
+            log.error(date + "is before then " +nextDrawDate);
         }
         return ticketRepository.findTicketsByDrawDate(date)
                 .stream()
