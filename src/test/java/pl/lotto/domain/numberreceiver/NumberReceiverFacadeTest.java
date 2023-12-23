@@ -39,9 +39,8 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        InputNumbersRequestDto inputNumbersRequest = InputNumbersRequestDto.builder()
-                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
-                .build();
+        InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
+
         // when
         when(ticketRepository.save(any(Ticket.class)))
                 .thenReturn(Ticket.builder()
@@ -62,9 +61,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        InputNumbersRequestDto inputNumbersRequest = InputNumbersRequestDto.builder()
-                .inputNumbers(Set.of(1, 2, 3, 4))
-                .build();
+        InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of(1, 2, 3, 4));
         // when
         when(ticketRepository.save(any(Ticket.class)))
                 .thenReturn(Ticket.builder()
@@ -86,9 +83,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        InputNumbersRequestDto inputNumbersRequest = InputNumbersRequestDto.builder()
-                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6, 7, 8))
-                .build();
+        InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6, 7, 8));
         // when
         when(ticketRepository.save(any(Ticket.class)))
                 .thenReturn(Ticket.builder()
@@ -109,10 +104,8 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        InputNumbersRequestDto inputNumbersRequest = InputNumbersRequestDto.builder()
-                .inputNumbers(Set.of(100, 200, 300, 400, 500, 600))
-                .build();
-        // when
+        InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of(100, 200, 300, 400, 500, 600));
+
         when(ticketRepository.save(any(Ticket.class)))
                 .thenReturn(Ticket.builder()
                         .ticketUUID("12345")
@@ -132,9 +125,8 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        InputNumbersRequestDto inputNumbersRequest = InputNumbersRequestDto.builder()
-                .inputNumbers(Set.of())
-                .build();
+        InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of());
+
         // when && then
         RuntimeException exception = assertThrows(InputNumbersNotFoundException.class,
                 () -> numberReceiverFacade.inputNumbers(inputNumbersRequest));
@@ -150,17 +142,14 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        Set<Integer> inputNumbers = Set.of(79, 33, 21, 17, 19);
         LocalDateTime drawDate = LocalDateTime.of(2023, 12, 16, 12, 0, 0);
 
-        InputNumbersRequestDto inputNumbersRequest = InputNumbersRequestDto.builder()
-                .inputNumbers(inputNumbers)
-                .build();
+        InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of(79, 33, 21, 17, 19));
 
         when(ticketRepository.save(any(Ticket.class)))
                 .thenReturn(Ticket.builder()
                         .ticketUUID("123456")
-                        .inputNumbers(inputNumbers)
+                        .inputNumbers(Set.of(79, 33, 21, 17, 19))
                         .drawDate(drawDate)
                         .message(OUT_OF_RANGE_NUMBERS.getInfo())
                         .build());
@@ -178,9 +167,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        InputNumbersRequestDto inputNumbersRequest = InputNumbersRequestDto.builder()
-                .inputNumbers(Set.of(-45, 79, -33, 21, 17, 19))
-                .build();
+        InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of(-45, 79, -33, 21, 17, 19));
         //when
 
         when(ticketRepository.save(any(Ticket.class)))
@@ -200,10 +187,7 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
-        InputNumbersRequestDto inputNumbersRequestDto = InputNumbersRequestDto.builder()
-                .inputNumbers(inputNumbers)
-                .build();
+        InputNumbersRequestDto inputNumbersRequestDto = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
 
         LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 12, 16, 12, 0, 0);
 
@@ -211,7 +195,7 @@ class NumberReceiverFacadeTest {
         when(ticketRepository.save(any(Ticket.class)))
                 .thenReturn(Ticket.builder()
                         .ticketUUID("123456")
-                        .inputNumbers(inputNumbers)
+                        .inputNumbers(Set.of(1,2,3,4,5,6))
                         .drawDate(expectedDrawDate)
                         .build());
 
@@ -242,17 +226,13 @@ class NumberReceiverFacadeTest {
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        Set<Integer> inputNumbers = Set.of(1, 2, 3, 4, 5, 6);
-        //when
         when(ticketRepository.save(any(Ticket.class)))
                 .thenReturn(new Ticket(UUID.randomUUID().toString(), Set.of(1, 2, 3, 4, 5, 6), LocalDateTime.of(2023, 11, 17, 12, 0, 0, 0), EQUALS_SIX_NUMBERS.getInfo()));
 
-        TicketResponseDto ticketResult = numberReceiverFacade.inputNumbers(
-                InputNumbersRequestDto.builder()
-                        .inputNumbers(inputNumbers)
-                        .build());
-
+        //when
+        TicketResponseDto ticketResult = numberReceiverFacade.inputNumbers(new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6)));
         LocalDateTime actualDrawDate = ticketResult.drawDate();
+
         //then
         LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 11, 17, 12, 0, 0, 0);
 
