@@ -11,6 +11,7 @@ import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,8 +67,8 @@ class ResultsCheckerFacadeTest {
                         .message(WIN)
                         .build());
 
-        when(resultCheckerRepository.findAllByTicketUUID(ticketUUID1)).thenReturn(List.of(ticket1));
-        when(resultCheckerRepository.findAllByTicketUUID(ticketUUID2)).thenReturn(List.of(ticket2));
+        when(resultCheckerRepository.findAllByTicketUUID(ticketUUID1)).thenReturn(Optional.of(ticket1));
+        when(resultCheckerRepository.findAllByTicketUUID(ticketUUID2)).thenReturn(Optional.of(ticket2));
         when(resultCheckerRepository.saveAll(anyList())).thenReturn(List.of(ticket2));
         //when
         ResultResponseDto playerResult = resultCheckerFacade.generateResults();
@@ -136,10 +137,10 @@ class ResultsCheckerFacadeTest {
 
 
         when(resultCheckerRepository.findAllByTicketUUID(ticketUUID1))
-               .thenReturn(List.of(ticket1));
+               .thenReturn(Optional.of(ticket1));
 
         when(resultCheckerRepository.findAllByTicketUUID(ticketUUID2))
-                .thenReturn(List.of(ticket2));
+                .thenReturn(Optional.of(ticket2));
         //when
 
         ResultResponseDto actualResult = resultCheckerFacade.findResultByTicketUUID(ticketUUID1);
