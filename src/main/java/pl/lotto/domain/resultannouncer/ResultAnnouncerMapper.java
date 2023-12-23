@@ -2,8 +2,6 @@ package pl.lotto.domain.resultannouncer;
 
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 
-import static pl.lotto.domain.resultannouncer.ResultStatus.*;
-
 public class ResultAnnouncerMapper {
 
     public static ResultAnnouncerResponseDto mapToResultAnnouncerResponseDto(ResultAnnouncerResponse resultAnnouncerResponseSaved) {
@@ -23,8 +21,8 @@ public class ResultAnnouncerMapper {
                 .inputNumbers(toResultAnnouncerResponseSavedDto.inputNumbers())
                 .hitNumbers(toResultAnnouncerResponseSavedDto.hitNumbers())
                 .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
-                .message(message)
                 .isWinner(toResultAnnouncerResponseSavedDto.isWinner())
+                .message(message)
                 .build();
     }
 

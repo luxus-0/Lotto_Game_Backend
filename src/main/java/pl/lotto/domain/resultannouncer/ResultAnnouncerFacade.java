@@ -10,9 +10,9 @@ import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
-import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.*;
+import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.getResultTicket;
+import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.mapToResultAnnouncerResponseDto;
 import static pl.lotto.domain.resultannouncer.ResultStatus.*;
-import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.TICKET_NOT_FOUND;
 
 @AllArgsConstructor
 public class ResultAnnouncerFacade {
