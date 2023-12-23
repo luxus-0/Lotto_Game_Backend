@@ -10,7 +10,7 @@ import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
-import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.mapToResultAnnouncerResponseDto;
+import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.toResultLottoSaved;
 import static pl.lotto.domain.resultannouncer.ResultStatus.*;
 
 @AllArgsConstructor
@@ -23,25 +23,25 @@ public class ResultAnnouncerFacade {
         if (ticketUUID == null || ticketUUID.isEmpty()) {
             throw new TicketUUIDNotFoundException();
         }
-        ResultResponseDto resultResponseDto = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
+        ResultResponseDto resultByTicketUUID = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
         ResultAnnouncerResponse resultAnnouncerResponse = resultAnnouncerRepository.findAllByTicketUUID(ticketUUID)
                 .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket id: " + ticketUUID));
         ResultAnnouncerResponse resultSaved = resultAnnouncerRepository.save(resultAnnouncerResponse);
-        ResultAnnouncerResponseDto resultSavedDto = mapToResultAnnouncerResponseDto(resultSaved);
-        if (!isAfterAnnouncementTime(resultResponseDto)) {
-            new WaitLottoMessage(resultSavedDto, WAIT.message);
+        ResultAnnouncerResponseDto resultLottoSaved = toResultLottoSaved(resultSaved);
+        if (!isAfterAnnouncementTime(resultByTicketUUID)) {
+            new WaitLottoMessage(resultLottoSaved, WAIT.message);
         }
-        else if(isAfterAnnouncementTime(resultResponseDto)){
-            new AlreadyCheckedLottoMessage(resultSavedDto, ALREADY_CHECKED.message);
+        else if(isAfterAnnouncementTime(resultByTicketUUID)){
+            new AlreadyCheckedLottoMessage(resultLottoSaved, ALREADY_CHECKED.message);
         }
-        else if (resultSavedDto.isWinner()) {
-            new WinLottoMessage(resultSavedDto, WIN.message);
+        else if (resultLottoSaved.isWinner()) {
+            new WinLottoMessage(resultLottoSaved, WIN.message);
         }
         else {
-            new LoseLottoMessage(resultSavedDto, LOSE.message);
+            new LoseLottoMessage(resultLottoSaved, LOSE.message);
         }
 
-        return resultSavedDto;
+        return resultLottoSaved;
     }
 
     private boolean isAfterAnnouncementTime(ResultResponseDto resultResponse) {
