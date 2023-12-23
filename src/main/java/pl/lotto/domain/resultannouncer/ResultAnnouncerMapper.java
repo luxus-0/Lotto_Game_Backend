@@ -22,7 +22,7 @@ public class ResultAnnouncerMapper {
                 .hitNumbers(toResultAnnouncerResponseSavedDto.hitNumbers())
                 .drawDate(toResultAnnouncerResponseSavedDto.drawDate())
                 .isWinner(toResultAnnouncerResponseSavedDto.isWinner())
-                .message(message)
+                .message(toResultAnnouncerResponseSavedDto.message())
                 .build();
     }
 
