@@ -3,6 +3,7 @@ package pl.lotto.domain.resultchecker;
 import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
@@ -32,9 +33,10 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
             List<TicketDto> tickets = numberReceiverFacade.retrieveTicketsByDrawDate(winningTicketResponse.drawDate());
             List<ResultResponseDto> winners = winnersRetriever.retrieveWinners(tickets, winningNumbers);
             log.info("Winners: " + winners);
-            List<TicketResults> ticketsByUUID = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID()).stream().toList();
-            List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(ticketsByUUID);
-            log.info("Ticket saved to database: " +ticketsSaved);
+            TicketResults ticket = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID())
+                    .orElseThrow(() -> new WinningTicketNotFoundException("Winning ticket not found"));
+            List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(List.of(ticket));
+            log.info("Ticket saved: " +ticketsSaved);
             return mapToResultResponseDto(ticketsSaved);
         }
         return ResultResponseDto.builder()
