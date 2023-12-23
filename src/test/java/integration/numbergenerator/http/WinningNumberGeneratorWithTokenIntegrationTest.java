@@ -15,7 +15,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static integration.numbergenerator.http.WinningNumbersGeneratorWithTokenIntegrationTestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -59,13 +58,8 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                         """.trim()));
 
         // then
-        failedLoginRequest
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-
-        postInputNumbers.andExpect(status().isBadRequest())
-                .andReturn();
+        failedLoginRequest.andExpect(status().isForbidden()).andReturn();
+        postInputNumbers.andExpect(status().isBadRequest()).andReturn();
 
 
 
@@ -88,10 +82,9 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                         }
                         """.trim()));
 
-        // then
-        getWinningNumbersRequest.andExpect(status().isOk());
-        failedLogin.andExpect(status().isForbidden());
 
+        getWinningNumbersRequest.andExpect(status().isNotFound()).andReturn();
+        failedLogin.andExpect(status().isForbidden()).andReturn();
 
         //step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
         // given & when
@@ -124,15 +117,16 @@ public class WinningNumberGeneratorWithTokenIntegrationTest extends BaseIntegrat
                         }
                         """.trim())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-        );
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE));
         // then
         MvcResult mvcResult = successLoginRequest.andExpect(status().isForbidden()).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         TokenResponseDto jwtResponse = objectMapper.readValue(json, TokenResponseDto.class);
         String token = jwtResponse.token();
         assertAll(
-                () -> assertThat(jwtResponse.username()).isEqualTo("someUser")
-                //() -> assertThat(token).matches(Pattern.compile(REGEX_TOKEN))
+                () -> assertThat(jwtResponse.username()).isEqualTo("someUser"),
+                () -> assertThat(token).isNotNull(),
+                () -> assertThat(token).matches(Pattern.compile(REGEX_TOKEN))
         );
 
         //step 7: user made GET /winning_numbers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned not found(404) with no winning numbers

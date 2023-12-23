@@ -21,8 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.LESS_THAN_SIX_NUMBERS;
-import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.MORE_THAN_SIX_NUMBERS;
+import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.*;
 
 @Log4j2
 public class NumberReceiverErrorIntegrationTest extends BaseIntegrationTest {
@@ -152,20 +151,20 @@ public class NumberReceiverErrorIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_status__when_input_numbers_has_size_more_than_six() throws Exception {
+    public void should_return_status_200_when_input_numbers_is_out_of_range() throws Exception {
         //given && when
         LocalDateTime drawDate = LocalDateTime.of(2023, 12, 16, 12, 0, 0);
 
         ResultActions postInputNumbersWithIncorrectSize = mockMvc.perform(post("/inputNumbers")
                 .content("""
                         {
-                            "inputNumbers" : [1, 2, 3, 4, 5, 6, 7, 8]
+                            "inputNumbers" : [0, 0, 0]
                         }
                         """.trim())
                 .contentType(APPLICATION_JSON)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE));
 
-        MvcResult mvcResult = postInputNumbersWithIncorrectSize.andExpect(httpStatus -> WireMock.status(400)).andReturn();
+        MvcResult mvcResult = postInputNumbersWithIncorrectSize.andExpect(httpStatus -> WireMock.status(200)).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
         String ticketId = ticketResponseDto.ticketUUID();
@@ -174,7 +173,7 @@ public class NumberReceiverErrorIntegrationTest extends BaseIntegrationTest {
         assertAll(
                 () -> assertThat(ticketId).isNotNull(),
                 () -> assertThat(ticketResponseDto.drawDate()).isEqualTo(drawDate),
-                () -> assertThat(ticketResponseDto.message()).isEqualTo(MORE_THAN_SIX_NUMBERS.getInfo())
+                () -> assertThat(ticketResponseDto.message()).isEqualTo(OUT_OF_RANGE_NUMBERS.getInfo())
         );
     }
 }
