@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +22,7 @@ public class NumberReceiverIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_post_input_six_numbers_with_draw_date() throws Exception {
         //given
-            LocalDateTime drawDate = LocalDateTime.of(2023, 12, 2, 12, 0, 0);
+            LocalDateTime drawDate = LocalDateTime.now(ZoneId.systemDefault()).withHour(12).withMinute(0).withSecond(0).withNano(0);
             //when
             ResultActions perform = mockMvc.perform(post("/inputNumbers")
                     .content("""
