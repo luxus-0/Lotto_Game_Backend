@@ -1,40 +1,49 @@
 package integration.numberreceiver;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import integration.BaseIntegrationTest;
 import integration.dto.ApiValidationErrorDto;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.LESS_THAN_SIX_NUMBERS;
+import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.MORE_THAN_SIX_NUMBERS;
 
 @Log4j2
 public class NumberReceiverErrorIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void should_return_404_not_found_and_validation_message_when_body_has_empty_input_numbers() throws Exception {
+    public void should_return_status_404_not_found_and_validation_message_when_body_has_empty_input_numbers() throws Exception {
         //give
-            MvcResult perform = mockMvc.perform(post("/inputNumbers")
-                            .content("""
-                                    {
-                                    "inputNumbers" : []
-                                    }
-                                    """.trim()
-                            ).contentType(APPLICATION_JSON)
-                    ).andExpect(status().isNotFound())
-                    .andReturn();
+        MvcResult perform = mockMvc.perform(post("/inputNumbers")
+                        .content("""
+                                {
+                                "inputNumbers" : []
+                                }
+                                """.trim()
+                        ).contentType(APPLICATION_JSON)
+                ).andExpect(status().isNotFound())
+                .andReturn();
 
-            //when
-            String json = perform.getResponse().getContentAsString();
+        //when
+        String json = perform.getResponse().getContentAsString();
 
-            //then
+        //then
         assertThrows(Exception.class, () -> {
             ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
             result.messages().containsAll(List.of(NOT_FOUND.name(), "404"));
@@ -42,7 +51,7 @@ public class NumberReceiverErrorIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_404_not_found_and_validation_message_when_body_is_empty() throws Exception {
+    public void should_return_status_404_not_found_and_validation_message_when_body_is_empty() throws Exception {
         //given
         MvcResult perform = mockMvc.perform(post("/inputNumbers")
                         .content("""
@@ -67,43 +76,105 @@ public class NumberReceiverErrorIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_403_forbidden_when_request_has_incorrect_url_input_numbers() throws Exception {
+    public void should_return_status_403_forbidden_when_request_has_incorrect_url_input_numbers() throws Exception {
         //given && when
-            MvcResult getInputNumbersWithNoExistingId = mockMvc.perform(post("/inputNumbers/444")
-                            .content("""
-                                    {
-                                    "inputNumbers" : []
-                                    }
-                                    """.trim()
-                            ).contentType(APPLICATION_JSON))
-                    .andExpect(status().isForbidden())
-                    .andReturn();
+        MvcResult getInputNumbersWithNoExistingId = mockMvc.perform(post("/inputNumbers/444")
+                        .content("""
+                                {
+                                "inputNumbers" : []
+                                }
+                                """.trim()
+                        ).contentType(APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andReturn();
 
-            //then
-            String json = getInputNumbersWithNoExistingId.getResponse().getContentAsString();
+        //then
+        String json = getInputNumbersWithNoExistingId.getResponse().getContentAsString();
         ApiValidationErrorDto result = new ApiValidationErrorDto(List.of("403"), FORBIDDEN);
 
         assertAll(
                 () -> assertThrows(Exception.class,
-                                () -> objectMapper.readValue(json, ApiValidationErrorDto.class)),
+                        () -> objectMapper.readValue(json, ApiValidationErrorDto.class)),
                 () -> assertThat(result.messages()).isEqualTo(List.of("403"))
         );
     }
 
     @Test
-    public void should_return_400_bad_request_when_input_numbers_has_size_less_than_six() throws Exception {
-        MvcResult getInputNumbersWithIncorrectSize = mockMvc.perform(post("/inputNumbers")
+    public void should_return_status_200_when_input_numbers_has_size_less_than_six() throws Exception {
+        //given && when
+        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 16, 12, 0, 0);
+
+        ResultActions postInputNumbersWithIncorrectSize = mockMvc.perform(post("/inputNumbers")
                 .content("""
-                                "inputNumbers" : [1, 2, 3, 4, 5]
-                                """.trim()).contentType(APPLICATION_JSON)
-                ).andExpect(status().isBadRequest())
-                .andReturn();
+                        {
+                            "inputNumbers" : [1, 2, 3, 4, 5]
+                        }
+                        """.trim()).contentType(APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE));
 
-        String json = getInputNumbersWithIncorrectSize.getResponse().getContentAsString();
+        MvcResult mvcResult = postInputNumbersWithIncorrectSize.andExpect(httpStatus -> WireMock.status(200)).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
+        String ticketId = ticketResponseDto.ticketUUID();
 
+        //then
         assertAll(
-                () -> assertThrows(Exception.class,
-                        () -> objectMapper.readValue(json, ApiValidationErrorDto.class),
-                        BAD_REQUEST.name()));
+                () -> assertThat(ticketId).isNotNull(),
+                () -> assertThat(ticketResponseDto.drawDate()).isEqualTo(drawDate),
+                () -> assertThat(ticketResponseDto.message()).isEqualTo(LESS_THAN_SIX_NUMBERS.getInfo())
+        );
+    }
+
+    @Test
+    public void should_return_status_200_when_input_numbers_has_size_more_than_six() throws Exception {
+        //given && when
+        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 16, 12, 0, 0);
+
+        ResultActions postInputNumbersWithIncorrectSize = mockMvc.perform(post("/inputNumbers")
+                .content("""
+                        {
+                            "inputNumbers" : [1, 2, 3, 4, 5, 6, 7, 8]
+                        }
+                        """.trim()).contentType(APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE));
+
+        MvcResult mvcResult = postInputNumbersWithIncorrectSize.andExpect(httpStatus -> WireMock.status(200)).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
+        String ticketId = ticketResponseDto.ticketUUID();
+
+        //then
+        assertAll(
+                () -> assertThat(ticketId).isNotNull(),
+                () -> assertThat(ticketResponseDto.drawDate()).isEqualTo(drawDate),
+                () -> assertThat(ticketResponseDto.message()).isEqualTo(MORE_THAN_SIX_NUMBERS.getInfo())
+        );
+    }
+
+    @Test
+    public void should_return_status__when_input_numbers_has_size_more_than_six() throws Exception {
+        //given && when
+        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 16, 12, 0, 0);
+
+        ResultActions postInputNumbersWithIncorrectSize = mockMvc.perform(post("/inputNumbers")
+                .content("""
+                        {
+                            "inputNumbers" : [1, 2, 3, 4, 5, 6, 7, 8]
+                        }
+                        """.trim())
+                .contentType(APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE));
+
+        MvcResult mvcResult = postInputNumbersWithIncorrectSize.andExpect(httpStatus -> WireMock.status(400)).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        TicketResponseDto ticketResponseDto = objectMapper.readValue(json, TicketResponseDto.class);
+        String ticketId = ticketResponseDto.ticketUUID();
+
+        //then
+        assertAll(
+                () -> assertThat(ticketId).isNotNull(),
+                () -> assertThat(ticketResponseDto.drawDate()).isEqualTo(drawDate),
+                () -> assertThat(ticketResponseDto.message()).isEqualTo(MORE_THAN_SIX_NUMBERS.getInfo())
+        );
     }
 }
