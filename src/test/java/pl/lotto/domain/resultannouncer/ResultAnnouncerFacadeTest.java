@@ -66,66 +66,39 @@ class ResultAnnouncerFacadeTest {
         //given
         ResultAnnouncerFacade resultAnnouncerFacade = new ResultAnnouncerFacadeConfiguration()
                 .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
-        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 23, 12,0,0);
+        LocalDateTime drawDate = LocalDateTime.of(2023, 12, 23, 12, 0, 0);
         String ticket1 = "123456";
-        String ticket2 = "1234567";
-        String ticket3 = "12345679";
-
 
         ResultAnnouncerResponse result1 = ResultAnnouncerResponse.builder()
                 .ticketUUID(ticket1)
-                .numbers(Set.of(25, 50, 12, 60, 32, 23))
-                .hitNumbers(Set.of(25, 60, 12))
-                .drawDate(drawDate)
-                .isWinner(true)
-                .message(WIN.message)
-                .build();
-
-        ResultAnnouncerResponse result2 = ResultAnnouncerResponse.builder()
-                .ticketUUID(ticket2)
-                .numbers(Set.of(26, 51, 13, 61, 33, 24))
-                .hitNumbers(Set.of(24, 13, 51))
-                .drawDate(drawDate)
-                .isWinner(true)
-                .message(WIN.message)
-                .build();
-
-        ResultAnnouncerResponse result3 = ResultAnnouncerResponse.builder()
-                .ticketUUID(ticket3)
-                .numbers(Set.of(27, 52, 14, 62, 34, 25))
-                .hitNumbers(Set.of(27, 25, 14))
+                .numbers(Set.of(34, 50, 12, 60, 32, 23))
+                .hitNumbers(Set.of(34, 60, 12))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .message(WIN.message)
                 .build();
 
         ResultResponseDto resultResponseDto = ResultResponseDto.builder()
-                .ticketUUID(ticket3)
-                .inputNumbers(Set.of(25, 50, 12, 60, 32, 23))
-                .hitNumbers(Set.of(25, 60, 12))
+                .ticketUUID(ticket1)
+                .inputNumbers(Set.of(34, 50, 12, 60, 32, 23))
+                .hitNumbers(Set.of(34, 60, 12))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .message(WIN.message)
                 .build();
 
+       resultAnnouncerRepository.save(result1);
 
         when(resultsCheckerFacade.findResultByTicketUUID(ticket1)).thenReturn(resultResponseDto);
-        when(resultsCheckerFacade.findResultByTicketUUID(ticket2)).thenReturn(resultResponseDto);
-        when(resultsCheckerFacade.findResultByTicketUUID(ticket3)).thenReturn(resultResponseDto);
-
-
-       resultAnnouncerRepository.save(result1);
-       resultAnnouncerRepository.save(result2);
-       resultAnnouncerRepository.save(result3);
 
         //when
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticket1);
         //then
 
         ResultAnnouncerResponseDto expectedResult = ResultAnnouncerResponseDto.builder()
-                .ticketUUID(ticket3)
-                .inputNumbers(Set.of(22, 46, 17, 44, 57, 74))
-                .hitNumbers(Set.of(22, 17, 44))
+                .ticketUUID(ticket1)
+                .inputNumbers(Set.of(34, 50, 12, 60, 32, 23))
+                .hitNumbers(Set.of(34, 60, 12))
                 .drawDate(drawDate)
                 .isWinner(true)
                 .message(WIN.message)
@@ -148,13 +121,24 @@ class ResultAnnouncerFacadeTest {
                 .ticketUUID(ticketUUID)
                 .numbers(Set.of(4, 7, 9, 11, 13, 15))
                 .drawDate(drawDate)
+                .message(WAIT.message)
+                .build();
+
+       ResultResponseDto result = ResultResponseDto.builder()
+                .ticketUUID(ticketUUID)
+                .inputNumbers(Set.of(4,7,9,11,13,15))
+                .drawDate(drawDate)
+               .message(WAIT.message)
                 .build();
 
         resultAnnouncerRepository.save(resultAnnouncerResponse);
+
+        when(resultsCheckerFacade.findResultByTicketUUID(ticketUUID)).thenReturn(result);
+
         //when
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketUUID);
-        //then
 
+        //then
         ResultAnnouncerResponseDto expectedResult = ResultAnnouncerResponseDto.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of(4, 7, 9, 11, 13, 15))
