@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LoginIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void should_return_failed_login_when_body_username_and_password_return_bad_credentials_401() throws Exception {
+    public void should_return_failed_login_when_body_username_and_password_return_bad_credentials() throws Exception {
         // given & when
 
         ResultActions failedLoginRequest = mockMvc.perform(post("/token")
