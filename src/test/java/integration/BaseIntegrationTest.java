@@ -1,7 +1,6 @@
 package integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
+import pl.lotto.domain.numbersgenerator.WinningNumbersRepository;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
@@ -36,6 +36,8 @@ public class BaseIntegrationTest {
     public ObjectMapper objectMapper;
     @Autowired
     public AdjustableClock clock;
+    @Autowired
+    public WinningNumbersRepository winningNumbersRepository;
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()

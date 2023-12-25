@@ -15,7 +15,7 @@ class WinningNumbersValidator {
 
     public boolean validate(Set<Integer> winningNumbers) {
         if(winningNumbers == null || winningNumbers.isEmpty()){
-            throw new WinningNumbersNotFoundException(WINNING_NUMBERS_NOT_FOUND.getMessage());
+            throw new IllegalArgumentException(WINNING_NUMBERS_NOT_FOUND.getMessage());
         }
         if (outOfRange(winningNumbers)) {
            throw new IllegalArgumentException(OUT_OF_RANGE.getMessage());
