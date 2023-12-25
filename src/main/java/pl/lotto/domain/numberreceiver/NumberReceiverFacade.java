@@ -6,10 +6,10 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
-import pl.lotto.domain.numberreceiver.exceptions.InputNumbersNotFoundException;
 import pl.lotto.domain.numberreceiver.exceptions.TicketNotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class NumberReceiverFacade {
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
             Ticket ticket = new Ticket(ticketUUID, inputNumbers, drawDate, validator.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
-
+            log.info("Ticket saved: " +ticketSaved);
             return TicketResponseDto.builder()
                     .ticketUUID(ticketSaved.ticketUUID())
                     .drawDate(ticketSaved.drawDate())
@@ -45,7 +45,7 @@ public class NumberReceiverFacade {
         return retrieveTicketsByDrawDate(nextDrawDate).stream()
                 .map(TicketDto::inputNumbers)
                 .findAny()
-                .orElseThrow(InputNumbersNotFoundException::new);
+                .orElse(Collections.emptySet());
     }
 
     public List<TicketDto> retrieveTicketsByDrawDate(LocalDateTime date) {
