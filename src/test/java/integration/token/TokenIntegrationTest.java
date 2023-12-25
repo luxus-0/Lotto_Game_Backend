@@ -12,6 +12,7 @@ import pl.lotto.infrastructure.security.token.dto.TokenResponseDto;
 
 import java.util.regex.Pattern;
 
+import static integration.token.TokenIntegrationTestConstants.TOKEN_REGEX;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -83,7 +84,7 @@ public class TokenIntegrationTest extends BaseIntegrationTest {
         String token = jwtResponse.token();
         assertAll(
                 () -> assertThat(jwtResponse.username()).isEqualTo("someUser"),
-                () -> assertThat(token).matches(Pattern.compile("^([A-Za-z0-9-_=]+\\.)+([A-Za-z0-9-_=])+\\.?$"))
+                () -> assertThat(token).matches(Pattern.compile(TOKEN_REGEX))
         );
     }
 
