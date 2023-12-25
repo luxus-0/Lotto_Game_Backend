@@ -1,9 +1,12 @@
 package pl.lotto.infrastructure.security.token.dto;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-public record TokenRequestDto(@NotBlank(message = "{username.not.blank}")
+public record TokenRequestDto(@NotNull(message = "username not null")
+                              @NotEmpty(message = "username not empty")
                               String username,
-                              @NotBlank(message = "{password.not.blank}")
+                              @NotNull(message = "password not null")
+                              @NotEmpty(message = "password not empty")
                               String password) {
 }
