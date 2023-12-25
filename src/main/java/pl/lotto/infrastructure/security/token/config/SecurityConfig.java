@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/winning_numbers").permitAll()
                         .requestMatchers("/random_numbers").permitAll()
                         .requestMatchers("/results/{ticketId}").permitAll()
+                        .requestMatchers("/token").permitAll()
                         .anyRequest().authenticated())
                 .headers(HeadersConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
