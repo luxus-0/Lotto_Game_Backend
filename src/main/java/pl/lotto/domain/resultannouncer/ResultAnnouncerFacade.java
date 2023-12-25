@@ -25,7 +25,7 @@ public class ResultAnnouncerFacade {
         }
         ResultResponseDto resultByTicketUUID = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
         ResultAnnouncerResponse resultAnnouncerResponse = resultAnnouncerRepository.findAllByTicketUUID(ticketUUID)
-                .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket id: " + ticketUUID));
+                .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket uuid: " + ticketUUID));
         ResultAnnouncerResponse resultSaved = resultAnnouncerRepository.save(resultAnnouncerResponse);
         ResultAnnouncerResponseDto resultLottoSaved = toResultLottoSaved(resultSaved);
         if (!isAfterAnnouncementTime(resultByTicketUUID)) {
