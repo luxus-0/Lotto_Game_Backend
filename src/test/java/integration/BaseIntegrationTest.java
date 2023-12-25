@@ -16,7 +16,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
-import pl.lotto.domain.numbersgenerator.WinningNumbersRepository;
+import pl.lotto.domain.login.LoginRepository;
+import pl.lotto.infrastructure.security.token.JwtConfigurationProperties;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
@@ -37,7 +38,9 @@ public class BaseIntegrationTest {
     @Autowired
     public AdjustableClock clock;
     @Autowired
-    public WinningNumbersRepository winningNumbersRepository;
+    public JwtConfigurationProperties properties;
+    @Autowired
+    public LoginRepository loginRepository;
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
