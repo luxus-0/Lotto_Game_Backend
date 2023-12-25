@@ -16,7 +16,7 @@ public class LoginAndRegisterFacade {
 
     public UserDto findByUsername(String username){
         return repository.findByUsername(username)
-                .map(user -> new UserDto(user.id(), user.username(), user.password()))
+                .map(user -> new UserDto(user.uuid(), user.username(), user.password()))
                 .orElseThrow(() -> new BadCredentialsException(USER_NOT_FOUND));
     }
 
@@ -26,6 +26,6 @@ public class LoginAndRegisterFacade {
                 .password(registerUser.password())
                 .build();
         User savedUser = repository.save(user);
-        return new RegistrationResultDto(savedUser.id(), savedUser.username(), true);
+        return new RegistrationResultDto(savedUser.uuid(), savedUser.username(), true);
     }
 }
