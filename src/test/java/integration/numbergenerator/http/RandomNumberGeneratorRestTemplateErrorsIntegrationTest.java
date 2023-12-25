@@ -40,7 +40,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     @Test
     public void should_throw_exception_404_not_found_when_client_has_incorrect_out_of_band_and_wait_20_seconds() {
         //given
-        wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=99&max=1&format=plain&col=2&base=10")
+        wireMockServer.stubFor(get("random.org/integers/?num=6&min=99&max=1&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                         .withBody("""
