@@ -38,7 +38,7 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
                     .build());
 
     @Test
-    public void should_throw_exception_404_when_client_has_incorrect_out_of_band_and_wait_20_seconds() {
+    public void should_throw_exception_404_not_found_when_client_has_incorrect_out_of_band_and_wait_20_seconds() {
         //given
         wireMockServer.stubFor(WireMock.get("random.org/integers/?num=6&min=99&max=1&format=plain&col=2&base=10")
                 .willReturn(aResponse()
@@ -67,8 +67,8 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 204 NO CONTENT when client has no inputNumbers")
-    public void should_throw_exception_204_when_client_has_no_numbers() {
+    @DisplayName("should throw exception 204 no content when client has no inputNumbers")
+    public void should_throw_exception_204_no_content_when_client_has_no_numbers() {
         //given
         wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
@@ -87,13 +87,13 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 401 UNAUTHORIZED when client is unauthorized response")
-    public void should_throw_exception_401_when_client_is_unauthorized_response() {
+    @DisplayName("should throw exception 401 unauthorized when client is unauthorized response")
+    public void should_throw_exception_401_unauthorized_when_client_is_unauthorized_response() {
         //given
         wireMockServer.stubFor(get("https://random.org/integers/?num=0&min=0&max=0&format=plain&col=2&base=10")
                 .willReturn(aResponse()
                         .withStatus(UNAUTHORIZED.value())
-                                .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 
         //when
         Throwable throwable = catchThrowable(() -> randomNumbersGenerator.generateRandomNumbers(0, 0, 0));
@@ -104,8 +104,8 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 404 NOT FOUND when client fault connection reset by peer")
-    public void should_throw_exception_404_when_fault_connection_reset_by_peer() {
+    @DisplayName("should throw exception 404 not found when client fault connection reset by peer")
+    public void should_throw_exception_404_not_found_when_fault_connection_reset_by_peer() {
         //given
         wireMockServer.stubFor(get("https://random.org/integers/?num=12&min=99&max=1&format=plain&col=2&base=10")
                 .willReturn(aResponse()
@@ -122,8 +122,8 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 404 NOT FOUND when client has out of bound inputNumbers")
-    void should_throw_exception_404_when_client_has_out_of_bound_numbers() {
+    @DisplayName("should throw exception 404 not found when client has out of bound inputNumbers")
+    void should_throw_exception_404_not_found_when_client_has_out_of_bound_numbers() {
         // given
         wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=102&format=plain&col=2&base=10")
                 .willReturn(aResponse()
@@ -140,8 +140,8 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 500 INTERNAL SERVER ERROR when fault empty response")
-    public void should_throw_exception_500_when_fault_empty_response() {
+    @DisplayName("should throw exception 500 interval sever error when fault empty response")
+    public void should_throw_exception_500_interval_sever_error_when_fault_empty_response() {
         //given
         wireMockServer.stubFor(get("https://random.org/integers/?num=15&min=99&max=30&format=plain&col=2&base=10")
                 .willReturn(aResponse()
@@ -158,8 +158,8 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 500 INTERNAL SERVER ERROR when response delay is 1500ms and read time out is 1000ms")
-    public void should_throw_exception_500_when_response_delay_is_1500ms_and_read_time_out_is_1000ms() {
+    @DisplayName("should throw exception 500 interval sever error when response delay is 1500ms and read time out is 1000ms")
+    public void should_throw_exception_500_interval_sever_error_when_response_delay_is_1500ms_and_read_time_out_is_1000ms() {
         //given
         wireMockServer.stubFor(get("https://random.org/integers/?num=12&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
@@ -180,8 +180,8 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 500 INTERVAL SERVER ERROR when client has malformed response chunk")
-    void should_throw_exception_500_when_fault_malformed_response_chunk() {
+    @DisplayName("should throw exception 500 interval sever error when client has malformed response chunk")
+    void should_throw_exception_500_interval_sever_error_when_fault_malformed_response_chunk() {
         // given
         wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()
@@ -197,8 +197,8 @@ public class RandomNumberGeneratorRestTemplateErrorsIntegrationTest {
     }
 
     @Test
-    @DisplayName("should throw exception 500 INTERVAL SERVER ERROR when client has fault random data then close")
-    void should_throw_exception_500_when_fault_random_data_then_close() {
+    @DisplayName("should throw exception 500 interval sever error when client has fault random data then close")
+    void should_throw_exception_500_interval_sever_error_when_fault_random_data_then_close() {
         // given
         wireMockServer.stubFor(get("https://random.org/integers/?num=25&min=1&max=99&format=plain&col=2&base=10")
                 .willReturn(aResponse()

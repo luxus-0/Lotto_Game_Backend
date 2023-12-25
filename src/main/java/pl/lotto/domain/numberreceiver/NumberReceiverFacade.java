@@ -49,16 +49,9 @@ public class NumberReceiverFacade {
     }
 
     public List<TicketDto> retrieveTicketsByDrawDate(LocalDateTime date) {
-        LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        if (date.isAfter(nextDrawDate)) {
-            log.error(date + " is after then " +nextDrawDate);
+            return ticketRepository.findTicketsByDrawDate(date)
+                    .stream()
+                    .map(TicketMapper::toTicketDto)
+                    .toList();
         }
-        if(date.isBefore(nextDrawDate)){
-            log.error(date + "is before then " +nextDrawDate);
-        }
-        return ticketRepository.findTicketsByDrawDate(date)
-                .stream()
-                .map(TicketMapper::toTicketDto)
-                .toList();
-    }
 }
