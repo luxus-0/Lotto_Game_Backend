@@ -5,14 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import org.springframework.lang.NonNull;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
 public class InMemoryLoginRepository implements LoginRepository {
@@ -71,7 +69,7 @@ public class InMemoryLoginRepository implements LoginRepository {
     @Override
     public User save(User entity) {
         User user =  User.builder()
-                .id(UUID.randomUUID().toString())
+                .uuid(UUID.randomUUID().toString())
                 .username(entity.username())
                 .password(entity.password())
                 .build();
