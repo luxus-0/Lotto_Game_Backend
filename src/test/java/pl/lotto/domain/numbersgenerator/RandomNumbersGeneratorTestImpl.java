@@ -31,7 +31,7 @@ public class RandomNumbersGeneratorTestImpl implements RandomNumbersGenerator{
                 .randomNumbers(Set.of(10,20,30,40,50,60))
                 .build();
     }
-    public boolean isOutOfRange(Set<Integer> numbers) {
+    private boolean isOutOfRange(Set<Integer> numbers) {
         return numbers.stream().anyMatch(number -> number < 1 || number > 99);
     }
 
