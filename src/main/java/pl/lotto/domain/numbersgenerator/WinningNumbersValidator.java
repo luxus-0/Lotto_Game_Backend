@@ -2,11 +2,11 @@ package pl.lotto.domain.numbersgenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 
 import java.util.Set;
 
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.*;
+import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.INCORRECT_SIZE;
+import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.OUT_OF_RANGE;
 
 @AllArgsConstructor
 @Log4j2
@@ -14,9 +14,6 @@ class WinningNumbersValidator {
     private final WinningNumbersConfigurationProperties properties;
 
     public boolean validate(Set<Integer> winningNumbers) {
-        if(winningNumbers == null || winningNumbers.isEmpty()){
-            throw new IllegalArgumentException(WINNING_NUMBERS_NOT_FOUND.getMessage());
-        }
         if (outOfRange(winningNumbers)) {
            throw new IllegalArgumentException(OUT_OF_RANGE.getMessage());
         }
