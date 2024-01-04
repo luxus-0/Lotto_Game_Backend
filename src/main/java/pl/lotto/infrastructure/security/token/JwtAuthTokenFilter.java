@@ -17,6 +17,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 @Component
 @AllArgsConstructor
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
@@ -24,7 +26,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
     private final JwtConfigurationProperties properties;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorization = request.getHeader("Authorization");
+        String authorization = request.getHeader(AUTHORIZATION);
         if(authorization == null){
             filterChain.doFilter(request, response);
             return;

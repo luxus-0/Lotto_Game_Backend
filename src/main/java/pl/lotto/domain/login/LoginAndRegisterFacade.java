@@ -7,6 +7,8 @@ import pl.lotto.domain.login.dto.RegisterUserDto;
 import pl.lotto.domain.login.dto.RegistrationResultDto;
 import pl.lotto.domain.login.dto.UserDto;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @Component
 public class LoginAndRegisterFacade {
@@ -22,6 +24,7 @@ public class LoginAndRegisterFacade {
 
     public RegistrationResultDto register(RegisterUserDto registerUser){
         final User user = User.builder()
+                .uuid(UUID.randomUUID().toString())
                 .username(registerUser.username())
                 .password(registerUser.password())
                 .build();
