@@ -23,6 +23,9 @@ public class RegisterController {
 
     @PostMapping("/register")
     public ResponseEntity<RegistrationResultDto> register(@RequestBody @Valid RegisterUserDto registerUser){
+        if(registerUser.username() == null){
+            throw new RuntimeException("aaaaa");
+        }
         String encodedPassword = bCryptPasswordEncoder.encode(registerUser.password());
         RegistrationResultDto registerResult = loginAndRegisterFacade.register(
                 new RegisterUserDto(registerUser.username(), encodedPassword));
