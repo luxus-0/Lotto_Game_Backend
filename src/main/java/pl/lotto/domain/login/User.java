@@ -9,7 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Collection;
+
+import static pl.lotto.infrastructure.apivalidation.ApiValidationConstants.MESSAGE_PASSWORD;
+import static pl.lotto.infrastructure.apivalidation.ApiValidationConstants.REGEX_PASSWORD;
 
 @Builder
 @Document
@@ -20,6 +24,7 @@ public record User(@UUID String uuid,
             String username,
             @NotNull(message = "password not null")
             @NotEmpty(message = "password not empty")
+            @Pattern(regexp = REGEX_PASSWORD,message = MESSAGE_PASSWORD)
             String password) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
