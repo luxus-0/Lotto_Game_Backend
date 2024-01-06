@@ -33,14 +33,14 @@ Front:<br>
   <div>
      <br><br>
   ::ENDPOINTS::
+    <div>
+      ![image](https://github.com/luxus-0/Lotto_Game/assets/74199705/48a8cdd5-e084-4421-87f8-7b403f9c2562)
+    </div>
 <ul>
   <li><a href="http://localhost:8080/numbers" target="_blank" title="INPUT NUMBERS FOR USER">INPUT NUMBERS</a></li>
   <li> <a href="http://localhost:8080/users" target="_blank" title="READ ALL USERS LOTTO">READ USERS</a></li>
   <li><a href="http://localhost:8080/winners" target="_blank" title="READ WINNERS LOTTO">WINNERS</a></li>
   <li><a href="http://localhost:8080/winners/{UUID}" target="_blank" title="READ WINNERS BY UUID">WINNERS/{ID}</a>   </li>
 </ul>
-    <ul>
-      ![image](https://github.com/luxus-0/Lotto_Game/assets/74199705/48a8cdd5-e084-4421-87f8-7b403f9c2562)
-    </ul>
 </div>
 </div>
