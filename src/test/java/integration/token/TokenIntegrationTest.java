@@ -34,8 +34,8 @@ public class TokenIntegrationTest extends BaseIntegrationTest {
         ResultActions failedLoginRequest = mockMvc.perform(post("/token")
                 .content("""
                         {
-                        "username": "someUser",
-                        "password": "somePassword"
+                        "username": "someUsers",
+                        "password": "somePasswords"
                         }
                         """.trim())
                 .contentType(APPLICATION_JSON_VALUE)
@@ -62,16 +62,16 @@ public class TokenIntegrationTest extends BaseIntegrationTest {
     void should_return_success_login_with_token_when_body_username_and_password_has_status_200_ok() throws Exception {
         //given
         loginRepository.save(User.builder()
-                .username("someUser")
-                .password(new BCryptPasswordEncoder().encode("somePassword"))
+                .username("someUsers")
+                .password(new BCryptPasswordEncoder().encode("somePasswords"))
                 .build());
 
         //when
         ResultActions successLoginRequest = mockMvc.perform(post("/token")
                 .content("""
                         {
-                            "username": "someUser",
-                            "password": "somePassword"
+                            "username": "someUsers",
+                            "password": "somePasswords"
                         }
                         """.trim())
                 .contentType(APPLICATION_JSON_VALUE)
@@ -83,7 +83,7 @@ public class TokenIntegrationTest extends BaseIntegrationTest {
         TokenResponseDto jwtResponse = objectMapper.readValue(json, TokenResponseDto.class);
         String token = jwtResponse.token();
         assertAll(
-                () -> assertThat(jwtResponse.username()).isEqualTo("someUser"),
+                () -> assertThat(jwtResponse.username()).isEqualTo("someUsers"),
                 () -> assertThat(token).matches(Pattern.compile(TOKEN_REGEX))
         );
     }

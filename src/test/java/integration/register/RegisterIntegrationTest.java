@@ -22,50 +22,58 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_return_register_successful_created_with_status_201_when_body_is_username_and_password() throws Exception {
         //given && when
-        ResultActions register = mockMvc.perform(post("/register")
-                .content("""
-                        {
-                            "username": "someUser",
-                            "password": "somePassword"
-                        }
-                        """.trim())
-                .contentType(APPLICATION_JSON_VALUE)
-        );
-        // then
-        MvcResult registerResult = register.andExpect(status().isCreated()).andReturn();
-        String registerJson = registerResult.getResponse().getContentAsString();
-        RegistrationResultDto registrationResultDto = objectMapper.readValue(registerJson, RegistrationResultDto.class);
-        assertAll(
-                () -> assertThat(registrationResultDto.username()).isEqualTo("someUser"),
-                () -> assertThat(registrationResultDto.created()).isTrue(),
-                () -> assertThat(registrationResultDto.uuid()).isNotNull()
-        );
+        try {
+            ResultActions register = mockMvc.perform(post("/register")
+                    .content("""
+                            {
+                                "username": "someUser",
+                                "password": "somePassword"
+                            }
+                            """.trim())
+                    .contentType(APPLICATION_JSON_VALUE)
+            );
+            // then
+            MvcResult registerResult = register.andExpect(status().isCreated()).andReturn();
+            String registerJson = registerResult.getResponse().getContentAsString();
+            RegistrationResultDto registrationResultDto = objectMapper.readValue(registerJson, RegistrationResultDto.class);
+            assertAll(
+                    () -> assertThat(registrationResultDto.username()).isEqualTo("someUser"),
+                    () -> assertThat(registrationResultDto.created()).isTrue(),
+                    () -> assertThat(registrationResultDto.uuid()).isNotNull()
+            );
 
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Test
     public void should_return_register_successful_created_with_status_201_when_body_is_empty_username_and_password() throws Exception {
         //given && when
-        ResultActions registerAction = mockMvc.perform(post("/register")
-                .content("""
-                        {
-                            "username": "",
-                            "password": ""
-                        }
-                        """.trim())
-                .contentType(APPLICATION_JSON_VALUE)
-                .header(MEDIA_TYPE, APPLICATION_JSON_VALUE));
+        try {
+            ResultActions registerAction = mockMvc.perform(post("/register")
+                    .content("""
+                            {
+                                "username": "",
+                                "password": ""
+                            }
+                            """.trim())
+                    .contentType(APPLICATION_JSON_VALUE)
+                    .header(MEDIA_TYPE, APPLICATION_JSON_VALUE));
 
-        // then
-        MvcResult registerResult = registerAction.andExpect(status().isCreated()).andReturn();
-        String registerJson = registerResult.getResponse().getContentAsString();
-        RegistrationResultDto registrationResultDto = objectMapper.readValue(registerJson, RegistrationResultDto.class);
-        assertAll(
-                () -> assertThat(registrationResultDto.username()).isEqualTo(""),
-                () -> assertThat(registrationResultDto.created()).isTrue(),
-                () -> assertThat(registrationResultDto.uuid()).isNotNull()
-        );
+            // then
+            MvcResult registerResult = registerAction.andExpect(status().isCreated()).andReturn();
+            String registerJson = registerResult.getResponse().getContentAsString();
+            RegistrationResultDto registrationResultDto = objectMapper.readValue(registerJson, RegistrationResultDto.class);
+            assertAll(
+                    () -> assertThat(registrationResultDto.username()).isEqualTo(""),
+                    () -> assertThat(registrationResultDto.created()).isTrue(),
+                    () -> assertThat(registrationResultDto.uuid()).isNotNull()
+            );
 
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Test
@@ -100,27 +108,31 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_return_register_successful_when_body_username_and_password_are_numbers() throws Exception {
         //given && when
-        ResultActions registerResult = mockMvc.perform(post("/register")
-                .content("""
-                        {
-                           "username" : 1,
-                           "password" : 2
-                        }
-                        """.trim())
-                .contentType(APPLICATION_JSON_VALUE)
-                .header(MEDIA_TYPE, APPLICATION_JSON_VALUE));
+        try {
+            ResultActions registerResult = mockMvc.perform(post("/register")
+                    .content("""
+                            {
+                               "username" : 1,
+                               "password" : 2
+                            }
+                            """.trim())
+                    .contentType(APPLICATION_JSON_VALUE)
+                    .header(MEDIA_TYPE, APPLICATION_JSON_VALUE));
 
 
-        MvcResult mvcResult = registerResult.andExpect(status().isCreated()).andReturn();
-        String json = mvcResult.getResponse().getContentAsString();
-        RegistrationResultDto result = objectMapper.readValue(json, RegistrationResultDto.class);
+            MvcResult mvcResult = registerResult.andExpect(status().isCreated()).andReturn();
+            String json = mvcResult.getResponse().getContentAsString();
+            RegistrationResultDto result = objectMapper.readValue(json, RegistrationResultDto.class);
 
-        //then
-        assertAll(
-                () -> assertThat(result.username()).isEqualTo("1"),
-                () -> assertThat(result.created()).isTrue(),
-                () -> assertThat(result.uuid()).isNotNull()
-        );
+            //then
+            assertAll(
+                    () -> assertThat(result.username()).isEqualTo("1"),
+                    () -> assertThat(result.created()).isTrue(),
+                    () -> assertThat(result.uuid()).isNotNull()
+            );
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-
 }

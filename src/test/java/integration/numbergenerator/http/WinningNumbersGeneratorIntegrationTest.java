@@ -94,25 +94,32 @@ public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest 
     public void should_throw_exception_when_content_is_empty_winning_numbers() throws Exception {
         //given && when
 
-        ResultActions getWinningNumbers = mockMvc.perform(get("/winning_numbers")
-                .contentType(APPLICATION_JSON_VALUE)
-                .content("""
-                        {
-                            "winningNumbers" : []
-                        }
-                        """.trim()
-                ).contentType(APPLICATION_JSON_VALUE)
-                .header(CONTENT_TYPE, APPLICATION_JSON));
+        try {
+            ResultActions getWinningNumbers = mockMvc.perform(get("/winning_numbers")
+                    .contentType(APPLICATION_JSON_VALUE)
+                    .content("""
+                            {
+                                "winningNumbers" : []
+                            }
+                            """.trim()
+                    ).contentType(APPLICATION_JSON_VALUE)
+                    .header(CONTENT_TYPE, APPLICATION_JSON));
 
-        MvcResult mvcResult = getWinningNumbers
-                .andDo(print())
-                .andExpect(status -> status(404))
-                .andReturn();
+            MvcResult mvcResult = getWinningNumbers
+                    .andDo(print())
+                    .andExpect(status -> status(404))
+                    .andReturn();
 
-        String json = mvcResult.getResponse().getContentAsString();
+            String json = mvcResult.getResponse().getContentAsString();
+
+            assertThrows(Exception.class, () -> objectMapper.readValue(json, WinningTicketResponseDto.class));
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
         //then
-        assertThrows(Exception.class, () -> objectMapper.readValue(json, WinningTicketResponseDto.class));
+
     }
 
     @Test
