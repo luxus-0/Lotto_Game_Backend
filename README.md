@@ -28,11 +28,13 @@ Front:<br>
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 &nbsp;
 
+DOCKER CONTAINERS
+![image](https://github.com/luxus-0/Lotto_Game/assets/74199705/48a8cdd5-e084-4421-87f8-7b403f9c2562) &nbsp;
+
 <div style="text-align:center">
   <img src="https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
   <div>
      <br><br>
-     ![image](https://github.com/luxus-0/Lotto_Game/assets/74199705/48a8cdd5-e084-4421-87f8-7b403f9c2562) &nbsp;
   ::ENDPOINTS::
 <ul>
   <li><a href="http://localhost:8080/numbers" target="_blank" title="INPUT NUMBERS FOR USER">INPUT NUMBERS</a></li>
