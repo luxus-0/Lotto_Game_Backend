@@ -32,10 +32,8 @@ Front:<br>
   <img src="https://github.com/luxus-0/Lotto_Game/blob/master/src/main/resources/picture/Rest_api.png" width="400" height="150"/>
   <div>
      <br><br>
+     ![image](https://github.com/luxus-0/Lotto_Game/assets/74199705/48a8cdd5-e084-4421-87f8-7b403f9c2562)
   ::ENDPOINTS::
-    <div>
-      ![image](https://github.com/luxus-0/Lotto_Game/assets/74199705/48a8cdd5-e084-4421-87f8-7b403f9c2562)
-    </div>
 <ul>
   <li><a href="http://localhost:8080/numbers" target="_blank" title="INPUT NUMBERS FOR USER">INPUT NUMBERS</a></li>
   <li> <a href="http://localhost:8080/users" target="_blank" title="READ ALL USERS LOTTO">READ USERS</a></li>
