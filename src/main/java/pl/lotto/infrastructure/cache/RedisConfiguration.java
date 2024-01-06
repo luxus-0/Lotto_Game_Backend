@@ -17,8 +17,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @ConditionalOnProperty(value = "spring.cache.type", havingValue = "redis")
 public class RedisConfiguration {
     @Bean
-    public JedisConnectionFactory redisConnectionFactory(@Value("${spring.redis.host:localhost}") String hostname,
-                                                         @Value("${spring.redis.port:6379}") int port){
+    public JedisConnectionFactory redisConnectionFactory(@Value("${REDIS_HOST}") String hostname,
+                                                         @Value("${REDIS_PORT}") int port){
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(hostname, port);
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
