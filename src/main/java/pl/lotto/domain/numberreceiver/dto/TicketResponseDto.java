@@ -13,9 +13,9 @@ import java.util.Set;
 @Builder
 public record TicketResponseDto(@UUID String ticketUUID,
                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                      LocalDateTime drawDate,
+                                LocalDateTime drawDate,
                                 @NotNull(message = "input numbers not null")
-                                      @NotEmpty(message = "input numbers not empty")
-                                      Set<Integer> inputNumbers,
+                                @NotEmpty(message = "input numbers not empty")
+                                Set<Integer> inputNumbers,
                                 String message) implements Serializable {
 }
