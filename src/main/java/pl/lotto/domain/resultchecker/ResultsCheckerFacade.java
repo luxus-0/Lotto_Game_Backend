@@ -1,13 +1,15 @@
 package pl.lotto.domain.resultchecker;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
-import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultchecker.exceptions.ResultNotFoundException;
 
 import java.util.List;
@@ -18,13 +20,16 @@ import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.LOSE;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.TICKET_NOT_FOUND;
 
 @Log4j2
-public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
-                                   DrawDateFacade drawDateFacade,
-                                   WinningNumbersFacade winningNumbersFacade,
-                                   WinnersRetriever winnersRetriever,
-                                   ResultCheckerRepository resultCheckerRepository,
-                                   ResultCheckerValidation resultCheckerValidation) {
+@AllArgsConstructor
+public class ResultsCheckerFacade {
+    private final NumberReceiverFacade numberReceiverFacade;
+    private final DrawDateFacade drawDateFacade;
+    private final WinningNumbersFacade winningNumbersFacade;
+    private final WinnersRetriever winnersRetriever;
+    private final ResultCheckerRepository resultCheckerRepository;
+    private final ResultCheckerValidation resultCheckerValidation;
 
+    @Cacheable("results")
     public ResultResponseDto generateResults() {
         WinningTicketResponseDto winningTicketResponse = winningNumbersFacade.generateWinningNumbers();
         Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
@@ -50,5 +55,9 @@ public record ResultsCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                 .map(ResultCheckerMapper::mapToResultResponse)
                 .findAny()
                 .orElseThrow(() -> new ResultNotFoundException(TICKET_NOT_FOUND));
+    }
+
+    public List<ResultResponseDto> generateWinTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
+        return winnersRetriever.retrieveWinners(tickets, winningNumbers);
     }
 }
