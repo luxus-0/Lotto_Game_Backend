@@ -2,6 +2,7 @@ package pl.lotto.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
@@ -22,6 +23,7 @@ public class NumberReceiverFacade {
     private final TicketRepository ticketRepository;
     private final TicketUUIDGenerator ticketUUIDGenerator;
 
+    @Cacheable("inputNumbers")
     public TicketResponseDto inputNumbers(InputNumbersRequestDto inputNumbersRequest) {
         Set<Integer> inputNumbers = inputNumbersRequest.inputNumbers();
         boolean validate = validator.validate(inputNumbers);
