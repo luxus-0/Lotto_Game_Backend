@@ -37,7 +37,7 @@ public class ResultsCheckerFacade {
         if (validate) {
             List<TicketDto> tickets = numberReceiverFacade.retrieveTicketsByDrawDate(winningTicketResponse.drawDate());
             List<ResultResponseDto> winTicket = generateWinningTicket(tickets, winningNumbers);
-            log.info("Win Ticket: " + winTicket);
+            log.info("Winning Ticket: " + winTicket);
             TicketResults ticket = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID())
                     .orElseThrow(() -> new WinningTicketNotFoundException("Winning ticket not found"));
             List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(List.of(ticket));
