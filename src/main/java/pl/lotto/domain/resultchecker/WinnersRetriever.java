@@ -10,7 +10,7 @@ import java.util.Set;
 
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapTicketResult;
 
-public class WinnersRetriever {
+class WinnersRetriever {
     private static final int NUMBERS_WHEN_PLAYERS_WON = 3;
 
     public List<ResultResponseDto> retrieveWinners(List<TicketDto> tickets, Set<Integer> winningNumbers) {
