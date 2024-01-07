@@ -36,8 +36,8 @@ public class ResultsCheckerFacade {
         boolean validate = resultCheckerValidation.validate(winningNumbers);
         if (validate) {
             List<TicketDto> tickets = numberReceiverFacade.retrieveTicketsByDrawDate(winningTicketResponse.drawDate());
-            List<ResultResponseDto> winners = winnersRetriever.retrieveWinners(tickets, winningNumbers);
-            log.info("Winners: " + winners);
+            List<ResultResponseDto> winTicket = generateWinningTicket(tickets, winningNumbers);
+            log.info("Win Ticket: " + winTicket);
             TicketResults ticket = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID())
                     .orElseThrow(() -> new WinningTicketNotFoundException("Winning ticket not found"));
             List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(List.of(ticket));
@@ -57,7 +57,7 @@ public class ResultsCheckerFacade {
                 .orElseThrow(() -> new ResultNotFoundException(TICKET_NOT_FOUND));
     }
 
-    public List<ResultResponseDto> generateWinTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
+    public List<ResultResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
         return winnersRetriever.retrieveWinners(tickets, winningNumbers);
     }
 }
