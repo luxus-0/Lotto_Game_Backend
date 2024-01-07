@@ -1,6 +1,5 @@
 package pl.lotto.domain.resultchecker;
 
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.lotto.domain.drawdate.AdjustableClock;
@@ -16,7 +15,6 @@ import java.time.ZoneId;
 import static java.time.ZoneOffset.UTC;
 
 @Configuration
-@AllArgsConstructor
 class ResultsCheckerFacadeConfiguration {
 
     @Bean
