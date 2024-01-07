@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -16,5 +17,5 @@ public record TicketResponseDto(@UUID String ticketUUID,
                                 @NotNull(message = "input numbers not null")
                                       @NotEmpty(message = "input numbers not empty")
                                       Set<Integer> inputNumbers,
-                                String message) {
+                                String message) implements Serializable {
 }
