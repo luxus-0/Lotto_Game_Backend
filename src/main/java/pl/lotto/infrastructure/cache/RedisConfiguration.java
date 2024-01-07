@@ -17,20 +17,20 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @ConditionalOnProperty(value = "spring.cache.type", havingValue = "redis")
 public class RedisConfiguration {
     @Bean
-    public JedisConnectionFactory redisConnectionFactory(@Value("${REDIS_HOST}") String hostname,
-                                                         @Value("${REDIS_PORT}") int port){
+    public JedisConnectionFactory redisConnectionFactory(@Value("${spring.data.redis.host}") String hostname,
+                                                         @Value("${spring.data.redis.port}") int port){
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(hostname, port);
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory){
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
     }
 }
