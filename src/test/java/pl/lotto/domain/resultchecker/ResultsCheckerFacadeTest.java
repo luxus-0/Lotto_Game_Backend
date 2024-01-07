@@ -190,7 +190,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(20, 35, 45);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinTicket(tickets, winningNumbers);
+        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
 
         ResultResponseDto player1 = results.get(0);
         ResultResponseDto player2 = results.get(1);
@@ -234,7 +234,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinTicket(tickets, winningNumbers);
+        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
 
         ResultResponseDto result1 = results.get(0);
         ResultResponseDto result2 = results.get(1);
@@ -277,7 +277,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinTicket(tickets, winningNumbers);
+        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
 
         ResultResponseDto result1 = results.get(0);
         ResultResponseDto result2 = results.get(1);
@@ -321,7 +321,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinTicket(tickets, winningNumbers);
+        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
 
         ResultResponseDto result1 = results.get(0);
         ResultResponseDto result2 = results.get(1);
@@ -340,7 +340,7 @@ class ResultsCheckerFacadeTest {
 
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinTicket(Collections.emptyList(), winningNumbers);
+        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(Collections.emptyList(), winningNumbers);
 
         //then
         assertTrue(results.isEmpty());
@@ -353,7 +353,7 @@ class ResultsCheckerFacadeTest {
                 .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinTicket(Collections.emptyList(), null);
+        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(Collections.emptyList(), null);
 
         //then
         assertThat(results).isNullOrEmpty();
