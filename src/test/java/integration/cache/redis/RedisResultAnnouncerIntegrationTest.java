@@ -45,7 +45,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //given && then
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
-        ResultActions getResults = mockMvc.perform(get("/results/{ticketUUID}", ticketUUID)
+        ResultActions getResults = mockMvc.perform(get("/results/" +ticketUUID)
                 .content("""
                         {
                             "ticketUUID" : "550e8400-e29b-41d4-a716-446655440000"
