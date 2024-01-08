@@ -34,7 +34,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_save_result_announcer_to_cache_and_then_invalidate_by_time_to_live() throws Exception {
+    public void should_save_result_announcer_to_cache_and_then_invalidate_by_one_times_of_invocations() throws Exception {
         //given && then
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
