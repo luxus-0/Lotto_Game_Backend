@@ -2,7 +2,6 @@ package integration.cache.redis;
 
 import integration.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cache.CacheManager;
@@ -10,8 +9,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
-import pl.lotto.domain.resultannouncer.ResultAnnouncerRepository;
-import pl.lotto.domain.resultchecker.ResultCheckerRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
@@ -27,10 +24,6 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
     @SpyBean
     ResultAnnouncerFacade resultAnnouncerFacade;
-    @Mock
-    ResultCheckerRepository resultCheckerRepository;
-    @Mock
-    ResultAnnouncerRepository resultAnnouncerRepository;
 
     @Autowired
     CacheManager cacheManager;
