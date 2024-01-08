@@ -25,7 +25,6 @@ import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
-
     @Container
     private static final GenericContainer<?> REDIS;
 
