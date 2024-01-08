@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -23,5 +24,5 @@ public record ResultAnnouncerResponseDto(@UUID
                                          boolean isWinner,
                                          @NotNull
                                          @NotEmpty
-                                         String message) {
+                                         String message) implements Serializable {
 }
