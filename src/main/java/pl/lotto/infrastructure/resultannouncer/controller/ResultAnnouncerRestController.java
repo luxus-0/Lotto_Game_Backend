@@ -14,9 +14,9 @@ public class ResultAnnouncerRestController {
 
     private final ResultAnnouncerFacade resultAnnouncerFacade;
 
-    @GetMapping("/results/{ticketId}")
-    ResponseEntity<ResultAnnouncerResponseDto> checkResultsByTicketId(@PathVariable String ticketId) throws Exception {
-        ResultAnnouncerResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketId);
+    @GetMapping("/results/{ticketUUID}")
+    ResponseEntity<ResultAnnouncerResponseDto> checkResultsByTicketId(@PathVariable String ticketUUID) throws Exception {
+        ResultAnnouncerResponseDto resultAnnouncerResponseDto = resultAnnouncerFacade.findResult(ticketUUID);
         return ResponseEntity.ok(resultAnnouncerResponseDto);
     }
 }
