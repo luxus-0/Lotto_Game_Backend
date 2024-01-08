@@ -1,7 +1,5 @@
 package pl.lotto.domain.numberreceiver;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.data.mongodb.core.mapping.Document;
