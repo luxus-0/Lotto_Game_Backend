@@ -1,6 +1,7 @@
 package pl.lotto.domain.resultannouncer;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import pl.lotto.domain.resultannouncer.dto.*;
 import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
 import pl.lotto.domain.resultannouncer.exceptions.TicketUUIDNotFoundException;
@@ -19,6 +20,7 @@ public class ResultAnnouncerFacade {
     private final ResultAnnouncerRepository resultAnnouncerRepository;
     private final Clock clock;
 
+    @Cacheable("results")
     public ResultAnnouncerResponseDto findResult(String ticketUUID) throws Exception {
         if (ticketUUID == null || ticketUUID.isEmpty()) {
             throw new TicketUUIDNotFoundException();
