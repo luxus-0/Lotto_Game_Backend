@@ -71,4 +71,24 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
                     verify(resultAnnouncerFacade, atLeast(1)).findResult(ticketUUID);
                 });
     }
+
+    @Test
+    public void should_save_result_to_cache_and_then_incorrect_cache_name() throws Exception {
+        //given && then
+        String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
+
+        ResultActions getResults = mockMvc.perform(get("/results/" +ticketUUID)
+                .content("""
+                        {
+                            "ticketUUID" : "550e8400-e29b-41d4-a716-446655440000"
+                        }
+                        """.trim())
+                .contentType(APPLICATION_JSON_VALUE));
+
+        //then
+        getResults.andExpect(status -> status(OK));
+
+        verify(resultAnnouncerFacade, times(1)).findResult("550e8400-e29b-41d4-a716-446655440000");
+        assertThat(cacheManager.getCacheNames().contains("result")).isFalse();
+    }
 }
