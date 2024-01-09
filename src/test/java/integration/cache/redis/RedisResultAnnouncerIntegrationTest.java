@@ -10,9 +10,12 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
 
+import java.time.Duration;
+
+import static com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.status;
@@ -51,5 +54,21 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
         verify(resultAnnouncerFacade, times(1)).findResult("550e8400-e29b-41d4-a716-446655440000");
         assertThat(cacheManager.getCacheNames().contains("results")).isTrue();
+    }
+
+    @Test
+    public void should_cache_results_and_wait_seconds() {
+        String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
+
+        await()
+                .atMost(Duration.ofSeconds(4))
+                .pollInterval(Duration.ofSeconds(1))
+                .untilAsserted(() -> {
+                    mockMvc.perform(get("/results/" + ticketUUID)
+                            .header(CONTENT_TYPE, "application/json")
+                            .contentType(APPLICATION_JSON_VALUE));
+
+                    verify(resultAnnouncerFacade, atLeast(1)).findResult(ticketUUID);
+                });
     }
 }
