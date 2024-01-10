@@ -147,5 +147,6 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         assertEquals(result1, result2);
 
         verify(resultsCheckerFacade, times(1)).findResultByTicketUUID(ticketUUID);
+        verify(resultsCheckerFacade, atLeast(1)).findResultByTicketUUID(ticketUUID);
     }
 }
