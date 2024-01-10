@@ -5,21 +5,33 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
+import pl.lotto.domain.resultannouncer.ResultAnnouncerRepository;
+import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
+import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
+import pl.lotto.domain.resultchecker.ResultCheckerRepository;
+import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
+import pl.lotto.domain.resultchecker.TicketResults;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 import static com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.WIN;
 
 public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
     @Container
@@ -27,6 +39,16 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
     @SpyBean
     ResultAnnouncerFacade resultAnnouncerFacade;
+    @SpyBean
+    ResultsCheckerFacade resultsCheckerFacade;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @SpyBean
+    ResultCheckerRepository resultCheckerRepository;
+    @SpyBean
+    ResultAnnouncerRepository resultAnnouncerRepository;
 
     @Autowired
     CacheManager cacheManager;
@@ -90,5 +112,40 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
         verify(resultAnnouncerFacade, times(1)).findResult("550e8400-e29b-41d4-a716-446655440000");
         assertThat(cacheManager.getCacheNames().contains("result")).isFalse();
+    }
+
+    @Test
+    public void should_save_result_to_cache_and_then_one_times_invocations() throws Exception {
+        String ticketUUID = "123";
+        resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+                        .ticketUUID(ticketUUID)
+                        .inputNumbers(Set.of(1,2,3,4,5,6))
+                        .hitNumbers(Set.of(1,2,3))
+                        .isWinner(true)
+                        .drawDate(LocalDateTime.now())
+                        .message(WIN)
+                .build()));
+
+        resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
+                .ticketUUID(ticketUUID)
+                .numbers(Set.of(1,2,3,4,5,6))
+                .hitNumbers(Set.of(1,2,3))
+                .isWinner(true)
+                .drawDate(LocalDateTime.now())
+                .message(WIN)
+                .build());
+
+        ResultAnnouncerResponseDto result1 = resultAnnouncerFacade.findResult(ticketUUID);
+
+        assertNull(redisTemplate.opsForValue().get("results/" +ticketUUID));
+
+        // Call the method for the second time
+        ResultAnnouncerResponseDto result2 = resultAnnouncerFacade.findResult(ticketUUID);
+
+        assertNull(redisTemplate.opsForValue().get("results/" +ticketUUID));
+
+        assertEquals(result1, result2);
+
+        verify(resultsCheckerFacade, times(1)).findResultByTicketUUID(ticketUUID);
     }
 }
