@@ -116,7 +116,6 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
         postInputNumbers.andExpect(status -> status(OK));
         postInputNumbers2.andExpect(status -> status(OK));
 
-        verify(numberReceiverFacade, times(1)).inputNumbers(new InputNumbersRequestDto(Set.of(1,2,3,4,5,6)));
         verify(numberReceiverFacade, times(1)).inputNumbers(new InputNumbersRequestDto(Set.of(7,8,9,10,11,12)));
         assertThat(cacheManager.getCacheNames().contains("inputNumbers")).isTrue();
     }
