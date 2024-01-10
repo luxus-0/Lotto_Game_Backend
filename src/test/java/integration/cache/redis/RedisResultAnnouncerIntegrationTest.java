@@ -64,7 +64,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //given && then
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
-        ResultActions getResults = mockMvc.perform(get("/results/" +ticketUUID)
+        ResultActions getResults = mockMvc.perform(get("/results/" + ticketUUID)
                 .content("""
                         {
                             "ticketUUID" : "550e8400-e29b-41d4-a716-446655440000"
@@ -100,7 +100,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //given && then
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
-        ResultActions getResults = mockMvc.perform(get("/results/" +ticketUUID)
+        ResultActions getResults = mockMvc.perform(get("/results/" + ticketUUID)
                 .content("""
                         {
                             "ticketUUID" : "550e8400-e29b-41d4-a716-446655440000"
@@ -119,18 +119,18 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
     public void should_save_result_to_cache_and_then_one_times_invocations() throws Exception {
         String ticketUUID = "123";
         resultCheckerRepository.saveAll(List.of(TicketResults.builder()
-                        .ticketUUID(ticketUUID)
-                        .inputNumbers(Set.of(1,2,3,4,5,6))
-                        .hitNumbers(Set.of(1,2,3))
-                        .isWinner(true)
-                        .drawDate(LocalDateTime.now())
-                        .message(WIN)
+                .ticketUUID(ticketUUID)
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3))
+                .isWinner(true)
+                .drawDate(LocalDateTime.now())
+                .message(WIN)
                 .build()));
 
         resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(1,2,3,4,5,6))
-                .hitNumbers(Set.of(1,2,3))
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3))
                 .isWinner(true)
                 .drawDate(LocalDateTime.now())
                 .message(WIN)
@@ -138,12 +138,12 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
         ResultAnnouncerResponseDto result1 = resultAnnouncerFacade.findResult(ticketUUID);
 
-        assertNull(redisTemplate.opsForValue().get("results/" +ticketUUID));
+        assertNull(redisTemplate.opsForValue().get("results/" + ticketUUID));
 
         // Call the method for the second time
         ResultAnnouncerResponseDto result2 = resultAnnouncerFacade.findResult(ticketUUID);
 
-        assertNull(redisTemplate.opsForValue().get("results/" +ticketUUID));
+        assertNull(redisTemplate.opsForValue().get("results/" + ticketUUID));
 
         assertEquals(result1, result2);
 
