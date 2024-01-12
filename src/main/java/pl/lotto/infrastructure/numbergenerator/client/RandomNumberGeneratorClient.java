@@ -2,17 +2,17 @@ package pl.lotto.infrastructure.numbergenerator.client;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
 import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
 import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -31,12 +31,12 @@ public class RandomNumberGeneratorClient implements RandomNumbersGenerator {
     public RandomNumbersResponseDto generateRandomNumbers(int count, int lowerBand, int upperBand) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-            validator.validateRandomNumbers(count, lowerBand, upperBand);
-            ResponseEntity<String> response = makeGetRequest(count, lowerBand, upperBand, requestEntity);
-                Set<Integer> randomNumbers = generateRandomNumbers(response.getBody());
-                return RandomNumbersResponseDto.builder()
-                        .randomNumbers(randomNumbers)
-                        .build();
+        validator.validateRandomNumbers(count, lowerBand, upperBand);
+        ResponseEntity<String> response = makeGetRequest(count, lowerBand, upperBand, requestEntity);
+        Set<Integer> randomNumbers = generateRandomNumbers(response.getBody());
+        return RandomNumbersResponseDto.builder()
+                .randomNumbers(randomNumbers)
+                .build();
     }
 
     private ResponseEntity<String> makeGetRequest(int count, int lowerBand, int upperBand, HttpEntity<String> requestEntity) {
@@ -59,10 +59,15 @@ public class RandomNumberGeneratorClient implements RandomNumbersGenerator {
 
 
     private Set<Integer> generateRandomNumbers(String body) {
-        return Arrays.stream(Objects.requireNonNull(body)
-                        .split("\\s+"))
-                .map(String::trim)
-                .map(Integer::valueOf)
-                .collect(Collectors.toSet());
+        try {
+            return Arrays.stream(Objects.requireNonNull(body)
+                            .split("\\s+"))
+                    .map(String::trim)
+                    .map(Integer::valueOf)
+                    .collect(Collectors.toSet());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return Set.of(0);
     }
 }
