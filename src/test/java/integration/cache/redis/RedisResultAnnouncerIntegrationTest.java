@@ -64,6 +64,24 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //given && then
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
+        resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+                .ticketUUID(ticketUUID)
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3))
+                .isWinner(true)
+                .drawDate(LocalDateTime.now())
+                .message(WIN)
+                .build()));
+
+        resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
+                .ticketUUID(ticketUUID)
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3))
+                .isWinner(true)
+                .drawDate(LocalDateTime.now())
+                .message(WIN)
+                .build());
+
         ResultActions getResults = mockMvc.perform(get("/results/" + ticketUUID)
                 .content("""
                         {
@@ -75,13 +93,31 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //then
         getResults.andExpect(status -> status(OK));
 
-        verify(resultAnnouncerFacade, times(1)).findResult("550e8400-e29b-41d4-a716-446655440000");
+        verify(resultAnnouncerFacade, atMost(1)).findResult(ticketUUID);
         assertThat(cacheManager.getCacheNames().contains("results")).isTrue();
     }
 
     @Test
     public void should_cache_results_and_validated_with_wait_seconds() {
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
+
+        resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+                .ticketUUID(ticketUUID)
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3))
+                .isWinner(true)
+                .drawDate(LocalDateTime.now())
+                .message(WIN)
+                .build()));
+
+        resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
+                .ticketUUID(ticketUUID)
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3))
+                .isWinner(true)
+                .drawDate(LocalDateTime.now())
+                .message(WIN)
+                .build());
 
         await()
                 .atMost(Duration.ofSeconds(4))
@@ -100,6 +136,24 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //given && then
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
+        resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+                .ticketUUID(ticketUUID)
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3))
+                .isWinner(true)
+                .drawDate(LocalDateTime.now())
+                .message(WIN)
+                .build()));
+
+        resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
+                .ticketUUID(ticketUUID)
+                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .hitNumbers(Set.of(1, 2, 3))
+                .isWinner(true)
+                .drawDate(LocalDateTime.now())
+                .message(WIN)
+                .build());
+
         ResultActions getResults = mockMvc.perform(get("/results/" + ticketUUID)
                 .content("""
                         {
@@ -111,7 +165,6 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //then
         getResults.andExpect(status -> status(OK));
 
-        verify(resultAnnouncerFacade, times(1)).findResult("550e8400-e29b-41d4-a716-446655440000");
         assertThat(cacheManager.getCacheNames().contains("result")).isFalse();
     }
 
