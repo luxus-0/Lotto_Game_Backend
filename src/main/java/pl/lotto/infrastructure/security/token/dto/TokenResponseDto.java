@@ -4,6 +4,7 @@ import lombok.Builder;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Builder
 public record TokenResponseDto(
@@ -12,5 +13,5 @@ public record TokenResponseDto(
         String username,
         @NotNull(message = "Token not null")
         @NotEmpty(message = "Token not empty")
-        String token) {
+        String token) implements Serializable {
 }

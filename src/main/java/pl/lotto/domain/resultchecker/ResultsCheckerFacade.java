@@ -9,15 +9,14 @@ import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
+import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
 import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
-import pl.lotto.domain.resultchecker.exceptions.ResultNotFoundException;
 
 import java.util.List;
 import java.util.Set;
 
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapToResultResponseDto;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.LOSE;
-import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.TICKET_NOT_FOUND;
 
 @Log4j2
 @AllArgsConstructor
@@ -50,11 +49,11 @@ public class ResultsCheckerFacade {
                 .build();
     }
 
-    public ResultResponseDto findResultByTicketUUID(String ticketUUID) throws ResultNotFoundException {
+    public ResultResponseDto findResultByTicketUUID(String ticketUUID) {
         return resultCheckerRepository.findAllByTicketUUID(ticketUUID).stream()
                 .map(ResultCheckerMapper::mapToResultResponse)
                 .findAny()
-                .orElseThrow(() -> new ResultNotFoundException(TICKET_NOT_FOUND));
+                .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket uuid: " + ticketUUID));
     }
 
     public List<ResultResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
