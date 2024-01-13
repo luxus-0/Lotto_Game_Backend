@@ -29,7 +29,7 @@ public class BaseIntegrationTest {
 
     public static final String WIRE_MOCK_HOST = "http://localhost";
     @Container
-    public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
+    public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:latest"));
 
     @Autowired
     public MockMvc mockMvc;
@@ -50,7 +50,7 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-        registry.add("number.generator.client.port", () -> wireMockServer.getPort());
-        registry.add("number.generator.client.uri", () -> WIRE_MOCK_HOST);
+        registry.add("spring.data.mongodb.port", () -> wireMockServer.getPort());
+        registry.add("spring.data.mongodb.host", () -> WIRE_MOCK_HOST);
     }
 }
