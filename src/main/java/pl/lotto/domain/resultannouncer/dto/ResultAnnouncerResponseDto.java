@@ -14,8 +14,8 @@ import java.util.Set;
 @Builder
 public record ResultAnnouncerResponseDto(@UUID
                                          String ticketUUID,
-                                         @NotNull(message = "inputNumbers not null")
-                                         @NotEmpty(message = "inputNumbers not empty")
+                                         @NotNull(message = "numbers not null")
+                                         @NotEmpty(message = "numbers not empty")
                                          Set<Integer> inputNumbers,
                                          @NotBlank
                                          Set<Integer> hitNumbers,
