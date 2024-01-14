@@ -17,6 +17,8 @@ import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.login.LoginRepository;
+import pl.lotto.domain.resultannouncer.ResultAnnouncerRepository;
+import pl.lotto.domain.resultchecker.ResultCheckerRepository;
 import pl.lotto.infrastructure.security.token.JwtConfigurationProperties;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
@@ -41,6 +43,10 @@ public class BaseIntegrationTest {
     public JwtConfigurationProperties properties;
     @Autowired
     public LoginRepository loginRepository;
+    @Autowired
+    public ResultAnnouncerRepository resultAnnouncerRepository;
+    @Autowired
+    public ResultCheckerRepository resultCheckerRepository;
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()

@@ -8,7 +8,7 @@ import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 
 /**
- * Generate random inputNumbers every Saturday at 12 p.m
+ * Generate random numbers every Saturday at 12 p.m
  */
 @AllArgsConstructor
 @Log4j2

@@ -12,7 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Component
 public class LoginAndRegisterFacade {
-
     public static final String USER_NOT_FOUND = "User not found";
     private final LoginRepository repository;
 
