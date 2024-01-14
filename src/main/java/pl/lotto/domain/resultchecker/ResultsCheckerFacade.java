@@ -9,8 +9,8 @@ import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
-import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
 import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
+import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
 
 import java.util.List;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class ResultsCheckerFacade {
         return resultCheckerRepository.findAllByTicketUUID(ticketUUID).stream()
                 .map(ResultCheckerMapper::mapToResultResponse)
                 .findAny()
-                .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket uuid: " + ticketUUID));
+                .orElseThrow(() -> new ResultCheckerNotFoundException("Not found for ticket uuid: " + ticketUUID));
     }
 
     public List<ResultResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
