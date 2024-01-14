@@ -4,6 +4,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import java.io.Serializable;
+
 import static pl.lotto.infrastructure.apivalidation.ApiValidationConstants.MESSAGE_PASSWORD;
 import static pl.lotto.infrastructure.apivalidation.ApiValidationConstants.REGEX_PASSWORD;
 
@@ -13,5 +15,5 @@ public record TokenRequestDto(@NotNull(message = "username not null")
                               @NotNull(message = "password not null")
                               @NotEmpty(message = "password not empty")
                               @Pattern(regexp = REGEX_PASSWORD,message = MESSAGE_PASSWORD)
-                              String password) {
+                              String password) implements Serializable {
 }
