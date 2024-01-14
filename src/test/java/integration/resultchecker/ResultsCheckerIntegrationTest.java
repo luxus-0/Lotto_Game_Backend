@@ -123,6 +123,5 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
         ResultAnnouncerResponse result = objectMapper.readValue(json, ResultAnnouncerResponse.class);
 
         assertThat(result).isNotNull();
-
     }
 }
