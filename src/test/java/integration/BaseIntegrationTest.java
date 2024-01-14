@@ -29,7 +29,7 @@ public class BaseIntegrationTest {
 
     public static final String WIRE_MOCK_HOST = "http://localhost";
     @Container
-    public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:latest"));
+    public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo"));
 
     @Autowired
     public MockMvc mockMvc;
@@ -45,6 +45,7 @@ public class BaseIntegrationTest {
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
             .options(wireMockConfig().dynamicPort())
+            .options(wireMockConfig().timeout(2000))
             .build();
 
     @DynamicPropertySource
