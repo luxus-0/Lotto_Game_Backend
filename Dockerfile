@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
-ADD target/Lotto_Game-1.0-SNAPSHOT.jar .
+FROM openjdk:23-slim
+ADD target/Lotto_Game.jar .
 EXPOSE 8080
-CMD java -jar Lotto_Game-1.0-SNAPSHOT.jar
+CMD java -jar Lotto_Game.jar
