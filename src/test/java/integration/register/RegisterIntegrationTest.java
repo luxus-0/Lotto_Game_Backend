@@ -20,9 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RegisterIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void should_return_register_successful_created_with_status_201_when_body_is_username_and_password() {
+    public void should_return_register_successful_created_with_status_201_when_body_is_username_and_password() throws Exception {
         //given && when
-        try {
             ResultActions register = mockMvc.perform(post("/register")
                     .content("""
                             {
@@ -41,16 +40,11 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
                     () -> assertThat(registrationResultDto.created()).isTrue(),
                     () -> assertThat(registrationResultDto.uuid()).isNotNull()
             );
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
     }
 
     @Test
-    public void should_return_register_successful_created_with_status_201_when_body_is_empty_username_and_password() {
+    public void should_return_register_successful_created_with_status_201_when_body_is_empty_username_and_password() throws Exception {
         //given && when
-        try {
             ResultActions registerAction = mockMvc.perform(post("/register")
                     .content("""
                             {
@@ -70,17 +64,13 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
                     () -> assertThat(registrationResultDto.created()).isTrue(),
                     () -> assertThat(registrationResultDto.uuid()).isNotNull()
             );
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
     }
 
     @Test
     public void should_throw_exception_with_message_when_body_is_empty() {
         //given && when
         try {
-            ResultActions registerResult = mockMvc.perform(post("/register")
+            ResultActions register = mockMvc.perform(post("/register")
                     .content("""
                             {
                                
@@ -90,7 +80,7 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
                     .header(MEDIA_TYPE, APPLICATION_JSON_VALUE));
 
 
-            MvcResult mvcResult = registerResult.andExpect(status().isBadRequest()).andReturn();
+            MvcResult mvcResult = register.andExpect(status().isBadRequest()).andReturn();
             String json = mvcResult.getResponse().getContentAsString();
             RegistrationResultDto result = objectMapper.readValue(json, RegistrationResultDto.class);
 
@@ -100,8 +90,8 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
                     () -> assertThat(result.created()).isFalse(),
                     () -> assertThat(result.uuid()).isNullOrEmpty()
             );
-        } catch (Exception e) {
-            log.info(e.getMessage());
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
     }
 

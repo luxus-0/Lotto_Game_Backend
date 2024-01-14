@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 import static integration.token.TokenIntegrationTestConstants.TOKEN_REGEX;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -81,10 +80,10 @@ public class TokenIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResult = successLoginRequest.andExpect(status().isOk()).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         TokenResponseDto jwtResponse = objectMapper.readValue(json, TokenResponseDto.class);
-        String token = jwtResponse.token();
+
         assertAll(
                 () -> assertThat(jwtResponse.username()).isEqualTo("someUsers"),
-                () -> assertThat(token).matches(Pattern.compile(TOKEN_REGEX))
+                () -> assertThat(jwtResponse.token()).matches(Pattern.compile(TOKEN_REGEX))
         );
     }
 
@@ -112,10 +111,10 @@ public class TokenIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResult = failedLoginRequest.andExpect(status().isUnauthorized()).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         TokenResponseDto jwtResponse = objectMapper.readValue(json, TokenResponseDto.class);
-        String token = jwtResponse.token();
+
         assertAll(
                 () -> assertThat(jwtResponse.username()).isEqualTo(null),
-                () -> assertThat(token).isEqualTo(null));
+                () -> assertThat(jwtResponse.token()).isEqualTo(null));
     }
 
     @Test
@@ -142,10 +141,6 @@ public class TokenIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResult = failedLoginRequest.andExpect(status().isForbidden()).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
 
-         assertThrows(Exception.class, () ->  {
-             TokenResponseDto result = objectMapper.readValue(json, TokenResponseDto.class);
-             assertThat(result.username()).isEqualTo(null);
-             assertThat(result.token()).isEqualTo(null);
-         });
+        assertThat(json).isEmpty();
     }
 }
