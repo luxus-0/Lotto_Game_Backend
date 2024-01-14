@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RegisterIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    public void should_return_register_successful_created_with_status_201_when_body_is_username_and_password() throws Exception {
+    public void should_return_register_successful_created_with_status_201_when_body_is_username_and_password() {
         //given && when
         try {
             ResultActions register = mockMvc.perform(post("/register")
@@ -48,7 +48,7 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_register_successful_created_with_status_201_when_body_is_empty_username_and_password() throws Exception {
+    public void should_return_register_successful_created_with_status_201_when_body_is_empty_username_and_password() {
         //given && when
         try {
             ResultActions registerAction = mockMvc.perform(post("/register")
@@ -106,7 +106,7 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_return_register_successful_when_body_username_and_password_are_numbers() throws Exception {
+    public void should_return_register_successful_when_body_username_and_password_are_numbers() {
         //given && when
         try {
             ResultActions registerResult = mockMvc.perform(post("/register")
