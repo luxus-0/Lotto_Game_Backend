@@ -10,10 +10,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
-import pl.lotto.domain.resultannouncer.ResultAnnouncerRepository;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
-import pl.lotto.domain.resultchecker.ResultCheckerRepository;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.TicketResults;
 
@@ -45,12 +43,6 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-
-    @SpyBean
-    ResultCheckerRepository resultCheckerRepository;
-    @SpyBean
-    ResultAnnouncerRepository resultAnnouncerRepository;
-
     @Autowired
     CacheManager cacheManager;
 

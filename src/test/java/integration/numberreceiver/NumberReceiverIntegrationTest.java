@@ -58,7 +58,7 @@ public class NumberReceiverIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_return_status_404_not_found_and_validation_message_when_body_has_empty_input_numbers() throws Exception {
         //give
-        MvcResult perform = mockMvc.perform(post("/inputNumbers")
+        MvcResult postInputNumbers = mockMvc.perform(post("/inputNumbers")
                         .content("""
                                 {
                                 "inputNumbers" : []
@@ -69,7 +69,7 @@ public class NumberReceiverIntegrationTest extends BaseIntegrationTest {
                 .andReturn();
 
         //when
-        String json = perform.getResponse().getContentAsString();
+        String json = postInputNumbers.getResponse().getContentAsString();
 
         //then
         assertThrows(Exception.class, () -> {
