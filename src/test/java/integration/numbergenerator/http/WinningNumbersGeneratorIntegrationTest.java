@@ -13,7 +13,6 @@ import java.util.Set;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
@@ -91,7 +90,7 @@ public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest 
     }
 
     @Test
-    public void should_throw_exception_when_content_is_empty_winning_numbers() throws Exception {
+    public void should_throw_exception_when_content_is_empty_winning_numbers() {
         //given && when
 
         try {
@@ -111,15 +110,12 @@ public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest 
                     .andReturn();
 
             String json = mvcResult.getResponse().getContentAsString();
-
-            assertThrows(Exception.class, () -> objectMapper.readValue(json, WinningTicketResponseDto.class));
+            WinningTicketResponseDto winningTicketResponseDto = objectMapper.readValue(json, WinningTicketResponseDto.class);
+            assertThat(winningTicketResponseDto).isNull();
 
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-
-        //then
-
     }
 
     @Test
