@@ -3,8 +3,6 @@ package pl.lotto.domain.resultannouncer;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultannouncer.exceptions.TicketUUIDNotFoundException;
-import pl.lotto.domain.resultchecker.ResultCheckerRepository;
-import pl.lotto.domain.resultchecker.ResultCheckerRepositoryTestImpl;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
 
@@ -26,7 +24,6 @@ class ResultAnnouncerFacadeTest {
 
     ResultsCheckerFacade resultsCheckerFacade = mock(ResultsCheckerFacade.class);
     ResultAnnouncerRepository resultAnnouncerRepository = new ResultAnnouncerRepositoryTestImpl();
-    ResultCheckerRepository resultCheckerRepository = new ResultCheckerRepositoryTestImpl();
     Clock clock = Clock.fixed(LocalDateTime.of(2023, 12, 12, 12, 0, 0).toInstant(UTC), ZoneId.systemDefault());
 
     @Test

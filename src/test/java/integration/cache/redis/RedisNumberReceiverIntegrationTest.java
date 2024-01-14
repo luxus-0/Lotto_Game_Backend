@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -19,6 +20,8 @@ import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import java.util.Collections;
 import java.util.Set;
 
+import static integration.cache.redis.RedisNumberReceiverConstant.DRAW_DATE;
+import static integration.cache.redis.RedisNumberReceiverConstant.TICKET_UUID_REGEX;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -28,6 +31,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.EQUALS_SIX_NUMBERS;
 
 public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
     @Container
@@ -55,8 +59,10 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_save_input_numbers_to_cache_and_then_invalidate_by_time_to_live() throws Exception {
+    public void should_save_input_numbers_to_cache_and_then_invalidate() throws Exception {
         //given && then
+        Set<Integer> expectedInputNumbers = Set.of(1,2,3,4,5,6);
+
         ResultActions postInputNumbers = mockMvc.perform(post("/inputNumbers")
                 .content("""
                         {
@@ -65,11 +71,17 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
                         """.trim())
                 .contentType(APPLICATION_JSON_VALUE));
 
-
         //then
-        postInputNumbers.andExpect(status -> status(OK));
+        ResultActions inputNumbersResult = postInputNumbers.andExpect(status -> status(OK));
+        MvcResult mvcResult = inputNumbersResult.andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        TicketResponseDto result = objectMapper.readValue(json, TicketResponseDto.class);
 
-        verify(numberReceiverFacade, times(1)).inputNumbers(new InputNumbersRequestDto(Set.of(1,2,3,4,5,6)));
+        assertThat(result).isNotNull();
+        assertThat(result.inputNumbers()).isEqualTo(expectedInputNumbers);
+        assertThat(result.ticketUUID()).containsPattern(TICKET_UUID_REGEX);
+        assertThat(result.message()).isEqualTo(EQUALS_SIX_NUMBERS.getInfo());
+        assertThat(result.drawDate()).isEqualTo(DRAW_DATE);
         assertThat(cacheManager.getCacheNames().contains("inputNumbers")).isTrue();
     }
 
