@@ -19,7 +19,6 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.OUT_OF_RANGE;
 
 @Log4j2
@@ -90,32 +89,24 @@ public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest 
     }
 
     @Test
-    public void should_throw_exception_when_content_is_empty_winning_numbers() {
+    public void should_throw_exception_when_winning_numbers_is_empty() throws Exception{
         //given && when
-
-        try {
             ResultActions getWinningNumbers = mockMvc.perform(get("/winning_numbers")
                     .contentType(APPLICATION_JSON_VALUE)
                     .content("""
                             {
                                 "winningNumbers" : []
                             }
-                            """.trim()
-                    ).contentType(APPLICATION_JSON_VALUE)
+                            """.trim())
+                    .contentType(APPLICATION_JSON_VALUE)
                     .header(CONTENT_TYPE, APPLICATION_JSON));
 
-            MvcResult mvcResult = getWinningNumbers
-                    .andDo(print())
-                    .andExpect(status -> status(404))
-                    .andReturn();
+            MvcResult mvcResult = getWinningNumbers.andExpect(status -> status(404)).andReturn();
 
             String json = mvcResult.getResponse().getContentAsString();
             WinningTicketResponseDto winningTicketResponseDto = objectMapper.readValue(json, WinningTicketResponseDto.class);
-            assertThat(winningTicketResponseDto).isNull();
 
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+            assertThat(winningTicketResponseDto.winningNumbers()).isEmpty();
     }
 
     @Test
