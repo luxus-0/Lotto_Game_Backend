@@ -16,6 +16,7 @@ import pl.lotto.infrastructure.security.token.dto.TokenResponseDto;
 
 import java.util.Optional;
 
+import static integration.token.TokenIntegrationTestConstants.TOKEN_REGEX;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -69,7 +70,7 @@ public class LoginIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_return_correct_login_credentials_with_token() throws Exception {
-       mockMvc.perform(post("/token")
+        mockMvc.perform(post("/register")
                 .content("""
                         {
                             "username": "someUser",
@@ -77,7 +78,8 @@ public class LoginIntegrationTest extends BaseIntegrationTest {
                         }
                         """.trim())
                 .contentType(APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION + " Bearer", properties.secret())).andReturn();
+                .header(AUTHORIZATION + " Bearer", properties.secret()))
+                .andReturn();
 
         ResultActions login = mockMvc.perform(post("/login")
                 .content("""
@@ -91,10 +93,10 @@ public class LoginIntegrationTest extends BaseIntegrationTest {
 
         MvcResult loginResult = login.andExpect(status().isCreated()).andReturn();
         String loginJson = loginResult.getResponse().getContentAsString();
-        TokenResponseDto loginWithToken = objectMapper.readValue(loginJson, TokenResponseDto.class);
+        TokenResponseDto result = objectMapper.readValue(loginJson, TokenResponseDto.class);
 
         assertAll(
-                () -> assertThat(loginWithToken.username()).isEqualTo("someUser"),
-                () -> assertThat(loginWithToken.token()).isEqualTo(properties.secret()));
+                () -> assertThat(result.username()).isEqualTo("someUser"),
+                () -> assertThat(result.token()).containsPattern(TOKEN_REGEX));
     }
 }
