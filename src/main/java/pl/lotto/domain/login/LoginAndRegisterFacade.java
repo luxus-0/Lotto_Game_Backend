@@ -2,7 +2,7 @@ package pl.lotto.domain.login;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.lotto.domain.login.dto.RegisterUserDto;
 import pl.lotto.domain.login.dto.RegistrationResultDto;
 import pl.lotto.domain.login.dto.UserDto;
@@ -10,7 +10,7 @@ import pl.lotto.domain.login.dto.UserDto;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Component
+@Service
 public class LoginAndRegisterFacade {
     public static final String USER_NOT_FOUND = "User not found";
     private final LoginRepository repository;
