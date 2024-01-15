@@ -2,24 +2,12 @@ package pl.lotto.domain.resultannouncer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-import static java.time.ZoneOffset.UTC;
 
 @Configuration
 public class ResultAnnouncerFacadeConfiguration {
-
-    @Bean
-    @Primary
-    AdjustableClock clock() {
-        return new AdjustableClock(LocalDateTime.of(2022, 11, 19, 12, 0, 0).toInstant(UTC), ZoneId.systemDefault());
-    }
 
     @Bean
     public ResultAnnouncerFacade resultAnnouncerFacade(ResultsCheckerFacade resultsCheckerFacade, ResultAnnouncerRepository resultAnnouncerRepository, Clock clock) {
