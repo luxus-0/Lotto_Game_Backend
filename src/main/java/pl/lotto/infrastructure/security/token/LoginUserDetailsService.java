@@ -5,10 +5,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 import pl.lotto.domain.login.LoginAndRegisterFacade;
 import pl.lotto.domain.login.dto.UserDto;
 
 @AllArgsConstructor
+@Service
 public class LoginUserDetailsService implements UserDetailsService {
 
     private final LoginAndRegisterFacade loginAndRegisterFacade;
