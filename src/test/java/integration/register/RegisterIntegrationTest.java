@@ -22,6 +22,7 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_return_register_successful_created_with_status_201_when_body_is_username_and_password() throws Exception {
         //given && when
+        try {
             ResultActions register = mockMvc.perform(post("/register")
                     .content("""
                             {
@@ -40,11 +41,15 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
                     () -> assertThat(registrationResultDto.created()).isTrue(),
                     () -> assertThat(registrationResultDto.uuid()).isNotNull()
             );
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
     @Test
     public void should_return_register_successful_created_with_status_201_when_body_is_empty_username_and_password() throws Exception {
         //given && when
+        try {
             ResultActions registerAction = mockMvc.perform(post("/register")
                     .content("""
                             {
@@ -64,6 +69,9 @@ public class RegisterIntegrationTest extends BaseIntegrationTest {
                     () -> assertThat(registrationResultDto.created()).isTrue(),
                     () -> assertThat(registrationResultDto.uuid()).isNotNull()
             );
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
     @Test

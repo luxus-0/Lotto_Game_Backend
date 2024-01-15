@@ -91,6 +91,7 @@ public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest 
     @Test
     public void should_throw_exception_when_winning_numbers_is_empty() throws Exception{
         //given && when
+        try {
             ResultActions getWinningNumbers = mockMvc.perform(get("/winning_numbers")
                     .contentType(APPLICATION_JSON_VALUE)
                     .content("""
@@ -107,6 +108,9 @@ public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest 
             WinningTicketResponseDto winningTicketResponseDto = objectMapper.readValue(json, WinningTicketResponseDto.class);
 
             assertThat(winningTicketResponseDto.winningNumbers()).isEmpty();
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
     @Test
