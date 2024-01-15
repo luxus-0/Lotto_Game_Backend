@@ -24,12 +24,12 @@ import pl.lotto.infrastructure.security.token.LoginUserDetailsService;
 public class SecurityConfig {
 
     private final JwtAuthTokenFilter jwtAuthTokenFilter;
-    @Bean
+   @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
+     @Bean
     public UserDetailsService userDetailsService(LoginAndRegisterFacade loginAndRegisterFacade){
         return new LoginUserDetailsService(loginAndRegisterFacade);
     }
