@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultannouncer.exceptions.TicketUUIDNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
+import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -34,7 +34,7 @@ class ResultAnnouncerFacadeTest {
                 .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
 
         String ticketUUID = "123456";
-        ResultResponseDto expectedResult = ResultResponseDto.builder()
+        ResultCheckerResponseDto expectedResult = ResultCheckerResponseDto.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of())
@@ -75,7 +75,7 @@ class ResultAnnouncerFacadeTest {
                 .message(WIN.message)
                 .build();
 
-        ResultResponseDto resultResponseDto = ResultResponseDto.builder()
+        ResultCheckerResponseDto resultCheckerResponseDto = ResultCheckerResponseDto.builder()
                 .ticketUUID(ticket1)
                 .inputNumbers(Set.of(34, 50, 12, 60, 32, 23))
                 .hitNumbers(Set.of(34, 60, 12))
@@ -86,7 +86,7 @@ class ResultAnnouncerFacadeTest {
 
        resultAnnouncerRepository.save(result1);
 
-        when(resultsCheckerFacade.findResultByTicketUUID(ticket1)).thenReturn(resultResponseDto);
+        when(resultsCheckerFacade.findResultByTicketUUID(ticket1)).thenReturn(resultCheckerResponseDto);
 
         //when
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticket1);
@@ -121,7 +121,7 @@ class ResultAnnouncerFacadeTest {
                 .message(WAIT.message)
                 .build();
 
-       ResultResponseDto result = ResultResponseDto.builder()
+       ResultCheckerResponseDto result = ResultCheckerResponseDto.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of(4,7,9,11,13,15))
                 .drawDate(drawDate)
@@ -187,7 +187,7 @@ class ResultAnnouncerFacadeTest {
                 .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
 
 
-        ResultResponseDto resultDto = ResultResponseDto.builder()
+        ResultCheckerResponseDto resultDto = ResultCheckerResponseDto.builder()
                 .ticketUUID(null)
                 .build();
 
@@ -201,7 +201,7 @@ class ResultAnnouncerFacadeTest {
         //given
         String ticketUUID = "1234";
 
-        ResultResponseDto expectedResult = ResultResponseDto.builder()
+        ResultCheckerResponseDto expectedResult = ResultCheckerResponseDto.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Collections.emptySet())
                 .hitNumbers(Set.of(1, 2, 3, 4))
@@ -224,14 +224,14 @@ class ResultAnnouncerFacadeTest {
         //given
         String ticketUUID = "";
 
-        ResultResponseDto resultDto = ResultResponseDto.builder()
+        ResultCheckerResponseDto resultDto = ResultCheckerResponseDto.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of())
                 .build();
         when(resultsCheckerFacade.findResultByTicketUUID(ticketUUID)).thenReturn(resultDto);
 
         //when
-        ResultResponseDto actualResult = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
+        ResultCheckerResponseDto actualResult = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
         //then
         Set<Integer> numbersResult = actualResult.inputNumbers();
 

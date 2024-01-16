@@ -9,7 +9,7 @@ import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
-import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
+import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
 import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
 
 import java.util.List;
@@ -29,13 +29,13 @@ public class ResultsCheckerFacade {
     private final ResultCheckerValidation resultCheckerValidation;
 
     @Cacheable("results")
-    public ResultResponseDto generateResults() {
+    public ResultCheckerResponseDto generateResults() {
         WinningTicketResponseDto winningTicketResponse = winningNumbersFacade.generateWinningNumbers();
         Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
         boolean validate = resultCheckerValidation.validate(winningNumbers);
         if (validate) {
             List<TicketDto> tickets = numberReceiverFacade.retrieveTicketsByDrawDate(winningTicketResponse.drawDate());
-            List<ResultResponseDto> winTicket = generateWinningTicket(tickets, winningNumbers);
+            List<ResultCheckerResponseDto> winTicket = generateWinningTicket(tickets, winningNumbers);
             log.info("Winning Ticket: " + winTicket);
             TicketResults ticket = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID())
                     .orElseThrow(() -> new WinningTicketNotFoundException("Winning ticket not found"));
@@ -43,20 +43,20 @@ public class ResultsCheckerFacade {
             log.info("Ticket saved: " +ticketsSaved);
             return mapToResultResponseDto(ticketsSaved);
         }
-        return ResultResponseDto.builder()
+        return ResultCheckerResponseDto.builder()
                 .isWinner(false)
                 .message(LOSE)
                 .build();
     }
 
-    public ResultResponseDto findResultByTicketUUID(String ticketUUID) {
+    public ResultCheckerResponseDto findResultByTicketUUID(String ticketUUID) {
         return resultCheckerRepository.findAllByTicketUUID(ticketUUID).stream()
                 .map(ResultCheckerMapper::mapToResultResponse)
                 .findAny()
                 .orElseThrow(() -> new ResultCheckerNotFoundException("Not found for ticket uuid: " + ticketUUID));
     }
 
-    public List<ResultResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
+    public List<ResultCheckerResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
         return winnersRetriever.retrieveWinners(tickets, winningNumbers);
     }
 }

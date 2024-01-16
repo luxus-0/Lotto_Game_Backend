@@ -6,7 +6,7 @@ import pl.lotto.domain.resultannouncer.dto.*;
 import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
 import pl.lotto.domain.resultannouncer.exceptions.TicketUUIDNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
+import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -25,7 +25,7 @@ public class ResultAnnouncerFacade {
         if (ticketUUID == null || ticketUUID.isEmpty()) {
             throw new TicketUUIDNotFoundException();
         }
-        ResultResponseDto resultByTicketUUID = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
+        ResultCheckerResponseDto resultByTicketUUID = resultsCheckerFacade.findResultByTicketUUID(ticketUUID);
         ResultAnnouncerResponse resultAnnouncerResponse = resultAnnouncerRepository.findAllByTicketUUID(ticketUUID)
                 .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket uuid: " + ticketUUID));
         ResultAnnouncerResponse resultSaved = resultAnnouncerRepository.save(resultAnnouncerResponse);
@@ -46,7 +46,7 @@ public class ResultAnnouncerFacade {
         return resultLottoSaved;
     }
 
-    private boolean isAfterAnnouncementTime(ResultResponseDto resultResponse) {
+    private boolean isAfterAnnouncementTime(ResultCheckerResponseDto resultResponse) {
         LocalDateTime announcementDateTime = resultResponse.drawDate();
         return LocalDateTime.now(clock).isAfter(announcementDateTime);
     }

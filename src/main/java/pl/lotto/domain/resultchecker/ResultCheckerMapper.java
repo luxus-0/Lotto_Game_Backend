@@ -2,7 +2,7 @@ package pl.lotto.domain.resultchecker;
 
 import lombok.AllArgsConstructor;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
+import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
 
 import java.util.List;
 import java.util.Set;
@@ -10,8 +10,8 @@ import java.util.Set;
 @AllArgsConstructor
 class ResultCheckerMapper {
 
-    static ResultResponseDto mapTicketResult(Set<Integer> hitNumbers, TicketDto ticket) {
-        return ResultResponseDto.builder()
+    static ResultCheckerResponseDto mapTicketResult(Set<Integer> hitNumbers, TicketDto ticket) {
+        return ResultCheckerResponseDto.builder()
                         .ticketUUID(ticket.ticketUUID())
                         .drawDate(ticket.drawDate())
                         .hitNumbers(hitNumbers)
@@ -21,10 +21,10 @@ class ResultCheckerMapper {
                 .build();
     }
 
-    public static ResultResponseDto mapToResultResponseDto(List<TicketResults> ticketSaved) {
+    public static ResultCheckerResponseDto mapToResultResponseDto(List<TicketResults> ticketSaved) {
         return ticketSaved.stream()
                 .map(ticketResultSaved ->
-                        ResultResponseDto.builder()
+                        ResultCheckerResponseDto.builder()
                                 .ticketUUID(ticketResultSaved.ticketUUID())
                                 .inputNumbers(ticketResultSaved.inputNumbers())
                                 .drawDate(ticketResultSaved.drawDate())
@@ -36,8 +36,8 @@ class ResultCheckerMapper {
                 .orElseThrow(() -> new RuntimeException("Ticket not saved to database"));
     }
 
-    public static ResultResponseDto mapToResultResponse(TicketResults ticketResults) {
-        return ResultResponseDto.builder()
+    public static ResultCheckerResponseDto mapToResultResponse(TicketResults ticketResults) {
+        return ResultCheckerResponseDto.builder()
                 .ticketUUID(ticketResults.ticketUUID())
                 .inputNumbers(ticketResults.inputNumbers())
                 .drawDate(ticketResults.drawDate())

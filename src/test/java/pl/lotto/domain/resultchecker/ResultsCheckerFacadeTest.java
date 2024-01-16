@@ -6,7 +6,7 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
-import pl.lotto.domain.resultchecker.dto.ResultResponseDto;
+import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
 import pl.lotto.domain.resultchecker.exceptions.ResultNotFoundException;
 
 import java.time.LocalDateTime;
@@ -72,7 +72,7 @@ class ResultsCheckerFacadeTest {
         when(resultCheckerRepository.findAllByTicketUUID(ticketUUID2)).thenReturn(Optional.of(ticket2));
         when(resultCheckerRepository.saveAll(anyList())).thenReturn(List.of(ticket2));
         //when
-        ResultResponseDto playerResult = resultCheckerFacade.generateResults();
+        ResultCheckerResponseDto playerResult = resultCheckerFacade.generateResults();
         //then
         assertTrue(playerResult.isWinner());
         assertThat(playerResult).isNotNull();
@@ -89,7 +89,7 @@ class ResultsCheckerFacadeTest {
                         .winningNumbers(Set.of())
                         .build());
 
-        ResultResponseDto results = resultCheckerFacade.generateResults();
+        ResultCheckerResponseDto results = resultCheckerFacade.generateResults();
 
         //when and then
         assertThat(results.message()).isEqualTo(LOSE);
@@ -144,9 +144,9 @@ class ResultsCheckerFacadeTest {
                 .thenReturn(Optional.of(ticket2));
         //when
 
-        ResultResponseDto actualResult = resultCheckerFacade.findResultByTicketUUID(ticketUUID1);
+        ResultCheckerResponseDto actualResult = resultCheckerFacade.findResultByTicketUUID(ticketUUID1);
         //then
-        ResultResponseDto expectedResult = ResultResponseDto.builder()
+        ResultCheckerResponseDto expectedResult = ResultCheckerResponseDto.builder()
                 .ticketUUID(ticketUUID1)
                 .inputNumbers(Set.of(4, 5, 6, 10, 11, 12))
                 .hitNumbers(Set.of(4, 5, 6, 10))
@@ -190,11 +190,11 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(20, 35, 45);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
+        List<ResultCheckerResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
 
-        ResultResponseDto player1 = results.get(0);
-        ResultResponseDto player2 = results.get(1);
-        ResultResponseDto player3 = results.get(2);
+        ResultCheckerResponseDto player1 = results.get(0);
+        ResultCheckerResponseDto player2 = results.get(1);
+        ResultCheckerResponseDto player3 = results.get(2);
 
         //then
         assertEquals(3, results.size());
@@ -234,11 +234,11 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
+        List<ResultCheckerResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
 
-        ResultResponseDto result1 = results.get(0);
-        ResultResponseDto result2 = results.get(1);
-        ResultResponseDto result3 = results.get(2);
+        ResultCheckerResponseDto result1 = results.get(0);
+        ResultCheckerResponseDto result2 = results.get(1);
+        ResultCheckerResponseDto result3 = results.get(2);
         //then
         assertThat(results).isNotNull();
         assertFalse(result1.isWinner());
@@ -277,11 +277,11 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
+        List<ResultCheckerResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
 
-        ResultResponseDto result1 = results.get(0);
-        ResultResponseDto result2 = results.get(1);
-        ResultResponseDto result3 = results.get(2);
+        ResultCheckerResponseDto result1 = results.get(0);
+        ResultCheckerResponseDto result2 = results.get(1);
+        ResultCheckerResponseDto result3 = results.get(2);
 
         //then
         assertThat(results).isNotNull();
@@ -321,11 +321,11 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
+        List<ResultCheckerResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
 
-        ResultResponseDto result1 = results.get(0);
-        ResultResponseDto result2 = results.get(1);
-        ResultResponseDto result3 = results.get(2);
+        ResultCheckerResponseDto result1 = results.get(0);
+        ResultCheckerResponseDto result2 = results.get(1);
+        ResultCheckerResponseDto result3 = results.get(2);
         //then
         assertThat(results).isNotNull();
         assertFalse(result1.isWinner());
@@ -340,7 +340,7 @@ class ResultsCheckerFacadeTest {
 
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(Collections.emptyList(), winningNumbers);
+        List<ResultCheckerResponseDto> results = resultsCheckerFacade.generateWinningTicket(Collections.emptyList(), winningNumbers);
 
         //then
         assertTrue(results.isEmpty());
@@ -353,7 +353,7 @@ class ResultsCheckerFacadeTest {
                 .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
 
         //when
-        List<ResultResponseDto> results = resultsCheckerFacade.generateWinningTicket(Collections.emptyList(), null);
+        List<ResultCheckerResponseDto> results = resultsCheckerFacade.generateWinningTicket(Collections.emptyList(), null);
 
         //then
         assertThat(results).isNullOrEmpty();
