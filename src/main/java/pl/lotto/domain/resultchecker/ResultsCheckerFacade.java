@@ -53,7 +53,7 @@ public class ResultsCheckerFacade {
         return resultCheckerRepository.findAllByTicketUUID(ticketUUID).stream()
                 .map(ResultCheckerMapper::mapToResultResponse)
                 .findAny()
-                .orElseThrow(() -> new ResultCheckerNotFoundException("Not found for ticket uuid: " + ticketUUID));
+                .orElseThrow(() -> new ResultCheckerNotFoundException(ticketUUID));
     }
 
     public List<ResultCheckerResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){

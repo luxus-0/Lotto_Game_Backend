@@ -106,7 +106,7 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_save_two_input_numbers_to_cache_and_then_invalidate_by_time_to_live() throws Exception {
-        //given
+        //given && when
         mockMvc.perform(post("/inputNumbers")
                 .content("""
                         {
@@ -115,6 +115,10 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
                         """.trim())
                 .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status -> status(200));
+
+        //first inputNumbers save to cache
+        InputNumbersRequestDto expectedInputNumbers = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
+        verify(numberReceiverFacade, times(1)).inputNumbers(expectedInputNumbers);
 
         mockMvc.perform(post("/inputNumbers")
                 .content("""
@@ -125,10 +129,7 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
                 .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status -> status(200));
 
-        //when
-        InputNumbersRequestDto expectedInputNumbers = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
-        verify(numberReceiverFacade, times(1)).inputNumbers(expectedInputNumbers);
-
+        //second inputNumbers save to cache
         InputNumbersRequestDto expectedInputNumbers2 = new InputNumbersRequestDto(Set.of(7, 8, 9, 10, 11, 12));
         verify(numberReceiverFacade, times(1)).inputNumbers(expectedInputNumbers2);
 
