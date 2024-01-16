@@ -10,13 +10,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
-import pl.lotto.domain.numbersgenerator.WinningNumbersRepository;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerRepository;
 import pl.lotto.domain.resultchecker.ResultCheckerRepository;
 
@@ -32,6 +32,8 @@ public class BaseIntegrationTest {
     @Container
     public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo")).withExposedPorts(27017);
 
+    @Container
+    private static final GenericContainer<?> REDIS;
     @Autowired
     public MockMvc mockMvc;
     @Autowired
@@ -48,10 +50,18 @@ public class BaseIntegrationTest {
             .options(wireMockConfig().dynamicPort())
             .build();
 
+    static {
+        REDIS = new GenericContainer<>("redis").withExposedPorts(6379);
+        REDIS.start();
+    }
+
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("spring.data.mongodb.port", () -> wireMockServer.getPort());
         registry.add("spring.data.mongodb.host", () -> WIRE_MOCK_HOST);
+        registry.add("spring.data.redis.port", () -> REDIS.getFirstMappedPort().toString());
+        registry.add("spring.cache.type", () -> "redis");
+        registry.add("spring.cache.redis.time-to-live", () -> "PT1S");
     }
 }
