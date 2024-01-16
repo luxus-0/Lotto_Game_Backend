@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cache.CacheManager;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,6 +18,7 @@ import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import java.util.Collections;
 import java.util.Set;
 
+import static integration.cache.redis.constants.RedisCacheValue.getCachedValue;
 import static integration.cache.redis.RedisNumberReceiverConstant.DRAW_DATE;
 import static integration.cache.redis.RedisNumberReceiverConstant.TICKET_UUID_REGEX;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,9 +41,6 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     CacheManager cacheManager;
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
 
     static {
         REDIS = new GenericContainer<>("redis").withExposedPorts(6379);
@@ -138,21 +134,12 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
         InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
         TicketResponseDto ticketResponse1 = numberReceiverFacade.inputNumbers(inputNumbersRequest);
 
-        assertNull(getCachedValue("inputNumbers", "result"));
-
-        // Call the method for the second time
         TicketResponseDto ticketResponse2 = numberReceiverFacade.inputNumbers(inputNumbersRequest);
 
-        // Ensure that the result is retrieved from the cache
         assertNull(getCachedValue("inputNumbers", "result"));
-
+        assertNull(getCachedValue("inputNumbers", "result"));
         assertEquals(ticketResponse1, ticketResponse2);
 
         verify(numberReceiverFacade, times(1)).inputNumbers(inputNumbersRequest);
-    }
-
-    public Object getCachedValue(String key, String hashKey) {
-        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
-        return hashOperations.get(key, hashKey);
     }
 }
