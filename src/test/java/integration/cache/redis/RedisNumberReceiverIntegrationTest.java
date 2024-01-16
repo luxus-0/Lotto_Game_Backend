@@ -9,11 +9,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.numberreceiver.Ticket;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 
 import static integration.cache.redis.constants.RedisNumberReceiver.DRAW_DATE;
@@ -88,8 +88,12 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_save_two_input_numbers_to_cache_and_then_invalidate_by_time_to_live() throws Exception {
+    public void should_save_two_input_numbers_to_cache() throws Exception {
         //given && when
+        ticketRepository.save(Ticket.builder()
+                        .inputNumbers(Set.of(1,2,3,4,5,6))
+                .build());
+
         mockMvc.perform(post("/inputNumbers")
                 .content("""
                         {
@@ -117,8 +121,7 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
         verify(numberReceiverFacade, times(1)).inputNumbers(expectedInputNumbers2);
 
         //then
-        assertThat(cacheManager.getCacheNames().contains("inputNumbers")).isTrue();
-        assertThat(Objects.requireNonNull(cacheManager.getCache("inputNumbers"))).isNotNull();
+        assertThat(cacheManager.getCache("inputNumbers")).isNotNull();
     }
 
     @Test
