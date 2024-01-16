@@ -7,8 +7,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.web.servlet.ResultActions;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
@@ -33,8 +31,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.WIN;
 
 public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
-    @Container
-    private static final GenericContainer<?> REDIS;
 
     @SpyBean
     ResultAnnouncerFacade resultAnnouncerFacade;
@@ -45,12 +41,6 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
     RedisTemplate<String, Object> redisTemplate;
     @Autowired
     CacheManager cacheManager;
-
-    static {
-        REDIS = new GenericContainer<>("redis").withExposedPorts(6379);
-        REDIS.start();
-    }
-
     @Test
     public void should_save_result_to_cache_and_then_invalidate_by_one_times_of_invocations() throws Exception {
         //given && then

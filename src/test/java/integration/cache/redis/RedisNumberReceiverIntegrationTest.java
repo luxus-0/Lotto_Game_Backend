@@ -6,12 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
@@ -34,8 +30,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.EQUALS_SIX_NUMBERS;
 
 public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
-    @Container
-    private static final GenericContainer<?> REDIS;
 
     @SpyBean
     NumberReceiverFacade numberReceiverFacade;
@@ -46,17 +40,6 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
 
-    static {
-        REDIS = new GenericContainer<>("redis").withExposedPorts(6379);
-        REDIS.start();
-    }
-    @DynamicPropertySource
-    public static void propertyOverride(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-        registry.add("spring.data.redis.port", () -> REDIS.getFirstMappedPort().toString());
-        registry.add("spring.cache.type", () -> "redis");
-        registry.add("spring.cache.redis.time-to-live", () -> "PT1S");
-    }
 
     @Test
     public void should_save_input_numbers_to_cache_and_then_invalidate() throws Exception {
