@@ -17,6 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
+import pl.lotto.domain.numberreceiver.TicketRepository;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerRepository;
 import pl.lotto.domain.resultchecker.ResultCheckerRepository;
 
@@ -44,6 +45,8 @@ public class BaseIntegrationTest {
     public ResultAnnouncerRepository resultAnnouncerRepository;
     @Autowired
     public ResultCheckerRepository resultCheckerRepository;
+    @Autowired
+    public TicketRepository ticketRepository;
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
@@ -56,10 +59,15 @@ public class BaseIntegrationTest {
     }
 
     @DynamicPropertySource
-    public static void propertyOverride(DynamicPropertyRegistry registry) {
+    public static void registerMongoProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("spring.data.mongodb.port", () -> wireMockServer.getPort());
         registry.add("spring.data.mongodb.host", () -> WIRE_MOCK_HOST);
+    }
+
+    @DynamicPropertySource
+    public static void registerRedisProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("spring.data.redis.port", () -> REDIS.getFirstMappedPort().toString());
         registry.add("spring.cache.type", () -> "redis");
         registry.add("spring.cache.redis.time-to-live", () -> "PT1S");
