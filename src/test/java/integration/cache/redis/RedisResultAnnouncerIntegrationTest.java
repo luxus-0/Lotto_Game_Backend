@@ -42,7 +42,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
     ResultsCheckerFacade resultsCheckerFacade;
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    RedisTemplate<String, Object> redisTemplate;
     @Autowired
     CacheManager cacheManager;
 
