@@ -17,6 +17,7 @@ import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 import static integration.cache.redis.constants.RedisNumberReceiver.DRAW_DATE;
@@ -106,29 +107,33 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_save_two_input_numbers_to_cache_and_then_invalidate_by_time_to_live() throws Exception {
         //given && then
-        ResultActions postInputNumbers = mockMvc.perform(post("/inputNumbers")
+        mockMvc.perform(post("/inputNumbers")
                 .content("""
                         {
                             "inputNumbers" : [1, 2, 3, 4, 5, 6]
                         }
                         """.trim())
-                .contentType(APPLICATION_JSON_VALUE));
+                .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status -> status(200));
 
-        ResultActions postInputNumbers2 = mockMvc.perform(post("/inputNumbers")
+        mockMvc.perform(post("/inputNumbers")
                 .content("""
                         {
                             "inputNumbers" : [7, 8, 9, 10, 11, 12]
                         }
                         """.trim())
-                .contentType(APPLICATION_JSON_VALUE));
+                .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status -> status(200));
 
+        InputNumbersRequestDto expectedInputNumbers = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
+        verify(numberReceiverFacade, times(1)).inputNumbers(expectedInputNumbers);
+
+        InputNumbersRequestDto expectedInputNumbers2 = new InputNumbersRequestDto(Set.of(7, 8, 9, 10, 11, 12));
+        verify(numberReceiverFacade, times(1)).inputNumbers(expectedInputNumbers2);
 
         //then
-        postInputNumbers.andExpect(status -> status(OK));
-        postInputNumbers2.andExpect(status -> status(OK));
-
-        verify(numberReceiverFacade, times(1)).inputNumbers(new InputNumbersRequestDto(Set.of(7,8,9,10,11,12)));
         assertThat(cacheManager.getCacheNames().contains("inputNumbers")).isTrue();
+        assertThat(Objects.requireNonNull(cacheManager.getCache("inputNumbers"))).isNotNull();
     }
 
     @Test
