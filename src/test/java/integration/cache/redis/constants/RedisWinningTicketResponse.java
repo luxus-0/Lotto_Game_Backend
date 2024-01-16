@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-public class WinningTicketResponse {
+public class RedisWinningTicketResponse {
     public static WinningTicketResponseDto createWinningTicketResponse() {
         {
             Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5,6);

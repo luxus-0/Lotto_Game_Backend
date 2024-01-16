@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
@@ -18,9 +19,8 @@ import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 import java.util.Collections;
 import java.util.Set;
 
-import static integration.cache.redis.constants.RedisCacheValue.getCachedValue;
-import static integration.cache.redis.RedisNumberReceiverConstant.DRAW_DATE;
-import static integration.cache.redis.RedisNumberReceiverConstant.TICKET_UUID_REGEX;
+import static integration.cache.redis.constants.RedisNumberReceiver.DRAW_DATE;
+import static integration.cache.redis.constants.RedisNumberReceiver.TICKET_UUID_REGEX;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -41,6 +41,9 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     CacheManager cacheManager;
+
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
 
     static {
         REDIS = new GenericContainer<>("redis").withExposedPorts(6379);
@@ -136,8 +139,8 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
 
         TicketResponseDto ticketResponse2 = numberReceiverFacade.inputNumbers(inputNumbersRequest);
 
-        assertNull(getCachedValue("inputNumbers", "result"));
-        assertNull(getCachedValue("inputNumbers", "result"));
+        assertNull(redisTemplate.opsForHash().get("inputNumbers", "result"));
+        assertNull(redisTemplate.opsForHash().get("inputNumbers", "result"));
         assertEquals(ticketResponse1, ticketResponse2);
 
         verify(numberReceiverFacade, times(1)).inputNumbers(inputNumbersRequest);
