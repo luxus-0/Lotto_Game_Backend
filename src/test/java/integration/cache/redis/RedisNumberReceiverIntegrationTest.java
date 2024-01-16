@@ -60,7 +60,7 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_save_input_numbers_to_cache_and_then_invalidate() throws Exception {
-        //given && then
+        //given && when
         Set<Integer> expectedInputNumbers = Set.of(1,2,3,4,5,6);
 
         ResultActions postInputNumbers = mockMvc.perform(post("/inputNumbers")
@@ -87,7 +87,7 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_not_save_input_numbers_to_cache_and_then_input_numbers_empty() throws Exception {
-        //given && then
+        //given && when
         ResultActions postInputNumbers = mockMvc.perform(post("/inputNumbers")
                 .content("""
                         {
@@ -106,7 +106,7 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_save_two_input_numbers_to_cache_and_then_invalidate_by_time_to_live() throws Exception {
-        //given && then
+        //given
         mockMvc.perform(post("/inputNumbers")
                 .content("""
                         {
@@ -125,6 +125,7 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
                 .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status -> status(200));
 
+        //when
         InputNumbersRequestDto expectedInputNumbers = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
         verify(numberReceiverFacade, times(1)).inputNumbers(expectedInputNumbers);
 
