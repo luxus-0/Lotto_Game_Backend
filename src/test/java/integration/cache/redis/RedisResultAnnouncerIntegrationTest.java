@@ -15,6 +15,7 @@ import pl.lotto.domain.resultchecker.TicketResults;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +45,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_save_result_to_cache_and_then_invalidate_by_one_times_of_invocations() throws Exception {
         //given && then
+        clock.withZone(ZoneId.systemDefault());
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
         resultCheckerRepository.saveAll(List.of(TicketResults.builder()
