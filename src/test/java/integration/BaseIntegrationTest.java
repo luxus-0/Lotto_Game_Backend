@@ -16,6 +16,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
+import pl.lotto.domain.numbersgenerator.WinningNumbersRepository;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerRepository;
 import pl.lotto.domain.resultchecker.ResultCheckerRepository;
 
