@@ -1,6 +1,6 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.randomnumbersgenerator;
 
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
+import pl.lotto.domain.winningnumbers.dto.RandomNumbersResponseDto;
 
 public interface RandomNumbersGenerator {
     String generateTicketUUID();

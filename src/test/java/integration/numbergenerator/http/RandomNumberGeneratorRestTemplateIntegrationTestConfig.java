@@ -1,9 +1,9 @@
 package integration.numbergenerator.http;
 
 import org.springframework.web.client.RestTemplate;
-import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
-import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacadeConfiguration;
+import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;
+import pl.lotto.domain.winningnumbers.WinningNumbersConfigurationProperties;
+import pl.lotto.domain.winningnumbers.WinningNumbersFacadeConfiguration;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClientConfig;
 import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
 
