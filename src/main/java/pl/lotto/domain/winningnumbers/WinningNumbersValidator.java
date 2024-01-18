@@ -1,12 +1,12 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.winningnumbers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Set;
 
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.INCORRECT_SIZE;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.OUT_OF_RANGE;
+import static pl.lotto.domain.winningnumbers.WinningNumbersValidationResult.INCORRECT_SIZE;
+import static pl.lotto.domain.winningnumbers.WinningNumbersValidationResult.OUT_OF_RANGE;
 
 @AllArgsConstructor
 @Log4j2
