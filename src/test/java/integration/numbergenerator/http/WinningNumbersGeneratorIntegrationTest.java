@@ -89,7 +89,7 @@ public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest 
     }
 
     @Test
-    public void should_throw_exception_when_winning_numbers_is_empty() throws Exception{
+    public void should_throw_exception_when_winning_numbers_is_empty() {
         //given && when
         try {
             ResultActions getWinningNumbers = mockMvc.perform(get("/winning_numbers")

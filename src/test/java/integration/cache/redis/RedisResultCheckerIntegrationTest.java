@@ -37,7 +37,7 @@ public class RedisResultCheckerIntegrationTest extends BaseIntegrationTest {
     RedisTemplate<String, Object> redisTemplate;
 
     @Test
-    public void should_return_two_results_to_cache() {
+    public void should_return_two_results_to_cache() throws Exception {
         // Given
         WinningTicketResponseDto winningTicketResponse = createWinningTicketResponse();
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(winningTicketResponse);
