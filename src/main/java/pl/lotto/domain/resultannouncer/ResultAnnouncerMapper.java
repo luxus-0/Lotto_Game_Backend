@@ -4,7 +4,7 @@ import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 
 public class ResultAnnouncerMapper {
 
-    public static ResultAnnouncerResponseDto toResultLottoSaved(ResultAnnouncerResponse resultAnnouncerResponseSaved) {
+    public static ResultAnnouncerResponseDto mapToResultLottoSaved(ResultAnnouncerResponse resultAnnouncerResponseSaved) {
         return ResultAnnouncerResponseDto.builder()
                 .ticketUUID(resultAnnouncerResponseSaved.ticketUUID())
                 .inputNumbers(resultAnnouncerResponseSaved.numbers())

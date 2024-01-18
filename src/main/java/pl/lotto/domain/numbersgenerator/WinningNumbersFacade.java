@@ -10,6 +10,7 @@ import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
 import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
 import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
@@ -70,6 +71,9 @@ public class WinningNumbersFacade {
 
     public boolean areWinningNumbersGeneratedByDate() {
         LocalDateTime nextDrawDate = drawDateFacade.retrieveNextDrawDate();
-        return winningNumbersRepository.existsByDrawDate(nextDrawDate);
+        if(nextDrawDate.isAfter(LocalDateTime.now(Clock.systemDefaultZone()))) {
+            return winningNumbersRepository.existsByDrawDate(nextDrawDate);
+        }
+        return false;
     }
 }
