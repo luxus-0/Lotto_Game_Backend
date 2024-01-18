@@ -8,9 +8,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import pl.lotto.domain.numbersgenerator.RandomNumbersGenerator;
-import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
+import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;
+import pl.lotto.domain.winningnumbers.WinningNumbersConfigurationProperties;
+import pl.lotto.domain.winningnumbers.dto.RandomNumbersResponseDto;
 
 import java.util.*;
 import java.util.stream.Collectors;

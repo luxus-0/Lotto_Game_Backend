@@ -2,7 +2,7 @@ package pl.lotto.infrastructure.numbergenerator.client;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lotto.domain.numbersgenerator.WinningNumbersConfigurationProperties;
+import pl.lotto.domain.winningnumbers.WinningNumbersConfigurationProperties;
 
 import static org.springframework.http.HttpStatus.*;
 
