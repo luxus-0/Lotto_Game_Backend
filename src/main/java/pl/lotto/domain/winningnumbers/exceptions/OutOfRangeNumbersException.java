@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator.exceptions;
+package pl.lotto.domain.winningnumbers.exceptions;
 
 public class OutOfRangeNumbersException extends RuntimeException {
     public OutOfRangeNumbersException(String message) {

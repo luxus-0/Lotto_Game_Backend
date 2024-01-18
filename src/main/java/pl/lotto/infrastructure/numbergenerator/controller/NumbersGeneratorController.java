@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersRequestDto;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
+import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
+import pl.lotto.domain.winningnumbers.dto.RandomNumbersRequestDto;
+import pl.lotto.domain.winningnumbers.dto.RandomNumbersResponseDto;
+import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClient;
 
 import javax.validation.Valid;

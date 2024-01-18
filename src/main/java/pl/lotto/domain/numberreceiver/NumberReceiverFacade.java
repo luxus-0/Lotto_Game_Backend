@@ -32,7 +32,7 @@ public class NumberReceiverFacade {
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
             Ticket ticket = new Ticket(ticketUUID, inputNumbers, drawDate, validator.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
-            log.info("Ticket saved: " +ticketSaved);
+            log.info("WinningTicket saved: " +ticketSaved);
             return TicketResponseDto.builder()
                     .ticketUUID(ticketSaved.ticketUUID())
                     .drawDate(ticketSaved.drawDate())
@@ -40,7 +40,7 @@ public class NumberReceiverFacade {
                     .message(ticketSaved.message())
                     .build();
         }
-        throw new TicketNotFoundException("Ticket not found");
+        throw new TicketNotFoundException("WinningTicket not found");
     }
 
     public Set<Integer> retrieveInputNumbersByDrawDate(LocalDateTime nextDrawDate) {
@@ -53,7 +53,7 @@ public class NumberReceiverFacade {
     public List<TicketDto> retrieveTicketsByDrawDate(LocalDateTime date) {
             return ticketRepository.findTicketsByDrawDate(date)
                     .stream()
-                    .map(TicketMapper::toTicketDto)
+                    .map(TicketMapper::mapToTicketDto)
                     .toList();
         }
 }
