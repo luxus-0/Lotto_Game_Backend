@@ -78,7 +78,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //then
         getResults.andExpect(status -> status(OK));
 
-        verify(resultAnnouncerFacade, atMost(1)).findResult(ticketUUID);
+        verify(resultAnnouncerFacade, atMost(1)).findResultAnnouncer(ticketUUID);
         assertThat(cacheManager.getCacheNames().contains("results")).isTrue();
     }
 
@@ -112,7 +112,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
                             .header(CONTENT_TYPE, "application/json")
                             .contentType(APPLICATION_JSON_VALUE));
 
-                    verify(resultAnnouncerFacade, atLeast(1)).findResult(ticketUUID);
+                    verify(resultAnnouncerFacade, atLeast(1)).findResultAnnouncer(ticketUUID);
                 });
     }
 
@@ -174,12 +174,12 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
                 .message(WIN)
                 .build());
 
-        ResultAnnouncerResponseDto result1 = resultAnnouncerFacade.findResult(ticketUUID);
+        ResultAnnouncerResponseDto result1 = resultAnnouncerFacade.findResultAnnouncer(ticketUUID);
 
         assertNull(redisTemplate.opsForValue().get("results/" + ticketUUID));
 
         // Call the method for the second time
-        ResultAnnouncerResponseDto result2 = resultAnnouncerFacade.findResult(ticketUUID);
+        ResultAnnouncerResponseDto result2 = resultAnnouncerFacade.findResultAnnouncer(ticketUUID);
 
         assertNull(redisTemplate.opsForValue().get("results/" + ticketUUID));
 

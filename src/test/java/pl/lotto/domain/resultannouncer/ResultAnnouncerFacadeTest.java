@@ -53,7 +53,7 @@ class ResultAnnouncerFacadeTest {
         when(resultsCheckerFacade.findResultByTicketUUID(ticketUUID)).thenReturn(expectedResult);
         resultAnnouncerRepository.save(expectedResultAnnouncerResponse);
         //when && then
-        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketUUID);
+        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResultAnnouncer(ticketUUID);
 
         assertThat(actualResult.message()).isEqualTo(LOSE.message);
     }
@@ -89,7 +89,7 @@ class ResultAnnouncerFacadeTest {
         when(resultsCheckerFacade.findResultByTicketUUID(ticket1)).thenReturn(resultCheckerResponseDto);
 
         //when
-        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticket1);
+        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResultAnnouncer(ticket1);
         //then
 
         ResultAnnouncerResponseDto expectedResult = ResultAnnouncerResponseDto.builder()
@@ -133,7 +133,7 @@ class ResultAnnouncerFacadeTest {
         when(resultsCheckerFacade.findResultByTicketUUID(ticketUUID)).thenReturn(result);
 
         //when
-        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResult(ticketUUID);
+        ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResultAnnouncer(ticketUUID);
 
         //then
         ResultAnnouncerResponseDto expectedResult = ResultAnnouncerResponseDto.builder()
@@ -153,7 +153,7 @@ class ResultAnnouncerFacadeTest {
                 .resultAnnouncerFacade(resultsCheckerFacade, resultAnnouncerRepository, clock);
 
         //when && then
-        assertThrowsExactly(TicketUUIDNotFoundException.class, () -> resultAnnouncerFacade.findResult(null));
+        assertThrowsExactly(TicketUUIDNotFoundException.class, () -> resultAnnouncerFacade.findResultAnnouncer(null));
     }
 
     @Test
@@ -177,7 +177,7 @@ class ResultAnnouncerFacadeTest {
 
         //when && then
         assertThrowsExactly(TicketUUIDNotFoundException.class,
-                () -> resultAnnouncerFacade.findResult(ticketUUID));
+                () -> resultAnnouncerFacade.findResultAnnouncer(ticketUUID));
     }
 
     @Test
@@ -193,7 +193,7 @@ class ResultAnnouncerFacadeTest {
 
         //when && then
         assertThrowsExactly(TicketUUIDNotFoundException.class,
-                () -> resultAnnouncerFacade.findResult(resultDto.ticketUUID()));
+                () -> resultAnnouncerFacade.findResultAnnouncer(resultDto.ticketUUID()));
     }
 
     @Test

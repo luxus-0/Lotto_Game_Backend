@@ -11,7 +11,7 @@ import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
-import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.toResultLottoSaved;
+import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.mapToResultLottoSaved;
 import static pl.lotto.domain.resultannouncer.ResultStatus.*;
 
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class ResultAnnouncerFacade {
     private final Clock clock;
 
     @Cacheable("results")
-    public ResultAnnouncerResponseDto findResult(String ticketUUID) throws Exception {
+    public ResultAnnouncerResponseDto findResultAnnouncer(String ticketUUID) throws Exception {
         if (ticketUUID == null || ticketUUID.isEmpty()) {
             throw new TicketUUIDNotFoundException();
         }
@@ -29,7 +29,7 @@ public class ResultAnnouncerFacade {
         ResultAnnouncerResponse resultAnnouncerResponse = resultAnnouncerRepository.findAllByTicketUUID(ticketUUID)
                 .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket uuid: " + ticketUUID));
         ResultAnnouncerResponse resultSaved = resultAnnouncerRepository.save(resultAnnouncerResponse);
-        ResultAnnouncerResponseDto resultLottoSaved = toResultLottoSaved(resultSaved);
+        ResultAnnouncerResponseDto resultLottoSaved = mapToResultLottoSaved(resultSaved);
         if (!isAfterAnnouncementTime(resultByTicketUUID)) {
             new WaitLottoMessage(resultLottoSaved, WAIT.message);
         }
