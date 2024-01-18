@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.winningnumbers;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,11 +6,12 @@ import pl.lotto.domain.drawdate.AdjustableClock;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.DrawDateGenerator;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
+import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;
 
 import java.time.Instant;
 import java.time.ZoneId;
 
-import static pl.lotto.domain.numbersgenerator.RandomNumbersURL.*;
+import static pl.lotto.domain.randomnumbersgenerator.RandomNumbersURL.*;
 
 @Configuration
 public class WinningNumbersFacadeConfiguration {

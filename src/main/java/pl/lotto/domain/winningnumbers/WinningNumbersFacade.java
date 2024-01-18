@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.winningnumbers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,9 +6,10 @@ import lombok.extern.log4j.Log4j2;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.drawdate.exceptions.DrawDateNotFoundException;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
+import pl.lotto.domain.winningnumbers.dto.RandomNumbersResponseDto;
+import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
+import pl.lotto.domain.winningnumbers.exceptions.WinningNumbersNotFoundException;
+import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -16,8 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static pl.lotto.domain.drawdate.DrawDateMessageProvider.DRAW_DATE_NOT_FOUND;
-import static pl.lotto.domain.numbersgenerator.RandomNumbersURL.*;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.WINNING_NUMBERS_NOT_FOUND;
+import static pl.lotto.domain.randomnumbersgenerator.RandomNumbersURL.*;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.LOSE;
 
 @AllArgsConstructor
@@ -65,7 +65,7 @@ public class WinningNumbersFacade {
                         .winningNumbers(winningNumbers.winningNumbers())
                         .build())
                 .findAny()
-                .orElseThrow(() -> new WinningNumbersNotFoundException(WINNING_NUMBERS_NOT_FOUND.getMessage())))
+                .orElseThrow(() -> new WinningNumbersNotFoundException()))
                 .orElseThrow(() -> new DrawDateNotFoundException(DRAW_DATE_NOT_FOUND));
     }
 

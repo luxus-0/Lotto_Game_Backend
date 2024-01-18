@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.winningnumbers;
 
 import lombok.Builder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
