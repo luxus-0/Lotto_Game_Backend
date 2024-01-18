@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
+import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
+import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.TicketResults;
-import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
+import pl.lotto.domain.resultchecker.WinningTicket;
+import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,11 +42,11 @@ public class RedisResultCheckerIntegrationTest extends BaseIntegrationTest {
         WinningTicketResponseDto winningTicketResponse = createWinningTicketResponse();
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(winningTicketResponse);
 
-        ResultCheckerResponseDto firstCallResult = resultsCheckerFacade.generateResults();
+        TicketResponseDto firstCallResult = resultsCheckerFacade.generateResults();
 
-        assertEquals(firstCallResult, Objects.requireNonNull(cacheManager.getCache("results")).get("result", ResultCheckerResponseDto.class));
+        assertEquals(firstCallResult, Objects.requireNonNull(cacheManager.getCache("results")).get("result", TicketResponseDto.class));
 
-        ResultCheckerResponseDto secondCallResult = resultsCheckerFacade.generateResults();
+        TicketResponseDto secondCallResult = resultsCheckerFacade.generateResults();
 
         assertEquals(firstCallResult, secondCallResult);
     }
@@ -54,7 +54,7 @@ public class RedisResultCheckerIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_return_saved_result_checker_to_cache() {
 
-        List<TicketResults> results = resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+        List<WinningTicket> results = resultCheckerRepository.saveAll(List.of(WinningTicket.builder()
                 .ticketUUID("12345")
                 .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))
@@ -63,7 +63,7 @@ public class RedisResultCheckerIntegrationTest extends BaseIntegrationTest {
                 .isWinner(true)
                 .build()));
 
-        ResultCheckerResponseDto result = toResultChecker(results);
+        TicketResponseDto result = toResultChecker(results);
 
         redisTemplate.opsForValue().set(result.ticketUUID(), result.isWinner());
 

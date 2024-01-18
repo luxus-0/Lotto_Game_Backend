@@ -1,15 +1,15 @@
 package integration.cache.redis.constants;
 
-import pl.lotto.domain.resultchecker.TicketResults;
-import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
+import pl.lotto.domain.resultchecker.WinningTicket;
+import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 
 import java.util.List;
 
 public class RedisResultCheckerMapper {
-    public static ResultCheckerResponseDto toResultChecker(List<TicketResults> ticketSaved) {
-        return ticketSaved.stream()
+    public static TicketResponseDto toResultChecker(List<WinningTicket> winningTicketSaved) {
+        return winningTicketSaved.stream()
                 .map(ticketResultSaved ->
-                        ResultCheckerResponseDto.builder()
+                        TicketResponseDto.builder()
                                 .ticketUUID(ticketResultSaved.ticketUUID())
                                 .inputNumbers(ticketResultSaved.inputNumbers())
                                 .drawDate(ticketResultSaved.drawDate())
@@ -18,6 +18,6 @@ public class RedisResultCheckerMapper {
                                 .message(ticketResultSaved.message())
                                 .build())
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("Ticket not saved to database"));
+                .orElseThrow(() -> new RuntimeException("WinningTicket not saved to database"));
     }
 }
