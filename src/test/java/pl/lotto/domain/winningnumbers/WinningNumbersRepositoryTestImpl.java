@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.winningnumbers;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
