@@ -11,7 +11,7 @@ import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.TicketResults;
+import pl.lotto.domain.resultchecker.WinningTicket;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -49,7 +49,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         clock.withZone(ZoneId.systemDefault());
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
-        resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+        resultCheckerRepository.saveAll(List.of(WinningTicket.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))
@@ -86,7 +86,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
     public void should_cache_results_and_validated_with_wait_seconds() {
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
-        resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+        resultCheckerRepository.saveAll(List.of(WinningTicket.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))
@@ -121,7 +121,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
         //given && then
         String ticketUUID = "550e8400-e29b-41d4-a716-446655440000";
 
-        resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+        resultCheckerRepository.saveAll(List.of(WinningTicket.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))
@@ -156,7 +156,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_save_result_to_cache_and_then_one_times_invocations() throws Exception {
         String ticketUUID = "123";
-        resultCheckerRepository.saveAll(List.of(TicketResults.builder()
+        resultCheckerRepository.saveAll(List.of(WinningTicket.builder()
                 .ticketUUID(ticketUUID)
                 .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))

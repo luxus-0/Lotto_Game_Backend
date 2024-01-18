@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.randomnumbersgenerator;
 
 public class RandomNumbersURL {
     public static final String BASE_RANDOM_NUMBERS_URL = "https://random.org/integers/?";
