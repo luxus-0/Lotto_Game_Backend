@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ResultCheckerRepository extends MongoRepository<TicketResults, String> {
-    Optional<TicketResults> findAllByTicketUUID(String ticketUUID);
+public interface ResultCheckerRepository extends MongoRepository<WinningTicket, String> {
+    Optional<WinningTicket> findAllByTicketUUID(String ticketUUID);
 }

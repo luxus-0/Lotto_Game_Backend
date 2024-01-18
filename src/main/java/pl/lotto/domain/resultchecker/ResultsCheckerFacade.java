@@ -7,11 +7,13 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
-import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
+import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
+import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
+import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
+import pl.lotto.domain.resultchecker.exceptions.TicketNotSavedException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -24,39 +26,45 @@ public class ResultsCheckerFacade {
     private final NumberReceiverFacade numberReceiverFacade;
     private final DrawDateFacade drawDateFacade;
     private final WinningNumbersFacade winningNumbersFacade;
-    private final WinnersRetriever winnersRetriever;
+    private final Winners winners;
     private final ResultCheckerRepository resultCheckerRepository;
     private final ResultCheckerValidation resultCheckerValidation;
 
     @Cacheable("results")
-    public ResultCheckerResponseDto generateResults() {
+    public TicketResponseDto generateResults() throws Exception {
         WinningTicketResponseDto winningTicketResponse = winningNumbersFacade.generateWinningNumbers();
+        boolean validate = resultCheckerValidation.validate(winningTicketResponse.winningNumbers());
+        String ticketUUID = winningTicketResponse.ticketUUID();
+        LocalDateTime drawDate = winningTicketResponse.drawDate();
         Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
-        boolean validate = resultCheckerValidation.validate(winningNumbers);
+
+
         if (validate) {
-            List<TicketDto> tickets = numberReceiverFacade.retrieveTicketsByDrawDate(winningTicketResponse.drawDate());
-            List<ResultCheckerResponseDto> winTicket = generateWinningTicket(tickets, winningNumbers);
-            log.info("Winning Ticket: " + winTicket);
-            TicketResults ticket = resultCheckerRepository.findAllByTicketUUID(winningTicketResponse.ticketUUID())
-                    .orElseThrow(() -> new WinningTicketNotFoundException("Winning ticket not found"));
-            List<TicketResults> ticketsSaved = resultCheckerRepository.saveAll(List.of(ticket));
-            log.info("Ticket saved: " +ticketsSaved);
+            List<TicketDto> tickets = numberReceiverFacade.retrieveTicketsByDrawDate(drawDate);
+            WinningTicket winningTicket = resultCheckerRepository.findAllByTicketUUID(ticketUUID)
+                    .orElseThrow(WinningTicketNotFoundException::new);
+            List<TicketResponseDto> ticketResponseDtos = generateWinningTicket(tickets, winningNumbers);
+            List<WinningTicket> ticketsSaved = resultCheckerRepository.saveAll(List.of(winningTicket));
+            if(ticketsSaved.isEmpty()){
+                throw new TicketNotSavedException();
+            }
+            log.info("WinningTicket saved: " +ticketsSaved);
             return mapToResultResponseDto(ticketsSaved);
         }
-        return ResultCheckerResponseDto.builder()
+        return TicketResponseDto.builder()
                 .isWinner(false)
                 .message(LOSE)
                 .build();
     }
 
-    public ResultCheckerResponseDto findResultByTicketUUID(String ticketUUID) {
+    public TicketResponseDto findResultByTicketUUID(String ticketUUID) throws Exception {
         return resultCheckerRepository.findAllByTicketUUID(ticketUUID).stream()
                 .map(ResultCheckerMapper::mapToResultResponse)
                 .findAny()
                 .orElseThrow(() -> new ResultCheckerNotFoundException(ticketUUID));
     }
 
-    public List<ResultCheckerResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
-        return winnersRetriever.retrieveWinners(tickets, winningNumbers);
+    public List<TicketResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
+        return winners.retrieveWinners(tickets, winningNumbers);
     }
 }
