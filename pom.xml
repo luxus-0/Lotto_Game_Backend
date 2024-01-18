@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.lotto</groupId>
-    <artifactId>Lotto_Game</artifactId>
+    <artifactId>Lotto_Game_Backend</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
