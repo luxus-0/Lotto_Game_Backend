@@ -1,8 +1,8 @@
 package pl.lotto.domain.resultchecker;
 
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
-import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
+import pl.lotto.domain.winningnumbers.exceptions.WinningNumbersNotFoundException;
+import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,10 +10,10 @@ import java.util.Set;
 
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapTicketResult;
 
-class WinnersRetriever {
+class Winners {
     private static final int NUMBERS_WHEN_PLAYERS_WON = 3;
 
-    public List<ResultCheckerResponseDto> retrieveWinners(List<TicketDto> tickets, Set<Integer> winningNumbers) {
+    public List<TicketResponseDto> retrieveWinners(List<TicketDto> tickets, Set<Integer> winningNumbers) {
         return tickets.stream().map(ticketDto -> {
                     Set<Integer> hitNumbers = calculateHits(winningNumbers, tickets);
                     return createResults(hitNumbers, ticketDto);
@@ -21,11 +21,11 @@ class WinnersRetriever {
                 .toList();
     }
 
-    private ResultCheckerResponseDto createResults(Set<Integer> hitNumbers, TicketDto ticket) {
+    private TicketResponseDto createResults(Set<Integer> hitNumbers, TicketDto ticket) {
         if(isWinner(hitNumbers)) {
             return mapTicketResult(hitNumbers, ticket);
         }
-        return ResultCheckerResponseDto.builder()
+        return TicketResponseDto.builder()
                 .isWinner(ticket.isWinner())
                 .build();
     }
@@ -44,6 +44,6 @@ class WinnersRetriever {
     private static Integer winningNumber(Set<Integer> winningNumbers) {
         return winningNumbers.stream()
                 .findAny()
-                .orElseThrow(() -> new WinningNumbersNotFoundException("Winning numbers not found"));
+                .orElseThrow(WinningNumbersNotFoundException::new);
     }
 }

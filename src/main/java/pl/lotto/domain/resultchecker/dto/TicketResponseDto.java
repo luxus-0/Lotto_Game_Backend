@@ -12,16 +12,19 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record ResultCheckerResponseDto(@UUID
+public record TicketResponseDto(@UUID
                                 String ticketUUID,
-                                       @NotNull(message = "numbers not null")
+                                @NotNull(message = "numbers not null")
                                 @NotEmpty(message = "numbers not empty")
                                 Set<Integer> inputNumbers,
-                                       Set<Integer> hitNumbers,
-                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                Set<Integer> hitNumbers,
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                 LocalDateTime drawDate,
-                                       @NotBlank
+                                @NotNull(message = "Winning numbers not null")
+                                       @NotEmpty(message = "Winning numbers not empty")
+                                       Set<Integer> winningNumbers,
+                                @NotBlank
                                 boolean isWinner,
-                                       @NotBlank
+                                @NotBlank
                                 String message) implements Serializable {
 }
