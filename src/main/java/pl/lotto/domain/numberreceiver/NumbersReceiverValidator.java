@@ -21,7 +21,7 @@ class NumbersReceiverValidator {
     boolean validate(Set<Integer> inputNumbers) {
         errors = new LinkedList<>();
         if(inputNumbers == null || inputNumbers.isEmpty()){
-            throw new InputNumbersNotFoundException("InputNumbers not found");
+            throw new InputNumbersNotFoundException("Input numbers not found");
         }
         if (isEqualsSixNumberFrom1To99(inputNumbers)) {
             errors.add(EQUALS_SIX_NUMBERS.getInfo());

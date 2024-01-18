@@ -7,7 +7,7 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
-import pl.lotto.domain.numberreceiver.exceptions.TicketNotFoundException;
+import pl.lotto.domain.resultchecker.exceptions.TicketNotSavedException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -24,7 +24,7 @@ public class NumberReceiverFacade {
     private final TicketUUIDGenerator ticketUUIDGenerator;
 
     @Cacheable("inputNumbers")
-    public TicketResponseDto inputNumbers(InputNumbersRequestDto inputNumbersRequest) {
+    public TicketResponseDto inputNumbers(InputNumbersRequestDto inputNumbersRequest) throws Exception {
         Set<Integer> inputNumbers = inputNumbersRequest.inputNumbers();
         boolean validate = validator.validate(inputNumbers);
         if (validate) {
@@ -32,7 +32,8 @@ public class NumberReceiverFacade {
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
             Ticket ticket = new Ticket(ticketUUID, inputNumbers, drawDate, validator.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
-            log.info("WinningTicket saved: " +ticketSaved);
+            checkSavedTicket(ticketSaved);
+            log.info("Ticket saved to database: " +ticketSaved);
             return TicketResponseDto.builder()
                     .ticketUUID(ticketSaved.ticketUUID())
                     .drawDate(ticketSaved.drawDate())
@@ -40,7 +41,17 @@ public class NumberReceiverFacade {
                     .message(ticketSaved.message())
                     .build();
         }
-        throw new TicketNotFoundException("WinningTicket not found");
+        return TicketResponseDto.builder()
+                .ticketUUID("")
+                .inputNumbers(Collections.emptySet())
+                .message("Ticket not found")
+                .build();
+    }
+
+    private static void checkSavedTicket(Ticket ticketSaved) throws TicketNotSavedException {
+        if(ticketSaved.ticketUUID() == null || ticketSaved.inputNumbers() == null || ticketSaved.drawDate() == null || ticketSaved.message() == null){
+            throw new TicketNotSavedException();
+        }
     }
 
     public Set<Integer> retrieveInputNumbersByDrawDate(LocalDateTime nextDrawDate) {

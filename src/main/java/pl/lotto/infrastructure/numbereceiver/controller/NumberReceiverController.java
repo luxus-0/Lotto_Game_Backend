@@ -16,7 +16,7 @@ class NumberReceiverController {
     private final NumberReceiverFacade numberReceiverFacade;
 
     @PostMapping("/inputNumbers")
-    ResponseEntity<TicketResponseDto> inputNumbers(@RequestBody @Valid InputNumbersRequestDto inputNumbersRequest) {
+    ResponseEntity<TicketResponseDto> inputNumbers(@RequestBody @Valid InputNumbersRequestDto inputNumbersRequest) throws Exception {
         TicketResponseDto ticketResponse = numberReceiverFacade.inputNumbers(inputNumbersRequest);
         return ResponseEntity.ok(ticketResponse);
     }
