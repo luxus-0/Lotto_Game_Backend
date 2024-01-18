@@ -7,6 +7,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
 import pl.lotto.domain.resultchecker.WinningTicket;
+import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -57,7 +58,7 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
                     .andExpect(shouldHaveThrown(ResultCheckerNotFoundException.class))
                     .andExpect(content().json("""
                             {
-                            "message" : "Not found for winningTicket uuid: 12345"
+                            "message" : "Not found for winning ticket uuid: 12345"
                             "status: "NOT_FOUND"
                             }
                                 """.trim()
