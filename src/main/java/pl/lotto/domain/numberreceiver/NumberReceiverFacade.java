@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.TICKET_NOT_FOUND;
+
 @AllArgsConstructor
 @Log4j2
 public class NumberReceiverFacade {
@@ -44,7 +46,7 @@ public class NumberReceiverFacade {
         return TicketResponseDto.builder()
                 .ticketUUID("")
                 .inputNumbers(Collections.emptySet())
-                .message("Ticket not found")
+                .message(TICKET_NOT_FOUND)
                 .build();
     }
 
