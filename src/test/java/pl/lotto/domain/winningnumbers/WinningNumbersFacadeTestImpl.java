@@ -1,6 +1,6 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.winningnumbers;
 
-import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
+import pl.lotto.domain.winningnumbers.exceptions.OutOfRangeNumbersException;
 
 import java.util.Set;
 

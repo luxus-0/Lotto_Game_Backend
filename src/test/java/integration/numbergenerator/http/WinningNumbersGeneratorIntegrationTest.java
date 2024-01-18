@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
+import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 
 import java.util.Set;
 
@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersValidationResult.OUT_OF_RANGE;
+import static pl.lotto.domain.winningnumbers.WinningNumbersValidationResult.OUT_OF_RANGE;
 
 @Log4j2
 public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest {

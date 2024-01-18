@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.winningnumbers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -6,9 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
-import pl.lotto.domain.numbersgenerator.dto.WinningTicketResponseDto;
-import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
-import pl.lotto.domain.numbersgenerator.exceptions.WinningNumbersNotFoundException;
+import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
+import pl.lotto.domain.winningnumbers.exceptions.OutOfRangeNumbersException;
+import pl.lotto.domain.winningnumbers.exceptions.WinningNumbersNotFoundException;
+import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static pl.lotto.domain.numbersgenerator.WinningNumbersFacadeTestImpl.isNumbersInRange;
+import static pl.lotto.domain.winningnumbers.WinningNumbersFacadeTestImpl.isNumbersInRange;
 
 @RequiredArgsConstructor
 @Log4j2
