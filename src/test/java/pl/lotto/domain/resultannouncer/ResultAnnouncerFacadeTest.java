@@ -197,7 +197,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_input_numbers_is_empty() {
+    public void should_throw_an_exception_when_input_numbers_is_empty() throws Exception {
         //given
         String ticketUUID = "1234";
 
@@ -220,7 +220,7 @@ class ResultAnnouncerFacadeTest {
     }
 
     @Test
-    public void should_throw_an_exception_when_hit_numbers_is_empty() {
+    public void should_throw_an_exception_when_hit_numbers_is_empty() throws Exception {
         //given
         String ticketUUID = "";
 
