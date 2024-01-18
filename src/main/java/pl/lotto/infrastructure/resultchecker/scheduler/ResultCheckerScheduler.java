@@ -3,7 +3,7 @@ package pl.lotto.infrastructure.resultchecker.scheduler;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
-import pl.lotto.domain.numbersgenerator.WinningNumbersFacade;
+import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 
 @AllArgsConstructor

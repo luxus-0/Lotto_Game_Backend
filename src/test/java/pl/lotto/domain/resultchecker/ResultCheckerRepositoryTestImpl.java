@@ -13,69 +13,69 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class ResultCheckerRepositoryTestImpl implements ResultCheckerRepository{
-    private final Map<String, TicketResults> results = new ConcurrentHashMap<>();
+    private final Map<String, WinningTicket> results = new ConcurrentHashMap<>();
     @Override
-    public Optional<TicketResults> findAllByTicketUUID(String ticketUUID) {
+    public Optional<WinningTicket> findAllByTicketUUID(String ticketUUID) {
         return Optional.ofNullable(results.get(ticketUUID));
     }
 
     @Override
-    public <S extends TicketResults> S insert(S entity) {
+    public <S extends WinningTicket> S insert(S entity) {
         return null;
     }
 
     @Override
-    public <S extends TicketResults> List<S> insert(Iterable<S> entities) {
+    public <S extends WinningTicket> List<S> insert(Iterable<S> entities) {
         return null;
     }
 
     @Override
-    public <S extends TicketResults> Optional<S> findOne(Example<S> example) {
+    public <S extends WinningTicket> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends TicketResults> List<S> findAll(Example<S> example) {
+    public <S extends WinningTicket> List<S> findAll(Example<S> example) {
         return null;
     }
 
     @Override
-    public <S extends TicketResults> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends WinningTicket> List<S> findAll(Example<S> example, Sort sort) {
         return null;
     }
 
     @Override
-    public <S extends TicketResults> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends WinningTicket> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends TicketResults> long count(Example<S> example) {
+    public <S extends WinningTicket> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends TicketResults> boolean exists(Example<S> example) {
+    public <S extends WinningTicket> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends TicketResults, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends WinningTicket, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public TicketResults save(TicketResults ticket) {
-        return results.put(ticket.ticketUUID(), ticket);
+    public WinningTicket save(WinningTicket winningTicket) {
+        return results.put(winningTicket.ticketUUID(), winningTicket);
     }
 
     @Override
-    public <S extends TicketResults> List<S> saveAll(Iterable<S> entities) {
+    public <S extends WinningTicket> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
     @Override
-    public Optional<TicketResults> findById(String s) {
+    public Optional<WinningTicket> findById(String s) {
         return Optional.empty();
     }
 
@@ -85,12 +85,12 @@ public class ResultCheckerRepositoryTestImpl implements ResultCheckerRepository{
     }
 
     @Override
-    public List<TicketResults> findAll() {
+    public List<WinningTicket> findAll() {
         return null;
     }
 
     @Override
-    public List<TicketResults> findAllById(Iterable<String> strings) {
+    public List<WinningTicket> findAllById(Iterable<String> strings) {
         return null;
     }
 
@@ -105,7 +105,7 @@ public class ResultCheckerRepositoryTestImpl implements ResultCheckerRepository{
     }
 
     @Override
-    public void delete(TicketResults entity) {
+    public void delete(WinningTicket entity) {
 
     }
 
@@ -115,7 +115,7 @@ public class ResultCheckerRepositoryTestImpl implements ResultCheckerRepository{
     }
 
     @Override
-    public void deleteAll(Iterable<? extends TicketResults> entities) {
+    public void deleteAll(Iterable<? extends WinningTicket> entities) {
 
     }
 
@@ -125,12 +125,12 @@ public class ResultCheckerRepositoryTestImpl implements ResultCheckerRepository{
     }
 
     @Override
-    public List<TicketResults> findAll(Sort sort) {
+    public List<WinningTicket> findAll(Sort sort) {
         return null;
     }
 
     @Override
-    public Page<TicketResults> findAll(Pageable pageable) {
+    public Page<WinningTicket> findAll(Pageable pageable) {
         return null;
     }
 }
