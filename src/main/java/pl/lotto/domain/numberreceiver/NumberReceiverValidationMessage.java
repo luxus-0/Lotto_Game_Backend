@@ -3,7 +3,7 @@ package pl.lotto.domain.numberreceiver;
 import lombok.Getter;
 
 @Getter
-public enum NumberReceiverValidationResult {
+public enum NumberReceiverValidationMessage {
     LESS_THAN_SIX_NUMBERS("less than six numbers"),
     MORE_THAN_SIX_NUMBERS("more than six numbers"),
     OUT_OF_RANGE_NUMBERS("out of range numbers"),
@@ -11,7 +11,7 @@ public enum NumberReceiverValidationResult {
     INPUT_NUMBERS_NOT_FOUND("Input numbers not found");
     private final String info;
 
-    NumberReceiverValidationResult(String info) {
+    NumberReceiverValidationMessage(String info) {
         this.info = info;
     }
 }

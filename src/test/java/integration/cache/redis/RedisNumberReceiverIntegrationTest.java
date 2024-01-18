@@ -27,7 +27,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static pl.lotto.domain.numberreceiver.NumberReceiverValidationResult.EQUALS_SIX_NUMBERS;
+import static pl.lotto.domain.numberreceiver.NumberReceiverValidationMessage.EQUALS_SIX_NUMBERS;
 
 public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
 
