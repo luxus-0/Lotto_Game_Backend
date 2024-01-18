@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
-import pl.lotto.domain.resultchecker.TicketResults;
-import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
+import pl.lotto.domain.resultchecker.WinningTicket;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,7 +36,7 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
                     .andExpect(content().json("""
                             {
                             "message" : "TICKET NOT FOUND",
-                            "status" : "Not found for ticket uuid: 1234567"
+                            "status" : "Not found for winningTicket uuid: 1234567"
                             }
                                 """.trim()
                     )).andDo(print()).andReturn();
@@ -58,7 +57,7 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
                     .andExpect(shouldHaveThrown(ResultCheckerNotFoundException.class))
                     .andExpect(content().json("""
                             {
-                            "message" : "Not found for ticket uuid: 12345"
+                            "message" : "Not found for winningTicket uuid: 12345"
                             "status: "NOT_FOUND"
                             }
                                 """.trim()
@@ -92,7 +91,7 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
                 .message("WIN")
                 .build();
 
-        TicketResults expectedTicketResult = TicketResults.builder()
+        WinningTicket expectedWinningTicketResult = WinningTicket.builder()
                 .ticketUUID(expectedTicketUUID)
                 .inputNumbers(expectedInputNumbers)
                 .hitNumbers(expectedHitNumbers)
@@ -102,7 +101,7 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
                 .build();
 
         resultAnnouncerRepository.save(expectedAnnouncerResult);
-        resultCheckerRepository.saveAll(List.of(expectedTicketResult));
+        resultCheckerRepository.saveAll(List.of(expectedWinningTicketResult));
 
         ResultActions getResults = mockMvc.perform(get("/results/" + expectedTicketUUID))
                 .andExpect(status -> status(200))
