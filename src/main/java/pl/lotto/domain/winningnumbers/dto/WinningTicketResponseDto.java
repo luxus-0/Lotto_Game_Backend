@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator.dto;
+package pl.lotto.domain.winningnumbers.dto;
 
 import lombok.Builder;
 import org.hibernate.validator.constraints.UUID;
