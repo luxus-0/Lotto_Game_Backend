@@ -1,4 +1,4 @@
-package integration.numbergenerator.http;
+package integration.winningnumbers;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import integration.BaseIntegrationTest;

@@ -1,4 +1,4 @@
-package integration.numbergenerator.http;
+package integration.randomnumbersgenerator.http;
 
 import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;

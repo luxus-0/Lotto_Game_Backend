@@ -1,4 +1,4 @@
-package integration.numbergenerator.http;
+package integration.randomnumbersgenerator.http;
 
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
