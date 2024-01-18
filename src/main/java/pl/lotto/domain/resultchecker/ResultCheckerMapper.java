@@ -2,7 +2,7 @@ package pl.lotto.domain.resultchecker;
 
 import lombok.AllArgsConstructor;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
-import pl.lotto.domain.resultchecker.dto.ResultCheckerResponseDto;
+import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 
 import java.util.List;
 import java.util.Set;
@@ -10,8 +10,8 @@ import java.util.Set;
 @AllArgsConstructor
 class ResultCheckerMapper {
 
-    static ResultCheckerResponseDto mapTicketResult(Set<Integer> hitNumbers, TicketDto ticket) {
-        return ResultCheckerResponseDto.builder()
+    static TicketResponseDto mapTicketResult(Set<Integer> hitNumbers, TicketDto ticket) {
+        return TicketResponseDto.builder()
                         .ticketUUID(ticket.ticketUUID())
                         .drawDate(ticket.drawDate())
                         .hitNumbers(hitNumbers)
@@ -21,10 +21,10 @@ class ResultCheckerMapper {
                 .build();
     }
 
-    public static ResultCheckerResponseDto mapToResultResponseDto(List<TicketResults> ticketSaved) {
-        return ticketSaved.stream()
+    public static TicketResponseDto mapToResultResponseDto(List<WinningTicket> winningTicketSaved) {
+        return winningTicketSaved.stream()
                 .map(ticketResultSaved ->
-                        ResultCheckerResponseDto.builder()
+                        TicketResponseDto.builder()
                                 .ticketUUID(ticketResultSaved.ticketUUID())
                                 .inputNumbers(ticketResultSaved.inputNumbers())
                                 .drawDate(ticketResultSaved.drawDate())
@@ -33,17 +33,17 @@ class ResultCheckerMapper {
                                 .message(ticketResultSaved.message())
                                 .build())
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("Ticket not saved to database"));
+                .orElseThrow(() -> new RuntimeException("WinningTicket not saved to database"));
     }
 
-    public static ResultCheckerResponseDto mapToResultResponse(TicketResults ticketResults) {
-        return ResultCheckerResponseDto.builder()
-                .ticketUUID(ticketResults.ticketUUID())
-                .inputNumbers(ticketResults.inputNumbers())
-                .drawDate(ticketResults.drawDate())
-                .hitNumbers(ticketResults.hitNumbers())
-                .isWinner(ticketResults.isWinner())
-                .message(ticketResults.message())
+    public static TicketResponseDto mapToResultResponse(WinningTicket winningTicket) {
+        return TicketResponseDto.builder()
+                .ticketUUID(winningTicket.ticketUUID())
+                .inputNumbers(winningTicket.inputNumbers())
+                .drawDate(winningTicket.drawDate())
+                .hitNumbers(winningTicket.hitNumbers())
+                .isWinner(winningTicket.isWinner())
+                .message(winningTicket.message())
                 .build();
     }
 }
