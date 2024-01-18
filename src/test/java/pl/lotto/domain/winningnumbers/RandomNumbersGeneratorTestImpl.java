@@ -1,13 +1,14 @@
-package pl.lotto.domain.numbersgenerator;
+package pl.lotto.domain.winningnumbers;
 
 import lombok.Getter;
-import pl.lotto.domain.numbersgenerator.dto.RandomNumbersResponseDto;
-import pl.lotto.domain.numbersgenerator.exceptions.OutOfRangeNumbersException;
+import pl.lotto.domain.winningnumbers.dto.RandomNumbersResponseDto;
+import pl.lotto.domain.winningnumbers.exceptions.OutOfRangeNumbersException;
+import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;
 
 import java.util.Set;
 
 @Getter
-public class RandomNumbersGeneratorTestImpl implements RandomNumbersGenerator{
+public class RandomNumbersGeneratorTestImpl implements RandomNumbersGenerator {
 
     private final Set<Integer> generatedNumbers;
     RandomNumbersGeneratorTestImpl() {

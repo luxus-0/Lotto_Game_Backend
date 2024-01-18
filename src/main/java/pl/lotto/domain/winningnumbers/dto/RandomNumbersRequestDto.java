@@ -1,4 +1,4 @@
-package pl.lotto.domain.numbersgenerator.dto;
+package pl.lotto.domain.winningnumbers.dto;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
