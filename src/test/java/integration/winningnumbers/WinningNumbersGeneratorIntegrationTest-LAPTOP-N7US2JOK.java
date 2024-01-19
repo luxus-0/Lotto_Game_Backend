@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static pl.lotto.domain.winningnumbers.WinningNumbersValidationResult.OUT_OF_RANGE;
 
 @Log4j2
-public class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest {
+class WinningNumbersGeneratorIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_return_winning_numbers_when_body_is_three_winning_numbers() throws Exception {
