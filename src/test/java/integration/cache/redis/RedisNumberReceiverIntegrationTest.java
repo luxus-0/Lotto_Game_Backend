@@ -125,7 +125,7 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void should_cache_value_two_input_numbers() {
+    public void should_cache_value_two_input_numbers() throws Exception {
 
         InputNumbersRequestDto inputNumbersRequest = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
         TicketResponseDto ticketResponse1 = numberReceiverFacade.inputNumbers(inputNumbersRequest);
