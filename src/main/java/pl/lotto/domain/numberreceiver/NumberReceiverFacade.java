@@ -7,7 +7,6 @@ import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
-import pl.lotto.domain.resultchecker.exceptions.TicketNotSavedException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -34,7 +33,6 @@ public class NumberReceiverFacade {
             LocalDateTime drawDate = drawDateFacade.retrieveNextDrawDate();
             Ticket ticket = new Ticket(ticketUUID, inputNumbers, drawDate, validator.getMessage());
             Ticket ticketSaved = ticketRepository.save(ticket);
-            checkSavedTicket(ticketSaved);
             log.info("Ticket saved to database: " +ticketSaved);
             return TicketResponseDto.builder()
                     .ticketUUID(ticketSaved.ticketUUID())
@@ -48,12 +46,6 @@ public class NumberReceiverFacade {
                 .inputNumbers(Collections.emptySet())
                 .message(TICKET_NOT_FOUND)
                 .build();
-    }
-
-    private static void checkSavedTicket(Ticket ticketSaved) throws TicketNotSavedException {
-        if(ticketSaved.ticketUUID() == null || ticketSaved.inputNumbers() == null || ticketSaved.drawDate() == null || ticketSaved.message() == null){
-            throw new TicketNotSavedException();
-        }
     }
 
     public Set<Integer> retrieveInputNumbersByDrawDate(LocalDateTime nextDrawDate) {

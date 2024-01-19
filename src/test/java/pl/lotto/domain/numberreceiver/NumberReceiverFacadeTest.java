@@ -28,13 +28,12 @@ import static pl.lotto.domain.numberreceiver.NumberReceiverValidationMessage.*;
 
 @Log4j2
 class NumberReceiverFacadeTest {
-
     TicketRepository ticketRepository = mock(TicketRepository.class);
     TicketUUIDGenerator ticketUUIDGenerator = new TicketUUIDGeneratorTestImpl();
     AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023, 12, 13, 12, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
     DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
     @Test
-    public void should_return_six_numbers_message_when_user_gave_6_numbers() {
+    public void should_return_six_numbers_message_when_user_gave_6_numbers() throws Exception {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
@@ -56,7 +55,7 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_less_than_six_numbers_message_when_user_gave_less_than_6_numbers() {
+    public void should_return_less_than_six_numbers_message_when_user_gave_less_than_6_numbers() throws Exception {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
@@ -77,7 +76,7 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_more_than_six_number_message_when_user_gave_more_than_6_numbers() {
+    public void should_return_more_than_six_number_message_when_user_gave_more_than_6_numbers() throws Exception {
         // given
         AdjustableClock clock = new AdjustableClock(LocalDateTime.now().toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
@@ -99,7 +98,7 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_out_of_range_message_when_user_gave_at_least_one_number_out_of_range_from_1_to_99() {
+    public void should_return_out_of_range_message_when_user_gave_at_least_one_number_out_of_range_from_1_to_99() throws Exception {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
@@ -131,13 +130,13 @@ class NumberReceiverFacadeTest {
         RuntimeException exception = assertThrows(InputNumbersNotFoundException.class,
                 () -> numberReceiverFacade.inputNumbers(inputNumbersRequest));
 
-        assertThat(exception.getMessage()).isEqualTo("InputNumbers not found");
+        assertThat(exception.getMessage()).isEqualTo("Input numbers not found");
 
     }
 
     @Test
     @DisplayName("return out of range message when user gave negative number")
-    public void should_return_out_of_range_message_when_user_gave_one_negative_number() {
+    public void should_return_out_of_range_message_when_user_gave_one_negative_number() throws Exception {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
@@ -162,7 +161,7 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_correct_ticketUUID() {
+    public void should_return_correct_ticketUUID() throws Exception {
         //given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
@@ -182,26 +181,24 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_correct_draw_date() {
+    public void should_return_correct_draw_date() throws Exception {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
 
-        InputNumbersRequestDto inputNumbersRequestDto = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
-
+        InputNumbersRequestDto expectedInputNumbers = new InputNumbersRequestDto(Set.of(1, 2, 3, 4, 5, 6));
         LocalDateTime expectedDrawDate = LocalDateTime.of(2023, 12, 16, 12, 0, 0);
 
-
-        when(ticketRepository.save(any(Ticket.class)))
+        when(ticketRepository.save(any()))
                 .thenReturn(Ticket.builder()
-                        .ticketUUID("123456")
-                        .inputNumbers(Set.of(1,2,3,4,5,6))
+                        .ticketUUID(UUID.randomUUID().toString())
+                        .inputNumbers(expectedInputNumbers.inputNumbers())
                         .drawDate(expectedDrawDate)
+                        .message("Ticket saved")
                         .build());
 
         // when
-
-        TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(inputNumbersRequestDto);
+        TicketResponseDto actualTicket = numberReceiverFacade.inputNumbers(expectedInputNumbers);
         LocalDateTime actualDrawDate = actualTicket.drawDate();
         // then
         assertThat(actualDrawDate).isEqualTo(expectedDrawDate);
@@ -221,7 +218,7 @@ class NumberReceiverFacadeTest {
     }
 
     @Test
-    public void should_return_next_Saturday_draw_date_when_date_is_Saturday_noon() {
+    public void should_return_next_Saturday_draw_date_when_date_is_Saturday_noon() throws Exception {
         //given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
                 .numberReceiverFacade(clock, ticketUUIDGenerator, ticketRepository);
