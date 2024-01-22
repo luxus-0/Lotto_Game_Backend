@@ -1,6 +1,6 @@
 package pl.lotto.domain.resultannouncer;
 
-enum ResultStatus {
+enum ResultAnnouncerMessage {
     WAIT("Results are being calculated, please come back later"),
     WIN("You won"),
     LOSE("You lost"),
@@ -8,7 +8,7 @@ enum ResultStatus {
 
     final String message;
 
-    ResultStatus(String message) {
+    ResultAnnouncerMessage(String message) {
         this.message = message;
 
     }
