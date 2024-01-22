@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import pl.lotto.domain.winningnumbers.WinningNumbersConfigurationProperties;
-import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
+import pl.lotto.infrastructure.numbersgenerator.client.TimeConnectionClient;
 import pl.lotto.infrastructure.security.token.JwtConfigurationProperties;
 
 @SpringBootApplication
