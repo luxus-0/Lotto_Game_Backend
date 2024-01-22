@@ -4,8 +4,8 @@ import org.springframework.web.client.RestTemplate;
 import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;
 import pl.lotto.domain.winningnumbers.WinningNumbersConfigurationProperties;
 import pl.lotto.domain.winningnumbers.WinningNumbersFacadeConfiguration;
-import pl.lotto.infrastructure.numbergenerator.client.RandomNumberGeneratorClientConfig;
-import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
+import pl.lotto.infrastructure.numbersgenerator.client.RandomNumberGeneratorClientConfig;
+import pl.lotto.infrastructure.numbersgenerator.client.TimeConnectionClient;
 
 public class RandomNumberGeneratorRestTemplateIntegrationTestConfig extends RandomNumberGeneratorClientConfig {
 
