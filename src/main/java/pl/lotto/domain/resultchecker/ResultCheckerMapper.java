@@ -7,6 +7,8 @@ import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 import java.util.List;
 import java.util.Set;
 
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.WIN;
+
 @AllArgsConstructor
 class ResultCheckerMapper {
 
@@ -15,9 +17,8 @@ class ResultCheckerMapper {
                         .ticketUUID(ticket.ticketUUID())
                         .drawDate(ticket.drawDate())
                         .hitNumbers(hitNumbers)
-                        .inputNumbers(ticket.inputNumbers())
-                .isWinner(ticket.isWinner())
-                .message(ticket.message())
+                        .isWinner(true)
+                        .message(WIN)
                 .build();
     }
 
@@ -33,7 +34,7 @@ class ResultCheckerMapper {
                                 .message(ticketResultSaved.message())
                                 .build())
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("WinningTicket not saved to database"));
+                .orElseThrow(() -> new RuntimeException("Winning ticket not saved to database"));
     }
 
     public static TicketResponseDto mapToResultResponse(WinningTicket winningTicket) {
