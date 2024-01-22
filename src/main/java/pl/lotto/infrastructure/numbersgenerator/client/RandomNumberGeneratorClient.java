@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.numbergenerator.client;
+package pl.lotto.infrastructure.numbersgenerator.client;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
