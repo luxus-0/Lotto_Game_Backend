@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.numbergenerator.client;
+package pl.lotto.infrastructure.numbersgenerator.client;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
