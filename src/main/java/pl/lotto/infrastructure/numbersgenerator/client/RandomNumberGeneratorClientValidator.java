@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.numbergenerator.client;
+package pl.lotto.infrastructure.numbersgenerator.client;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.server.ResponseStatusException;
