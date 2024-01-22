@@ -21,8 +21,8 @@ public record TicketResponseDto(@UUID
                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                 LocalDateTime drawDate,
                                 @NotNull(message = "Winning numbers not null")
-                                       @NotEmpty(message = "Winning numbers not empty")
-                                       Set<Integer> winningNumbers,
+                                @NotEmpty(message = "Winning numbers not empty")
+                                Set<Integer> winningNumbers,
                                 @NotBlank
                                 boolean isWinner,
                                 @NotBlank
