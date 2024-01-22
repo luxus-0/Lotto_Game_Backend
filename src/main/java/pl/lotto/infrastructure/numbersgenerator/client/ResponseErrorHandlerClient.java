@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.numbergenerator.client;
+package pl.lotto.infrastructure.numbersgenerator.client;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatus.Series;
