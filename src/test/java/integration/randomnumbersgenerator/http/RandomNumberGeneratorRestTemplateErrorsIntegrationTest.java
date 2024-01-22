@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lotto.domain.randomnumbersgenerator.RandomNumbersGenerator;
-import pl.lotto.infrastructure.numbergenerator.client.TimeConnectionClient;
+import pl.lotto.infrastructure.numbersgenerator.client.TimeConnectionClient;
 
 import java.time.Duration;
 
