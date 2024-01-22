@@ -7,11 +7,9 @@ public class ResultAnnouncerMapper {
     public static ResultAnnouncerResponseDto mapToResultLottoSaved(ResultAnnouncerResponse resultAnnouncerResponseSaved) {
         return ResultAnnouncerResponseDto.builder()
                 .ticketUUID(resultAnnouncerResponseSaved.ticketUUID())
-                .inputNumbers(resultAnnouncerResponseSaved.numbers())
                 .hitNumbers(resultAnnouncerResponseSaved.hitNumbers())
                 .drawDate(resultAnnouncerResponseSaved.drawDate())
                 .isWinner(resultAnnouncerResponseSaved.isWinner())
-                .message(resultAnnouncerResponseSaved.message())
                 .build();
     }
 
