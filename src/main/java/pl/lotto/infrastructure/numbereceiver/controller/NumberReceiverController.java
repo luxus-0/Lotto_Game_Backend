@@ -11,7 +11,6 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 class NumberReceiverController {
     private final NumberReceiverFacade numberReceiverFacade;
 
