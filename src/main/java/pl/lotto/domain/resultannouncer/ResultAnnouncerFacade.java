@@ -2,17 +2,23 @@ package pl.lotto.domain.resultannouncer;
 
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
-import pl.lotto.domain.resultannouncer.dto.*;
+import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
+import pl.lotto.domain.resultannouncer.dto.ResultLottoDto;
+import pl.lotto.domain.resultannouncer.dto.WinningLottoPrizeDto;
 import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
 import pl.lotto.domain.resultannouncer.exceptions.TicketUUIDNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 
+import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
+import static pl.lotto.domain.resultannouncer.LottoNumbersFactor.BASE_PRICE;
+import static pl.lotto.domain.resultannouncer.LottoNumbersFactor.NUMBERS_FACTOR;
+import static pl.lotto.domain.resultannouncer.LottoNumbersRange.COUNT_NUMBERS;
 import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.mapToResultLottoSaved;
-import static pl.lotto.domain.resultannouncer.ResultStatus.*;
+import static pl.lotto.domain.resultannouncer.ResultAnnouncerMessage.*;
 
 @AllArgsConstructor
 public class ResultAnnouncerFacade {
@@ -30,20 +36,33 @@ public class ResultAnnouncerFacade {
                 .orElseThrow(() -> new ResultAnnouncerNotFoundException("Not found for ticket uuid: " + ticketUUID));
         ResultAnnouncerResponse resultSaved = resultAnnouncerRepository.save(resultAnnouncerResponse);
         ResultAnnouncerResponseDto resultLottoSaved = mapToResultLottoSaved(resultSaved);
+        int hitNumbersCount = resultLottoSaved.hitNumbers().size();
+        WinningLottoPrizeDto winningAmount = calculateWinningPrice(hitNumbersCount);
         if (!isAfterAnnouncementTime(resultByTicketUUID)) {
-            new WaitLottoMessage(resultLottoSaved, WAIT.message);
+            new ResultLottoDto(resultLottoSaved, winningAmount, WAIT.message);
         }
         else if(isAfterAnnouncementTime(resultByTicketUUID)){
-            new AlreadyCheckedLottoMessage(resultLottoSaved, ALREADY_CHECKED.message);
+            new ResultLottoDto(resultLottoSaved, winningAmount, ALREADY_CHECKED.message);
         }
         else if (resultLottoSaved.isWinner()) {
-            new WinLottoMessage(resultLottoSaved, WIN.message);
+            new ResultLottoDto(resultLottoSaved, winningAmount, WIN.message);
         }
         else {
-            new LoseLottoMessage(resultLottoSaved, LOSE.message);
+            new ResultLottoDto(resultLottoSaved, winningAmount, LOSE.message);
         }
 
         return resultLottoSaved;
+    }
+    private WinningLottoPrizeDto calculateWinningPrice(int countHitNumbers) {
+        if (countHitNumbers > 0 && countHitNumbers <= COUNT_NUMBERS) {
+            double winningPrize = calculatePrize(countHitNumbers);
+            return new WinningLottoPrizeDto(countHitNumbers, BigDecimal.valueOf(winningPrize));
+        } else {
+            return new WinningLottoPrizeDto(0, BigDecimal.ZERO);
+        }
+    }
+    private double calculatePrize(int countHitNumbers) {
+        return countHitNumbers * NUMBERS_FACTOR * BASE_PRICE;
     }
 
     private boolean isAfterAnnouncementTime(TicketResponseDto resultResponse) {
