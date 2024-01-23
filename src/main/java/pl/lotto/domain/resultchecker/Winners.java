@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Set;
 
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapTicketResult;
+import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.LOSE;
 
 class Winners {
     private static final int NUMBERS_WHEN_PLAYERS_WON = 3;
 
-    public List<TicketResponseDto> retrieveWinners(List<TicketDto> tickets, Set<Integer> winningNumbers) {
+    public List<TicketResponseDto> retrieveWinners(Set<Integer> winningNumbers, List<TicketDto> tickets) {
         return tickets.stream().map(ticketDto -> {
                     Set<Integer> hitNumbers = calculateHits(winningNumbers, tickets);
                     return createResults(hitNumbers, ticketDto);
@@ -26,7 +27,8 @@ class Winners {
             return mapTicketResult(hitNumbers, ticket);
         }
         return TicketResponseDto.builder()
-                .isWinner(ticket.isWinner())
+                .message(LOSE)
+                .isWinner(false)
                 .build();
     }
 
