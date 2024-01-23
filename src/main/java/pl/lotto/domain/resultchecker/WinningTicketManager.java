@@ -8,10 +8,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapTicketResult;
+import static pl.lotto.domain.resultchecker.ResultCheckerMapper.toTicketResponseDto;
 import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.LOSE;
 
-class Winners {
+class WinningTicketManager {
     private static final int NUMBERS_WHEN_PLAYERS_WON = 3;
 
     public List<TicketResponseDto> retrieveWinners(Set<Integer> winningNumbers, List<TicketDto> tickets) {
@@ -24,7 +24,7 @@ class Winners {
 
     private TicketResponseDto createResults(Set<Integer> hitNumbers, TicketDto ticket) {
         if(isWinner(hitNumbers)) {
-            return mapTicketResult(hitNumbers, ticket);
+            return toTicketResponseDto(hitNumbers, ticket);
         }
         return TicketResponseDto.builder()
                 .message(LOSE)

@@ -11,7 +11,6 @@ import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
 import pl.lotto.domain.resultchecker.exceptions.TicketNotSavedException;
 import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
 import pl.lotto.domain.winningnumbers.WinningTicket;
-import pl.lotto.domain.winningnumbers.WinningTicketManager;
 import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 
 import java.time.LocalDateTime;

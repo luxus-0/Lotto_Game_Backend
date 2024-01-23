@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
-import pl.lotto.domain.winningnumbers.WinningTicketManager;
 import pl.lotto.infrastructure.resultchecker.scheduler.ResultCheckerScheduler;
 
 @Configuration

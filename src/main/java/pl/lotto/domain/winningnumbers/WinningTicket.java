@@ -1,4 +1,4 @@
-package pl.lotto.domain.resultchecker;
+package pl.lotto.domain.winningnumbers;
 
 import lombok.Builder;
 import org.hibernate.validator.constraints.UUID;
@@ -15,8 +15,8 @@ import java.util.Set;
 public record WinningTicket(@UUID
                             @NotNull
                             String ticketUUID,
-                            @NotNull(message = "input numbers not null")
-                            @NotEmpty(message = "input numbers not empty")
+                            @NotNull
+                            @NotEmpty
                             Set<Integer> inputNumbers,
                             @NotNull
                             @NotEmpty
