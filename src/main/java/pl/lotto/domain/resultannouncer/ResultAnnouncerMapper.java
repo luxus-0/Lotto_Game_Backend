@@ -2,7 +2,7 @@ package pl.lotto.domain.resultannouncer;
 
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 
-public class ResultAnnouncerMapper {
+class ResultAnnouncerMapper {
 
     public static ResultAnnouncerResponseDto mapToResultLottoSaved(ResultAnnouncerResponse resultAnnouncerResponseSaved) {
         return ResultAnnouncerResponseDto.builder()

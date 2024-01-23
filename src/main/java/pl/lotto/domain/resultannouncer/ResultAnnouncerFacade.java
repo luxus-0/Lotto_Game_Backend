@@ -14,9 +14,9 @@ import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
-import static pl.lotto.domain.resultannouncer.LottoNumbersFactor.BASE_PRICE;
-import static pl.lotto.domain.resultannouncer.LottoNumbersFactor.NUMBERS_FACTOR;
-import static pl.lotto.domain.resultannouncer.LottoNumbersRange.COUNT_NUMBERS;
+import static pl.lotto.domain.resultannouncer.PriceAmount.BASE_PRICE;
+import static pl.lotto.domain.resultannouncer.NumbersFactor.NUMBERS_FACTOR;
+import static pl.lotto.domain.resultannouncer.NumbersInRange.COUNT_NUMBERS;
 import static pl.lotto.domain.resultannouncer.ResultAnnouncerMapper.mapToResultLottoSaved;
 import static pl.lotto.domain.resultannouncer.ResultAnnouncerMessage.*;
 

@@ -7,7 +7,7 @@ import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
 import java.time.Clock;
 
 @Configuration
-public class ResultAnnouncerFacadeConfiguration {
+class ResultAnnouncerFacadeConfiguration {
 
     @Bean
     public ResultAnnouncerFacade resultAnnouncerFacade(ResultsCheckerFacade resultsCheckerFacade, ResultAnnouncerRepository resultAnnouncerRepository, Clock clock) {
