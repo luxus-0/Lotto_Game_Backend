@@ -10,6 +10,8 @@ import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
 import pl.lotto.domain.resultchecker.exceptions.TicketNotSavedException;
 import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
+import pl.lotto.domain.winningnumbers.WinningTicket;
+import pl.lotto.domain.winningnumbers.WinningTicketManager;
 import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 
 import java.time.LocalDateTime;
@@ -24,7 +26,7 @@ import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.LOSE;
 public class ResultsCheckerFacade {
     private final NumberReceiverFacade numberReceiverFacade;
     private final WinningNumbersFacade winningNumbersFacade;
-    private final Winners winners;
+    private final WinningTicketManager winningTicketManager;
     private final ResultCheckerRepository resultCheckerRepository;
     private final ResultCheckerValidation resultCheckerValidation;
 
@@ -62,6 +64,6 @@ public class ResultsCheckerFacade {
     }
 
     public List<TicketResponseDto> generateWinTicket(Set<Integer> winningNumbers, List<TicketDto> tickets){
-        return winners.retrieveWinners(winningNumbers, tickets);
+        return winningTicketManager.retrieveWinners(winningNumbers, tickets);
     }
 }

@@ -5,6 +5,7 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
+import pl.lotto.domain.winningnumbers.WinningTicket;
 import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 
 import java.time.LocalDateTime;

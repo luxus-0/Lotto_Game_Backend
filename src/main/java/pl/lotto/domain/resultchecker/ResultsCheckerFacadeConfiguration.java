@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
+import pl.lotto.domain.winningnumbers.WinningTicketManager;
 import pl.lotto.infrastructure.resultchecker.scheduler.ResultCheckerScheduler;
 
 @Configuration
@@ -16,8 +17,8 @@ class ResultsCheckerFacadeConfiguration {
 
     @Bean
     ResultsCheckerFacade resultsCheckerFacade(NumberReceiverFacade numberReceiverFacade, WinningNumbersFacade winningNumbersFacade, ResultCheckerRepository resultCheckerRepository) {
-        Winners winners = new Winners();
+        WinningTicketManager winningTicketManager = new WinningTicketManager();
         ResultCheckerValidation resultCheckerValidation = new ResultCheckerValidation();
-        return new ResultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, winners, resultCheckerRepository, resultCheckerValidation);
+        return new ResultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, winningTicketManager, resultCheckerRepository, resultCheckerValidation);
     }
 }

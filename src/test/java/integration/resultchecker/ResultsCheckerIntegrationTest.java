@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
-import pl.lotto.domain.resultchecker.WinningTicket;
+import pl.lotto.domain.winningnumbers.WinningTicket;
 
 import java.time.LocalDateTime;
 import java.util.List;

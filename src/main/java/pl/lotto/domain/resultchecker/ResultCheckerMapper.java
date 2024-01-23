@@ -3,22 +3,22 @@ package pl.lotto.domain.resultchecker;
 import lombok.AllArgsConstructor;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
+import pl.lotto.domain.winningnumbers.WinningTicket;
 
 import java.util.List;
 import java.util.Set;
 
-import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.WIN;
-
 @AllArgsConstructor
-class ResultCheckerMapper {
+public class ResultCheckerMapper {
 
-    static TicketResponseDto mapTicketResult(Set<Integer> hitNumbers, TicketDto ticket) {
+    public static TicketResponseDto toTicketResponseDto(Set<Integer> hitNumbers, TicketDto ticket) {
         return TicketResponseDto.builder()
                         .ticketUUID(ticket.ticketUUID())
+                        .inputNumbers(ticket.inputNumbers())
                         .drawDate(ticket.drawDate())
                         .hitNumbers(hitNumbers)
-                        .isWinner(true)
-                        .message(WIN)
+                        .isWinner(ticket.isWinner())
+                        .message(ticket.message())
                 .build();
     }
 
