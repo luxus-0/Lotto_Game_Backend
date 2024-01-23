@@ -65,7 +65,7 @@ public class WinningNumbersFacade {
                         .winningNumbers(winningNumbers.winningNumbers())
                         .build())
                 .findAny()
-                .orElseThrow(() -> new WinningNumbersNotFoundException()))
+                .orElseThrow(WinningNumbersNotFoundException::new))
                 .orElseThrow(() -> new DrawDateNotFoundException(DRAW_DATE_NOT_FOUND));
     }
 

@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.numbergenerator.scheduler;
+package pl.lotto.infrastructure.numbersgenerator.scheduler;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
