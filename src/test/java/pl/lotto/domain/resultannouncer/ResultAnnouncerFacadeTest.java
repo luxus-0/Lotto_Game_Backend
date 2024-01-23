@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static pl.lotto.domain.resultannouncer.ResultStatus.*;
+import static pl.lotto.domain.resultannouncer.ResultAnnouncerMessage.*;
 
 class ResultAnnouncerFacadeTest {
 
