@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
 import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.WinningTicket;
+import pl.lotto.domain.winningnumbers.WinningTicket;
 import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;

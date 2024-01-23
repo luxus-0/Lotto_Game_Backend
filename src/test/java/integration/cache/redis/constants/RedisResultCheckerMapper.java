@@ -1,6 +1,6 @@
 package integration.cache.redis.constants;
 
-import pl.lotto.domain.resultchecker.WinningTicket;
+import pl.lotto.domain.winningnumbers.WinningTicket;
 import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 
 import java.util.List;
@@ -11,7 +11,6 @@ public class RedisResultCheckerMapper {
                 .map(ticketResultSaved ->
                         TicketResponseDto.builder()
                                 .ticketUUID(ticketResultSaved.ticketUUID())
-                                .inputNumbers(ticketResultSaved.inputNumbers())
                                 .drawDate(ticketResultSaved.drawDate())
                                 .hitNumbers(ticketResultSaved.hitNumbers())
                                 .isWinner(ticketResultSaved.isWinner())

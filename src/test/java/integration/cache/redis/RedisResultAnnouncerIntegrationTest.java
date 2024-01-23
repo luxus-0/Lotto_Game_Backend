@@ -11,7 +11,7 @@ import pl.lotto.domain.resultannouncer.ResultAnnouncerFacade;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
-import pl.lotto.domain.resultchecker.WinningTicket;
+import pl.lotto.domain.winningnumbers.WinningTicket;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
