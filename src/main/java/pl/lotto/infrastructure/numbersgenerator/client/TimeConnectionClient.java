@@ -1,4 +1,4 @@
-package pl.lotto.infrastructure.numbergenerator.client;
+package pl.lotto.infrastructure.numbersgenerator.client;
 
 import lombok.Builder;
 import org.springframework.boot.context.properties.ConfigurationProperties;

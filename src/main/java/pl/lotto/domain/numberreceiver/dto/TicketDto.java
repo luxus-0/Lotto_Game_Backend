@@ -13,8 +13,8 @@ import java.util.Set;
 @Builder
 public record TicketDto(@UUID
                         String ticketUUID,
-                        @NotNull(message = "inputNumbers not null")
-                        @NotEmpty(message = "inputNumbers not empty")
+                        @NotNull(message = "Input numbers not null")
+                        @NotEmpty(message = "Input numbers not empty")
                         Set<Integer> inputNumbers,
                         Set<Integer> hitNumbers,
                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
