@@ -7,7 +7,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerResponse;
 import pl.lotto.domain.resultchecker.WinningTicket;
-import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.Set;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -55,7 +53,6 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
 
         try {
             ResultActions getResultWithNotExistingId = mockMvc.perform(get("/results/" + notExistingTicketId))
-                    .andExpect(shouldHaveThrown(ResultCheckerNotFoundException.class))
                     .andExpect(content().json("""
                             {
                             "message" : "Not found for winning ticket uuid: 12345"
@@ -106,7 +103,8 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
 
         ResultActions getResults = mockMvc.perform(get("/results/" + expectedTicketUUID))
                 .andExpect(status -> status(200))
-                .andExpect(content().json("""
+                .andExpect(content()
+                        .json("""
                         {
                            "ticketUUID": "12345",
                             "inputNumbers": [1, 2, 3, 4, 5, 6],
@@ -115,8 +113,7 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
                               "isWinner": true,
                               "message": "WIN"
                         }
-                            """.trim()
-                ));
+                            """.trim()));
 
         MvcResult mvcResult = getResults.andReturn();
         String json = mvcResult.getResponse().getContentAsString();

@@ -1,12 +1,11 @@
 package pl.lotto.domain.resultchecker;
 
 import org.junit.jupiter.api.Test;
-import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
+import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
 import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
-import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -26,7 +25,6 @@ class ResultsCheckerFacadeTest {
 
     WinningNumbersFacade winningNumbersFacade = mock(WinningNumbersFacade.class);
     NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
-    DrawDateFacade drawDateFacade = mock(DrawDateFacade.class);
     ResultCheckerRepository resultCheckerRepository = mock(ResultCheckerRepository.class);
 
 
@@ -34,7 +32,7 @@ class ResultsCheckerFacadeTest {
     public void should_generate_one_player_win() throws Exception {
         //given
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2023, 11, 25, 12, 0, 0);
         String ticketUUID1 = "550e8125-e29b-41d4-a716-446655440000";
@@ -81,7 +79,7 @@ class ResultsCheckerFacadeTest {
     public void should_return_message_lose_when_winning_numbers_is_empty() throws Exception {
         //given
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         when(winningNumbersFacade.generateWinningNumbers()).thenReturn(
                 WinningTicketResponseDto.builder()
@@ -115,7 +113,7 @@ class ResultsCheckerFacadeTest {
     public void should_return_result_with_correct_credentials() throws Exception {
         //given
         ResultsCheckerFacade resultCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         LocalDateTime drawDate = LocalDateTime.of(2023, 12, 25, 12, 0, 0);
         String ticketUUID1 = "550e8400-e29b-41d4-a716-446655440000";
@@ -160,7 +158,7 @@ class ResultsCheckerFacadeTest {
     public void should_return_win_player_when_hit_numbers_are_three() {
         //given
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         TicketDto ticket1 = TicketDto.builder()
                 .ticketUUID("1234")
@@ -189,7 +187,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(20, 35, 45);
 
         //when
-        List<TicketResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
+        List<TicketResponseDto> results = resultsCheckerFacade.generateWinTicket(winningNumbers, tickets);
 
         TicketResponseDto player1 = results.get(0);
         TicketResponseDto player2 = results.get(1);
@@ -206,7 +204,7 @@ class ResultsCheckerFacadeTest {
     public void should_return_not_win_players_when_hit_numbers_are_less_than_three() {
         //given
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         TicketDto ticket1 = TicketDto.builder()
                 .ticketUUID("1234")
@@ -233,7 +231,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<TicketResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
+        List<TicketResponseDto> results = resultsCheckerFacade.generateWinTicket(winningNumbers, tickets);
 
         TicketResponseDto result1 = results.get(0);
         TicketResponseDto result2 = results.get(1);
@@ -249,7 +247,7 @@ class ResultsCheckerFacadeTest {
     public void should_return_not_win_player_when_hit_numbers_are_empty() {
         //given
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         TicketDto ticket1 = TicketDto.builder()
                 .ticketUUID("1234")
@@ -276,7 +274,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<TicketResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
+        List<TicketResponseDto> results = resultsCheckerFacade.generateWinTicket(winningNumbers, tickets);
 
         TicketResponseDto result1 = results.get(0);
         TicketResponseDto result2 = results.get(1);
@@ -293,7 +291,7 @@ class ResultsCheckerFacadeTest {
     public void should_return_not_win_players_when_input_numbers_are_empty() {
         //given
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         TicketDto ticket1 = TicketDto.builder()
                 .ticketUUID("1234")
@@ -320,7 +318,7 @@ class ResultsCheckerFacadeTest {
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
 
         //when
-        List<TicketResponseDto> results = resultsCheckerFacade.generateWinningTicket(tickets, winningNumbers);
+        List<TicketResponseDto> results = resultsCheckerFacade.generateWinTicket(winningNumbers, tickets);
 
         TicketResponseDto result1 = results.get(0);
         TicketResponseDto result2 = results.get(1);
@@ -335,11 +333,11 @@ class ResultsCheckerFacadeTest {
     public void should_return_empty_players_when_tickets_is_empty() {
         //given
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         Set<Integer> winningNumbers = Set.of(1, 2, 3, 4, 5, 6, 7);
         //when
-        List<TicketResponseDto> results = resultsCheckerFacade.generateWinningTicket(Collections.emptyList(), winningNumbers);
+        List<TicketResponseDto> results = resultsCheckerFacade.generateWinTicket(winningNumbers, Collections.emptyList());
 
         //then
         assertTrue(results.isEmpty());
@@ -349,10 +347,10 @@ class ResultsCheckerFacadeTest {
     public void should_return_no_winners_when_tickets_is_empty_and_winning_numbers_is_null() {
         //given
         ResultsCheckerFacade resultsCheckerFacade = new ResultsCheckerFacadeConfiguration()
-                .resultsCheckerFacade(numberReceiverFacade, drawDateFacade, winningNumbersFacade, resultCheckerRepository);
+                .resultsCheckerFacade(numberReceiverFacade, winningNumbersFacade, resultCheckerRepository);
 
         //when
-        List<TicketResponseDto> results = resultsCheckerFacade.generateWinningTicket(Collections.emptyList(), null);
+        List<TicketResponseDto> results = resultsCheckerFacade.generateWinTicket(null, Collections.emptyList());
 
         //then
         assertThat(results).isNullOrEmpty();
