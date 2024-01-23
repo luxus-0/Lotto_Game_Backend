@@ -41,10 +41,10 @@ REDIS
      <br><br>
   ::ENDPOINTS::
 <ul>
-  <li><a href="http://localhost:8080/numbers" target="_blank" title="INPUT NUMBERS FOR USER">INPUT NUMBERS</a></li>
-  <li> <a href="http://localhost:8080/users" target="_blank" title="READ ALL USERS LOTTO">READ USERS</a></li>
-  <li><a href="http://localhost:8080/winners" target="_blank" title="READ WINNERS LOTTO">WINNERS</a></li>
-  <li><a href="http://localhost:8080/winners/{UUID}" target="_blank" title="READ WINNERS BY UUID">WINNERS/{ID}</a>   </li>
+  <li><a href="http://localhost:8080//inputNumbers" target="_blank" title="INPUT NUMBERS FOR USER">INPUT NUMBERS</a></li>
+  <li> <a href="http://localhost:8080//random_numbers" target="_blank" title="GENERATE RANDOM NUMBERS">GENERATE RANDOM NUMBERS</a></li>
+  <li><a href="http://localhost:8080/winning_numbers" target="_blank" title="GENERATE WINNING NUMBERS">WINNING NUMBERS</a></li>
+  <li><a href="http://localhost:8080/results/{UUID}" target="_blank" title="FIND WINNING TICKET BY UUID">FIND WINNING TICKET BY UUID</a></li>
 </ul>
 </div>
 </div>
