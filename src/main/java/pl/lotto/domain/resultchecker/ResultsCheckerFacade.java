@@ -3,15 +3,14 @@ package pl.lotto.domain.resultchecker;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;
-import pl.lotto.domain.drawdate.DrawDateFacade;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.numberreceiver.exceptions.WinningTicketNotFoundException;
-import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
-import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 import pl.lotto.domain.resultchecker.dto.TicketResponseDto;
 import pl.lotto.domain.resultchecker.exceptions.ResultCheckerNotFoundException;
 import pl.lotto.domain.resultchecker.exceptions.TicketNotSavedException;
+import pl.lotto.domain.winningnumbers.WinningNumbersFacade;
+import pl.lotto.domain.winningnumbers.dto.WinningTicketResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +23,6 @@ import static pl.lotto.domain.resultchecker.ResultCheckerMessageProvider.LOSE;
 @AllArgsConstructor
 public class ResultsCheckerFacade {
     private final NumberReceiverFacade numberReceiverFacade;
-    private final DrawDateFacade drawDateFacade;
     private final WinningNumbersFacade winningNumbersFacade;
     private final Winners winners;
     private final ResultCheckerRepository resultCheckerRepository;
@@ -37,18 +35,17 @@ public class ResultsCheckerFacade {
         String ticketUUID = winningTicketResponse.ticketUUID();
         LocalDateTime drawDate = winningTicketResponse.drawDate();
         Set<Integer> winningNumbers = winningTicketResponse.winningNumbers();
-
-
         if (validate) {
             List<TicketDto> tickets = numberReceiverFacade.retrieveTicketsByDrawDate(drawDate);
             WinningTicket winningTicket = resultCheckerRepository.findAllByTicketUUID(ticketUUID)
                     .orElseThrow(WinningTicketNotFoundException::new);
-            List<TicketResponseDto> ticketResponseDtos = generateWinningTicket(tickets, winningNumbers);
+            List<TicketResponseDto> winningTickets = generateWinTicket(winningNumbers, tickets);
+            log.info("Winning ticket: " +winningTickets);
             List<WinningTicket> ticketsSaved = resultCheckerRepository.saveAll(List.of(winningTicket));
             if(ticketsSaved.isEmpty()){
                 throw new TicketNotSavedException();
             }
-            log.info("WinningTicket saved: " +ticketsSaved);
+            log.info("Winning ticket saved : " +ticketsSaved);
             return mapToResultResponseDto(ticketsSaved);
         }
         return TicketResponseDto.builder()
@@ -64,7 +61,7 @@ public class ResultsCheckerFacade {
                 .orElseThrow(() -> new ResultCheckerNotFoundException(ticketUUID));
     }
 
-    public List<TicketResponseDto> generateWinningTicket(List<TicketDto> tickets, Set<Integer> winningNumbers){
-        return winners.retrieveWinners(tickets, winningNumbers);
+    public List<TicketResponseDto> generateWinTicket(Set<Integer> winningNumbers, List<TicketDto> tickets){
+        return winners.retrieveWinners(winningNumbers, tickets);
     }
 }

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 import pl.lotto.domain.resultannouncer.dto.ResultLottoDto;
-import pl.lotto.domain.resultannouncer.dto.WinningLottoPrizeDto;
+import pl.lotto.domain.winningnumbers.dto.WinningLottoPrizeDto;
 import pl.lotto.domain.resultannouncer.exceptions.ResultAnnouncerNotFoundException;
 import pl.lotto.domain.resultannouncer.exceptions.TicketUUIDNotFoundException;
 import pl.lotto.domain.resultchecker.ResultsCheckerFacade;
