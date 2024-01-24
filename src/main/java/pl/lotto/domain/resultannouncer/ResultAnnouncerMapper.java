@@ -10,6 +10,7 @@ class ResultAnnouncerMapper {
                 .hitNumbers(resultAnnouncerResponseSaved.hitNumbers())
                 .drawDate(resultAnnouncerResponseSaved.drawDate())
                 .isWinner(resultAnnouncerResponseSaved.isWinner())
+                .message(resultAnnouncerResponseSaved.message())
                 .build();
     }
 
