@@ -39,6 +39,7 @@ class ResultAnnouncerFacadeTest {
                 .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of())
                 .drawDate(drawDate)
+                .message(LOSE.message)
                 .build();
 
         ResultAnnouncerResponse expectedResultAnnouncerResponse = ResultAnnouncerResponse.builder()
@@ -90,8 +91,8 @@ class ResultAnnouncerFacadeTest {
 
         //when
         ResultAnnouncerResponseDto actualResult = resultAnnouncerFacade.findResultAnnouncer(ticket1);
-        //then
 
+        //then
         ResultAnnouncerResponseDto expectedResult = ResultAnnouncerResponseDto.builder()
                 .ticketUUID(ticket1)
                 .inputNumbers(Set.of(34, 50, 12, 60, 32, 23))
