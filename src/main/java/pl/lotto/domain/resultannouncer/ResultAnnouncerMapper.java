@@ -7,6 +7,7 @@ class ResultAnnouncerMapper {
     public static ResultAnnouncerResponseDto mapToResultLottoSaved(ResultAnnouncerResponse resultAnnouncerResponseSaved) {
         return ResultAnnouncerResponseDto.builder()
                 .ticketUUID(resultAnnouncerResponseSaved.ticketUUID())
+                .inputNumbers(resultAnnouncerResponseSaved.inputNumbers())
                 .hitNumbers(resultAnnouncerResponseSaved.hitNumbers())
                 .drawDate(resultAnnouncerResponseSaved.drawDate())
                 .isWinner(resultAnnouncerResponseSaved.isWinner())

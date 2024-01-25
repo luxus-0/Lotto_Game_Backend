@@ -17,7 +17,7 @@ import java.util.Set;
 public record ResultAnnouncerResponse(@UUID String ticketUUID,
                                       @NotNull(message = "numbers not null")
                                       @NotEmpty(message = "numbers not empty")
-                                      Set<Integer> numbers,
+                                      Set<Integer> inputNumbers,
                                       @NotBlank
                                       Set<Integer> hitNumbers,
                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
