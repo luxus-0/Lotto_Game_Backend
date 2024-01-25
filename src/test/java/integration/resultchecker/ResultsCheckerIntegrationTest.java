@@ -82,7 +82,7 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
 
         ResultAnnouncerResponse expectedAnnouncerResult = ResultAnnouncerResponse.builder()
                 .ticketUUID(expectedTicketUUID)
-                .numbers(expectedInputNumbers)
+                .inputNumbers(expectedInputNumbers)
                 .hitNumbers(expectedHitNumbers)
                 .drawDate(expectedDrawDate)
                 .isWinner(isWinner)

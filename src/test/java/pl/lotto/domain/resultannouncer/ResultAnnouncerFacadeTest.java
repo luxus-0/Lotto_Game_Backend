@@ -44,7 +44,7 @@ class ResultAnnouncerFacadeTest {
 
         ResultAnnouncerResponse expectedResultAnnouncerResponse = ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of())
                 .isWinner(false)
                 .drawDate(drawDate)
@@ -69,7 +69,7 @@ class ResultAnnouncerFacadeTest {
 
         ResultAnnouncerResponse result1 = ResultAnnouncerResponse.builder()
                 .ticketUUID(ticket1)
-                .numbers(Set.of(34, 50, 12, 60, 32, 23))
+                .inputNumbers(Set.of(34, 50, 12, 60, 32, 23))
                 .hitNumbers(Set.of(34, 60, 12))
                 .drawDate(drawDate)
                 .isWinner(true)
@@ -117,7 +117,8 @@ class ResultAnnouncerFacadeTest {
 
         ResultAnnouncerResponse resultAnnouncerResponse = ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(4, 7, 9, 11, 13, 15))
+                .inputNumbers(Set.of(4, 7, 9, 11, 13, 15))
+                .hitNumbers(Set.of(4,7,9))
                 .drawDate(drawDate)
                 .message(WAIT.message)
                 .build();
@@ -167,7 +168,7 @@ class ResultAnnouncerFacadeTest {
 
         ResultAnnouncerResponse expectedResult = ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(1, 45, 67, 76, 23, 48))
+                .inputNumbers(Set.of(1, 45, 67, 76, 23, 48))
                 .hitNumbers(Set.of(1, 76, 45))
                 .drawDate(drawDate)
                 .isWinner(true)

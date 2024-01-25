@@ -130,7 +130,7 @@ class NumberReceiverFacadeTest {
         RuntimeException exception = assertThrows(InputNumbersNotFoundException.class,
                 () -> numberReceiverFacade.inputNumbers(inputNumbersRequest));
 
-        assertThat(exception.getMessage()).isEqualTo("Input numbers not found");
+        assertThat(exception.getMessage()).isEqualTo("Input inputNumbers not found");
 
     }
 

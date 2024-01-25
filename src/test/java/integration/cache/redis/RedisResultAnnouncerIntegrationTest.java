@@ -60,7 +60,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
         resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))
                 .isWinner(true)
                 .drawDate(LocalDateTime.now())
@@ -97,7 +97,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
         resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))
                 .isWinner(true)
                 .drawDate(LocalDateTime.now())
@@ -132,7 +132,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
         resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))
                 .isWinner(true)
                 .drawDate(LocalDateTime.now())
@@ -167,7 +167,7 @@ public class RedisResultAnnouncerIntegrationTest extends BaseIntegrationTest {
 
         resultAnnouncerRepository.save(ResultAnnouncerResponse.builder()
                 .ticketUUID(ticketUUID)
-                .numbers(Set.of(1, 2, 3, 4, 5, 6))
+                .inputNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .hitNumbers(Set.of(1, 2, 3))
                 .isWinner(true)
                 .drawDate(LocalDateTime.now())
