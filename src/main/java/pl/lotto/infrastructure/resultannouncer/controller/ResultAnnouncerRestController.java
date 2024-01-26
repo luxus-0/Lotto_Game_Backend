@@ -8,7 +8,6 @@ import pl.lotto.domain.resultannouncer.dto.ResultAnnouncerResponseDto;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api")
 public class ResultAnnouncerRestController {
 
     private final ResultAnnouncerFacade resultAnnouncerFacade;

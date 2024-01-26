@@ -9,7 +9,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
-import pl.lotto.domain.numberreceiver.Ticket;
 import pl.lotto.domain.numberreceiver.dto.InputNumbersRequestDto;
 import pl.lotto.domain.numberreceiver.dto.TicketResponseDto;
 
@@ -90,9 +89,6 @@ public class RedisNumberReceiverIntegrationTest extends BaseIntegrationTest {
     @Test
     public void should_save_two_input_numbers_to_cache() throws Exception {
         //given && when
-        ticketRepository.save(Ticket.builder()
-                        .inputNumbers(Set.of(1,2,3,4,5,6))
-                .build());
 
         mockMvc.perform(post("/inputNumbers")
                 .content("""

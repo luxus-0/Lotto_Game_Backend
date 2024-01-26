@@ -98,6 +98,7 @@ public class ResultsCheckerIntegrationTest extends BaseIntegrationTest {
                 .message("WIN")
                 .build();
 
+
         resultAnnouncerRepository.save(expectedAnnouncerResult);
         resultCheckerRepository.saveAll(List.of(expectedWinningTicketResult));
 

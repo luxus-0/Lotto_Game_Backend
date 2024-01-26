@@ -17,7 +17,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import pl.lotto.LottoApplication;
 import pl.lotto.domain.drawdate.AdjustableClock;
-import pl.lotto.domain.numberreceiver.TicketRepository;
 import pl.lotto.domain.resultannouncer.ResultAnnouncerRepository;
 import pl.lotto.domain.resultchecker.ResultCheckerRepository;
 
@@ -45,8 +44,6 @@ public class BaseIntegrationTest {
     public ResultAnnouncerRepository resultAnnouncerRepository;
     @Autowired
     public ResultCheckerRepository resultCheckerRepository;
-    @Autowired
-    public TicketRepository ticketRepository;
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
